@@ -4,11 +4,6 @@ from pagetree.helpers import get_hierarchy, get_section_from_path
 from pagetree.helpers import get_module, needs_submit, submitted
 from django.contrib.auth.decorators import login_required
 
-@render_to('main/index.html')
-def index(request):
-    return dict()
-
-
 @render_to('main/page.html')
 def page(request, path):
     section = get_section_from_path(path)
