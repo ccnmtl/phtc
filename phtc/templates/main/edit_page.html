@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+{% load compress %}
+{% load bootstrap %}
+{% block title %}{{section.label}} (edit){% endblock %}
+{% block js %}
+
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/themes/base/jquery-ui.css" type="text/css" media="all" /> 
+
+{% compress css %}
+<style type="text/css">
+	#edit-blocks-tab .draggable { background-color: #ddd; }
+	.draghandle {float: left;}
+	#children-order-list {list-style-type: none; margin: 0; padding: 0;}
+	#children li { margin: 0 3px 3px 3px; padding: 0.4em;
+	padding-left: 1.5em; 
+          background-color: #ddd;
+	}
+	#children li span { position: absolute; margin-left: -1.3em; }
+	.dragging {border: #f60 solid 1px;}
+	</style>
+{% endcompress %}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/jquery-ui.min.js" type="text/javascript"></script>
+
+{% compress js %}
+<script type="text/javascript">
+var saveOrderOfChildren = function() {
+    var url = "{% url reorder-section-children section.id %}?";
+    var worktodo = 0;
+    $("#children-order-list li").each(function(index,element) {
+       worktodo = 1;
+       var id = $(element).attr('id').split("-")[1];
+       url += "section_id_" + index + "=" + id + ";";
+    });
+    if (worktodo == 1) {
+        var req = new XMLHttpRequest();
+        req.open("POST",url,true);
+        req.send(null);
+    }
+};
+
+var saveOrderOfPageBlocks = function() {
+    var url = "{% url reorder-pageblocks section.id %}?";
+    var worktodo = 0;
+    $("#edit-blocks-tab>div").each(function(index,element) {
+      worktodo = 1;
+      var id = $(element).attr('id').split("-")[1];
+      url += "pageblock_id_" + index + "=" + id + ";";
+    });
+    if (worktodo == 1) {
+        /* only bother submitting if there are elements to be sorted */
+        var req = new XMLHttpRequest();
+        req.open("POST",url,true);
+        req.send(null);
+    }
+
+}
+
+</script>
+
+<script type="text/javascript">
+$(function() {
+  $("#children-order-list").sortable({
+    containment : 'parent'
+    ,axis : 'y'
+    ,tolerance: 'pointer'
+    ,activeClass: 'dragging'
+    ,handle: '.draghandle'
+    ,stop: function (event,ui) { saveOrderOfChildren();}
+  });
+  $("#children-order-list").disableSelection();
+  $("#edit-blocks-tab").sortable({
+    items : 'div'
+    ,axis: 'y'
+    ,containment: 'parent'
+    ,handle: '.draghandle'
+    ,activeClass: 'dragging'
+    ,tolerance: 'pointer'
+    ,stop: function (event,ui) { saveOrderOfPageBlocks();}
+  });
+
+  $("#edit-blocks-tab").disableSelect();
+});
+</script>
+
+{% endcompress %}
+{% endblock %}
+
+{% block moduletabs %}
+
+<ul class="nav">
+  {% for section in modules %}
+  <li{% ifequal section.id module.id %} class="active"{% endifequal %}><a href="/edit{{section.get_absolute_url}}">{{section.label}}</a></li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
+
+
+{% block sidenav %}
+	<!-- ###### Secondary Navigation ###### -->
+			<h3>Sections</h3>
+{% with "/edit" as menu_base %}
+{% include "main/menu.html" %}
+{% endwith %}
+
+{% endblock %}
+
+{% block navrightextra %}
+<li><a href="{{section.get_absolute_url}}" class="btn-success">view page</a></li>
+{% endblock %}
+
+{% block content %}
+<h1>{{ section.label }}</h1>
+
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#edit-blocks-tab" data-toggle="tab">Edit Blocks</a></li>
+  <li><a href="#children-tab" data-toggle="tab">Children</a></li>
+  <li><a href="#add-pageblock-tab" data-toggle="tab">Add Pageblock</a></li>
+  <li><a href="#edit-page-tab" data-toggle="tab">Edit Section</a></li>
+</ul>
+
+<div class="tab-content">
+
+<div id="edit-blocks-tab" class="tab-pane active"/>
+{% if section.pageblock_set.count %}
+{% for block in section.pageblock_set.all %}
+<div class="block-edit draggable" id="pageblock-{{block.id}}">
+<table width="100%" border="0"><tr><td><span title="drag to reorder pageblocks" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span></td>
+<td align="right">
+<form action="{% url delete-pageblock block.id %}" method="post"
+			class="form-horizontal" >
+<input type="submit" value="delete block {{block.ordinality}}" class="btn btn-danger"/>
+</form></td></tr>
+<tr>
+<td>
+{% if block.block.exportable %}
+<a href="{% url export-pageblock-json block.id %}">export json</a>
+{% endif %}
+</td>
+<td>
+{% if block.block.importable %}
+<a href="{% url import-pageblock-json block.id %}">import json</a>
+{% endif %}
+</td>
+</tr>
+</table>
+<form action="{% url edit-pageblock block.id %}" method="post"
+class="well form-horizontal"
+{% if block.edit_form.is_multipart %}enctype="multipart/form-data"{% endif %}>
+
+{{ block.default_edit_form|bootstrap }}
+{% with block.edit_form as ef %}
+{{ ef|bootstrap }}
+{% if ef.alt_text %}
+<div>{{ ef.alt_text|safe }}</div>
+{% endif %}
+{% endwith %}
+
+<input type="submit" value="save" class="btn btn-primary"/>
+</form>
+</div>
+{% endfor %}
+{% else %}
+<div class="alert">
+  <strong>Warning!</strong> There are no pageblocks on this page. You should add some.
+</div>
+{% endif %}
+</div>
+
+<div id="children-tab" class="tab-pane">
+<h2>Reorder Children</h2>
+<div class="well">
+<p>Drag and drop arrows to reorder children</p>
+<ul id="children-order-list">
+{% for child in section.get_children %}
+<li class="draggable"
+    id="child-{{child.id}}"><span title="drag to reorder pageblocks" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span>
+  {{child.label}}
+</li>
+{% endfor %}
+</ul>
+</div>
+
+<h2>Add Child</h2>
+<form action="{% url add-child-section section.id %}" method="post"
+			class="well form-inline" >
+
+{{ section.add_child_section_form|bootstrap }}
+
+<input type="submit" value="add child section" class="btn btn-primary"
+			 />
+</form>
+</div>
+
+
+<div id="add-pageblock-tab" class="tab-pane">
+
+{% for blocktype in section.available_pageblocks %}
+{% if blocktype %}
+<form action="{% url add-pageblock section.id %}"
+class="well form-horizontal"
+{% if blocktype.add_form.is_multipart %}
+enctype="multipart/form-data"
+{% endif %}
+method="post">
+<fieldset>
+  <legend>Add {{ blocktype.display_name }}</legend>
+<input type="hidden" name="blocktype" value="{{blocktype.display_name}}"/>
+
+{{section.add_pageblock_form|bootstrap}}
+{{blocktype.add_form|bootstrap}}
+
+<input type="submit" value="add {{blocktype.display_name}}" 
+			 class="btn btn-primary" />
+</fieldset>
+</form>
+{% endif %}
+{% endfor %}
+</div>
+
+<div id="edit-page-tab" class="tab-pane">
+
+<form action="{% url edit-section section.id %}" method="post"
+			class="form-horizontal well">
+{% csrf_token %}
+<fieldset><legend>Edit Page</legend>
+
+{{ section.edit_form|bootstrap }}
+
+<input type="submit" value="save" class="btn btn-primary" />
+</fieldset>
+</form>
+
+
+<form action="{% url delete-section section.id %}" method="post" class="well">
+<input type="submit" value="delete this page" class="btn btn-danger"/>
+</form>
+
+</div>
+</div>
+{% endblock %}
+
+{% block content-nav %}
+<ul class="pager">
+{% if section.get_previous %}
+  <li class="previous">
+		<a href="{% url edit-page section.get_previous.get_path %}">&larr; {{section.get_previous.label}}</a>
+  </li>
+{% endif %}
+
+{% if section.get_next %}
+{% with section.get_next as next_section %}
+<li class="next"><a href="{% url edit-page section.get_next.get_path %}">{{section.get_next.label}} &rarr;</a></li>
+{% endwith %}
+{% endif %}
+</ul>
+
+{% endblock %}

@@ -11,7 +11,7 @@
 {% compress css %}
     <link href="/site_media/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="/site_media/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="/site_media/css/main.css" rel="stylesheet">
+    <link href="/site_media/css/main.css?site=phtc" rel="stylesheet">
 {% endcompress %}
 	<link rel="shortcut icon" href="/site_media/img/favicon.ico" type="image/x-icon" />
 	{% block css %}{% endblock %}
@@ -71,16 +71,16 @@
         <div class="container">
           <ul class="nav">
           {% block primarynavtabs %}
-            <li class="active"><a href="/one/">One</a></li>
-						<li><a href="/two/">Two</a></li>
+					{% for section in modules %}
+            <li{% ifequal section.id module.id %} class="active"{% endifequal %}><a href="{{section.get_absolute_url}}">{{section.label}}</a></li>
+					{% endfor %}
           {% endblock %}
 					{% block primarynavtabsextra %}{% endblock %}
           </ul>
 
           <ul class="nav pull-right">
             {% block primarynavrightextra %}{% endblock %}
-						<li><a href="/three/">Three</a></li>
-						<li><a href="/four/">Four</a></li>
+						<li><a href="/edit{{section.get_absolute_url}}">Edit</a></li>
           </ul>
         </div>
       </div>
@@ -97,6 +97,7 @@
         <div class="span10" id="right-content">
 {% block pagetitle %}{% endblock %}
 {% block content %}{% endblock %}
+{% block content-nav %}{% endblock %}
         </div>
       </div>
     </div>

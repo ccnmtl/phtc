@@ -35,7 +35,7 @@ TEMPLATE_LOADERS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-		'django.contrib.auth.context_processors.auth',
+    'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
     )
@@ -82,16 +82,27 @@ INSTALLED_APPS = (
     'bootstrapform',
     'lettuce.django',
     'phtc.main',
+    'pagetree',
+    'pageblocks',
+    'quizblock',
 )
 
 LETTUCE_APPS = (
     'phtc.main',
 )
 
+PAGEBLOCKS = ['pageblocks.TextBlock',
+              'pageblocks.HTMLBlock',
+              'pageblocks.PullQuoteBlock',
+              'pageblocks.ImageBlock',
+              'pageblocks.ImagePullQuoteBlock',
+              'quizblock.Quiz',
+              ]
+
 
 STATSD_CLIENT = 'statsd.client'
 STATSD_PREFIX = 'phtc'
-STATSD_HOST = 'localhost'
+STATSD_HOST = '127.0.0.1'
 STATSD_PORT = 8125
 STATSD_PATCHES = ['django_statsd.patches.db', ]
 

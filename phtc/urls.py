@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import patterns, include
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic.simple import direct_to_template
@@ -23,8 +23,17 @@ urlpatterns = patterns('',
                        (r'^$', 'phtc.main.views.index'),
                        (r'^admin/', include(admin.site.urls)),
                        (r'^munin/',include('munin.urls')),
-											 (r'^stats/', direct_to_template, {'template': 'stats.html'}),
+                       (r'^_stats/', direct_to_template, {'template': 'stats.html'}),
                        (r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': site_media_root}),
                        (r'^uploads/(?P<path>.*)$','django.views.static.serve',{'document_root' : settings.MEDIA_ROOT}),
+                       (r'^_pagetree/', include('pagetree.urls')),
+                       (r'^_quiz/', include('quizblock.urls')),
+                       # these need to be last
+                       (r'^edit/(?P<path>.*)$', 'phtc.main.views.edit_page',
+                        {}, 'edit-page'),
+                       (r'^instructor/(?P<path>.*)$',
+                        'phtc.main.views.instructor_page'),
+                       (r'^(?P<path>.*)$', 'phtc.main.views.page'),
+
 ) + staticmedia.serve()
 
