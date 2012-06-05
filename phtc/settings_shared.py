@@ -112,7 +112,7 @@ SENTRY_REMOTE_URL = 'http://sentry.ccnmtl.columbia.edu/sentry/store/'
 SENTRY_SITE = 'phtc'
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-if 'test' in sys.argv:
+if 'test' in sys.argv or 'harvest' in sys.argv:
      DATABASE_ENGINE = 'sqlite3'
 SOUTH_TESTS_MIGRATE = False
 
