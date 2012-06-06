@@ -71,7 +71,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'tagging',
     'typogrify',
-# TODO: update raven config to this: http://raven.readthedocs.org/en/latest/config/django.html
+# TODO: update raven config to this:
+#  http://raven.readthedocs.org/en/latest/config/django.html
 # disable until then
 #    'raven.contrib.django',
     'munin',
@@ -95,6 +96,8 @@ LETTUCE_APPS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 AUTH_PROFILE_MODULE = "phtc.main.UserProfile"
+SERVER_EMAIL = "phtc@ccnmtl.columbia.edu"
+DEFAULT_FROM_EMAIL = "phtc@ccnmtl.columbia.edu"
 
 PAGEBLOCKS = ['pageblocks.TextBlock',
               'pageblocks.HTMLBlock',
@@ -187,4 +190,3 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.signals.SignalDebugPanel',
     'debug_toolbar.panels.logger.LoggingPanel',
 )
-
