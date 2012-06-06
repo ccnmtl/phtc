@@ -2,7 +2,7 @@
 from settings_shared import *
 
 TEMPLATE_DIRS = (
-    "/var/www/phtc/phtc/templates",
+    "/var/www/phtc/phtc/phtc/templates",
 )
 
 MEDIA_ROOT = '/var/www/phtc/uploads/'
