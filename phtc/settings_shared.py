@@ -85,11 +85,15 @@ INSTALLED_APPS = (
     'pagetree',
     'pageblocks',
     'quizblock',
+    'registration',
 )
 
 LETTUCE_APPS = (
     'phtc.main',
 )
+
+ACCOUNT_ACTIVATION_DAYS = 7
+AUTH_PROFILE_MODULE = "phtc.main.UserProfile"
 
 PAGEBLOCKS = ['pageblocks.TextBlock',
               'pageblocks.HTMLBlock',

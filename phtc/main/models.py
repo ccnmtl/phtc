@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from registration.signals import user_registered
+from forms import UserRegistrationForm
 
 # define your models here
 class UserProfile(models.Model):
@@ -16,9 +17,16 @@ class UserProfile(models.Model):
     def __str__(self):
         return "%s's profile" % self.user
     
-    def create_user_profile(sender, instance, created, **kwargs):
-        if created:
-            profile = UserProfile()
-            profile.user = instance
-            
-    post_save.connect(create_user_profile, sender = User)
+def user_created(sender, user, request, **kwargs):
+	form = UserRegistrationForm(request.POST)
+	data = UserProfile(user=user)
+        data.sex = form.data["sex"]
+        data.age = form.data["age"]
+        data.origin = form.data["origin"]
+        data.ethnicity = form.data["ethnicity"]
+        disadvantaged = form.data["disadvantaged"]
+        employment_location = form.data["employment_location"]
+        position = form.data["position"]
+	data.save()
+
+user_registered.connect(user_created)
