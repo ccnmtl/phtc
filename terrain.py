@@ -2,7 +2,11 @@
 from lettuce.django import django_url
 from lettuce import before, after, world, step
 from django.test import client
+from django.core.management import call_command
+from django.test.utils import setup_test_environment, teardown_test_environment
 import sys
+import os
+from pagetree.models import Hierarchy, Section
 
 import time
 try:
@@ -23,13 +27,33 @@ def setup_browser(variables):
     world.client = client.Client()
     world.using_selenium = False
 
+# test_data/test.db was created by the following process
+#
+# 1) with a normal setup, add some pages, blocks, etc
+# 2) create a phtc/settings_test.py that uses sqlite3 and test_data/test.db
+# 3) ./manage.py dumpdata --indent=2 --format=json \
+#      --natural > phtc/main/fixtures/test_data.json
+# 4) ./manage.py syncdb --settings=phtc.settings_test
+# 5) ./manage.py migrate --settings=phtc.settings_test
+# 6) ./manage.py reset contenttypes --settings=phtc.settings_test
+# 7) ./manage.py reset auth --settings=phtc.settings_test
+# 8) ./manage.py loaddata phtc/main/fixtures/test_data.json \
+#      --settings=phtc.settings_test
+
+@before.harvest
+def setup_database(_foo):
+    # make sure we have a fresh test database
+    os.system("rm -f lettuce.db")
+    os.system("cp test_data/test.db lettuce.db")
+
+@after.harvest
+def teardown_database(_foo):
+    os.system("rm -f lettuce.db")
+
 @after.harvest
 def teardown_browser(total):
     world.firefox.quit()
-
-@before.each_scenario
-def clear_data(_foo):
-    pass
+    teardown_test_environment()
 
 @step(u'Using selenium')
 def using_selenium(step):
@@ -48,13 +72,13 @@ def access_url(step, url):
     if world.using_selenium:
         world.firefox.get(django_url(url))
     else:
-        response = world.client.get(django_url(url))
+        response = world.client.get(django_url(url), follow=True)
         world.dom = html.fromstring(response.content)
 
 @step(u'I am not logged in')
 def i_am_not_logged_in(step):
     if world.using_selenium:
-        world.firefox.get(django_url("/accounts/logout/"))
+        world.firefox.get(django_url("/accounts/logout/"), follow=True)
     else:
         world.client.logout()
 
@@ -137,10 +161,19 @@ def wait(step,seconds):
 @step(r'I see the header "(.*)"')
 def see_header(step, text):
     if world.using_selenium:
-        assert text.strip() == world.firefox.find_element_by_css_selector(".hero-unit>h1").text.strip()
+        found = False
+        for h1 in world.firefox.find_elements_by_css_selector("h1"):
+            if text.strip().lower() == h1.text.strip().lower():
+                found = True
+                break
+        assert found, "header %s found" % text
     else:
-        header = world.dom.cssselect('.hero-unit>h1')[0]
-        assert text.strip() == header.text_content().strip()
+        found = False
+        for h1 in world.dom.cssselect('h1'): 
+            if text.strip().lower() == h1.text_content().strip().lower():
+                found = True
+                break
+        assert found, "header %s found" % text
 
 @step(r'I see the page title "(.*)"')
 def see_title(step, text):
