@@ -96,6 +96,8 @@ LETTUCE_APPS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 AUTH_PROFILE_MODULE = "phtc.main.UserProfile"
+SERVER_EMAIL = "phtc@ccnmtl.columbia.edu"
+DEFAULT_FROM_EMAIL = "phtc@ccnmtl.columbia.edu"
 
 PAGEBLOCKS = ['pageblocks.TextBlock',
               'pageblocks.HTMLBlock',
