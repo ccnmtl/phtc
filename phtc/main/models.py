@@ -4,7 +4,6 @@ from registration.signals import user_registered
 from forms import UserRegistrationForm
 
 
-# define your models here
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     sex = models.TextField()
