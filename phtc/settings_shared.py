@@ -71,7 +71,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'tagging',
     'typogrify',
-    'raven.contrib.django',
+# TODO: update raven config to this: http://raven.readthedocs.org/en/latest/config/django.html
+# disable until then
+#    'raven.contrib.django',
     'munin',
     'south',
     'django_nose',
