@@ -1,8 +1,9 @@
 from annoying.decorators import render_to
-from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
-from pagetree.helpers import get_hierarchy, get_section_from_path
+from django.http import HttpResponseRedirect
+from pagetree.helpers import get_section_from_path
 from pagetree.helpers import get_module, needs_submit, submitted
 from django.contrib.auth.decorators import login_required
+
 
 @render_to('main/page.html')
 def page(request, path):
@@ -34,6 +35,7 @@ def page(request, path):
                     modules=root.get_children(),
                     root=section.hierarchy.get_root(),
                     )
+
 
 @login_required
 @render_to('main/edit_page.html')
