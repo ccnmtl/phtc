@@ -71,7 +71,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'tagging',
     'typogrify',
-# TODO: update raven config to this: http://raven.readthedocs.org/en/latest/config/django.html
+# TODO: update raven config to this:
+#  http://raven.readthedocs.org/en/latest/config/django.html
 # disable until then
 #    'raven.contrib.django',
     'munin',
@@ -187,4 +188,3 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.signals.SignalDebugPanel',
     'debug_toolbar.panels.logger.LoggingPanel',
 )
-
