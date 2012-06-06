@@ -3,3 +3,5 @@
 *.pyc
 ve
 media/CACHE
+lettuce.db
+*\#

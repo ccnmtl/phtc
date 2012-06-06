@@ -3,7 +3,10 @@ from lettuce.django import django_url
 from lettuce import before, after, world, step
 from django.test import client
 from django.core.management import call_command
+from django.test.utils import setup_test_environment, teardown_test_environment
 import sys
+import os
+from pagetree.models import Hierarchy, Section
 
 import time
 try:
@@ -24,23 +27,33 @@ def setup_browser(variables):
     world.client = client.Client()
     world.using_selenium = False
 
+# test_data/test.db was created by the following process
+#
+# 1) with a normal setup, add some pages, blocks, etc
+# 2) create a phtc/settings_test.py that uses sqlite3 and test_data/test.db
+# 3) ./manage.py dumpdata --indent=2 --format=json \
+#      --natural > phtc/main/fixtures/test_data.json
+# 4) ./manage.py syncdb --settings=phtc.settings_test
+# 5) ./manage.py migrate --settings=phtc.settings_test
+# 6) ./manage.py reset contenttypes --settings=phtc.settings_test
+# 7) ./manage.py reset auth --settings=phtc.settings_test
+# 8) ./manage.py loaddata phtc/main/fixtures/test_data.json \
+#      --settings=phtc.settings_test
+
 @before.harvest
-def setup_database(variables):
-    call_command('syncdb', interactive=False, verbosity=0)
-    call_command('flush', interactive=False, verbosity=0)
-    call_command('migrate', interactive=False, verbosity=0)
-    # contenttypes and auth don't play well with fixtures, so nuke them first
-    call_command('reset', 'contenttypes', interactive=False, verbosity=0)
-    call_command('reset', 'auth', interactive=False, verbosity=0)
-    call_command('loaddata', 'phtc/main/fixtures/test_data.json', verbosity=0)
+def setup_database(_foo):
+    # make sure we have a fresh test database
+    os.system("rm -f lettuce.db")
+    os.system("cp test_data/test.db lettuce.db")
+
+@after.harvest
+def teardown_database(_foo):
+    os.system("rm -f lettuce.db")
 
 @after.harvest
 def teardown_browser(total):
     world.firefox.quit()
-
-@before.each_scenario
-def clear_data(_foo):
-    pass
+    teardown_test_environment()
 
 @step(u'Using selenium')
 def using_selenium(step):

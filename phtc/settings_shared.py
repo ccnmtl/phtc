@@ -115,7 +115,7 @@ SENTRY_REMOTE_URL = 'http://sentry.ccnmtl.columbia.edu/sentry/store/'
 SENTRY_SITE = 'phtc'
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-if 'test' in sys.argv or 'harvest' in sys.argv:
+if 'test' in sys.argv:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -126,7 +126,19 @@ if 'test' in sys.argv or 'harvest' in sys.argv:
             'PASSWORD': '',
             }
         }
-    DEBUG=True
+
+if 'harvest' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'lettuce.db',
+            'HOST': '',
+            'PORT': '',
+            'USER': '',
+            'PASSWORD': '',
+            }
+        }
+
 
 SOUTH_TESTS_MIGRATE = False
 
