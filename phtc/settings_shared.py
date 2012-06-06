@@ -114,7 +114,18 @@ SENTRY_SITE = 'phtc'
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 if 'test' in sys.argv or 'harvest' in sys.argv:
-    DATABASE_ENGINE = 'sqlite3'
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+            'HOST': '',
+            'PORT': '',
+            'USER': '',
+            'PASSWORD': '',
+            }
+        }
+    DEBUG=True
+
 SOUTH_TESTS_MIGRATE = False
 
 THUMBNAIL_SUBDIR = "thumbs"

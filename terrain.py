@@ -2,6 +2,7 @@
 from lettuce.django import django_url
 from lettuce import before, after, world, step
 from django.test import client
+from django.core.management import call_command
 import sys
 
 import time
@@ -22,6 +23,16 @@ def setup_browser(variables):
     world.firefox = webdriver.Firefox(ff_profile)
     world.client = client.Client()
     world.using_selenium = False
+
+@before.harvest
+def setup_database(variables):
+    call_command('syncdb', interactive=False, verbosity=0)
+    call_command('flush', interactive=False, verbosity=0)
+    call_command('migrate', interactive=False, verbosity=0)
+    # contenttypes and auth don't play well with fixtures, so nuke them first
+    call_command('reset', 'contenttypes', interactive=False, verbosity=0)
+    call_command('reset', 'auth', interactive=False, verbosity=0)
+    call_command('loaddata', 'phtc/main/fixtures/test_data.json', verbosity=0)
 
 @after.harvest
 def teardown_browser(total):
@@ -48,13 +59,13 @@ def access_url(step, url):
     if world.using_selenium:
         world.firefox.get(django_url(url))
     else:
-        response = world.client.get(django_url(url))
+        response = world.client.get(django_url(url), follow=True)
         world.dom = html.fromstring(response.content)
 
 @step(u'I am not logged in')
 def i_am_not_logged_in(step):
     if world.using_selenium:
-        world.firefox.get(django_url("/accounts/logout/"))
+        world.firefox.get(django_url("/accounts/logout/"), follow=True)
     else:
         world.client.logout()
 
@@ -137,10 +148,19 @@ def wait(step,seconds):
 @step(r'I see the header "(.*)"')
 def see_header(step, text):
     if world.using_selenium:
-        assert text.strip() == world.firefox.find_element_by_css_selector(".hero-unit>h1").text.strip()
+        found = False
+        for h1 in world.firefox.find_elements_by_css_selector("h1"):
+            if text.strip().lower() == h1.text.strip().lower():
+                found = True
+                break
+        assert found, "header %s found" % text
     else:
-        header = world.dom.cssselect('.hero-unit>h1')[0]
-        assert text.strip() == header.text_content().strip()
+        found = False
+        for h1 in world.dom.cssselect('h1'): 
+            if text.strip().lower() == h1.text_content().strip().lower():
+                found = True
+                break
+        assert found, "header %s found" % text
 
 @step(r'I see the page title "(.*)"')
 def see_title(step, text):
