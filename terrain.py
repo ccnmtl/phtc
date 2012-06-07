@@ -226,3 +226,29 @@ def see_title(step, text):
         assert text == world.browser.title
     else:
         assert text == world.dom.find(".//title").text
+
+
+@step(r'there is an? "([^"]+)" field')
+def there_is_a_form_field(step, field_id):
+    if not world.using_selenium:
+        assert len(world.dom.cssselect("input#%s" % field_id)) > 0
+
+
+@step(r'there is an? "([^"]+)" select')
+def there_is_a_select(step, select_id):
+    if not world.using_selenium:
+        assert len(world.dom.cssselect("select#%s" % select_id)) > 0
+
+
+@step(u'there is a "([^"]*)" submit button')
+def there_is_a_submit_button(step, label):
+    if world.using_selenium:
+        assert False, "not implemented for selenium"
+
+    found = False
+    for i in world.dom.cssselect("input[type=submit]"):
+        if robust_string_compare(i.attrib['value'], label):
+            found = True
+            break
+    assert found, "found submit button with the right label"
+
