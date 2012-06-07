@@ -3,6 +3,7 @@ from lettuce.django import django_url
 from lettuce import before, after, world, step
 from django.test import client
 from django.test.utils import teardown_test_environment
+from django.conf import settings
 import os
 
 import time
@@ -25,14 +26,23 @@ def robust_string_compare(a, b):
     return a.strip().lower() == b.strip().lower()
 
 
+def skip_selenium():
+    return (hasattr(settings, 'LETTUCE_SKIP_SELENIUM')
+            and settings.LETTUCE_SKIP_SELENIUM)
+
 @before.harvest
 def setup_browser(variables):
-#    ff_profile = FirefoxProfile()
-#    ff_profile.set_preference("webdriver_enable_native_events", False)
-#    world.firefox = webdriver.Firefox(ff_profile)
-    world.browser = webdriver.Chrome()
-    world.client = client.Client()
     world.using_selenium = False
+    if skip_selenium():
+        world.browser = None
+        world.skipping = False
+    else:
+#       ff_profile = FirefoxProfile()
+#       ff_profile.set_preference("webdriver_enable_native_events", False)
+#       world.firefox = webdriver.Firefox(ff_profile)
+        world.browser = webdriver.Chrome()
+    world.client = client.Client()
+
 
 # test_data/test.db was created by the following process
 #
@@ -62,27 +72,36 @@ def teardown_database(_foo):
 
 @after.harvest
 def teardown_browser(total):
-    world.browser.quit()
+    if not skip_selenium(): 
+        world.browser.quit()
     teardown_test_environment()
 
 
 @step(u'Using selenium')
 def using_selenium(step):
-    world.using_selenium = True
+    if skip_selenium():
+        world.skipping = True
+    else:
+        world.using_selenium = True
 
 
 @step(u'Finished using selenium')
 def finished_selenium(step):
-    world.using_selenium = False
+    if skip_selenium():
+        world.skipping = False
+    else:
+        world.using_selenium = False
 
 
 @before.each_scenario
 def clear_selenium(step):
+    world.skipping = False
     world.using_selenium = False
 
 
 @step(r'I access the url "(.*)"')
 def access_url(step, url):
+    if world.skipping: return
     if world.using_selenium:
         world.browser.get(django_url(url))
     else:
@@ -92,6 +111,7 @@ def access_url(step, url):
 
 @step(u'I am not logged in')
 def i_am_not_logged_in(step):
+    if world.skipping: return
     if world.using_selenium:
         world.browser.get(django_url("/accounts/logout/"), follow=True)
     else:
@@ -100,6 +120,7 @@ def i_am_not_logged_in(step):
 
 @step(u'I am taken to a login screen')
 def i_am_taken_to_a_login_screen(step):
+    if world.skipping: return
     assert len(world.response.redirect_chain) > 0
     (url, status) = world.response.redirect_chain[0]
     assert status == 302, status
@@ -108,6 +129,7 @@ def i_am_taken_to_a_login_screen(step):
 
 @step(u'there is not an? "([^"]*)" link')
 def there_is_not_a_link(step, text):
+    if world.skipping: return
     found = False
     for a in world.dom.cssselect("a"):
         if a.text and robust_string_compare(a.text, text):
@@ -186,6 +208,7 @@ def wait(step, seconds):
 
 @step(r'I see the header "(.*)"')
 def see_header(step, text):
+    if world.skipping: return
     assert has_element(
         "h1",
         lambda element: compare_element_string(element, text)
