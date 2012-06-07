@@ -21,9 +21,10 @@ except:
 
 @before.harvest
 def setup_browser(variables):
-    ff_profile = FirefoxProfile()
-    ff_profile.set_preference("webdriver_enable_native_events", False)
-    world.firefox = webdriver.Firefox(ff_profile)
+#    ff_profile = FirefoxProfile()
+#    ff_profile.set_preference("webdriver_enable_native_events", False)
+#    world.firefox = webdriver.Firefox(ff_profile)
+    world.browser = webdriver.Chrome()
     world.client = client.Client()
     world.using_selenium = False
 
@@ -52,7 +53,7 @@ def teardown_database(_foo):
 
 @after.harvest
 def teardown_browser(total):
-    world.firefox.quit()
+    world.browser.quit()
     teardown_test_environment()
 
 @step(u'Using selenium')
@@ -70,7 +71,7 @@ def clear_selenium(step):
 @step(r'I access the url "(.*)"')
 def access_url(step, url):
     if world.using_selenium:
-        world.firefox.get(django_url(url))
+        world.browser.get(django_url(url))
     else:
         response = world.client.get(django_url(url), follow=True)
         world.dom = html.fromstring(response.content)
@@ -78,7 +79,7 @@ def access_url(step, url):
 @step(u'I am not logged in')
 def i_am_not_logged_in(step):
     if world.using_selenium:
-        world.firefox.get(django_url("/accounts/logout/"), follow=True)
+        world.browser.get(django_url("/accounts/logout/"), follow=True)
     else:
         world.client.logout()
 
@@ -119,17 +120,17 @@ def i_click_the_link(step, text):
         assert False, "could not find the '%s' link" % text
     else:
         try:
-            link = world.firefox.find_element_by_partial_link_text(text)
+            link = world.browser.find_element_by_partial_link_text(text)
             assert link.is_displayed()
             link.click()
         except:
             try:
                 time.sleep(1)
-                link = world.firefox.find_element_by_partial_link_text(text)
+                link = world.browser.find_element_by_partial_link_text(text)
                 assert link.is_displayed()
                 link.click()
             except:
-                world.firefox.get_screenshot_as_file("/tmp/selenium.png")
+                world.browser.get_screenshot_as_file("/tmp/selenium.png")
                 assert False, link.location
 
 @step(u'I fill in "([^"]*)" in the "([^"]*)" form field')
@@ -138,21 +139,21 @@ def i_fill_in_the_form_field(step, value, field_name):
     if not world.using_selenium:
         assert False, "this step needs to be implemented for the django test client"
 
-    world.firefox.find_element_by_id(field_name).send_keys(value)
+    world.browser.find_element_by_id(field_name).send_keys(value)
 
 @step(u'I submit the "([^"]*)" form')
 def i_submit_the_form(step, id):
     if not world.using_selenium:
         assert False, "this step needs to be implemented for the django test client"
 
-    world.firefox.find_element_by_id(id).submit()
+    world.browser.find_element_by_id(id).submit()
 
 @step('I go back')
 def i_go_back(self):
     """ need to back out of games currently"""
     if not world.using_selenium:
         assert False, "this step needs to be implemented for the django test client"
-    world.firefox.back()
+    world.browser.back()
 
 @step(u'I wait for (\d+) seconds')
 def wait(step,seconds):
@@ -162,7 +163,7 @@ def wait(step,seconds):
 def see_header(step, text):
     if world.using_selenium:
         found = False
-        for h1 in world.firefox.find_elements_by_css_selector("h1"):
+        for h1 in world.browser.find_elements_by_css_selector("h1"):
             if text.strip().lower() == h1.text.strip().lower():
                 found = True
                 break
@@ -178,6 +179,6 @@ def see_header(step, text):
 @step(r'I see the page title "(.*)"')
 def see_title(step, text):
     if world.using_selenium:
-        assert text == world.firefox.title
+        assert text == world.browser.title
     else:
         assert text == world.dom.find(".//title").text
