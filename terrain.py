@@ -19,6 +19,15 @@ try:
 except:
     pass
 
+
+def robust_string_compare(a,b):
+    """ compare two strings but be a little flexible about it.
+
+    try to handle case and whitespace variations without blowing up.
+    this makes tests more robust in the face of template changes"""
+    return a.strip().lower() == b.strip().lower()
+
+
 @before.harvest
 def setup_browser(variables):
 #    ff_profile = FirefoxProfile()
@@ -95,7 +104,7 @@ def i_am_taken_to_a_login_screen(step):
 def there_is_not_a_link(step, text):
     found = False
     for a in world.dom.cssselect("a"):
-        if a.text and a.text.strip() == text:
+        if a.text and robust_string_compare(a.text,text):
             found = True
     assert not found
 
@@ -103,7 +112,7 @@ def there_is_not_a_link(step, text):
 def there_is_a_link(step, text):
     found = False
     for a in world.dom.cssselect("a"):
-        if a.text and a.text.strip() == text:
+        if a.text and robust_string_compare(a.text,text):
             found = True
     assert found
 
@@ -159,19 +168,20 @@ def i_go_back(self):
 def wait(step,seconds):
     time.sleep(int(seconds))
 
+
 @step(r'I see the header "(.*)"')
 def see_header(step, text):
     if world.using_selenium:
         found = False
         for h1 in world.browser.find_elements_by_css_selector("h1"):
-            if text.strip().lower() == h1.text.strip().lower():
+            if robust_string_compare(text,h1.text):
                 found = True
                 break
         assert found, "header %s found" % text
     else:
         found = False
         for h1 in world.dom.cssselect('h1'): 
-            if text.strip().lower() == h1.text_content().strip().lower():
+            if robust_string_compare(text,h1.text_content()):
                 found = True
                 break
         assert found, "header %s found" % text
@@ -181,14 +191,14 @@ def see_h3(step, text):
     if world.using_selenium:
         found = False
         for h3 in world.browser.find_elements_by_css_selector("h3"):
-            if text.strip().lower() == h3.text.strip().lower():
+            if robust_string_compare(text,h3.text):
                 found = True
                 break
         assert found, "h3 %s found" % text
     else:
         found = False
         for h3 in world.dom.cssselect('h3'): 
-            if text.strip().lower() == h3.text_content().strip().lower():
+            if robust_string_compare(text,h3.text_content()):
                 found = True
                 break
         assert found, "h3 %s found" % text
