@@ -186,38 +186,44 @@ def wait(step, seconds):
 
 @step(r'I see the header "(.*)"')
 def see_header(step, text):
-    if world.using_selenium:
-        found = False
-        for h1 in world.browser.find_elements_by_css_selector("h1"):
-            if robust_string_compare(text, h1.text):
-                found = True
-                break
-        assert found, "header %s found" % text
+    assert has_element(
+        "h1",
+        lambda element: compare_element_string(element, text)
+        ), "h1 %s found" % text
+
+
+def compare_element_string(element, text):
+    if hasattr(element, 'text_content'):
+        return robust_string_compare(element.text_content(), text)
     else:
-        found = False
-        for h1 in world.dom.cssselect('h1'):
-            if robust_string_compare(text, h1.text_content()):
-                found = True
-                break
-        assert found, "header %s found" % text
+        return robust_string_compare(element.text, text)
+
+def has_element(css_selector, test_func, root=None):
+    if root is None:
+        if world.using_selenium:
+            root = world.browser
+        else:
+            root = world.dom
+
+    collection = []
+    if world.using_selenium:
+        collection = root.find_elements_by_css_selector(css_selector)
+    else:
+        collection = root.cssselect(css_selector)
+
+    for element in collection:
+        if test_func(element):
+            return True
+
+    return False
 
 
 @step(r'I see the h3 "(.*)"')
 def see_h3(step, text):
-    if world.using_selenium:
-        found = False
-        for h3 in world.browser.find_elements_by_css_selector("h3"):
-            if robust_string_compare(text, h3.text):
-                found = True
-                break
-        assert found, "h3 %s found" % text
-    else:
-        found = False
-        for h3 in world.dom.cssselect('h3'):
-            if robust_string_compare(text, h3.text_content()):
-                found = True
-                break
-        assert found, "h3 %s found" % text
+    assert has_element(
+        "h3",
+        lambda element: compare_element_string(element, text)
+        ), "h3 %s found" % text
 
 
 @step(r'I see the page title "(.*)"')
@@ -242,13 +248,8 @@ def there_is_a_select(step, select_id):
 
 @step(u'there is a "([^"]*)" submit button')
 def there_is_a_submit_button(step, label):
-    if world.using_selenium:
-        assert False, "not implemented for selenium"
-
-    found = False
-    for i in world.dom.cssselect("input[type=submit]"):
-        if robust_string_compare(i.attrib['value'], label):
-            found = True
-            break
-    assert found, "found submit button with the right label"
+    assert has_element(
+        "input[type=submit]",
+        lambda element: robust_string_compare(element.attrib['value'], label)
+        ), "found submit button with the right label"
 
