@@ -176,6 +176,24 @@ def see_header(step, text):
                 break
         assert found, "header %s found" % text
 
+@step(r'I see the h3 "(.*)"')
+def see_h3(step, text):
+    if world.using_selenium:
+        found = False
+        for h3 in world.browser.find_elements_by_css_selector("h3"):
+            if text.strip().lower() == h3.text.strip().lower():
+                found = True
+                break
+        assert found, "h3 %s found" % text
+    else:
+        found = False
+        for h3 in world.dom.cssselect('h3'): 
+            if text.strip().lower() == h3.text_content().strip().lower():
+                found = True
+                break
+        assert found, "h3 %s found" % text
+
+
 @step(r'I see the page title "(.*)"')
 def see_title(step, text):
     if world.using_selenium:
