@@ -27,8 +27,9 @@ def robust_string_compare(a, b):
 
 
 def skip_selenium():
-    return (hasattr(settings, 'LETTUCE_SKIP_SELENIUM')
-            and settings.LETTUCE_SKIP_SELENIUM)
+    return (os.environ.get('LETTUCE_SKIP_SELENIUM',False)
+            or (hasattr(settings, 'LETTUCE_SKIP_SELENIUM')
+            and settings.LETTUCE_SKIP_SELENIUM))
 
 @before.harvest
 def setup_browser(variables):
