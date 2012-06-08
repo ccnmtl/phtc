@@ -49,6 +49,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
 )
 
 ROOT_URLCONF = 'phtc.urls'
@@ -93,6 +94,7 @@ INSTALLED_APPS = (
 LETTUCE_APPS = (
     'phtc.main',
 )
+LETTUCE_SERVER_PORT = 7000
 
 ACCOUNT_ACTIVATION_DAYS = 7
 AUTH_PROFILE_MODULE = "phtc.main.UserProfile"
@@ -159,6 +161,7 @@ STATICMEDIA_MOUNTS = (
 
 COMPRESS_URL = "/site_media/"
 COMPRESS_ROOT = "media/"
+COMPRESS_PARSER = "compressor.parser.HtmlParser"
 
 # WIND settings
 

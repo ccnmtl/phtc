@@ -11,6 +11,7 @@
 </form>
 
 <form method="post" action="." class="well">
+{% csrf_token %}
 <p>If you have a project account...</p>
 
 <label for="id_username">Username: {{ form.username }}</label>
@@ -21,7 +22,7 @@
 </form>
 
 <p class="smalltxt"><a href="/registration/register/" title="Create your new project account">Need a new account?</a></p>
-<p class="smalltxt"><a href="/registration/password/reset" title="Reset Password">Forgot Password?</a></p>
+<p class="smalltxt"><a href="/registration/password/reset/" title="Reset Password">Forgot Password?</a></p>
 
 {% endblock %}
 
