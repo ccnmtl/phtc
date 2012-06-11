@@ -297,11 +297,9 @@ def i_am_logged_in_as_an_admin(step):
 
 @step(u'I do not see an edit link')
 def i_do_not_see_an_edit_link(step):
-    assert (len(world.dom.cssselect("a#test-edit-link")) == 0,
-            "edit link not found")
+    assert len(world.dom.cssselect("a#test-edit-link")) == 0
 
 
 @step(u'I see an edit link')
 def then_i_see_an_edit_link(step):
-    assert (len(world.dom.cssselect("a#test-edit-link")) > 0,
-            "edit link found")
+    assert len(world.dom.cssselect("a#test-edit-link")) > 0
