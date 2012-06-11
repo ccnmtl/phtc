@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from registration.signals import user_registered
 from forms import UserRegistrationForm
+from django_statsd.clients import statsd
 
 
 class UserProfile(models.Model):
@@ -29,5 +30,6 @@ def user_created(sender, user, request, **kwargs):
     data.employment_location = form.data["employment_location"]
     data.position = form.data["position"]
     data.save()
+    statsd.incr('user_registered')
 
 user_registered.connect(user_created)
