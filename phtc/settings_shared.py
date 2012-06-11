@@ -89,6 +89,7 @@ INSTALLED_APPS = (
     'quizblock',
     'registration',
     'debug_toolbar',
+    'smartif',
 )
 
 LETTUCE_APPS = (
