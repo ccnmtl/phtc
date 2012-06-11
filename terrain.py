@@ -283,3 +283,25 @@ def there_is_a_submit_button(step, label):
         "input[type=submit]",
         lambda element: robust_string_compare(element.attrib['value'], label)
         ), "found submit button with the right label"
+
+
+@step(u'I am logged as a student')
+def i_am_logged_as_a_student(step):
+    world.client.login(username='testuser', password='test')
+
+
+@step(u'I am logged in as an admin')
+def i_am_logged_in_as_an_admin(step):
+    world.client.login(username='testadmin', password='test')
+
+
+@step(u'I do not see an edit link')
+def i_do_not_see_an_edit_link(step):
+    assert (len(world.dom.cssselect("a#test-edit-link")) == 0,
+            "edit link not found")
+
+
+@step(u'I see an edit link')
+def then_i_see_an_edit_link(step):
+    assert (len(world.dom.cssselect("a#test-edit-link")) > 0,
+            "edit link found")
