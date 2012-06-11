@@ -27,9 +27,10 @@ def robust_string_compare(a, b):
 
 
 def skip_selenium():
-    return (os.environ.get('LETTUCE_SKIP_SELENIUM',False)
+    return (os.environ.get('LETTUCE_SKIP_SELENIUM', False)
             or (hasattr(settings, 'LETTUCE_SKIP_SELENIUM')
             and settings.LETTUCE_SKIP_SELENIUM))
+
 
 @before.harvest
 def setup_browser(variables):
@@ -73,7 +74,7 @@ def teardown_database(_foo):
 
 @after.harvest
 def teardown_browser(total):
-    if not skip_selenium(): 
+    if not skip_selenium():
         world.browser.quit()
     teardown_test_environment()
 
@@ -102,7 +103,8 @@ def clear_selenium(step):
 
 @step(r'I access the url "(.*)"')
 def access_url(step, url):
-    if world.skipping: return
+    if world.skipping:
+        return
     if world.using_selenium:
         world.browser.get(django_url(url))
     else:
@@ -112,7 +114,8 @@ def access_url(step, url):
 
 @step(u'I am not logged in')
 def i_am_not_logged_in(step):
-    if world.skipping: return
+    if world.skipping:
+        return
     if world.using_selenium:
         world.browser.get(django_url("/accounts/logout/"), follow=True)
     else:
@@ -121,7 +124,8 @@ def i_am_not_logged_in(step):
 
 @step(u'I am taken to a login screen')
 def i_am_taken_to_a_login_screen(step):
-    if world.skipping: return
+    if world.skipping:
+        return
     assert len(world.response.redirect_chain) > 0
     (url, status) = world.response.redirect_chain[0]
     assert status == 302, status
@@ -130,7 +134,8 @@ def i_am_taken_to_a_login_screen(step):
 
 @step(u'there is not an? "([^"]*)" link')
 def there_is_not_a_link(step, text):
-    if world.skipping: return
+    if world.skipping:
+        return
     found = False
     for a in world.dom.cssselect("a"):
         if a.text and robust_string_compare(a.text, text):
@@ -209,7 +214,8 @@ def wait(step, seconds):
 
 @step(r'I see the header "(.*)"')
 def see_header(step, text):
-    if world.skipping: return
+    if world.skipping:
+        return
     assert has_element(
         "h1",
         lambda element: compare_element_string(element, text)
@@ -221,6 +227,7 @@ def compare_element_string(element, text):
         return robust_string_compare(element.text_content(), text)
     else:
         return robust_string_compare(element.text, text)
+
 
 def has_element(css_selector, test_func, root=None):
     if root is None:
@@ -276,4 +283,3 @@ def there_is_a_submit_button(step, label):
         "input[type=submit]",
         lambda element: robust_string_compare(element.attrib['value'], label)
         ), "found submit button with the right label"
-
