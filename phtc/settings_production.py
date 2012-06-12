@@ -15,6 +15,9 @@ COMPRESS_ROOT = "/var/www/phtc/phtc/media/"
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+# unset this to prevent anyone from accidently running pull_from_prod on production
+PROD_BASE_URL = None
+
 try:
     from local_settings import *
 except ImportError:
