@@ -1,8 +1,10 @@
 from annoying.decorators import render_to
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from pagetree.helpers import get_section_from_path
 from pagetree.helpers import get_module, needs_submit, submitted
 from django.contrib.auth.decorators import login_required
+from pagetree_export.exportimport import export_zip
+import os
 
 
 @render_to('main/page.html')
@@ -52,3 +54,15 @@ def edit_page(request, path):
 @render_to('main/instructor_page.html')
 def instructor_page(request, path):
     return dict()
+
+
+def exporter(request):
+    section = get_section_from_path('/')
+    zip_filename = export_zip(section.hierarchy)
+
+    with open(zip_filename) as zipfile:
+        resp = HttpResponse(zipfile.read())
+    resp['Content-Type'] = "application/x-zip-compressed"
+    resp['Content-Disposition'] = ("attachment; filename=content.zip")
+    os.unlink(zip_filename)
+    return resp
