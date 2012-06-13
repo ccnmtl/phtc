@@ -1,9 +1,8 @@
-from pagetree_export.exportimport import import_zip
 from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.utils.simplejson import loads
+from pagetree.models import Hierarchy
 from restclient import GET
-from zipfile import ZipFile
-from cStringIO import StringIO
 
 
 class Command(BaseCommand):
@@ -15,8 +14,10 @@ class Command(BaseCommand):
             print "this should never be run on production"
             return
         print "fetching content from prod..."
-        zc = GET(settings.PROD_BASE_URL + "_export/")
-        buffer = StringIO(zc)
-        zipfile = ZipFile(buffer, "r")
-
-        import_zip(zipfile, 'main')
+        d = loads(GET(settings.PROD_BASE_URL + "_export/"))
+        print str(d)
+        print "removing old pagetree hierarchy"
+        Hierarchy.objects.all().delete()
+        print "importing the new one"
+        Hierarchy.from_dict(d)
+        print "done"
