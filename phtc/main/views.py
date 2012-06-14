@@ -3,7 +3,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from pagetree.helpers import get_section_from_path
 from pagetree.helpers import get_module, needs_submit, submitted
 from django.contrib.auth.decorators import login_required
-from django.utils.simplejson import dumps
 
 
 @render_to('main/page.html')
@@ -11,6 +10,8 @@ def page(request, path):
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
     module = get_module(section)
+    if not request.user.is_anonymous():
+        section.user_visit(request.user)
     if section.id == root.id:
         # trying to visit the root page
         if section.get_next():
@@ -18,6 +19,8 @@ def page(request, path):
             return HttpResponseRedirect(section.get_next().get_absolute_url())
 
     if request.method == "POST":
+        if request.user.is_anonymous():
+            return HttpResponse("you must login first")
         # user has submitted a form. deal with it
         if request.POST.get('action', '') == 'reset':
             section.reset(request.user)
@@ -53,11 +56,3 @@ def edit_page(request, path):
 @render_to('main/instructor_page.html')
 def instructor_page(request, path):
     return dict()
-
-
-def exporter(request):
-    h = get_section_from_path('/').hierarchy
-    data = h.as_dict()
-    resp = HttpResponse(dumps(data))
-    resp['Content-Type'] = 'application/json'
-    return resp
