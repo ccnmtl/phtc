@@ -3,7 +3,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from pagetree.helpers import get_section_from_path
 from pagetree.helpers import get_module, needs_submit, submitted
 from django.contrib.auth.decorators import login_required
-from django.utils.simplejson import dumps
 
 
 @render_to('main/page.html')
@@ -57,11 +56,3 @@ def edit_page(request, path):
 @render_to('main/instructor_page.html')
 def instructor_page(request, path):
     return dict()
-
-
-def exporter(request):
-    h = get_section_from_path('/').hierarchy
-    data = h.as_dict()
-    resp = HttpResponse(dumps(data))
-    resp['Content-Type'] = 'application/json'
-    return resp
