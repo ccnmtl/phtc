@@ -15,7 +15,6 @@ class Command(BaseCommand):
             return
         print "fetching content from prod..."
         d = loads(GET(settings.PROD_BASE_URL + "_pagetree/export/"))
-        print str(d)
         print "removing old pagetree hierarchy"
         Hierarchy.objects.all().delete()
         print "importing the new one"
