@@ -11,6 +11,8 @@ def page(request, path):
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
     module = get_module(section)
+    if not request.user.is_anonymous():
+        section.user_visit(request.user)
     if section.id == root.id:
         # trying to visit the root page
         if section.get_next():
@@ -18,6 +20,8 @@ def page(request, path):
             return HttpResponseRedirect(section.get_next().get_absolute_url())
 
     if request.method == "POST":
+        if request.user.is_anonymous():
+            return HttpResponse("you must login first")
         # user has submitted a form. deal with it
         if request.POST.get('action', '') == 'reset':
             section.reset(request.user)
