@@ -29,6 +29,8 @@ urlpatterns = patterns('',
                             'form_class': UserRegistrationForm},
                         name='registration_register'),
                        (r'^registration/', include('registration.urls')),
+                       (r'^profile/$', 'phtc.main.views.get_user_profile'),
+                       (r'^profile_update/$', 'phtc.main.views.update_user_profile'),
                        (r'^admin/', include(admin.site.urls)),
                        (r'^munin/', include('munin.urls')),
                        (r'^_stats/', direct_to_template,
@@ -48,5 +50,6 @@ urlpatterns = patterns('',
                        (r'^instructor/(?P<path>.*)$',
                         'phtc.main.views.instructor_page'),
                        (r'^(?P<path>.*)$', 'phtc.main.views.page'),
+                       
 
 ) + staticmedia.serve()

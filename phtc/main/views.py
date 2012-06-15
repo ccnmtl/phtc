@@ -4,6 +4,10 @@ from pagetree.helpers import get_section_from_path
 from pagetree.helpers import get_module, needs_submit, submitted
 from django.contrib.auth.decorators import login_required
 from django.utils.simplejson import dumps
+from phtc.main.models import UserProfile
+from phtc.main.models import User
+from django import forms
+from phtc.main.forms import RegistrationForm, UserRegistrationForm
 
 
 @render_to('main/page.html')
@@ -61,3 +65,41 @@ def exporter(request):
     resp = HttpResponse(dumps(data))
     resp['Content-Type'] = 'application/json'
     return resp
+
+@render_to('main/profile.html')
+def get_user_profile(request):
+    try:
+        profile = UserProfile.objects.get(user=request.user.id)
+        user = User.objects.get(pk = request.user.id)
+        form = UserRegistrationForm(initial={
+                                             'username': user.username,
+                                             'email': user.email,
+                                              'sex': profile.sex,
+                                              'age': profile.age,
+                                              'origin': profile.origin,
+                                              'ethnicity': profile.ethnicity,
+                                              'disadvantaged': profile.disadvantaged,
+                                              'employment_location': profile.employment_location,
+                                              'position': profile.position,
+                                              })
+        return dict(profile = profile, form = form)
+    except UserProfile.DoesNotExist:
+        return HttpResponseRedirect('/registration/register/')
+
+def update_user_profile(request):
+    form = UserRegistrationForm(request.POST)
+    user  = User.objects.get(pk = request.user.id)
+    user.username = form.data["username"] 
+    
+    userprofile = UserProfile.objects.get(user=request.user.id)
+    userprofile.sex = form.data["sex"]
+    userprofile.age = form.data["age"]
+    userprofile.origin = form.data["origin"]
+    userprofile.ethnicity = form.data["ethnicity"]
+    userprofile.disadvantaged = form.data["disadvantaged"]
+    userprofile.employment_location = form.data["employment_location"]
+    userprofile.position = form.data["position"]
+    userprofile.save()
+    user.save()
+    return HttpResponseRedirect('/profile/?saved=true/')
+

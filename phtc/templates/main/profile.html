@@ -1,0 +1,15 @@
+{% extends "registration/registration_base.html" %}
+{% load bootstrap %}
+{% block title %}Register for an account{% endblock %}
+{% block content %}
+
+<h3>Edit your Profile</h3>
+	<p>{{request.user.id}}</p>
+	<form method='post' action='/profile_update/' class="well form-horizontal">{% csrf_token %}
+			{{form|bootstrap}}
+	
+	<div class="fieldwrapper">
+        <input type="submit" class="btn btn-primary" value="Update Profile" /></td>
+	</div><!-- fieldwrapper -->
+    </form>
+{% endblock %}
