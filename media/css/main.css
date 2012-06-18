@@ -52,3 +52,7 @@ body > .container {
 #primarynav a:hover {
   color: blue;
 }
+
+.controls textarea {
+		width: 90%;
+}

@@ -196,3 +196,4 @@ DEBUG_TOOLBAR_PANELS = (
 )
 
 PROD_BASE_URL = "http://training.lowernysphtc.org/"
+PROD_MEDIA_BASE_URL = "http://training.lowernysphtc.org/uploads/"
