@@ -4,12 +4,49 @@
 {% block content %}
 
 <h3>Edit your Profile</h3>
-	<p>{{request.user.id}}</p>
-	<form method='post' action='/profile_update/' class="well form-horizontal">{% csrf_token %}
+	<p>user id = {{request.user.id}}</p>
+	<form id="user_profile" method='post' action='/update_profile/' class="well form-horizontal">{% csrf_token %}
 			{{form|bootstrap}}
 	
 	<div class="fieldwrapper">
-        <input type="submit" class="btn btn-primary" value="Update Profile" /></td>
+        <input type="button" class="btn btn-primary" value="Update Profile" /></td>
 	</div><!-- fieldwrapper -->
     </form>
+    <script>
+    	jQuery('#id_password1').parent().append('<span>Leave Blank to keep the same password</span>');
+    	jQuery('#id_password2').parent().append('<span>Leave Blank to keep the same password</span>');
+    	
+    	jQuery('input.btn').click(function(){
+	    	var valid = 0;
+	    	var password_valid = 0;
+	    	var p1 = jQuery('#id_password1').val();
+	    	var p2 = jQuery('#id_password2').val()
+	    	jQuery('.help-inline').remove()
+	    	jQuery('.controls').each(function(i){
+	    		if (jQuery(this).children().attr('id') === 'id_password1' || jQuery(this).children().attr('id') === 'id_password2'){
+		    		
+	    		}else{
+	    			jQuery(this).parent().removeClass('error')
+		    		if (jQuery(this).children().val() === 'Please Select' || jQuery(this).children().val() === ''){
+		    	 	 	jQuery(jQuery('.controls')[i]).append('<span class="help-inline">this field is required</span>').parent().addClass('error')
+		    	 	 	valid +=1;
+		    	 	}
+	    		}//end if password
+	    	});//end each
+	    	
+	    	if (p1 === '' && p2 === ''  ){
+	    		password_valid  = 0;
+	    	}else if (p1 === p2){
+	    		password_valid = 0;
+	    	}else{
+	    		alert('passwords must match')
+	    		password_valid += 1;
+	    	}
+	    	
+	    	if (valid == 0 && password_valid == 0) {
+	    		jQuery('#user_profile').submit();
+	    	} 
+    	
+		});
+    </script>
 {% endblock %}
