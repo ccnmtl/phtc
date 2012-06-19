@@ -78,3 +78,9 @@
 {% endblock %}
 
 
+
+{% block primarynavrightextra %}
+						{% if request.user.is_superuser %}
+						<li><a id="test-edit-link" href="/edit{{section.get_absolute_url}}">Edit</a></li>
+						{% endif %}
+{% endblock %}
