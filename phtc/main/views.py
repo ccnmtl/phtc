@@ -1,6 +1,6 @@
 from annoying.decorators import render_to
 from django.http import HttpResponseRedirect, HttpResponse
-from pagetree.helpers import get_section_from_path
+from pagetree.helpers import get_section_from_path, get_hierarchy
 from pagetree.helpers import get_module, needs_submit, submitted
 from django.contrib.auth.decorators import login_required
 
@@ -56,3 +56,12 @@ def edit_page(request, path):
 @render_to('main/instructor_page.html')
 def instructor_page(request, path):
     return dict()
+
+
+@login_required
+@render_to('main/dashboard.html')
+def dashboard(request):
+    h = get_hierarchy("main")
+    root = h.get_root()
+    last_session = h.get_user_section(request.user)
+    return dict(root=root, last_session=last_session)
