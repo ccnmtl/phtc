@@ -24,7 +24,14 @@
 	    	jQuery('.help-inline').remove()
 	    	jQuery('.controls').each(function(i){
 	    		if (jQuery(this).children().attr('id') === 'id_password1' || jQuery(this).children().attr('id') === 'id_password2'){
-		    		
+	    			if (p1 === '' && p2 === ''  ){
+			    		password_valid  = 0;
+			    	}else if (p1 === p2){
+			    		password_valid = 0;
+			    	}else{
+			    		alert('passwords must match')
+			    		password_valid += 1;
+			    	}	
 	    		}else{
 	    			jQuery(this).parent().removeClass('error')
 		    		if (jQuery(this).children().val() === 'Please Select' || jQuery(this).children().val() === ''){
@@ -33,15 +40,6 @@
 		    	 	}
 	    		}//end if password
 	    	});//end each
-	    	
-	    	if (p1 === '' && p2 === ''  ){
-	    		password_valid  = 0;
-	    	}else if (p1 === p2){
-	    		password_valid = 0;
-	    	}else{
-	    		alert('passwords must match')
-	    		password_valid += 1;
-	    	}
 	    	
 	    	if (valid == 0 && password_valid == 0) {
 	    		jQuery('#user_profile').submit();

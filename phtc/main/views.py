@@ -3,14 +3,12 @@ from django.http import HttpResponseRedirect, HttpResponse
 from pagetree.helpers import get_section_from_path
 from pagetree.helpers import get_module, needs_submit, submitted
 from django.contrib.auth.decorators import login_required
-<<<<<<< HEAD
 from django.utils.simplejson import dumps
 from phtc.main.models import UserProfile
 from phtc.main.models import User
 from django import forms
 from phtc.main.forms import RegistrationForm, UserRegistrationForm
-=======
->>>>>>> a632281f13f49edd4bff61ed68192567d530be38
+
 
 
 @render_to('main/page.html')
@@ -64,7 +62,6 @@ def edit_page(request, path):
 @render_to('main/instructor_page.html')
 def instructor_page(request, path):
     return dict()
-<<<<<<< HEAD
 
 
 def exporter(request):
@@ -104,28 +101,21 @@ def get_user_profile(request):
 
 def update_user_profile(request):
     form = UserRegistrationForm(request.POST)
-    if form.is_valid():
-        user = User.objects.get(pk = request.user.id)
-        user.username = form.data["username"]
-        if form.data["password1"] != " ":
-            user_pass = form.data["password1"]
-            user.set_password(form.data["password1"])
-        try :
-            userprofile = UserProfile.objects.get(user=user)
-        except:
-            userprofile = UserProfile.objects.create(user=user)
-        userprofile.sex = form.data["sex"]
-        userprofile.age = form.data["age"]
-        userprofile.origin = form.data["origin"]
-        userprofile.ethnicity = form.data["ethnicity"]
-        userprofile.disadvantaged = form.data["disadvantaged"]
-        userprofile.employment_location = form.data["employment_location"]
-        userprofile.position = form.data["position"]
-        userprofile.save()
-        user.save()
-        return HttpResponseRedirect('/profile/?saved=true/')
-    else:
-        return HttpResponse(form.errors)
-
-=======
->>>>>>> a632281f13f49edd4bff61ed68192567d530be38
+    user = User.objects.get(pk = request.user.id)
+    user.username = form.data["username"]
+    if form.data["password1"] != "":
+        user.set_password(form.data["password1"])
+    try :
+        userprofile = UserProfile.objects.get(user=user)
+    except:
+        userprofile = UserProfile.objects.create(user=user)
+    userprofile.sex = form.data["sex"]
+    userprofile.age = form.data["age"]
+    userprofile.origin = form.data["origin"]
+    userprofile.ethnicity = form.data["ethnicity"]
+    userprofile.disadvantaged = form.data["disadvantaged"]
+    userprofile.employment_location = form.data["employment_location"]
+    userprofile.position = form.data["position"]
+    userprofile.save()
+    user.save()
+    return HttpResponseRedirect('/profile/?saved=true/')
