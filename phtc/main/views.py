@@ -6,9 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.simplejson import dumps
 from phtc.main.models import UserProfile
 from phtc.main.models import User
-from django import forms
-from phtc.main.forms import RegistrationForm, UserRegistrationForm
-
+from phtc.main.forms import UserRegistrationForm
 
 
 @render_to('main/page.html')
@@ -63,6 +61,7 @@ def edit_page(request, path):
 def instructor_page(request, path):
     return dict()
 
+
 def exporter(request):
     h = get_section_from_path('/').hierarchy
     data = h.as_dict()
@@ -70,41 +69,43 @@ def exporter(request):
     resp['Content-Type'] = 'application/json'
     return resp
 
+
 @render_to('main/profile.html')
 def get_user_profile(request):
     if request.user.is_authenticated():
         try:
             profile = UserProfile.objects.get(user=request.user.id)
-            user = User.objects.get(pk = request.user.id)
+            user = User.objects.get(pk=request.user.id)
             form = UserRegistrationForm(initial={
-                                                 'username': user.username,
-                                                 'email': user.email,
-                                                  'sex': profile.sex,
-                                                  'age': profile.age,
-                                                  'origin': profile.origin,
-                                                  'ethnicity': profile.ethnicity,
-                                                  'disadvantaged': profile.disadvantaged,
-                                                  'employment_location': profile.employment_location,
-                                                  'position': profile.position,
-                                                  })
-            return dict(profile = profile, form = form)
+                    'username': user.username,
+                    'email': user.email,
+                    'sex': profile.sex,
+                    'age': profile.age,
+                    'origin': profile.origin,
+                    'ethnicity': profile.ethnicity,
+                    'disadvantaged': profile.disadvantaged,
+                    'employment_location': profile.employment_location,
+                    'position': profile.position,
+                    })
+            return dict(profile=profile, form=form)
         except UserProfile.DoesNotExist:
-            user = User.objects.get(pk = request.user.id)
+            user = User.objects.get(pk=request.user.id)
             form = UserRegistrationForm(initial={
-                                                 'username': user.username,
-                                                 'email': user.email,
-                                              })
-        return dict(form = form, user = user)
+                    'username': user.username,
+                    'email': user.email,
+                    })
+        return dict(form=form, user=user)
     else:
         return HttpResponseRedirect('/accounts/login/?next=/edit/')
 
+
 def update_user_profile(request):
     form = UserRegistrationForm(request.POST)
-    user = User.objects.get(pk = request.user.id)
+    user = User.objects.get(pk=request.user.id)
     user.username = form.data["username"]
     if form.data["password1"] != "":
         user.set_password(form.data["password1"])
-    try :
+    try:
         userprofile = UserProfile.objects.get(user=user)
     except:
         userprofile = UserProfile.objects.create(user=user)
@@ -119,6 +120,7 @@ def update_user_profile(request):
     user.save()
     return HttpResponseRedirect('/profile/?saved=true/')
 
+
 @login_required
 @render_to('main/dashboard.html')
 def dashboard(request):
@@ -126,4 +128,3 @@ def dashboard(request):
     root = h.get_root()
     last_session = h.get_user_section(request.user)
     return dict(root=root, last_session=last_session)
-
