@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load user_status %}
+
+{% block content %}
+
+<h1>Dashboard</h1>
+
+
+{% for module in root.get_children %}
+<div class="row-fluid">
+	<div class="span5">
+		<a href="{{module.get_absolute_url}}">{{module.label}}</a>
+	</div>
+	<div class="span1">
+		{% get_user_section_status request.user module as status %}
+		{% ifequal status.status "complete" %}
+		<img src="/site_media/img/status_completed.png">
+		{% endifequal %}
+		{% ifequal status.status "incomplete" %}
+		<img src="/site_media/img/status_inprogress.png">
+		{% endifequal %}
+		{% if not status %}
+		<img src="/site_media/img/status_uninitiated.png">
+		{% endif %}
+
+</div>
+	<div class="span1"><img src="/site_media/img/status_info.png"></div>
+</div>
+
+{% for section in module.get_children %}
+<div class="row-fluid">
+	<div class="span1"></div>
+	<div class="span4">
+		<a href="{{section.get_absolute_url}}">{{section.label}}</a>
+	</div>
+	<div class="span1">
+		{% get_user_section_status request.user section as status %}
+		{% ifequal status.status "complete" %}
+		<img src="/site_media/img/status_completed.png">
+		{% endifequal %}
+		{% ifequal status.status "incomplete" %}
+		<img src="/site_media/img/status_inprogress.png">
+		{% endifequal %}
+		{% if not status %}
+		<img src="/site_media/img/status_uninitiated.png">
+		{% endif %}
+</div>
+	<div class="span1"><img src="/site_media/img/status_info.png"></div>
+
+</div>
+{% endfor %}
+
+{% endfor %}
+
+
+{% endblock %}
