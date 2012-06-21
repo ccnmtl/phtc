@@ -42,6 +42,7 @@
           <a href="/accounts/login/?next=/" class="btn btn-success">login</a>
           {% else %}
           logged in as <a rel="tooltip" title="view/edit profile" href="/profile/">{{request.user.username}} {{request.user.last_name}}</a> (<a href="/accounts/logout/">Log out</a>)
+					[<a href="/dashboard/">Dashboard</a>]
           {% endif %}
 {% endblock %}
        </p>
