@@ -9,6 +9,29 @@ from phtc.main.models import User
 from phtc.main.forms import UserRegistrationForm
 
 
+def redirect_to_first_section_if_root(section, root):
+    if section.id == root.id:
+        # trying to visit the root page
+        if section.get_next():
+            # just send them to the first child
+            return HttpResponseRedirect(section.get_next().get_absolute_url())
+    return None
+
+
+def update_status(section, user):
+    uv = None
+    if not user.is_anonymous():
+        uv = section.get_uservisit(user)
+        if not uv:
+            section.user_pagevisit(user, status="incomplete")
+        else:
+            if uv.status != "complete":
+                section.user_pagevisit(user, status="incomplete")
+            else:
+                # we still want the last_visit time to update
+                section.user_pagevisit(user, status="complete")
+
+
 @render_to('main/page.html')
 def page(request, path):
     section = get_section_from_path(path)
@@ -16,11 +39,11 @@ def page(request, path):
     module = get_module(section)
     if not request.user.is_anonymous():
         section.user_visit(request.user)
-    if section.id == root.id:
-        # trying to visit the root page
-        if section.get_next():
-            # just send them to the first child
-            return HttpResponseRedirect(section.get_next().get_absolute_url())
+
+    rv = redirect_to_first_section_if_root(section, root)
+    if rv:
+        return rv
+    update_status(section, request.user)
 
     if request.method == "POST":
         if request.user.is_anonymous():
@@ -28,9 +51,11 @@ def page(request, path):
         # user has submitted a form. deal with it
         if request.POST.get('action', '') == 'reset':
             section.reset(request.user)
+            section.user_pagevisit(request.user, status="incomplete")
             return HttpResponseRedirect(section.get_absolute_url())
         proceed = section.submit(request.POST, request.user)
         if proceed:
+            section.user_pagevisit(request.user, status="complete")
             return HttpResponseRedirect(section.get_next().get_absolute_url())
         else:
             # giving them feedback before they proceed
