@@ -97,7 +97,7 @@ def get_user_profile(request):
                                               })
         return dict(form = form, user = user)
     else:
-        return HttpResponseRedirect('/registration/register/')
+        return HttpResponseRedirect('/accounts/login/?next=/edit/')
 
 def update_user_profile(request):
     form = UserRegistrationForm(request.POST)
