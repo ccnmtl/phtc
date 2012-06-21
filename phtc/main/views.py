@@ -70,35 +70,34 @@ def exporter(request):
     return resp
 
 
+@login_required
 @render_to('main/profile.html')
 def get_user_profile(request):
-    if request.user.is_authenticated():
-        try:
-            profile = UserProfile.objects.get(user=request.user.id)
-            user = User.objects.get(pk=request.user.id)
-            form = UserRegistrationForm(initial={
-                    'username': user.username,
-                    'email': user.email,
-                    'sex': profile.sex,
-                    'age': profile.age,
-                    'origin': profile.origin,
-                    'ethnicity': profile.ethnicity,
-                    'disadvantaged': profile.disadvantaged,
-                    'employment_location': profile.employment_location,
-                    'position': profile.position,
-                    })
-            return dict(profile=profile, form=form)
-        except UserProfile.DoesNotExist:
-            user = User.objects.get(pk=request.user.id)
-            form = UserRegistrationForm(initial={
-                    'username': user.username,
-                    'email': user.email,
-                    })
-        return dict(form=form, user=user)
-    else:
-        return HttpResponseRedirect('/accounts/login/?next=/edit/')
+    try:
+        profile = UserProfile.objects.get(user=request.user.id)
+        user = User.objects.get(pk=request.user.id)
+        form = UserRegistrationForm(initial={
+                'username': user.username,
+                'email': user.email,
+                'sex': profile.sex,
+                'age': profile.age,
+                'origin': profile.origin,
+                'ethnicity': profile.ethnicity,
+                'disadvantaged': profile.disadvantaged,
+                'employment_location': profile.employment_location,
+                'position': profile.position,
+                })
+        return dict(profile=profile, form=form)
+    except UserProfile.DoesNotExist:
+        user = User.objects.get(pk=request.user.id)
+        form = UserRegistrationForm(initial={
+                'username': user.username,
+                'email': user.email,
+                })
+    return dict(form=form, user=user)
 
 
+@login_required
 def update_user_profile(request):
     form = UserRegistrationForm(request.POST)
     user = User.objects.get(pk=request.user.id)
