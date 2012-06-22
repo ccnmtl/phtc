@@ -18,7 +18,7 @@ requirements/src/raven-0.7.0.tar.gz
 requirements/src/django-bootstrap-form-2.0.3.tar.gz
 requirements/src/django-treebeard-1.61.tar.gz
 requirements/src/django-pagetree-0.10.0.tar.gz
-requirements/src/django-pageblocks-0.5.6.tar.gz
+requirements/src/django-pageblocks-0.5.7.tar.gz
 requirements/src/django-pagetree_export-0.3.tar.gz
 requirements/src/django-quizblock-0.6.7.tar.gz
 requirements/src/django-registration-0.8.tar.gz
