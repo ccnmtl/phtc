@@ -30,7 +30,8 @@ urlpatterns = patterns('',
                         name='registration_register'),
                        (r'^registration/', include('registration.urls')),
                        (r'^profile/$', 'phtc.main.views.get_user_profile'),
-                       (r'^update_profile/$', 'phtc.main.views.update_user_profile'),
+                       (r'^update_profile/$',
+                        'phtc.main.views.update_user_profile'),
                        (r'^admin/', include(admin.site.urls)),
                        (r'^munin/', include('munin.urls')),
                        (r'^dashboard/', 'phtc.main.views.dashboard'),
@@ -50,6 +51,4 @@ urlpatterns = patterns('',
                        (r'^instructor/(?P<path>.*)$',
                         'phtc.main.views.instructor_page'),
                        (r'^(?P<path>.*)$', 'phtc.main.views.page'),
-                       
-
-) + staticmedia.serve()
+                       ) + staticmedia.serve()

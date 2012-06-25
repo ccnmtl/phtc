@@ -17,8 +17,8 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return "%s's profile" % self.user
-        
-    
+
+
 def user_created(sender, user, request, **kwargs):
     form = UserRegistrationForm(request.POST)
     data = UserProfile(user=user)

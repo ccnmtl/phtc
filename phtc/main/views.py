@@ -6,9 +6,30 @@ from django.contrib.auth.decorators import login_required
 from django.utils.simplejson import dumps
 from phtc.main.models import UserProfile
 from phtc.main.models import User
-from django import forms
-from phtc.main.forms import RegistrationForm, UserRegistrationForm
+from phtc.main.forms import UserRegistrationForm
 
+
+def redirect_to_first_section_if_root(section, root):
+    if section.id == root.id:
+        # trying to visit the root page
+        if section.get_next():
+            # just send them to the first child
+            return HttpResponseRedirect(section.get_next().get_absolute_url())
+    return None
+
+
+def update_status(section, user):
+    uv = None
+    if not user.is_anonymous():
+        uv = section.get_uservisit(user)
+        if not uv:
+            section.user_pagevisit(user, status="incomplete")
+        else:
+            if uv.status != "complete":
+                section.user_pagevisit(user, status="incomplete")
+            else:
+                # we still want the last_visit time to update
+                section.user_pagevisit(user, status="complete")
 
 
 @render_to('main/page.html')
@@ -18,11 +39,11 @@ def page(request, path):
     module = get_module(section)
     if not request.user.is_anonymous():
         section.user_visit(request.user)
-    if section.id == root.id:
-        # trying to visit the root page
-        if section.get_next():
-            # just send them to the first child
-            return HttpResponseRedirect(section.get_next().get_absolute_url())
+
+    rv = redirect_to_first_section_if_root(section, root)
+    if rv:
+        return rv
+    update_status(section, request.user)
 
     if request.method == "POST":
         if request.user.is_anonymous():
@@ -30,9 +51,11 @@ def page(request, path):
         # user has submitted a form. deal with it
         if request.POST.get('action', '') == 'reset':
             section.reset(request.user)
+            section.user_pagevisit(request.user, status="incomplete")
             return HttpResponseRedirect(section.get_absolute_url())
         proceed = section.submit(request.POST, request.user)
         if proceed:
+            section.user_pagevisit(request.user, status="complete")
             return HttpResponseRedirect(section.get_next().get_absolute_url())
         else:
             # giving them feedback before they proceed
@@ -63,6 +86,7 @@ def edit_page(request, path):
 def instructor_page(request, path):
     return dict()
 
+
 def exporter(request):
     h = get_section_from_path('/').hierarchy
     data = h.as_dict()
@@ -70,41 +94,42 @@ def exporter(request):
     resp['Content-Type'] = 'application/json'
     return resp
 
+
+@login_required
 @render_to('main/profile.html')
 def get_user_profile(request):
-    if request.user.is_authenticated():
-        try:
-            profile = UserProfile.objects.get(user=request.user.id)
-            user = User.objects.get(pk = request.user.id)
-            form = UserRegistrationForm(initial={
-                                                 'username': user.username,
-                                                 'email': user.email,
-                                                  'sex': profile.sex,
-                                                  'age': profile.age,
-                                                  'origin': profile.origin,
-                                                  'ethnicity': profile.ethnicity,
-                                                  'disadvantaged': profile.disadvantaged,
-                                                  'employment_location': profile.employment_location,
-                                                  'position': profile.position,
-                                                  })
-            return dict(profile = profile, form = form)
-        except UserProfile.DoesNotExist:
-            user = User.objects.get(pk = request.user.id)
-            form = UserRegistrationForm(initial={
-                                                 'username': user.username,
-                                                 'email': user.email,
-                                              })
-        return dict(form = form, user = user)
-    else:
-        return HttpResponseRedirect('/accounts/login/?next=/edit/')
+    try:
+        profile = UserProfile.objects.get(user=request.user.id)
+        user = User.objects.get(pk=request.user.id)
+        form = UserRegistrationForm(initial={
+                'username': user.username,
+                'email': user.email,
+                'sex': profile.sex,
+                'age': profile.age,
+                'origin': profile.origin,
+                'ethnicity': profile.ethnicity,
+                'disadvantaged': profile.disadvantaged,
+                'employment_location': profile.employment_location,
+                'position': profile.position,
+                })
+        return dict(profile=profile, form=form)
+    except UserProfile.DoesNotExist:
+        user = User.objects.get(pk=request.user.id)
+        form = UserRegistrationForm(initial={
+                'username': user.username,
+                'email': user.email,
+                })
+    return dict(form=form, user=user)
 
+
+@login_required
 def update_user_profile(request):
     form = UserRegistrationForm(request.POST)
-    user = User.objects.get(pk = request.user.id)
+    user = User.objects.get(pk=request.user.id)
     user.username = form.data["username"]
     if form.data["password1"] != "":
         user.set_password(form.data["password1"])
-    try :
+    try:
         userprofile = UserProfile.objects.get(user=user)
     except:
         userprofile = UserProfile.objects.create(user=user)
@@ -119,6 +144,7 @@ def update_user_profile(request):
     user.save()
     return HttpResponseRedirect('/profile/?saved=true/')
 
+
 @login_required
 @render_to('main/dashboard.html')
 def dashboard(request):
@@ -126,4 +152,3 @@ def dashboard(request):
     root = h.get_root()
     last_session = h.get_user_section(request.user)
     return dict(root=root, last_session=last_session)
-
