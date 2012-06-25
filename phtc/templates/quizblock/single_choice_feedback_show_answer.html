@@ -1,16 +1,28 @@
 {% load markup %}
-{% if block.rhetorical %}
+{% if block.feedback  %}
       <div class="casesanswerdisplay">
-        <a href="#q{{question.id}}" class="moretoggle">Show answer &gt;&gt;</a>
         <div id="q{{question.id}}" class="toggleable">
           <p>
-            {% if question.correct_answer_letter %}
-              <i>The correct answer is {{question.correct_answer_letter}}:</i>
-            {% endif %} 
-            {{question.explanation|markdown}}
+            
+            {{answer.feedback}}
           </p>
         </div>
       </div>
+      <div class="case-feedback">
+        {% for answer in question.answer_set.all %}
+          <div class ="item-feedback well">
+            {% if answer.correct %}
+              <p><span class="correct">Correct: </span>{{ answer.feedback }} </p>
+            {% else %}    
+              <p><span class="incorrect">Incorrect: </span>{{ answer.feedback }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+      </div><!--end case-feedback-->
 {% else %}
 <p>{{question.explanation|markdown}}</p>
+
 {% endif %}
+
+
+

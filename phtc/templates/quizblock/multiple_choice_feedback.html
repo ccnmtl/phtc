@@ -2,10 +2,10 @@
 {% load getresponse %}
 
 
-<ol type="A">qweqwe
+<ol type="A">
   {% for answer in question.answer_set.all %}
     {% if block.rhetorical %}
-      <li>sdfsdf<input name="question{{question.id}}" value="{{answer.label}}" type="checkbox" />{{answer.label}}</li>
+      <li><input name="question{{question.id}}" value="{{answer.label}}" type="checkbox" />{{answer.label}}</li>
     {% else %}
       <li>
         {% if response %}

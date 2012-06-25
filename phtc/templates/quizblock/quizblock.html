@@ -10,12 +10,13 @@
   {% include 'quizblock/question.html' %}
 {% endfor %}
 
-{% if block.rhetorical %}
-	{% if block.pageblocks%}
-            <p>this question has feedback</p>
-        {% endif %}
-  <script src="http://mt.ccnmtl.columbia.edu/pedialabs/js/quizshow.js" type="text/javascript" language="javascript"></script>
-{% endif %}	
 
+{% if block.rhetorical %}
+	{% if block.feedback%}
+		<script src="site_media/js/feedback.js"></script>
+	{% else %}
+		<script src="http://mt.ccnmtl.columbia.edu/pedialabs/js/quizshow.js" type="text/javascript" language="javascript"></script>
+	{% endif %}
+{% endif %}	
 
 {% endif %}

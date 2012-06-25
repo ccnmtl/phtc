@@ -65,6 +65,7 @@ class Quiz(models.Model):
             description = forms.CharField(widget=forms.widgets.Textarea(),
                                           initial=self.description)
             rhetorical = forms.BooleanField(initial=self.rhetorical)
+            feedback = forms.BooleanField(initial=self.feedback)
             allow_redo = forms.BooleanField(initial=self.allow_redo)
             alt_text = ("<a href=\"" + reverse("edit-quiz", args=[self.id])
                         + "\">manage questions/answers</a>")
@@ -75,6 +76,7 @@ class Quiz(models.Model):
         class AddForm(forms.Form):
             description = forms.CharField(widget=forms.widgets.Textarea())
             rhetorical = forms.BooleanField()
+            feedback = forms.BooleanField()
             allow_redo = forms.BooleanField()
         return AddForm()
 
@@ -83,6 +85,7 @@ class Quiz(models.Model):
         return Quiz.objects.create(
             description=request.POST.get('description', ''),
             rhetorical=request.POST.get('rhetorical', ''),
+            feedback=request.POST.get('feedback', ''),
             allow_redo=request.POST.get('allow_redo', ''))
 
     @classmethod
@@ -98,6 +101,7 @@ class Quiz(models.Model):
     def edit(self, vals, files):
         self.description = vals.get('description', '')
         self.rhetorical = vals.get('rhetorical', '')
+        self.feedback = vals.get('feedback', '')
         self.allow_redo = vals.get('allow_redo', '')
         self.save()
 
@@ -113,6 +117,7 @@ class Quiz(models.Model):
     def as_dict(self):
         d = dict(description=self.description,
                  rhetorical=self.rhetorical,
+                 feedback=self.feedback,
                  allow_redo=self.allow_redo)
         d['questions'] = [q.as_dict() for q in self.question_set.all()]
         return d
@@ -120,6 +125,7 @@ class Quiz(models.Model):
     def import_from_dict(self, d):
         self.description = d['description']
         self.rhetorical = d['rhetorical']
+        self.feedback = d['feedback']
         self.allow_redo = d.get('allow_redo', True)
         self.save()
         self.submission_set.all().delete()
