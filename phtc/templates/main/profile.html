@@ -4,7 +4,6 @@
 {% block content %}
 
 <h3>Edit your Profile</h3>
-	<p>user id = {{request.user.id}}</p>
 	<form id="user_profile" method='post' action='/update_profile/' class="well form-horizontal">{% csrf_token %}
 			{{form|bootstrap}}
 	
