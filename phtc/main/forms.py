@@ -8,11 +8,13 @@ attrs_dict = {'class': 'required'}
 class UserRegistrationForm(RegistrationForm):
     sex = forms.CharField(
         max_length=6,
+        label="What is your sex?",
         widget=forms.Select(choices=[('Please Select', 'Please Select'),
                                      ('male', 'Male'),
                                      ('female', 'Female')])
         )
     age = forms.CharField(
+        label="What is your age?",
         widget=forms.Select(choices=[('Please Select', 'Please Select'),
                                      ('Under 20', 'Under 20 Years'),
                                      ('20-29', '20-29 Years'),
@@ -25,6 +27,7 @@ class UserRegistrationForm(RegistrationForm):
                                       'I prefer not to answer')])
         )
     origin = forms.CharField(
+        label="Are you of Hispanic. Latino, or Spanish origin?",
         widget=forms.Select(choices=[('Please Select', 'Please Select'),
                                      ('yes', 'Yes'),
                                      ('no', 'No'),
@@ -32,6 +35,7 @@ class UserRegistrationForm(RegistrationForm):
                                       'I prefer not to answer')])
         )
     ethnicity = forms.CharField(
+        label="Which of these best represent your race/ethnicity?",
         widget=forms.Select(
             choices=[
                 ('Please Select', 'Please Select'),
@@ -52,6 +56,7 @@ class UserRegistrationForm(RegistrationForm):
                 ('Prefer not to answer', 'I prefer not to answer')])
         )
     disadvantaged = forms.CharField(
+        label="Prior to the age of 18, do you feel that you were educationally or financially disadvantaged?",
         widget=forms.Select(choices=[('Please Select',
                                       'Please Select'),
                                      ('yes', 'Yes'),
@@ -60,6 +65,7 @@ class UserRegistrationForm(RegistrationForm):
                                       'I prefer not to answer')])
         )
     employment_location = forms.CharField(
+        label="Which category best describes your employment location?",
         widget=forms.Select(
             choices=[('Please Select', 'Please Select'),
                      ('Academia', 'Academia'),
@@ -75,6 +81,7 @@ class UserRegistrationForm(RegistrationForm):
                      ('Other', 'Other')])
         )
     position = forms.CharField(
+        label="Which general job category best describes your position?",
         widget=forms.Select(
             choices=[
                 ('Please Select', 'Please Select'),
