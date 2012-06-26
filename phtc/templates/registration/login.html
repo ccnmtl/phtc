@@ -1,29 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
+<div id="welcome">
+	<h2>Welcome to the PHTC Training Environment</h2>
+	
+	<p>But ere this was done, Pip, who had been slily hovering near by all this while, drew nigh to him where he lay, and with soft sobbings, took him by the hand; in the other, holding his tambourine.</p>
+	
+	<p>"Poor rover! will ye never have done with all this weary roving? where go ye now? But if the currents carry ye to those sweet Antilles where the beaches are only beat with water-lilies, will ye do one little errand for me? Seek out one Pip, who's now been missing long: I think he's in those far Antilles. If ye find him, then comfort him; for he must be very sad; for look! he's left his tambourine behind;—I found it. Rig-a-dig, dig, dig! Now, Queequeg, die; and I'll beat ye your dying march."</p>
+</div>
+<div id="user_log_in">
+	<h3 class="log_in">Please log in</h3>
 
-<h2>Choose a Login Option...</h2>
+	<form method="post" action="./?next=/dashboard/" class="well">
+	{% csrf_token %}
+	<p>If you have a project account...</p>
 
-<form method="get" action="{{ wind_base }}login" class="well">
-<input type="hidden" name="service" value="{{ wind_service }}" />
-<input type="hidden" name="destination" value="http://{{ request.get_host }}/accounts/windlogin/?next={{ next }}" />
-<p>If you have a Columbia University Network ID
-        (UNI)... </p><input type="submit" value="LOG IN" class="btn btn-primary"/></p>
-</form>
+	<label for="id_username">Username: {{ form.username }}</label>
+	<label for="id_password">Password: {{ form.password }}</label>
 
-<form method="post" action="./?next=/dashboard/" class="well">
-{% csrf_token %}
-<p>If you have a project account...</p>
+	<input type="submit" value="LOG IN" class="btn btn-primary" />
+	<input type="hidden" name="next" value="{{ next }}" />
 
-<label for="id_username">Username: {{ form.username }}</label>
-<label for="id_password">Password: {{ form.password }}</label>
+	<p class="smalltxt login"><a href="/registration/register/" title="Create your new project account">Need a new account?</a></p>
+	<p class="smalltxt login"><a href="/registration/password/reset/" title="Reset Password">Forgot Password?</a></p>
+	</form>
 
-<input type="submit" value="LOG IN" class="btn btn-primary" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
+	<form method="get" action="{{ wind_base }}login" class="well">
+	<input type="hidden" name="service" value="{{ wind_service }}" />
+	<input type="hidden" name="destination" value="http://{{ request.get_host }}/accounts/windlogin/?next={{ next }}" />
+	<p>If you have a Columbia University Network ID
+	        (UNI)... </p><input type="submit" value="LOG IN" class="btn btn-primary"/></p>
+	</form>
 
-<p class="smalltxt"><a href="/registration/register/" title="Create your new project account">Need a new account?</a></p>
-<p class="smalltxt"><a href="/registration/password/reset/" title="Reset Password">Forgot Password?</a></p>
-
+	
+</div><!--end #user_log_in-->
 {% endblock %}
 
 
