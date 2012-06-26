@@ -56,3 +56,19 @@ body > .container {
 .controls textarea {
 		width: 90%;
 }
+.item-feedback{
+  display: none;
+}
+.casequestion input[type="radio"]{
+	margin: 3px 3px 3px 0px;
+}
+.casequestion form li{
+	cursor: pointer;
+}
+
+.big-modal {
+   width: 940px;
+   margin-left:-470px;
+   max-height: 600px;
+   margin-top: -300px;
+}

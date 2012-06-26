@@ -41,7 +41,7 @@
           {% if request.user.is_anonymous %}
           <a href="/accounts/login/?next=/" class="btn btn-success">login</a>
           {% else %}
-          logged in as <a rel="tooltip" title="view/edit profile" href="/profile/">{{request.user.username}} {{request.user.last_name}}</a> (<a href="/accounts/logout/">Log out</a>)
+          logged in as <span class="user_profile" rel="tooltip" title="view/edit profile"><a href="/profile/">{{request.user.username}} {{request.user.last_name}}</a></span> (<a href="/accounts/logout/">Log out</a>)
 					[<a href="/dashboard/">Dashboard</a>]
           {% endif %}
 {% endblock %}
@@ -117,12 +117,10 @@
 
 {% block js %}{% endblock %}
 <script>
-//add tooltip 
-    jQuery("a[rel=tooltip]").hover(function(){
-      jQuery(this).tooltip({
-        placement: 'bottom'
-      });
-    })
+//add tooltip
+    jQuery("span.user_profile").tooltip({
+      placement: 'bottom'
+    });
 </script>
 </body>
 </html>
