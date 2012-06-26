@@ -39,9 +39,9 @@
           {% block topnavbarrightitems %}{% endblock %}
 {% block usernav %}
           {% if request.user.is_anonymous %}
-          <a href="/accounts/login/?next=/" class="btn btn-success">login</a>
+          <a href="/accounts/login/?next=/dashboard/" class="btn btn-success">login</a>
           {% else %}
-          logged in as <span class="user_profile" rel="tooltip" title="view/edit profile"><a href="/profile/">{{request.user.username}} {{request.user.last_name}}</a></span> (<a href="/accounts/logout/">Log out</a>)
+          logged in as <span class="user_profile" rel="tooltip" title="view/edit profile"><a href="/profile/">{{request.user.username}} {{request.user.last_name}}</a></span> (<a href="/accounts/logout/?next=/accounts/login/">Log out</a>)
 					[<a href="/dashboard/">Dashboard</a>]
           {% endif %}
 {% endblock %}

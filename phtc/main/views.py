@@ -2,6 +2,7 @@ from annoying.decorators import render_to
 from django.http import HttpResponseRedirect, HttpResponse
 from pagetree.helpers import get_section_from_path, get_hierarchy
 from pagetree.helpers import get_module, needs_submit, submitted
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.utils.simplejson import dumps
 from phtc.main.models import UserProfile
@@ -14,8 +15,9 @@ def redirect_to_first_section_if_root(section, root):
         # trying to visit the root page
         if section.get_next():
             # just send them to the first child
-            return HttpResponseRedirect(section.get_next().get_absolute_url())
-    return None
+            """ return HttpResponseRedirect(section.get_next().get_absolute_url()) """
+            # users will redirect to thier dashboard - if not logged in will goto login page
+            return HttpResponseRedirect("/dashboard/")
 
 
 def update_status(section, user):
