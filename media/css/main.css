@@ -72,3 +72,23 @@ body > .container {
    max-height: 600px;
    margin-top: -300px;
 }
+#user_log_in{
+  width:250px;
+  float: left;
+  margin: 30px 0px 0px 0px;
+}
+#welcome{
+  float: left;
+  width:600px;
+  padding: 0px 80px 0px 0px;
+}
+h3.log_in{
+  color: #777;
+}
+
+p.smalltxt.login{
+  margin: 10px 0 0 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+}
