@@ -6,11 +6,13 @@ stuff is all hooked up properly and running.
 
     Scenario: Index Page Load With Selenium
         Using selenium
+        Given I am logged as a student
         When I access the url "/"
-        Then I see the header "module 1"
+        Then I see the header "Dashboard"
         Finished using selenium
 
     Scenario: Index Page Load
+        Given I am logged as a student
         When I access the url "/"
-        Then I see the header "module 1"
+        Then I see the header "Dashboard"
 

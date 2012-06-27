@@ -287,12 +287,24 @@ def there_is_a_submit_button(step, label):
 
 @step(u'I am logged as a student')
 def i_am_logged_as_a_student(step):
-    world.client.login(username='testuser', password='test')
+    if world.skipping:
+        return
+
+    if not world.using_selenium:
+        world.client.login(username='testuser', password='test')
+    else:
+        assert False, "this needs to be implemented for selenium"
 
 
 @step(u'I am logged in as an admin')
 def i_am_logged_in_as_an_admin(step):
-    world.client.login(username='testadmin', password='test')
+    if world.skipping:
+        return
+
+    if not world.using_selenium:
+        world.client.login(username='testadmin', password='test')
+    else:
+        assert False, "this needs to be implemented for selenium"
 
 
 @step(u'I do not see an edit link')

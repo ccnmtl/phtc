@@ -56,7 +56,8 @@ class UserRegistrationForm(RegistrationForm):
                 ('Prefer not to answer', 'I prefer not to answer')])
         )
     disadvantaged = forms.CharField(
-        label="Prior to the age of 18, do you feel that you were educationally or financially disadvantaged?",
+        label=("Prior to the age of 18, do you feel that you were "
+               "educationally or financially disadvantaged?"),
         widget=forms.Select(choices=[('Please Select',
                                       'Please Select'),
                                      ('yes', 'Yes'),
