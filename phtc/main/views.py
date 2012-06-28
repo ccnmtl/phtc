@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.utils.simplejson import dumps
 from phtc.main.models import UserProfile
-from phtc.main.models import User
 from phtc.main.forms import UserRegistrationForm
 
 
@@ -15,8 +14,8 @@ def redirect_to_first_section_if_root(section, root):
         # trying to visit the root page
         if section.get_next():
             # just send them to the first child
-            """ return HttpResponseRedirect(section.get_next().get_absolute_url()) """
-            # users will redirect to thier dashboard - if not logged in will goto login page
+            # users will redirect to their dashboard
+            # - if not logged in will goto login page
             return HttpResponseRedirect("/dashboard/")
 
 
