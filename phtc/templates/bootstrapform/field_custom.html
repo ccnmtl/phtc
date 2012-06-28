@@ -1,0 +1,45 @@
+{% load bootstrap %}
+
+<style>
+.controls span{font-size:11px;color:#888;}
+.form-horizontal .control-label {font-weight:bold;padding-top: 5px;width:100%;text-align: left;}
+.form-horizontal .controls {margin-left: 0px;}
+select {width: 320px;background-color: #fff;}
+</style>
+
+<div class="control-group{% if field.errors %} error{% endif %}">
+    {% if field|is_checkbox %}
+                <div class="controls">
+                    <label class="checkbox">
+                        {{ field }} <span>{{ field.label }}</span>
+                    </label>
+
+                    {% for error in field.errors %}
+                        <span class="help-inline">{{ error }}</span>
+                    {% endfor %}
+
+                    {% if field.help_text %}
+                    <p class="help-block">
+                        {{ field.help_text }}
+                    </p>
+                    {% endif %}
+                </div>
+    {% else %}
+        <label class="control-label" for="{{ field.auto_id }}">{{ field.label }}</label>
+        <br style="clear:both"/>
+        <div class="controls">
+            {{ field }}
+
+            {% for error in field.errors %}
+                <span class="help-inline">{{ error }}</span>
+            {% endfor %}
+
+            {% if field.help_text %}
+            <p class="help-block">
+                {{ field.help_text }}
+            </p>
+            {% endif %}
+
+        </div>
+    {% endif %}
+</div>

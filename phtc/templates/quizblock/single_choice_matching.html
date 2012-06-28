@@ -1,0 +1,79 @@
+{% load markup %}
+<style type="text/css">
+button.btn, input[type="submit"].btn{
+  margin: 0 0 15px 0;
+}
+td.answer-label{
+  width:500px;
+  padding-right: 10px;
+}
+td.code-label{
+  width:500px;
+  padding-right: 10px;
+}
+ol.answer-codes li{
+  
+}
+td.td-ui{
+  width: 15px;
+}
+.td-answer-header{
+  width: 100px;
+  font-weight: bold;
+  padding: 0 8px 0 0;
+}
+.td-answer-comparison{
+  width: 100px;
+  padding: 0 8px 0 0; 
+}
+</style>
+  <h4>List of codes:</h4>
+  <div id="codes">
+    <ol class="answer-codes" type="A">
+    {% for answer in question.answer_set.all %}
+      <li>{{ answer.value }}</li>
+  {% endfor %}
+  </ol>
+  </div><!--end #codes-->
+
+    <table id="header-table" type="A">
+      <tr>
+        <td class="code-label"><h5>SCENARIO</h5></td>
+        {% for answer in question.answer_set.all %}
+        <td class="td-ui">
+            <span>{{ forloop.counter }}</span>
+        </td>
+        {% endfor %}
+      </tr>
+    </table>
+
+    <div id="matching">
+      {% for answer in question.answer_set.all %}
+      <table class="table-matching" type="A">
+        <tr>
+          <td class="answer-label">{{answer.label}}</td>
+          {% for answer in question.answer_set.all %}
+          <td class="td-ui user-selection">
+              <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}-{{ forloop.parentloop.counter0 }}" value="{{answer.value}}" type="radio" />
+          </td>
+          {% endfor %}
+        </tr>
+      </table><!--end .table-matching-->    
+      {% endfor %}
+    </div><!--end #matching-->
+    <div id="comparison"></div>
+
+{# Create the correct answer object #}
+  <script>
+  var correct_answers = {
+    {% for answer in question.answer_set.all %}
+      {% if forloop.last%}
+        {{ forloop.counter0 }} : '{{ answer.value }}'
+      {% else %}
+        {{ forloop.counter0 }} : '{{ answer.value }}',
+      {% endif %}
+    {% endfor %}
+  }
+
+  </script>
+

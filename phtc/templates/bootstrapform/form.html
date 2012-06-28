@@ -1,0 +1,20 @@
+{% if form.non_field_errors %}
+    <div class="alert alert-error">
+        <a class="close" data-dismiss="alert">&times;</a></a>
+        {% for non_field_error in form.non_field_errors %}
+             {{ non_field_error }}
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% for field in form.hidden_fields %}
+    {{ field }}
+{% endfor %}
+
+{% for field in form.visible_fields %}
+	{% if form.disadvantaged %}
+		{% include 'bootstrapform/field_custom.html' %}
+	{% else %}
+    	{% include 'bootstrapform/field.html' %}
+    {% endif %}
+{% endfor %}
