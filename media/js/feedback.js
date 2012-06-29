@@ -1,5 +1,5 @@
-jQuery(document).ready(function(){ 
-  jQuery('.casequestion form li').each(function(){
+jQuery(document).ready(function() {
+  jQuery('.casequestion form li').each(function() {
     jQuery(this).click(function(){//adding event listeners
       var casequestion = jQuery(this).parent().parent().parent().parent();
       var arr = jQuery(this).parent().children();
@@ -8,13 +8,13 @@ jQuery(document).ready(function(){
       var feedback_item = jQuery(casequestion).children('.case-feedback').children()[index];
 
       jQuery(feedback).children().each(function(){
-      	jQuery(this).css('display','none');
+        jQuery(this).css('display','none');
       });
 
       jQuery(this).children().attr('checked','true');
 
       jQuery(feedback_item).css({
-      	display: 'block'
+        display: 'block'
       });
 
     });//end click
