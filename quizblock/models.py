@@ -149,6 +149,7 @@ class Quiz(models.Model):
                 Answer.objects.create(question=question,
                                       value=a['value'],
                                       label=a['label'],
+                                      matching=a['matching'],
                                       feedback=a['feedback'],
                                       correct=a['correct'])
 
@@ -160,6 +161,7 @@ class Question(models.Model):
         max_length=256,
         choices=(
             ("multiple choice", "Multiple Choice: Multiple answers"),
+            ("matching", "Matching: Match questions with set of answers"),
             ("single choice", "Multiple Choice: Single answer"),
             ("single choice feedback", "Multiple Choice: Single answer with item feedback"),
             ("single choice dropdown",
@@ -217,6 +219,7 @@ class Question(models.Model):
     def answerable(self):
         """ whether it makes sense to have Answers associated with this """
         return self.question_type in ["multiple choice",
+                                      "matching",
                                       "single choice feedback",
                                       "single choice",
                                       "single choice dropdown"]
@@ -232,6 +235,9 @@ class Question(models.Model):
 
     def is_single_choice_feedback(self):
         return self.question_type == "single choice feedback"
+
+    def is_matching(self):
+        return self.question_type == "matching"
 
     def is_single_choice_dropdown(self):
         return self.question_type == "single choice dropdown"
@@ -273,7 +279,8 @@ class Answer(models.Model):
         return AnswerForm(request, instance=self)
 
     def as_dict(self):
-        return dict(value=self.value, label=self.label, feedback=self.feedback, correct=self.correct)
+        return dict(value=self.value, label=self.label, feedback=self.feedback, matching=self.matching,
+        correct=self.correct)
 
 
 class Submission(models.Model):

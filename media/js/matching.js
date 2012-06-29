@@ -47,6 +47,7 @@ jQuery(document).ready(function($){
 			$(this).children().children()
 				.append('<td class="td-answer-comparison">' + _user_answers[i] + '</td><td class="td-answer-comparison">'+ _answer_key[i] +'</td>')
 		});//end .each
+		$('#matching').append('<p class="explanation well">' + window.explanation.explanation + '</p>');
 		//$("#comparison").append($("#matching").clone());
 	}
 })//end doc.ready

@@ -26,6 +26,10 @@ td.td-ui{
   width: 100px;
   padding: 0 8px 0 0; 
 }
+.explanation{
+  margin: 20px 0;
+  padding: 10px;
+}
 </style>
   <h4>List of codes:</h4>
   <div id="codes">
@@ -65,6 +69,7 @@ td.td-ui{
 
 {# Create the correct answer object #}
   <script>
+  var explanation = {explanation : '{{ question.explanation }}'};
   var correct_answers = {
     {% for answer in question.answer_set.all %}
       {% if forloop.last%}
@@ -73,7 +78,7 @@ td.td-ui{
         {{ forloop.counter0 }} : '{{ answer.value }}',
       {% endif %}
     {% endfor %}
-  }
+  };
 
   </script>
 

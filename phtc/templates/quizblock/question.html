@@ -16,15 +16,15 @@
         {% if block.matching %}<form id="matching-form-{{question.id}}">{% endif %}
 
 	{% if question.is_single_choice %}
-    {% if block.matching %}
-      {% include 'quizblock/single_choice_matching.html' %}
-    {% else %}
       {% include 'quizblock/single_choice.html' %}
-    {% endif %}
-	{% endif %}
+  {% endif %}
 
   {% if question.is_single_choice_feedback %}
       {% include 'quizblock/single_choice.html' %}
+  {% endif %}
+
+  {% if question.is_matching %}
+      {% include 'quizblock/single_choice_matching.html' %}
   {% endif %}
 
 	{% if question.is_single_choice_dropdown %}
