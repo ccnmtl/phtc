@@ -9,15 +9,15 @@
 
 {% compress css %}
 <style type="text/css">
-	.draghandle {float: left;}
-	#children-order-list {list-style-type: none; margin: 0; padding: 0;}
-	#children li { margin: 0 3px 3px 3px; padding: 0.4em;
-	padding-left: 1.5em; 
+  .draghandle {float: left;}
+  #children-order-list {list-style-type: none; margin: 0; padding: 0;}
+  #children li { margin: 0 3px 3px 3px; padding: 0.4em;
+  padding-left: 1.5em; 
           background-color: #ddd;
-	}
-	#children li span { position: absolute; margin-left: -1.3em; }
-	.dragging {border: #f60 solid 1px;}
-	</style>
+  }
+  #children li span { position: absolute; margin-left: -1.3em; }
+  .dragging {border: #f60 solid 1px;}
+  </style>
 {% endcompress %}
 
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/jquery-ui.min.js" type="text/javascript"></script>
@@ -98,8 +98,8 @@ $(function() {
 
 
 {% block sidebar %}
-	<!-- ###### Secondary Navigation ###### -->
-			<h3>Sections</h3>
+  <!-- ###### Secondary Navigation ###### -->
+      <h3>Sections</h3>
 {% with "/edit" as menu_base %}
 {% include "main/menu.html" %}
 {% endwith %}
@@ -118,13 +118,13 @@ $(function() {
   <li><a href="#children-tab" data-toggle="tab">Children</a></li>
   <li><a href="#add-pageblock-tab" data-toggle="tab">Add Pageblock</a></li>
   <li><a href="#edit-page-tab" data-toggle="tab">Edit Section</a></li>
-	<li><a href="#history-tab" data-toggle="tab">History</a></li>
+  <li><a href="#history-tab" data-toggle="tab">History</a></li>
 </ul>
 
 <div class="tab-content">
 
 <div id="edit-blocks-tab" class="tab-pane active">
-	<p>Drag the <i class="icon-resize-vertical"></i> arrows to reorder pageblocks:</p>
+  <p>Drag the <i class="icon-resize-vertical"></i> arrows to reorder pageblocks:</p>
 
 {% if section.pageblock_set.count %}
 {% for block in section.pageblock_set.all %}
@@ -225,12 +225,12 @@ class=""
 
 <h2>Add Child</h2>
 <form action="{% url add-child-section section.id %}" method="post"
-			class="well form-inline" >
+      class="well form-inline" >
 
 {{ section.add_child_section_form|bootstrap }}
 
 <input type="submit" value="add child section" class="btn btn-primary"
-			 />
+       />
 </form>
 </div>
 
@@ -286,7 +286,7 @@ method="post">
 <div id="edit-page-tab" class="tab-pane">
 
 <form action="{% url edit-section section.id %}" method="post"
-			class="form-horizontal well">
+      class="form-horizontal well">
 {% csrf_token %}
 <fieldset><legend>Edit Page</legend>
 
@@ -337,7 +337,7 @@ method="post">
 <ul class="pager">
 {% if section.get_previous %}
   <li class="previous">
-		<a href="{% url edit-page section.get_previous.get_path %}">&larr; {{section.get_previous.label}}</a>
+    <a href="{% url edit-page section.get_previous.get_path %}">&larr; {{section.get_previous.label}}</a>
   </li>
 {% endif %}
 
@@ -351,5 +351,5 @@ method="post">
 {% endblock %}
 
 {% block primarynavrightextra %}
-						<li><a href="{{section.get_absolute_url}}">View</a></li>
+            <li><a href="{{section.get_absolute_url}}">View</a></li>
 {% endblock %}
