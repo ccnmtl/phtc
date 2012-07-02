@@ -279,7 +279,7 @@ class Answer(models.Model):
         return AnswerForm(request, instance=self)
 
     def as_dict(self):
-        return dict(value=self.value, label=self.label, feedback=self.feedback, matching=self.matching,
+        return dict(value=self.value, label=self.label, feedback=self.feedback,
         correct=self.correct)
 
 
