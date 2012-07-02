@@ -3,6 +3,7 @@ from registration.views import register
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic.simple import direct_to_template
+from django.views.generic.simple import redirect_to
 import os.path
 admin.autodiscover()
 import staticmedia
@@ -34,6 +35,8 @@ urlpatterns = patterns('',
                         'phtc.main.views.update_user_profile'),
                        (r'^admin/', include(admin.site.urls)),
                        (r'^munin/', include('munin.urls')),
+                       (r'^accounts/profile/$', redirect_to,
+                        {'url': '/dashboard/'}),
                        (r'^dashboard/', 'phtc.main.views.dashboard'),
                        (r'^_stats/', direct_to_template,
                         {'template': 'stats.html'}),

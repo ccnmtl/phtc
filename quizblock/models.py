@@ -12,6 +12,7 @@ class Quiz(models.Model):
     description = models.TextField(blank=True)
     rhetorical = models.BooleanField(default=False)
     feedback = models.BooleanField(default=False)
+    matching = models.BooleanField(default=False)
     allow_redo = models.BooleanField(default=True)
     template_file = "quizblock/quizblock.html"
 
@@ -66,6 +67,7 @@ class Quiz(models.Model):
                                           initial=self.description)
             rhetorical = forms.BooleanField(initial=self.rhetorical)
             feedback = forms.BooleanField(initial=self.feedback)
+            matching = forms.BooleanField(initial=self.matching)
             allow_redo = forms.BooleanField(initial=self.allow_redo)
             alt_text = ("<a href=\"" + reverse("edit-quiz", args=[self.id])
                         + "\">manage questions/answers</a>")
@@ -77,6 +79,7 @@ class Quiz(models.Model):
             description = forms.CharField(widget=forms.widgets.Textarea())
             rhetorical = forms.BooleanField()
             feedback = forms.BooleanField()
+            matching = forms.BooleanField()
             allow_redo = forms.BooleanField()
         return AddForm()
 
@@ -86,6 +89,7 @@ class Quiz(models.Model):
             description=request.POST.get('description', ''),
             rhetorical=request.POST.get('rhetorical', ''),
             feedback=request.POST.get('feedback', ''),
+            matching=request.POST.get('matching', ''),
             allow_redo=request.POST.get('allow_redo', ''))
 
     @classmethod
@@ -93,6 +97,8 @@ class Quiz(models.Model):
         q = Quiz.objects.create(
             description=d.get('description', ''),
             rhetorical=d.get('rhetorical', False),
+            feedback=request.POST.get('feedback', ''),
+            matching=request.POST.get('matching', ''),
             allow_redo=d.get('allow_redo', True),
             )
         q.import_from_dict(d)
@@ -102,6 +108,7 @@ class Quiz(models.Model):
         self.description = vals.get('description', '')
         self.rhetorical = vals.get('rhetorical', '')
         self.feedback = vals.get('feedback', '')
+        self.matching = vals.get('matching', '')
         self.allow_redo = vals.get('allow_redo', '')
         self.save()
 
@@ -118,6 +125,7 @@ class Quiz(models.Model):
         d = dict(description=self.description,
                  rhetorical=self.rhetorical,
                  feedback=self.feedback,
+                 matching=self.matching,
                  allow_redo=self.allow_redo)
         d['questions'] = [q.as_dict() for q in self.question_set.all()]
         return d
@@ -126,6 +134,7 @@ class Quiz(models.Model):
         self.description = d['description']
         self.rhetorical = d['rhetorical']
         self.feedback = d['feedback']
+        self.matching = d['matching']
         self.allow_redo = d.get('allow_redo', True)
         self.save()
         self.submission_set.all().delete()
@@ -140,6 +149,7 @@ class Quiz(models.Model):
                 Answer.objects.create(question=question,
                                       value=a['value'],
                                       label=a['label'],
+                                      matching=a['matching'],
                                       feedback=a['feedback'],
                                       correct=a['correct'])
 
@@ -151,6 +161,7 @@ class Question(models.Model):
         max_length=256,
         choices=(
             ("multiple choice", "Multiple Choice: Multiple answers"),
+            ("matching", "Matching: Match questions with set of answers"),
             ("single choice", "Multiple Choice: Single answer"),
             ("single choice feedback", "Multiple Choice: Single answer with item feedback"),
             ("single choice dropdown",
@@ -208,6 +219,7 @@ class Question(models.Model):
     def answerable(self):
         """ whether it makes sense to have Answers associated with this """
         return self.question_type in ["multiple choice",
+                                      "matching",
                                       "single choice feedback",
                                       "single choice",
                                       "single choice dropdown"]
@@ -223,6 +235,9 @@ class Question(models.Model):
 
     def is_single_choice_feedback(self):
         return self.question_type == "single choice feedback"
+
+    def is_matching(self):
+        return self.question_type == "matching"
 
     def is_single_choice_dropdown(self):
         return self.question_type == "single choice dropdown"
@@ -264,7 +279,8 @@ class Answer(models.Model):
         return AnswerForm(request, instance=self)
 
     def as_dict(self):
-        return dict(value=self.value, label=self.label, feedback=self.feedback, correct=self.correct)
+        return dict(value=self.value, label=self.label, feedback=self.feedback,
+        correct=self.correct)
 
 
 class Submission(models.Model):
