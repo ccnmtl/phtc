@@ -2,6 +2,7 @@ from django import forms
 from registration.forms import RegistrationForm
 
 
+
 attrs_dict = {'class': 'required'}
 
 

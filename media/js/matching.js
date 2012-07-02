@@ -13,7 +13,8 @@ jQuery(document).ready(function($){
 	btn.click(function(){
 		$('.user-selection').each(function(i){
 			if($(this).children().attr("checked") ){
-				var answer = Math.floor(i/4);
+				var answer_length = $('.answer-label').length
+				var answer = Math.floor(i/answer_length);
 				_user_answers[answer] = $(this).children().val() ;
 			}
 		});
