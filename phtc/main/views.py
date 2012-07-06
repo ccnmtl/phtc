@@ -7,7 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.simplejson import dumps
 from phtc.main.models import UserProfile
 from phtc.main.forms import UserRegistrationForm
-
+from phtc.main.models import Section
+from phtc.main.models import DashboardInfo
 
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:
@@ -77,7 +78,19 @@ def edit_page(request, path):
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
 
+    try:
+        dashboard_info = request.POST['dashboard_info']
+    except:
+        dashboard_info = 'dashboard_info'
+    try:
+        DashboardInfo.objects.get(dashboard_id = section.id)
+    except: 
+        DashboardInfo.objects.create(dashboard_id = section.id)   
+    dashboard = DashboardInfo.objects.get(dashboard_id = section.id)
+    dashboard.info = dashboard_info
+    dashboard.save()  
     return dict(section=section,
+                dashboard = dashboard,
                 module=get_module(section),
                 modules=root.get_children(),
                 root=section.hierarchy.get_root())
@@ -152,4 +165,10 @@ def dashboard(request):
     h = get_hierarchy("main")
     root = h.get_root()
     last_session = h.get_user_section(request.user)
-    return dict(root=root, last_session=last_session)
+    dashboard_info = DashboardInfo.objects.all()
+    return dict(root=root, last_session=last_session, dashboard_info = dashboard_info)
+
+@login_required
+def dashboard_info(request):
+    path = request.POST['path']
+    return HttpResponseRedirect('/edit' + path)
