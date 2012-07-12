@@ -43,7 +43,6 @@ class DashboardInfo(models.Model):
 
     def edit_form(self):
         class EditSectionForm(forms.Form):
-            dashboard_info = forms.CharField(widget=forms.Textarea,
-                                             initial=self.info)
+            dashboard_info = forms.CharField(widget=forms.Textarea, initial=self.info)
             #section = forms.CharField(initial=self.dashboard.id)
         return EditSectionForm()

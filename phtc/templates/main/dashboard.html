@@ -29,12 +29,12 @@
 		<img src="/site_media/img/status_uninitiated.png">
 		{% endif %}
 
-</div>
-		{% for info in dashboard_info %}
-			{% ifequal module.id info.dashboard_id %}
-				<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover span1"><img src="/site_media/img/status_info.png"></div>
-			{% endifequal %}
-		{% endfor %}
+	</div>
+	{% for info in dashboard_info %}
+		{% ifequal module.id info.dashboard_id %}
+			<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover span1"><img src="/site_media/img/status_info.png"></div>
+		{% endifequal %}
+	{% endfor %}
 </div>
 
 	{% for section in module.get_children %}
@@ -54,13 +54,41 @@
 			{% if not status %}
 			<img src="/site_media/img/status_uninitiated.png">
 			{% endif %}
-	</div>	{{ section.id }}
+		</div>
+
 		{% for info in dashboard_info %}
 			{% ifequal section.id info.dashboard_id %}
 				<div data-content="{{ info.info }}" data-original-title="Section Info" class="section-info-popover span1"><img src="/site_media/img/status_info.png"></div>
 			{% endifequal %}
 		{% endfor %}
 	</div>
+		{% if section.get_children %}
+			<div class="row-fluid">
+				
+					{%for c in section.get_children %}
+					<div class ="span5" style="margin:0 0 0 100px; width:276px;">
+						<a href="{{ c.get_absolute_url }}"> {{ c.label }}</a>
+					</div>
+						<div class="span1">
+							{% get_user_section_status request.user section as status %}
+							{% ifequal status.status "complete" %}
+							<img src="/site_media/img/status_completed.png">
+							{% endifequal %}
+							{% ifequal status.status "incomplete" %}
+							<img src="/site_media/img/status_inprogress.png">
+							{% endifequal %}
+							{% if not status %}
+							<img src="/site_media/img/status_uninitiated.png">
+							{% endif %}
+						</div>
+						{% for info in dashboard_info %}
+							{% ifequal c.id info.dashboard_id %}
+								<div data-content="{{ info.info }}" data-original-title="Section Info" class="section-info-popover span1"><img src="/site_media/img/status_info.png"></div>
+							{% endifequal %}
+						{% endfor %}
+					{% endfor %}
+			</div>
+		{% endif %}
 	{% endfor %}
 
 {% endfor %}

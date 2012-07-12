@@ -9,6 +9,7 @@ from phtc.main.models import UserProfile
 from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import Section
 from phtc.main.models import DashboardInfo
+from pagetree.models import UserPageVisit
 
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:
@@ -33,18 +34,41 @@ def update_status(section, user):
                 # we still want the last_visit time to update
                 section.user_pagevisit(user, status="complete")
 
-
+@login_required
 @render_to('main/page.html')
 def page(request, path):
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
     module = get_module(section)
+    is_visited = UserPageVisit.objects.filter(user_id = request.user)
+    incomplete = "incomplete"
+    completed = "completed"
     if not request.user.is_anonymous():
         section.user_visit(request.user)
 
     rv = redirect_to_first_section_if_root(section, root)
     if rv:
         return rv
+
+    # this needs to test whether it is a feedback or matching section
+
+    if not request.method =="POST":    
+        if module == section:
+            section.user_pagevisit(request.user, status="complete")
+        else:
+            user_id = request.user.id
+            prev_section_id = Section.objects.get(label = section.get_previous() ).id
+            try:
+                prev_section_status = UserPageVisit.objects.get(section_id = prev_section_id, user_id = user_id).status
+            except:
+                prev_section_status = "incomplete"
+            if prev_section_status == "incomplete":
+                go_back_message = "/dashboard/?incomplete=true"
+                return HttpResponseRedirect(go_back_message )
+            else:
+                section.user_pagevisit(request.user, status="complete")
+            #is_allowed = Section.objects.get(id = prev_section.id)
+
     update_status(section, request.user)
 
     if request.method == "POST":
@@ -65,6 +89,9 @@ def page(request, path):
     else:
         return dict(section=section,
                     module=module,
+                    is_visited = is_visited,
+                    incomplete = incomplete,
+                    completed = completed,
                     needs_submit=needs_submit(section),
                     is_submitted=submitted(section, request.user),
                     modules=root.get_children(),
@@ -77,17 +104,16 @@ def page(request, path):
 def edit_page(request, path):
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
-
-    try:
-        dashboard_info = request.POST['dashboard_info']
-    except:
-        dashboard_info = 'dashboard_info'
     try:
         DashboardInfo.objects.get(dashboard_id = section.id)
     except: 
-        DashboardInfo.objects.create(dashboard_id = section.id)   
+        DashboardInfo.objects.create(dashboard_id = section.id)
+
     dashboard = DashboardInfo.objects.get(dashboard_id = section.id)
-    dashboard.info = dashboard_info
+    if request.method == "POST":
+        dashboard_info = request.POST['dashboard_info']
+        dashboard.info = dashboard_info
+    
     dashboard.save()  
     return dict(section=section,
                 dashboard = dashboard,
