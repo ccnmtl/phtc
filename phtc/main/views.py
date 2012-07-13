@@ -34,13 +34,17 @@ def update_status(section, user):
                 # we still want the last_visit time to update
                 section.user_pagevisit(user, status="complete")
 
+def user_visits(request):
+    visits = UserPageVisit.objects.filter(user_id = request.user)
+    return visits
+
 @login_required
 @render_to('main/page.html')
 def page(request, path):
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
     module = get_module(section)
-    is_visited = UserPageVisit.objects.filter(user_id = request.user)
+    is_visited = user_visits(request)
     incomplete = "incomplete"
     completed = "completed"
     if not request.user.is_anonymous():
@@ -192,7 +196,10 @@ def dashboard(request):
     root = h.get_root()
     last_session = h.get_user_section(request.user)
     dashboard_info = DashboardInfo.objects.all()
-    return dict(root=root, last_session=last_session, dashboard_info = dashboard_info)
+    is_visited = user_visits(request)
+    empty = ""
+    return dict(root=root, last_session=last_session,
+                dashboard_info = dashboard_info, empty=empty, is_visited = is_visited)
 
 @login_required
 def dashboard_info(request):

@@ -58,35 +58,68 @@
 
 		{% for info in dashboard_info %}
 			{% ifequal section.id info.dashboard_id %}
-				<div data-content="{{ info.info }}" data-original-title="Section Info" class="section-info-popover span1"><img src="/site_media/img/status_info.png"></div>
+				{% ifnotequal info.info empty %}
+					<div data-content="{{ info.info }}" data-original-title="Section Info" class="section-info-popover span1"><img src="/site_media/img/status_info.png"></div>
+				{% endifnotequal%}
 			{% endifequal %}
 		{% endfor %}
 	</div>
 		{% if section.get_children %}
 			<div class="row-fluid">
-				
-					{%for c in section.get_children %}
-					<div class ="span5" style="margin:0 0 0 100px; width:276px;">
-						<a href="{{ c.get_absolute_url }}"> {{ c.label }}</a>
+				{%for c in section.get_children %}
+				<div class ="span5" style="margin:0 0 0 100px; width:276px;">
+					<a href="{{ c.get_absolute_url }}"> {{ c.label }}</a>
+				</div>
+					<div class="span1">
+						{% get_user_section_status request.user c as status %}
+						{% ifequal status.status "complete" %}
+						<img src="/site_media/img/status_completed.png">
+						{% endifequal %}
+						{% ifequal status.status "incomplete" %}
+						<img src="/site_media/img/status_inprogress.png">
+						{% endifequal %}
+						{% if not status %}
+						<img src="/site_media/img/status_uninitiated.png">
+						{% endif %}
 					</div>
-						<div class="span1">
-							{% get_user_section_status request.user section as status %}
-							{% ifequal status.status "complete" %}
-							<img src="/site_media/img/status_completed.png">
-							{% endifequal %}
-							{% ifequal status.status "incomplete" %}
-							<img src="/site_media/img/status_inprogress.png">
-							{% endifequal %}
-							{% if not status %}
-							<img src="/site_media/img/status_uninitiated.png">
-							{% endif %}
-						</div>
-						{% for info in dashboard_info %}
-							{% ifequal c.id info.dashboard_id %}
-								<div data-content="{{ info.info }}" data-original-title="Section Info" class="section-info-popover span1"><img src="/site_media/img/status_info.png"></div>
-							{% endifequal %}
-						{% endfor %}
+					{% for info in dashboard_info %}
+						{% ifequal c.id info.dashboard_id %}
+							{% ifnotequal info.info empty%}
+							<div data-content="{{ info.info }}" data-original-title="Section Info" class="section-info-popover span1"><img src="/site_media/img/status_info.png"></div>
+							{% endifnotequal %}
+						{% endifequal %}
 					{% endfor %}
+
+					{% if c.get_children %}
+					<div class="row-fluid">
+						{%for d in c.get_children %}
+							<div class ="span5" style="margin:0 0 0 150px; width:226px;">
+								<a href="{{ d.get_absolute_url }}"> {{ d.label }}</a>
+							</div>
+							<div class="span1" style="margin:0 0 0 75px;">
+								{% get_user_section_status request.user d as status %}
+								{% ifequal status.status "complete" %}
+								<img src="/site_media/img/status_completed.png">
+								{% endifequal %}
+								{% ifequal status.status "incomplete" %}
+								<img src="/site_media/img/status_inprogress.png">
+								{% endifequal %}
+								{% if not status %}
+								<img src="/site_media/img/status_uninitiated.png">
+								{% endif %}
+							</div>
+							{% for info in dashboard_info %}
+								{% ifequal d.id info.dashboard_id %}
+									{% ifnotequal info.info empty %}
+										<div data-content="{{ info.info }}" data-original-title="Section Info" class="section-info-popover span1"><img src="/site_media/img/status_info.png"></div>
+									{% endifnotequal%}
+								{% endifequal %}
+							{% endfor %}
+						{% endfor %}
+					</div>
+					{% endif %}
+
+				{% endfor %}
 			</div>
 		{% endif %}
 	{% endfor %}
