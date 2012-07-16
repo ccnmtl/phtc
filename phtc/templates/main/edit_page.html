@@ -291,11 +291,15 @@ method="post">
 <fieldset><legend>Edit Page</legend>
 
 {{ section.edit_form|bootstrap }}
-
 <input type="submit" value="save" class="btn btn-primary" />
 </fieldset>
 </form>
 
+<form action="." method="post"
+      class="form-horizontal well">
+  {{ dashboard.edit_form|bootstrap }}
+<input type="submit" value="save" class="btn btn-primary" />
+</form>
 
 <form action="{% url delete-section section.id %}" method="post" class="well">
 <input type="submit" value="delete this page" class="btn btn-danger"/>

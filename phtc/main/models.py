@@ -4,6 +4,8 @@ from registration.signals import user_registered
 from forms import UserRegistrationForm
 from django_statsd.clients import statsd
 from pagetree.models import Section
+from django import forms
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
@@ -34,12 +36,14 @@ def user_created(sender, user, request, **kwargs):
 
 user_registered.connect(user_created)
 
+
 class DashboardInfo(models.Model):
     dashboard = models.OneToOneField(Section)
     info = models.TextField()
 
     def edit_form(self):
         class EditSectionForm(forms.Form):
-            dashboard_info = forms.CharField(widget=forms.Textarea,initial=self.info)
-            section = forms.CharField(initial=self.dashboard)
+            dashboard_info = forms.CharField(widget=forms.Textarea,
+                                             initial=self.info)
+            #section = forms.CharField(initial=self.dashboard.id)
         return EditSectionForm()

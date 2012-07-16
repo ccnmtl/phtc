@@ -30,7 +30,11 @@
 		{% endif %}
 
 </div>
-	<div data-content="{{ status.section.dashboard_info}}" data-original-title="Module Info" class="module-info-popover span1"><img src="/site_media/img/status_info.png"></div>
+		{% for info in dashboard_info %}
+			{% ifequal module.id info.dashboard_id %}
+				<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover span1"><img src="/site_media/img/status_info.png"></div>
+			{% endifequal %}
+		{% endfor %}
 </div>
 
 	{% for section in module.get_children %}
@@ -50,8 +54,12 @@
 			{% if not status %}
 			<img src="/site_media/img/status_uninitiated.png">
 			{% endif %}
-	</div>
-		<div data-content="{{ section.dashboard_info}}" data-original-title="Section Info" class="section-info-popover span1"><img src="/site_media/img/status_info.png"></div>
+	</div>	{{ section.id }}
+		{% for info in dashboard_info %}
+			{% ifequal section.id info.dashboard_id %}
+				<div data-content="{{ info.info }}" data-original-title="Section Info" class="section-info-popover span1"><img src="/site_media/img/status_info.png"></div>
+			{% endifequal %}
+		{% endfor %}
 	</div>
 	{% endfor %}
 
