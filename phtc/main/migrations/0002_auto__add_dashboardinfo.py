@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
@@ -94,5 +93,3 @@ class Migration(SchemaMigration):
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'})
         }
     }
-
-    complete_apps = ['main']

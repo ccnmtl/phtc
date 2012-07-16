@@ -7,9 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils.simplejson import dumps
 from phtc.main.models import UserProfile
 from phtc.main.forms import UserRegistrationForm
-from phtc.main.models import Section
 from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
+
 
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:
@@ -121,6 +121,7 @@ def edit_page(request, path):
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
     try:
+<<<<<<< HEAD
         DashboardInfo.objects.get(dashboard_id = section.id)
     except: 
         DashboardInfo.objects.create(dashboard_id = section.id)
@@ -131,8 +132,16 @@ def edit_page(request, path):
         dashboard.info = dashboard_info
     
     dashboard.save()  
+=======
+        DashboardInfo.objects.get(dashboard_id=section.id)
+    except:
+        DashboardInfo.objects.create(dashboard_id=section.id)
+    dashboard = DashboardInfo.objects.get(dashboard_id=section.id)
+    dashboard.info = dashboard_info
+    dashboard.save()
+>>>>>>> cfe74e3f83ed78db245023f40fce2d5c76e8ef0f
     return dict(section=section,
-                dashboard = dashboard,
+                dashboard=dashboard,
                 module=get_module(section),
                 modules=root.get_children(),
                 root=section.hierarchy.get_root())
@@ -208,7 +217,18 @@ def dashboard(request):
     root = h.get_root()
     last_session = h.get_user_section(request.user)
     dashboard_info = DashboardInfo.objects.all()
+<<<<<<< HEAD
     is_visited = user_visits(request)
     empty = ""
     return dict(root=root, last_session=last_session,dashboard_info = dashboard_info,
                 empty=empty, is_visited = is_visited)
+=======
+    return dict(root=root, last_session=last_session,
+                dashboard_info=dashboard_info)
+
+
+@login_required
+def dashboard_info(request):
+    path = request.POST['path']
+    return HttpResponseRedirect('/edit' + path)
+>>>>>>> cfe74e3f83ed78db245023f40fce2d5c76e8ef0f
