@@ -1,9 +1,7 @@
 
 
 <ul>
-{% for s in module.get_descendants %}
-    
-
+{% for s in module.get_descendants %}  
 {% if s.needs_submit %}
   {% if s.is_submitted  %}
   <h4>Yep</h4>

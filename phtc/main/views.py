@@ -47,6 +47,10 @@ def page(request, path):
     is_visited = user_visits(request)
     incomplete = "incomplete"
     completed = "completed"
+    user_id = request.user.id
+    if section.get_previous():
+        prev_section_id = Section.objects.get(id = section.get_previous().id )
+    
     if not request.user.is_anonymous():
         section.user_visit(request.user)
 
@@ -56,17 +60,25 @@ def page(request, path):
 
     # this needs to test whether it is a feedback or matching section
 
-    if not request.method =="POST":    
+    if not request.method == "POST":
+        for s in module.get_children():
+            s.user_pagevisit(request.user, status="complete")
         if module == section:
             section.user_pagevisit(request.user, status="complete")
         else:
-            user_id = request.user.id
-            prev_section_id = Section.objects.get(label = section.get_previous() ).id
             try:
                 prev_section_status = UserPageVisit.objects.get(section_id = prev_section_id, user_id = user_id).status
             except:
                 prev_section_status = "incomplete"
-            if prev_section_status == "incomplete":
+            
+            try:
+                sec_status = UserPageVisit.objects.get(section_id = section.id, user_id = user_id).status
+            except:
+                sec_status = "incomplete"
+
+            if sec_status == "complete":
+                sec_status = "complete"
+            elif prev_section_status == "incomplete":
                 go_back_message = "/dashboard/?incomplete=true"
                 return HttpResponseRedirect(go_back_message )
             else:
@@ -198,10 +210,5 @@ def dashboard(request):
     dashboard_info = DashboardInfo.objects.all()
     is_visited = user_visits(request)
     empty = ""
-    return dict(root=root, last_session=last_session,
-                dashboard_info = dashboard_info, empty=empty, is_visited = is_visited)
-
-@login_required
-def dashboard_info(request):
-    path = request.POST['path']
-    return HttpResponseRedirect('/edit' + path)
+    return dict(root=root, last_session=last_session,dashboard_info = dashboard_info,
+                empty=empty, is_visited = is_visited)

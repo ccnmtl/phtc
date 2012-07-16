@@ -11,7 +11,6 @@
 </style>
 
 <h1>Dashboard</h1>
-
 {% for module in root.get_children %}
 <div class="row-fluid">
 	<div class="span5">
@@ -38,10 +37,11 @@
 </div>
 
 	{% for section in module.get_children %}
+
 	<div class="row-fluid">
 		<div class="span1"></div>
 		<div class="span4">
-			<a href="{{section.get_absolute_url}}">{{section.label}}</a>
+				<a href="{{section.get_absolute_url}}">{{section.label}}</a>
 		</div>
 		<div class="span1">
 			{% get_user_section_status request.user section as status %}
