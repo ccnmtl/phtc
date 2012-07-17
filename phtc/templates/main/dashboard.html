@@ -14,7 +14,7 @@
 {% for module in root.get_children %}
 <div class="row-fluid">
 	<div class="span5">
-		<a href="{{module.get_absolute_url}}">{{module.label}}</a>
+		<a class="section_url" href="{{module.get_absolute_url}}">{{module.label}}</a>
 	</div>
 	<div class="span1">
 		{% get_user_section_status request.user module as status %}
@@ -25,7 +25,7 @@
 		<img src="/site_media/img/status_inprogress.png">
 		{% endifequal %}
 		{% if not status %}
-		<img src="/site_media/img/status_uninitiated.png">
+		<img class="uninitiated" src="/site_media/img/status_uninitiated.png">
 		{% endif %}
 
 	</div>
@@ -41,7 +41,7 @@
 	<div class="row-fluid">
 		<div class="span1"></div>
 		<div class="span4">
-				<a href="{{section.get_absolute_url}}">{{section.label}}</a>
+				<a class="section_url" href="{{section.get_absolute_url}}">{{section.label}}</a>
 		</div>
 		<div class="span1">
 			{% get_user_section_status request.user section as status %}
@@ -52,7 +52,7 @@
 			<img src="/site_media/img/status_inprogress.png">
 			{% endifequal %}
 			{% if not status %}
-			<img src="/site_media/img/status_uninitiated.png">
+			<img class="uninitiated" src="/site_media/img/status_uninitiated.png">
 			{% endif %}
 		</div>
 
@@ -68,7 +68,7 @@
 			<div class="row-fluid">
 				{%for c in section.get_children %}
 				<div class ="span5" style="margin:0 0 0 100px; width:276px;">
-					<a href="{{ c.get_absolute_url }}"> {{ c.label }}</a>
+					<a class="section_url" href="{{ c.get_absolute_url }}"> {{ c.label }}</a>
 				</div>
 					<div class="span1">
 						{% get_user_section_status request.user c as status %}
@@ -79,7 +79,7 @@
 						<img src="/site_media/img/status_inprogress.png">
 						{% endifequal %}
 						{% if not status %}
-						<img src="/site_media/img/status_uninitiated.png">
+						<img class="uninitiated" src="/site_media/img/status_uninitiated.png">
 						{% endif %}
 					</div>
 					{% for info in dashboard_info %}
@@ -94,7 +94,7 @@
 					<div class="row-fluid">
 						{%for d in c.get_children %}
 							<div class ="span5" style="margin:0 0 0 150px; width:226px;">
-								<a href="{{ d.get_absolute_url }}"> {{ d.label }}</a>
+								<a class="section_url" href="{{ d.get_absolute_url }}"> {{ d.label }}</a>
 							</div>
 							<div class="span1" style="margin:0 0 0 75px;">
 								{% get_user_section_status request.user d as status %}
@@ -105,7 +105,7 @@
 								<img src="/site_media/img/status_inprogress.png">
 								{% endifequal %}
 								{% if not status %}
-								<img src="/site_media/img/status_uninitiated.png">
+								<img class="uninitiated" src="/site_media/img/status_uninitiated.png">
 								{% endif %}
 							</div>
 							{% for info in dashboard_info %}
@@ -127,29 +127,55 @@
 {% endfor %}
 <script>
 jQuery(document).ready(function($){
-		$(".module-info-popover").popover({
-        	offset: 10,
-        	trigger:'manual'
+	$(".module-info-popover").popover({
+    	offset: 10,
+    	trigger:'manual'
 
-        }).click(function(){
-             $(this).popover('show')
+    }).click(function(){
+         $(this).popover('show')
 
-        }).mouseleave(function(){
-        	$(this).popover('hide')
-        });
+    }).mouseleave(function(){
+    	$(this).popover('hide')
+    });
 
-		$(".section-info-popover").popover({
-        	offset: 10,
-        	trigger:'manual'
+	$(".section-info-popover").popover({
+    	offset: 10,
+    	trigger:'manual'
 
-        }).click(function(){
-             $(this).popover('show')
+    }).click(function(){
+         $(this).popover('show')
 
-        }).mouseleave(function(){
-        	$(this).popover('hide')
-        });
+    }).mouseleave(function(){
+    	$(this).popover('hide')
+    });
 
+	/*
+	* undo all anchor tags  that are unititiated 
+	*/
 
+	var links = jQuery('.section_url');
+	var uninitiated = []
+
+	links.each(function(){
+		var link = jQuery(this);
+		var class_name = link.parent().next().children().attr('class')
+		if(class_name == "uninitiated" ){
+			uninitiated.push(link)
+		}else{
+			console.log('nope')
+		}
+	})
+
+	jQuery(uninitiated).each(function(i){
+		if(i === 0){
+		}
+		else{
+			var link = jQuery(this);
+			var linkSpan = '<span>'+ link.html() +'</span>'
+			link.parent().append(linkSpan)
+			link.remove()
+		}
+	}) 
 });
 </script>
 

@@ -93,7 +93,7 @@ class Quiz(models.Model):
             allow_redo=request.POST.get('allow_redo', ''))
 
     @classmethod
-    def create_from_dict(self, d):
+    def create_from_dict(self, d, request):
         q = Quiz.objects.create(
             description=d.get('description', ''),
             rhetorical=d.get('rhetorical', False),
