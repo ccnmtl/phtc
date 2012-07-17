@@ -72,10 +72,10 @@ td.td-ui{
   var explanation = {explanation : '{{ question.explanation }}'};
   var correct_answers = {
     {% for answer in question.answer_set.all %}
-      {% if forloop.last%}
-        {{ forloop.counter0 }} : '{{ answer.value }}'
+      {% if forloop.last %}
+        '{{ answer.label }}' : '{{ answer.value }}'
       {% else %}
-        {{ forloop.counter0 }} : '{{ answer.value }}',
+        '{{ answer.label }}' : '{{ answer.value }}',
       {% endif %}
     {% endfor %}
   };
