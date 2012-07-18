@@ -9,7 +9,6 @@
 	cursor: pointer;
 }
 </style>
-
 <h1>Dashboard</h1>
 {% for module in root.get_children %}
 <div class="row-fluid">
@@ -41,7 +40,12 @@
 	<div class="row-fluid">
 		<div class="span1"></div>
 		<div class="span4">
+			{% get_user_section_status request.user module as status %}
+			{% ifequal status.status "complete" %}
 				<a class="section_url part" href="{{section.get_absolute_url}}">{{section.label}}</a>
+			{% else %}
+				{{section.label}}
+			{% endifequal %}
 		</div>
 		<div class="span1">
 			{% get_user_section_status request.user section as status %}
@@ -123,7 +127,10 @@
 			</div>
 		{% endif %}
 	{% endfor %}
-
+{% get_user_section_status request.user module as status %}
+			{% ifequal status.status "complete" %}
+				<script> var next_section_status = true</script>
+			{% endifequal %}
 {% endfor %}
 <script src="/site_media/js/dashboard.js"></script>
 {% endblock %}
