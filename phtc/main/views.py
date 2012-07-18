@@ -80,6 +80,9 @@ def page(request, path):
             if sec_status == "complete":
                 sec_status = "complete"
             elif prev_section_status == "incomplete":
+                if request.user.is_staff:
+                    section.user_pagevisit(request.user, status="complete")
+                    return HttpResponseRedirect(section.get_absolute_url())
                 go_back_message = "/dashboard/?incomplete=true"
                 return HttpResponseRedirect(go_back_message )
             else:
@@ -121,6 +124,7 @@ def page(request, path):
 def edit_page(request, path):
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
+    edit_page = True
     try:
 
         DashboardInfo.objects.get(dashboard_id = section.id)
@@ -138,7 +142,8 @@ def edit_page(request, path):
                 dashboard=dashboard,
                 module=get_module(section),
                 modules=root.get_children(),
-                root=section.hierarchy.get_root())
+                root=section.hierarchy.get_root(),
+                edit_page = edit_page)
 
 
 @render_to('main/instructor_page.html')
