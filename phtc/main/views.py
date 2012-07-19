@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils.simplejson import dumps
 from phtc.main.models import UserProfile
 from phtc.main.forms import UserRegistrationForm
+from phtc.main.models import DashboardInfo
+from pagetree.models import UserPageVisit
+from pagetree.models import Section
 
 
 def redirect_to_first_section_if_root(section, root):
@@ -32,18 +35,60 @@ def update_status(section, user):
                 # we still want the last_visit time to update
                 section.user_pagevisit(user, status="complete")
 
+def user_visits(request):
+    visits = UserPageVisit.objects.filter(user_id = request.user)
+    return visits
 
+@login_required
 @render_to('main/page.html')
 def page(request, path):
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
     module = get_module(section)
+    is_visited = user_visits(request)
+    incomplete = "incomplete"
+    completed = "completed"
+    user_id = request.user.id
+    if section.get_previous():
+        prev_section_id = Section.objects.get(id = section.get_previous().id )
+    
     if not request.user.is_anonymous():
         section.user_visit(request.user)
 
     rv = redirect_to_first_section_if_root(section, root)
     if rv:
         return rv
+
+    # this needs to test whether it is a feedback or matching section
+
+    if not request.method == "POST":
+        for s in module.get_children():
+            s.user_pagevisit(request.user, status="complete")
+        if module == section:
+            section.user_pagevisit(request.user, status="complete")
+        else:
+            try:
+                prev_section_status = UserPageVisit.objects.get(section_id = prev_section_id, user_id = user_id).status
+            except:
+                prev_section_status = "incomplete"
+            
+            try:
+                sec_status = UserPageVisit.objects.get(section_id = section.id, user_id = user_id).status
+            except:
+                sec_status = "incomplete"
+
+            if sec_status == "complete":
+                sec_status = "complete"
+            elif prev_section_status == "incomplete":
+                if request.user.is_staff:
+                    section.user_pagevisit(request.user, status="complete")
+                    return HttpResponseRedirect(section.get_absolute_url())
+                go_back_message = "/dashboard/?incomplete=true"
+                return HttpResponseRedirect(go_back_message )
+            else:
+                section.user_pagevisit(request.user, status="complete")
+            #is_allowed = Section.objects.get(id = prev_section.id)
+
     update_status(section, request.user)
 
     if request.method == "POST":
@@ -64,6 +109,9 @@ def page(request, path):
     else:
         return dict(section=section,
                     module=module,
+                    is_visited = is_visited,
+                    incomplete = incomplete,
+                    completed = completed,
                     needs_submit=needs_submit(section),
                     is_submitted=submitted(section, request.user),
                     modules=root.get_children(),
@@ -76,11 +124,26 @@ def page(request, path):
 def edit_page(request, path):
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
+    edit_page = True
+    try:
+
+        DashboardInfo.objects.get(dashboard_id = section.id)
+    except: 
+        DashboardInfo.objects.create(dashboard_id = section.id)
+
+    dashboard = DashboardInfo.objects.get(dashboard_id = section.id)
+    if request.method == "POST":
+        dashboard_info = request.POST['dashboard_info']
+        dashboard.info = dashboard_info
+    
+    dashboard.save()  
 
     return dict(section=section,
+                dashboard=dashboard,
                 module=get_module(section),
                 modules=root.get_children(),
-                root=section.hierarchy.get_root())
+                root=section.hierarchy.get_root(),
+                edit_page = edit_page)
 
 
 @render_to('main/instructor_page.html')
@@ -152,4 +215,10 @@ def dashboard(request):
     h = get_hierarchy("main")
     root = h.get_root()
     last_session = h.get_user_section(request.user)
-    return dict(root=root, last_session=last_session)
+    dashboard_info = DashboardInfo.objects.all()
+
+    is_visited = user_visits(request)
+    empty = ""
+    return dict(root=root, last_session=last_session,dashboard_info = dashboard_info,
+                empty=empty, is_visited = is_visited)
+

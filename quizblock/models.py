@@ -97,8 +97,8 @@ class Quiz(models.Model):
         q = Quiz.objects.create(
             description=d.get('description', ''),
             rhetorical=d.get('rhetorical', False),
-            feedback=request.POST.get('feedback', ''),
-            matching=request.POST.get('matching', ''),
+            feedback=d.get('feedback', ''),
+            matching=d.get('matching', ''),
             allow_redo=d.get('allow_redo', True),
             )
         q.import_from_dict(d)
@@ -149,7 +149,6 @@ class Quiz(models.Model):
                 Answer.objects.create(question=question,
                                       value=a['value'],
                                       label=a['label'],
-                                      matching=a['matching'],
                                       feedback=a['feedback'],
                                       correct=a['correct'])
 
