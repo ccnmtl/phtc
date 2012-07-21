@@ -22,7 +22,6 @@ class rendered_with(object):
 
         return rendered_func
 
-
 @rendered_with('quizblock/edit_quiz.html')
 def edit_quiz(request, id):
     quiz = get_object_or_404(Quiz, id=id)

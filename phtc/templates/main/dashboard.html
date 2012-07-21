@@ -84,6 +84,9 @@
 		{% ifequal status.status "incomplete" %}
 			<span>{{ p.label }}</span> <img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
 		{% endifequal %}
+		{% if not status %}
+			<span>{{ p.label }}</span> <img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
+		{% endif %}
 
 		{% for visited in is_visited %}
 			{% ifequal p.id visited.section_id %}

@@ -48,6 +48,10 @@ def page(request, path):
     is_visited = user_visits(request)
     user_id = request.user.id
     
+    if request.method =="POST":
+        if request.POST.get('pre_test') == "true":
+            return HttpResponse ("This was a pre-Test post!")
+
     if not request.user.is_anonymous():
         section.user_visit(request.user)
 
@@ -58,7 +62,6 @@ def page(request, path):
     update_status(section, request.user)
 
     if request.method == "POST":
-
         if request.user.is_anonymous():
             return HttpResponse("you must login first")
         # user has submitted a form. deal with it
