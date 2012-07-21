@@ -46,11 +46,7 @@ def page(request, path):
     root = section.hierarchy.get_root()
     module = get_module(section)
     is_visited = user_visits(request)
-    incomplete = "incomplete"
-    completed = "completed"
     user_id = request.user.id
-    if section.get_previous():
-        prev_section_id = Section.objects.get(id = section.get_previous().id )
     
     if not request.user.is_anonymous():
         section.user_visit(request.user)
@@ -59,39 +55,10 @@ def page(request, path):
     if rv:
         return rv
 
-    # this needs to test whether it is a feedback or matching section
-
-    if not request.method == "POST":
-        for s in module.get_children():
-            s.user_pagevisit(request.user, status="complete")
-        if module == section:
-            section.user_pagevisit(request.user, status="complete")
-        else:
-            try:
-                prev_section_status = UserPageVisit.objects.get(section_id = prev_section_id, user_id = user_id).status
-            except:
-                prev_section_status = "incomplete"
-            
-            try:
-                sec_status = UserPageVisit.objects.get(section_id = section.id, user_id = user_id).status
-            except:
-                sec_status = "incomplete"
-
-            if sec_status == "complete":
-                sec_status = "complete"
-            elif prev_section_status == "incomplete":
-                if request.user.is_staff:
-                    section.user_pagevisit(request.user, status="complete")
-                    return HttpResponseRedirect(section.get_absolute_url())
-                go_back_message = "/dashboard/?incomplete=true"
-                return HttpResponseRedirect(go_back_message )
-            else:
-                section.user_pagevisit(request.user, status="complete")
-            #is_allowed = Section.objects.get(id = prev_section.id)
-
     update_status(section, request.user)
 
     if request.method == "POST":
+
         if request.user.is_anonymous():
             return HttpResponse("you must login first")
         # user has submitted a form. deal with it
@@ -106,17 +73,42 @@ def page(request, path):
         else:
             # giving them feedback before they proceed
             return HttpResponseRedirect(section.get_absolute_url())
+
     else:
-        return dict(section=section,
-                    module=module,
-                    is_visited = is_visited,
-                    incomplete = incomplete,
-                    completed = completed,
-                    needs_submit=needs_submit(section),
-                    is_submitted=submitted(section, request.user),
-                    modules=root.get_children(),
-                    root=section.hierarchy.get_root(),
-                    )
+         # make current page in progress
+        section.user_pagevisit(request.user, status="in_progress")
+
+        if section.get_previous():
+            prev_section = section.get_previous()
+            try:
+                prev_section_visit = UserPageVisit.objects.get(section_id = prev_section.id, user_id = user_id)
+                if prev_section_visit.status == "in_progress":
+                    visit = UserPageVisit.objects.get(section_id = prev_section.id, user_id = user_id)
+                    visit.status = "complete"
+                    visit.save()
+            except:
+                pass
+        # the section is a "Part"
+        else:
+            parts = module.get_children()
+            for part in parts:
+                try:
+                    part_status = UserPageVisit.objects.get(section_id = part.id, user_id = user_id)
+                    if part_status == "in_progress":
+                        visit = UserPageVisit.objects.get(section_id = prev_section.id, user_id = user_id)
+                        visit.status = "complete"
+                        visit.save()
+                except:
+                    part_status = UserPageVisit.objects.get_or_create(section_id = part.id, user_id = user_id, status ="allowed")
+                    pass
+    return dict(section=section,
+                module=module,
+                is_visited = is_visited,
+                needs_submit=needs_submit(section),
+                is_submitted=submitted(section, request.user),
+                modules=root.get_children(),
+                root=section.hierarchy.get_root(),
+                )
 
 
 @login_required
