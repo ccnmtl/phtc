@@ -12,7 +12,9 @@
 	{% if block.matching %}
 		<script src="/site_media/js/matching.js"></script>
 	{% endif %}
-
+	{% if block.pre_test %}
+		<script src="/site_media/js/pre_test.js"></script>
+	{% endif %}
 	{% if block.rhetorical %}
 		{% if block.feedback%}
 			<script src="/site_media/js/feedback.js"></script>

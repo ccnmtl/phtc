@@ -43,13 +43,19 @@
 	<div class='module'>
 		{% for info in dashboard_info %}
 			{% ifequal module.id info.dashboard_id %}
-				<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/></div>
+				{% ifnotequal info.info "" %}
+					<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/><br class="clear"/></div>
+				{% endifnotequal %}
 			{% endifequal %}
 		{% endfor %}
 		{% get_user_section_status request.user module as status %}
 		{% ifequal status.status "complete" %}
 			<a href="{{ module.get_absolute_url }}">{{ module.label }}</a>
 			<img src="/site_media/img/status_completed.png"/><br class="clear"/>
+		{% endifequal %}
+		{% ifequal status.status "allowed" %}
+			<a href="{{ module.get_absolute_url }}">{{ module.label }}</a>
+			<img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
 		{% endifequal %}
 		{% ifequal status.status "in_progress" %}
 			<a href="{{ module.get_absolute_url }}">{{ module.label }}</a>
@@ -65,7 +71,9 @@
 		<div style="margin-left:25px" class='part'>
 		{% for info in dashboard_info %}
 			{% ifequal p.id info.dashboard_id %}
-				<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/></div>
+				{% ifnotequal info.info "" %}
+					<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/><br class="clear"/></div>
+				{% endifnotequal %}
 			{% endifequal %}
 		{% endfor %}
 		{% get_user_section_status request.user p as status %}
@@ -87,18 +95,17 @@
 		{% if not status %}
 			<span>{{ p.label }}</span> <img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
 		{% endif %}
-
-		{% for visited in is_visited %}
-			{% ifequal p.id visited.section_id %}
-				{% if not status %}
-					<span>{{ p.label }}</span> <img src="/site_media/img/status_inprogress.png"/><br class="clear"/>
-				{% endif %}
-			{% endifequal %}
-		{% endfor %}
 		</div>
 
 		{% for s in p.get_children %}
 			<div style="margin-left:50px" class='section'>
+			{% for info in dashboard_info %}
+			{% ifequal s.id info.dashboard_id %}
+				{% ifnotequal info.info "" %}
+				<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/><br class="clear"/></div>
+				{% endifnotequal %}
+			{% endifequal %}
+			{% endfor %}
 			{% get_user_section_status request.user s as status %}
 			{% ifequal status.status "complete" %}
 				<a href="{{ s.get_absolute_url }}">{{ s.label }}</a>
@@ -114,21 +121,16 @@
 			{% if not status %}
 				<span>{{ s.label }}</span> <img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
 			{% endif %}
-			{% for visited in is_visited %}
-				{% ifequal s.id visited.section_id %}
-					{% if not status %}
-						<span>{{ s.label }}</span> <img src="/site_media/img/status_inprogress.png"/><br class="clear"/>
-					{% endif %}
-				{% endifequal %}
-			{% endfor %}
-			{% for info in dashboard_info %}
-				{% ifequal s.id info.dashboard_id %}
-					<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/></div>
-				{% endifequal %}
-			{% endfor %}
 			</div>
 				{% for sub in s.get_children %}
 					<div style="margin-left:75px;" class='sub'>
+					{% for info in dashboard_info %}
+						{% ifequal sub.id info.dashboard_id %}
+							{% ifnotequal info.info "" %}
+							<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/><br class="clear"/></div>
+							{% endifnotequal %}
+						{% endifequal %}
+					{% endfor %}
 					{% get_user_section_status request.user sub as status %}
 					{% ifequal status.status "complete" %}
 						<a href="{{ sub.get_absolute_url }}">{{ sub.label }}</a>
@@ -149,19 +151,7 @@
 						<span>{{ sub.label }}</span> <img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
 					{% endif %}
 					
-					{% for visited in is_visited %}
-						{% ifequal sub.id visited.section_id %}
-							{% if not status %}
-								<span>{{ sub.label }}</span> <img src="/site_media/img/status_inprogress.png"/><br class="clear"/>
-							{% endif %}
-						{% endifequal %}
-					{% endfor %}
 					</div>
-				{% endfor %}
-				{% for info in dashboard_info %}
-					{% ifequal sub.id info.dashboard_id %}
-						<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/></div>
-					{% endifequal %}
 				{% endfor %}
 		{% endfor %}
 	{% endfor %}
