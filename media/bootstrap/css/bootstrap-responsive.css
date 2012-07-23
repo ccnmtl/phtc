@@ -434,9 +434,9 @@
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 950px) {
   .row {
-    margin-left: -30px;
+    margin-left: -10px;
     *zoom: 1;
   }
   .row:before,
@@ -449,12 +449,16 @@
   }
   [class*="span"] {
     float: left;
-    margin-left: 30px;
+    margin-left: 10px;
+    /*margin-left: 30px;*/
   }
   .container,
   .navbar-fixed-top .container,
   .navbar-fixed-bottom .container {
-    width: 1170px;
+    width: 1000px;
+  }
+  #outer-container {
+  margin-top: 41px;
   }
   .span12 {
     width: 1170px;
@@ -682,6 +686,9 @@
 @media (max-width: 979px) {
   body {
     padding-top: 0;
+  }
+  #outer-container {
+  margin-top: 0;
   }
   .navbar-fixed-top {
     position: static;
