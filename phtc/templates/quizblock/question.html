@@ -34,6 +34,9 @@
 	{% if question.is_multiple_choice %}
 	  {% include 'quizblock/multiple_choice.html' %}
 	{% endif %}
+  {% if block.pre_test %}
+    <input name="pre_test" value="true" type="hidden" />
+  {% endif %} 
 
         {% if block.rhetorical %}
           </form>

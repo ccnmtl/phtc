@@ -4,9 +4,9 @@
 {% for s in module.get_descendants %}  
 {% if s.needs_submit %}
   {% if s.is_submitted  %}
-  <h4>Yep</h4>
+  <h4>Ye - s.is_submitted  </h4>
   {% else %}
-  <h4>nope</h4>
+  <h4>nope - s.is_submitted </h4>
   {% endif %}
 {% endif %}
 
@@ -19,7 +19,7 @@
         {% else %}
         {% for v in is_visited %}
           {% ifequal s.id v.section_id %}
-              {% ifequal v.status incomplete %}
+              {% ifequal v.status "incomplete" %}
               {% else %}
               <a href="{{menu_base}}{{s.get_absolute_url}}">
               {% endifequal %}

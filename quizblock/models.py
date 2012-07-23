@@ -14,6 +14,8 @@ class Quiz(models.Model):
     feedback = models.BooleanField(default=False)
     matching = models.BooleanField(default=False)
     allow_redo = models.BooleanField(default=True)
+    pre_test = models.BooleanField(default=False)
+    post_test = models.BooleanField(default=False)
     template_file = "quizblock/quizblock.html"
 
     display_name = "Quiz"
@@ -68,6 +70,8 @@ class Quiz(models.Model):
             rhetorical = forms.BooleanField(initial=self.rhetorical)
             feedback = forms.BooleanField(initial=self.feedback)
             matching = forms.BooleanField(initial=self.matching)
+            pre_test = forms.BooleanField(initial=self.pre_test)
+            post_test = forms.BooleanField(initial=self.post_test)
             allow_redo = forms.BooleanField(initial=self.allow_redo)
             alt_text = ("<a href=\"" + reverse("edit-quiz", args=[self.id])
                         + "\">manage questions/answers</a>")
@@ -81,6 +85,8 @@ class Quiz(models.Model):
             feedback = forms.BooleanField()
             matching = forms.BooleanField()
             allow_redo = forms.BooleanField()
+            pre_test = forms.BooleanField()
+            post_test = forms.BooleanField()
         return AddForm()
 
     @classmethod
@@ -90,7 +96,9 @@ class Quiz(models.Model):
             rhetorical=request.POST.get('rhetorical', ''),
             feedback=request.POST.get('feedback', ''),
             matching=request.POST.get('matching', ''),
-            allow_redo=request.POST.get('allow_redo', ''))
+            allow_redo=request.POST.get('allow_redo', ''),
+            pre_test=request.POST.get('pre_test', ''),
+            post_test=request.POST.get('post_test', ''))
 
     @classmethod
     def create_from_dict(self, d):
@@ -99,6 +107,8 @@ class Quiz(models.Model):
             rhetorical=d.get('rhetorical', False),
             feedback=d.get('feedback', ''),
             matching=d.get('matching', ''),
+            pre_test=d.get('pre_test', ''),
+            post_test=d.get('post_test', ''),
             allow_redo=d.get('allow_redo', True),
             )
         q.import_from_dict(d)
@@ -109,6 +119,8 @@ class Quiz(models.Model):
         self.rhetorical = vals.get('rhetorical', '')
         self.feedback = vals.get('feedback', '')
         self.matching = vals.get('matching', '')
+        self.pre_test = vals.get('pre_test', '')
+        self.post_test = vals.get('post_test', '')
         self.allow_redo = vals.get('allow_redo', '')
         self.save()
 
@@ -126,6 +138,8 @@ class Quiz(models.Model):
                  rhetorical=self.rhetorical,
                  feedback=self.feedback,
                  matching=self.matching,
+                 pre_test=self.pre_test,
+                 post_test=self.post_test,
                  allow_redo=self.allow_redo)
         d['questions'] = [q.as_dict() for q in self.question_set.all()]
         return d
