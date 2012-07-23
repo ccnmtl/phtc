@@ -1,94 +1,80 @@
 header#masthead
 {
-	 height: 150px;
-   background-color: #9af;
+    height: 150px;
+    background-color: transparent;
 }
 
-header h1 {
-	display: none;
+header h1 { display: none; }
+header h4 { display: none; }
+html { height: 100%; }
+
+body
+{
+    background-color: #eee;
+    height: 100%;
 }
 
-header h4 {
-	display: none;
+body > .container
+{
+    background-color: #fff;
+    min-height: 100%;
 }
 
-html {
-	height: 100%;
+#content { min-height: 100%; }
+.navbar-top { margin-bottom: 0px; }
+
+#primarynav .navbar-inner
+{
+    background-color: blue;
+    background-image: none;
 }
 
-body {
-  background-color: #eee;
-  height: 100%;
+#primarynav li.active a
+{
+    background-color: #8ae;
+    color: black;
 }
 
-body > .container {
-  background-color: #fff;
-  min-height: 100%;
+#primarynav a
+{
+    color: white;
+    background-color: #679;
 }
 
-#content {
-  min-height: 100%;
+#primarynav a:hover { color: blue; }
+.controls textarea { width: 90%; }
+.item-feedback { display: none; }
+.casequestion input[type="radio"] { margin: 3px 3px 3px 0px; }
+.casequestion form li { cursor: pointer; }
+
+.big-modal
+{
+    width: 940px;
+    margin-left: -470px;
+    max-height: 600px;
+    margin-top: -300px;
 }
 
-.navbar-top {
-  margin-bottom: 0px;
+#user_log_in
+{
+    width: 250px;
+    float: left;
+    margin: 30px 0px 0px 0px;
 }
 
-#primarynav .navbar-inner {
-	background-color: blue;
-	background-image: none;
+#welcome
+{
+    float: left;
+    width: 600px;
+    padding: 0px 80px 0px 0px;
 }
 
-#primarynav li.active a {
-	background-color: #8ae;
-	color: black;
-}
+h3.log_in { color: #777; }
 
-#primarynav a {
-  color: white;
-	background-color: #679;
-}
-
-#primarynav a:hover {
-  color: blue;
-}
-
-.controls textarea {
-		width: 90%;
-}
-.item-feedback{
-  display: none;
-}
-.casequestion input[type="radio"]{
-	margin: 3px 3px 3px 0px;
-}
-.casequestion form li{
-	cursor: pointer;
-}
-
-.big-modal {
-   width: 940px;
-   margin-left:-470px;
-   max-height: 600px;
-   margin-top: -300px;
-}
-#user_log_in{
-  width:250px;
-  float: left;
-  margin: 30px 0px 0px 0px;
-}
-#welcome{
-  float: left;
-  width:600px;
-  padding: 0px 80px 0px 0px;
-}
-h3.log_in{
-  color: #777;
-}
-
-p.smalltxt.login{
-  margin: 10px 0 0 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  line-height: 18px;
+p.smalltxt.login
+{
+    margin: 10px 0 0 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
 }
