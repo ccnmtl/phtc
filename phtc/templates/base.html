@@ -24,7 +24,7 @@
 
 	{% block feeds %}{% endblock %}
 </head>
-<body>
+<body{% block noleftsidebar %}{% endblock %}>
 
 {% block topnavbar %}
   <div class="navbar navbar-fixed-top">
@@ -55,7 +55,13 @@
   <div class="container" id="outer-container">
 {% block masthead %}
     <header class="subhead hidden-phone" id="masthead">
-      <h1><a href="./" title="phtc">phtc</a></h1>
+      <h1><a href="/" title="Return to {% if request.user.is_anonymous %}Home Page{% else %}My Dashboard{% endif %}"><span>Return to
+        {% if request.user.is_anonymous %}
+            Home Page
+        {% else %}
+            My Dashboard
+        {% endif %}
+      </span></a></h1>
       <h4 id="logo-ccnmtl">
         <a href="http://ccnmtl.columbia.edu" target="_blank"
           title="Columbia Center for New Media Teaching and Learning">
@@ -66,7 +72,7 @@
     </header>
 
 {% block primarynav %}
-    <div class="navbar" id="primarynav">
+{% comment %}    <div class="navbar" id="primarynav">
       <div class="navbar-inner">
         <div class="container">
           <ul class="nav">
@@ -84,16 +90,17 @@
         </div>
       </div>
     </div>
+{% endcomment %}
 {% endblock %}
 
 {% endblock %}
 
     <div class="container-fluid" id="content">
-      <div class="row-fluid">
-        <div class="span2" id="sidebar">
+      <div class="row">
+        <div class="span3" id="sidebar">
 {% block sidebar %}{% endblock %}
         </div>
-        <div class="span10" id="right-content">
+        <div class="span7" id="right-content">
 {% block pagetitle %}{% endblock %}
 {% block content %}{% endblock %}
 {% block content-nav %}{% endblock %}
