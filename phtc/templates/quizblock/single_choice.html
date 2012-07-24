@@ -1,5 +1,4 @@
 {% load markup %}
-
 <ol type="A">
   {% for answer in question.answer_set.all %}
     {% if block.rhetorical %}
@@ -20,3 +19,4 @@
     {% endif %}
   {% endfor %}
 </ol>
+

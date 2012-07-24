@@ -12,8 +12,17 @@
 	{% if block.matching %}
 		<script src="/site_media/js/matching.js"></script>
 	{% endif %}
-	{% if block.pre_test %}
-		<script src="/site_media/js/pre_test.js"></script>
+	{% if is_submitted  %}
+	{% else %}
+		{% if block.pre_test %}
+			<script src="/site_media/js/pre_test.js"></script>
+		{% endif %}
+	{% endif %}
+	{% if is_submitted  %}
+	{% else %}
+		{% if block.post_test %}
+			<script src="/site_media/js/post_test.js"></script>
+		{% endif %}
 	{% endif %}
 	{% if block.rhetorical %}
 		{% if block.feedback%}

@@ -30,7 +30,6 @@
 <div id="content">
 {% if needs_submit %}
 {% if is_submitted %}
-yep
 {% else %}
 <form action="." method="post">
 {% endif %}
@@ -41,10 +40,11 @@ yep
 <div class="pageblock{% if block.css_extra %} {{block.css_extra}}{% endif %}">
 {% if block.label %}<h3>{{block.label}}</h3>{% endif %}
 {% render block %}
+
+{{block.description}}
+
 </div>
 {% endfor %}
-
-
 {% if needs_submit %}
 {% if request.user.is_anonymous %}
 {% else %}
@@ -54,6 +54,11 @@ yep
 <input type="hidden" name="action" value="reset" />
 <input type="submit" value="clear your answers and try again" class="btn" />
 </form>
+<script>
+  jQuery(document).ready(function(){
+    jQuery('.pager').css({ display: 'block'})
+  })
+  </script>
 {% else %}
 <input type="submit" value="Submit" class="btn btn-primary" />
 

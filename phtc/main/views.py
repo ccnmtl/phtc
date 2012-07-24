@@ -10,7 +10,7 @@ from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
 from pagetree.models import Section
-
+from django.core.mail import send_mail
 
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:
@@ -61,6 +61,10 @@ def user_visits(request):
     visits = UserPageVisit.objects.filter(user_id = request.user)
     return visits
 
+def send_post_test_email():
+    send_mail('PHTC Training', 'Here is your digital diploma!', 'admin@lowernysphtc.org',
+    ['djredhand@gmail.com'], fail_silently=False)
+
 @login_required
 @render_to('main/page.html')
 def page(request, path):
@@ -69,10 +73,7 @@ def page(request, path):
     module = get_module(section)
     is_visited = user_visits(request)
     user_id = request.user.id
-    
-    if request.method =="POST":
-        if request.POST.get('pre_test') == "true":
-            return HttpResponse ("This was a pre-Test post!")
+        
 
     if not request.user.is_anonymous():
         section.user_visit(request.user)
@@ -84,6 +85,10 @@ def page(request, path):
     #return HttpResponse( update_status(section, request.user) )
 
     if request.method == "POST":
+        #if request.POST.get('pre_test') == "true":
+            #return HttpResponse('YES this is a PRE_test submit')
+        if request.POST.get('post_test') == "true":
+            send_post_test_email()
         if request.user.is_anonymous():
             return HttpResponse("you must login first")
         # user has submitted a form. deal with it
