@@ -1,10 +1,23 @@
 header#masthead
 {
-    height: 150px;
+    height: 100px;
     background-color: transparent;
+    padding: 10px 0 10px 10px;
 }
 
-header h1 { display: none; }
+header h1 {
+    background: url('/site_media/img/banner.jpg') 0 0 no-repeat;
+    height: 100px;
+    width: 669px;
+}
+header h1 a {
+    display: block;
+    height: 100px;
+    width: 669px;
+}
+header h1 a span {
+    display: none;
+}
 header h4 { display: none; }
 html { height: 100%; }
 
@@ -59,13 +72,13 @@ body > .container
 {
     width: 250px;
     float: left;
-    margin: 30px 0px 0px 0px;
+    margin: 0;
 }
 
 #welcome
 {
     float: left;
-    width: 600px;
+    width: 500px;
     padding: 0px 80px 0px 0px;
 }
 
@@ -78,3 +91,13 @@ p.smalltxt.login
     font-size: 13px;
     line-height: 18px;
 }
+
+/* special classes */
+
+.no-left-sidebar #sidebar {
+    display: none;
+}
+
+.no-left-sidebar #right-content {
+    width: 940px;
+    }
