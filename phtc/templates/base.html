@@ -40,7 +40,7 @@
           {% if request.user.is_anonymous %}
           <a href="/accounts/login/?next=/dashboard/" class="btn-small btn-primary">Log in</a>
           {% else %}
-          Hello <span class="user_profile" rel="tooltip" title="View/Edit my profile"><a href="/profile/">{% comment %}{{request.user.username}} {% endcomment %}{{request.user.first_name}}</a></span> <a href="/accounts/logout/?next=/accounts/login/" class="btn-small btn-primary">Log out</a>
+          Hello <span class="user_profile" rel="tooltip" title="View/Edit my profile"><a href="/profile/">{% if request.user.last_name %}{{request.user.first_name}}{% else %}{{request.user.username}}{% endif %}</a></span> <a href="/accounts/logout/?next=/accounts/login/" class="btn-small btn-primary">Log out</a>
           {% endif %}
           {% endblock %}
         </div><!-- usernav -->
