@@ -2,20 +2,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<title>{% block title %}{% endblock %} | Lower New York State Public Health Training Center</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="phtc">
-  <meta name="author" content="CCNMTL">
+    <meta charset="utf-8" />
+    <title>{% block title %}{% endblock %} | Lower New York State Public Health Training Center</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="phtc">
+    <meta name="author" content="CCNMTL">
 
-{% compress css %}
+    {% compress css %}
     <link href="/site_media/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="/site_media/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    {% comment %} <link href="/site_media/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">{% endcomment %}
     <link href="/site_media/css/main.css?site=phtc" rel="stylesheet">
-{% endcompress %}
+    {% endcompress %}
 	<link rel="shortcut icon" href="/site_media/img/favicon.ico" type="image/x-icon" />
 	{% block css %}{% endblock %}
-  <script src="/site_media/js/jquery-1.7.2.min.js"></script>
+    <script src="/site_media/js/jquery-1.7.2.min.js"></script>
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -27,29 +27,27 @@
 <body{% block noleftsidebar %}{% endblock %}>
 
 {% block topnavbar %}
-  <div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-      <div class="container">
-        <ul class="nav">
-          <li><a class="brand" href="/">phtc</a></li>
-          {% block topnavbarleftitems %}{% endblock %}
-        </ul>
-
-        <p class="navbar-text pull-right">
-          {% block topnavbarrightitems %}{% endblock %}
-{% block usernav %}
-          {% if request.user.is_anonymous %}
-          <a href="/accounts/login/?next=/dashboard/" class="btn btn-success">login</a>
-          {% else %}
-          logged in as <span class="user_profile" rel="tooltip" title="view/edit profile"><a href="/profile/">{{request.user.username}} {{request.user.last_name}}</a></span> (<a href="/accounts/logout/?next=/accounts/login/">Log out</a>)
-					[<a href="/dashboard/">Dashboard</a>]
-          {% endif %}
-{% endblock %}
-       </p>
-
-       </div>
-     </div>
-  </div>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <ul class="nav">
+                    <li><a class="brand" href="/">phtc</a></li>
+                    {% block topnavbarleftitems %}{% endblock %}
+                </ul>
+                <p class="navbar-text pull-right">
+                    {% block topnavbarrightitems %}{% endblock %}
+                    {% block usernav %}
+                    {% if request.user.is_anonymous %}
+                    <a href="/accounts/login/?next=/dashboard/" class="btn btn-success">login</a>
+                    {% else %}
+                    logged in as <span class="user_profile" rel="tooltip" title="view/edit profile"><a href="/profile/">{{request.user.username}} {{request.user.last_name}}</a></span> (<a href="/accounts/logout/?next=/accounts/login/">Log out</a>)
+                    [<a href="/dashboard/">Dashboard</a>]
+                    {% endif %}
+                    {% endblock %}
+                </p>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
   <div class="container" id="outer-container">
