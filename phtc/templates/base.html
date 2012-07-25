@@ -38,37 +38,26 @@
           {% block topnavbarrightitems %}{% endblock %}
           {% block usernav %}
           {% if request.user.is_anonymous %}
-          <a href="/accounts/login/?next=/dashboard/" class="btn btn-success">login</a>
+          <a href="/accounts/login/?next=/dashboard/" class="btn-small btn-primary">Log in</a>
           {% else %}
-          logged in as <span class="user_profile" rel="tooltip" title="view/edit profile"><a href="/profile/">{{request.user.username}} {{request.user.last_name}}</a></span> (<a href="/accounts/logout/?next=/accounts/login/">Log out</a>)
-          [<a href="/dashboard/">Dashboard</a>]
+          Hello <span class="user_profile" rel="tooltip" title="View/Edit my profile"><a href="/profile/">{% comment %}{{request.user.username}} {% endcomment %}{{request.user.first_name}}</a></span> <a href="/accounts/logout/?next=/accounts/login/" class="btn-small btn-primary">Log out</a>
           {% endif %}
           {% endblock %}
         </div><!-- usernav -->
       </div><!-- navbar-inner -->
     </div><!-- navbar -->
-  </div><!-- container -->
 {% endblock %}
 
-  <div class="container" id="outer-container">
-{% block masthead %}
-  <header class="subhead hidden-phone" id="masthead">
-    <h1><a href="/" title="Return to {% if request.user.is_anonymous %}Home Page{% else %}My Dashboard{% endif %}"><span>Return to
-    {% if request.user.is_anonymous %}
-      Home Page
-    {% else %}
-      My Dashboard
-    {% endif %}
-    </span></a></h1>
-    <h4 id="logo-ccnmtl">
+ {% block masthead %}
+   <header id="masthead">
+      <h1><a href="/" title="Return to {% if request.user.is_anonymous %}Home Page{% else %}My Dashboard{% endif %}"><span>Return to {% if request.user.is_anonymous %} Home Page {% else %} My Dashboard {% endif %} </span></a></h1>
+      <h4 id="logo-ccnmtl">
     <a href="http://ccnmtl.columbia.edu" target="_blank"
-      title="Columbia Center for New Media Teaching and Learning">
-      <span>Produced by the Columbia Center for New Media Teaching
-      and Learning</span>
+    title="Columbia Center for New Media Teaching and Learning">
+    <span>Produced by the Columbia Center for New Media Teaching
+    and Learning</span>
     </a>
     </h4>
-  </header>
-
 {% block primarynav %}
 {% comment %}  <div class="navbar" id="primarynav">
     <div class="navbar-inner">
@@ -90,8 +79,15 @@
   </div>
 {% endcomment %}
 {% endblock %}
-
+    </header><!-- masthead -->
 {% endblock %}
+
+  </div><!-- container -->
+
+
+  <div class="container" id="outer-container">
+
+
 
   <div class="container-fluid" id="content">
     <div class="row">

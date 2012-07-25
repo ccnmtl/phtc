@@ -1,7 +1,8 @@
 header#masthead
 {
+    margin: 0;
     height: 100px;
-    background-color: transparent;
+    background-color: #fff;
     padding: 10px 0 10px 10px;
 }
 
@@ -118,15 +119,17 @@ body {
 
 .navbar {
     height: 30px;
+    margin-bottom: 10px;
 }
 
 .navbar-inner {
     padding-right: 10px;
     padding-left: 10px;
 }
+
 .navbar .nav {
     float: left;
-    width: 458px;
+    width: 460px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -140,5 +143,7 @@ body {
 
 .navbar .usernav {
     float: left;
-    width: 458px;
+    width: 479px;
+    line-height: 40px;
+    text-align: right;
 }
