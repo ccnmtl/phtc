@@ -3,7 +3,7 @@ header#masthead
     margin: 0;
     height: 100px;
     background-color: #fff;
-    padding: 10px 0 10px 10px;
+    padding: 10px 0 30px 10px;
 }
 
 header h1 {
@@ -95,11 +95,13 @@ p.smalltxt.login
 
 /* special classes */
 
-.no-left-sidebar #sidebar {
+.no-left-sidebar #sidebar,
+.no-left-sidebar #sidebarleft {
     display: none;
 }
 
-.no-left-sidebar #right-content {
+.no-left-sidebar #right-content,
+.no-left-sidebar #maincontent {
     width: 940px;
     }
     
@@ -115,6 +117,13 @@ body {
 .container {
     margin: auto;
     width: 960px;
+}
+
+.content
+{
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
 }
 
 .navbar {

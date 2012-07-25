@@ -82,6 +82,21 @@
     </header><!-- masthead -->
 {% endblock %}
 
+  <div class="content">
+      <div class="row">
+          <div class="span3" id="sidebarleft">
+            {% block sidebar %}{% endblock %}
+          </div><!-- sidebarleft -->
+          <div class="span9" id="maincontent">
+            {% block pagetitle %}{% endblock %}
+            {% block content %}{% endblock %}
+            {% block content-nav %}{% endblock %}
+          </div><!-- maincontent -->
+     </div>
+        <div class="divclearfix"></div><!-- divclearfix -->
+    </div><!-- content -->
+
+
   </div><!-- container -->
 
 
@@ -92,12 +107,9 @@
   <div class="container-fluid" id="content">
     <div class="row">
     <div class="span3" id="sidebar">
-{% block sidebar %}{% endblock %}
+
     </div>
     <div class="span7" id="right-content">
-{% block pagetitle %}{% endblock %}
-{% block content %}{% endblock %}
-{% block content-nav %}{% endblock %}
     </div>
     </div>
   </div>
