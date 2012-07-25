@@ -29,8 +29,8 @@ body
 
 body > .container
 {
-    background-color: #fff;
-    min-height: 100%;
+    background-color: transparent;
+    /*min-height: 100%;*/
 }
 
 #content { min-height: 100%; }
@@ -101,3 +101,44 @@ p.smalltxt.login
 .no-left-sidebar #right-content {
     width: 940px;
     }
+    
+    
+/* CSS overide special for PHTC */
+
+body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.container {
+    margin: auto;
+    width: 960px;
+}
+
+.navbar {
+    height: 30px;
+}
+
+.navbar-inner {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.navbar .nav {
+    float: left;
+    width: 458px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.navbar .brand {
+    margin: 0;
+    padding-left: 23px !important;
+    background: url('/site_media/img/icon_home.png') 0 11px no-repeat;
+}
+
+.navbar .usernav {
+    float: left;
+    width: 458px;
+}
