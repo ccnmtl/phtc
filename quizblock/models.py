@@ -16,6 +16,8 @@ class Quiz(models.Model):
     allow_redo = models.BooleanField(default=True)
     pre_test = models.BooleanField(default=False)
     post_test = models.BooleanField(default=False)
+    post_test_credit = models.FloatField(default=False, null=True)
+
     template_file = "quizblock/quizblock.html"
 
     display_name = "Quiz"
@@ -58,6 +60,7 @@ class Quiz(models.Model):
     def redirect_to_self_on_submit(self):
         return True
 
+
     def unlocked(self, user):
         # meaning that the user can proceed *past* this one,
         # not that they can access this one. careful.
@@ -72,6 +75,7 @@ class Quiz(models.Model):
             matching = forms.BooleanField(initial=self.matching)
             pre_test = forms.BooleanField(initial=self.pre_test)
             post_test = forms.BooleanField(initial=self.post_test)
+            post_test_credit = forms.FloatField(widget = forms.widgets.TextInput(attrs={'class':'post_test_credit'}),initial= self.post_test_credit)
             allow_redo = forms.BooleanField(initial=self.allow_redo)
             alt_text = ("<a href=\"" + reverse("edit-quiz", args=[self.id])
                         + "\">manage questions/answers</a>")
@@ -87,6 +91,7 @@ class Quiz(models.Model):
             allow_redo = forms.BooleanField()
             pre_test = forms.BooleanField()
             post_test = forms.BooleanField()
+            post_test_credit = forms.FloatField()
         return AddForm()
 
     @classmethod
@@ -98,7 +103,9 @@ class Quiz(models.Model):
             matching=request.POST.get('matching', ''),
             allow_redo=request.POST.get('allow_redo', ''),
             pre_test=request.POST.get('pre_test', ''),
-            post_test=request.POST.get('post_test', ''))
+            post_test=request.POST.get('post_test', ''),
+            post_test_credit = request.POST.get('post_test_credit','')
+            )
 
     @classmethod
     def create_from_dict(self, d):
@@ -109,6 +116,7 @@ class Quiz(models.Model):
             matching=d.get('matching', ''),
             pre_test=d.get('pre_test', ''),
             post_test=d.get('post_test', ''),
+            post_test_credit = d.get('post_test_credit', ''),
             allow_redo=d.get('allow_redo', True),
             )
         q.import_from_dict(d)
@@ -121,6 +129,7 @@ class Quiz(models.Model):
         self.matching = vals.get('matching', '')
         self.pre_test = vals.get('pre_test', '')
         self.post_test = vals.get('post_test', '')
+        self.post_test_credit = vals.get('post_test_credit','')
         self.allow_redo = vals.get('allow_redo', '')
         self.save()
 
@@ -140,6 +149,7 @@ class Quiz(models.Model):
                  matching=self.matching,
                  pre_test=self.pre_test,
                  post_test=self.post_test,
+                 post_test_credit = self.post_test_credit,
                  allow_redo=self.allow_redo)
         d['questions'] = [q.as_dict() for q in self.question_set.all()]
         return d

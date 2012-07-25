@@ -8,15 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Answer.feedback'
-        db.add_column('quizblock_answer', 'feedback',
-                      self.gf('django.db.models.fields.TextField')(default='', blank=True),
+        # Adding field 'Quiz.post_test_credit'
+        db.add_column('quizblock_quiz', 'post_test_credit',
+                      self.gf('django.db.models.fields.FloatField')(default=False, null=True),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'Answer.feedback'
-        db.delete_column('quizblock_answer', 'feedback')
+        # Deleting field 'Quiz.post_test_credit'
+        db.delete_column('quizblock_quiz', 'post_test_credit')
 
 
     models = {
@@ -65,6 +65,7 @@ class Migration(SchemaMigration):
         'pagetree.pageblock': {
             'Meta': {'ordering': "('section', 'ordinality')", 'object_name': 'PageBlock'},
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
+            'css_extra': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'label': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
@@ -105,7 +106,12 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Quiz'},
             'allow_redo': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'feedback': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'matching': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'post_test': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'post_test_credit': ('django.db.models.fields.FloatField', [], {'default': 'False', 'null': 'True'}),
+            'pre_test': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'rhetorical': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
         'quizblock.response': {
