@@ -1,8 +1,9 @@
 header#masthead
 {
+    margin: 0;
     height: 100px;
-    background-color: transparent;
-    padding: 10px 0 10px 10px;
+    background-color: #fff;
+    padding: 10px 0 30px 10px;
 }
 
 header h1 {
@@ -29,8 +30,8 @@ body
 
 body > .container
 {
-    background-color: #fff;
-    min-height: 100%;
+    background-color: transparent;
+    /*min-height: 100%;*/
 }
 
 #content { min-height: 100%; }
@@ -94,10 +95,64 @@ p.smalltxt.login
 
 /* special classes */
 
-.no-left-sidebar #sidebar {
+.no-left-sidebar #sidebar,
+.no-left-sidebar #sidebarleft {
     display: none;
 }
 
-.no-left-sidebar #right-content {
+.no-left-sidebar #right-content,
+.no-left-sidebar #maincontent {
     width: 940px;
     }
+    
+    
+/* CSS overide special for PHTC */
+
+body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.container {
+    margin: auto;
+    width: 960px;
+}
+
+.content
+{
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+}
+
+.navbar {
+    height: 30px;
+    margin-bottom: 10px;
+}
+
+.navbar-inner {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.navbar .nav {
+    float: left;
+    width: 460px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.navbar .brand {
+    margin: 0;
+    padding-left: 23px !important;
+    background: url('/site_media/img/icon_home.png') 0 11px no-repeat;
+}
+
+.navbar .usernav {
+    float: left;
+    width: 479px;
+    line-height: 40px;
+    text-align: right;
+}

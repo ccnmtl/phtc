@@ -2,115 +2,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>{% block title %}{% endblock %} | Lower New York State Public Health Training Center</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="phtc">
-    <meta name="author" content="CCNMTL">
+  <meta charset="utf-8" />
+  <title>{% block title %}{% endblock %} | Lower New York State Public Health Training Center</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="phtc">
+  <meta name="author" content="CCNMTL">
 
-    {% compress css %}
-    <link href="/site_media/bootstrap/css/bootstrap.css" rel="stylesheet">
-    {% comment %} <link href="/site_media/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">{% endcomment %}
-    <link href="/site_media/css/main.css?site=phtc" rel="stylesheet">
-    {% endcompress %}
+  {% compress css %}
+  <link href="/site_media/bootstrap/css/bootstrap.css" rel="stylesheet">
+  {% comment %} <link href="/site_media/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">{% endcomment %}
+  <link href="/site_media/css/main.css?site=phtc" rel="stylesheet">
+  {% endcompress %}
 	<link rel="shortcut icon" href="/site_media/img/favicon.ico" type="image/x-icon" />
 	{% block css %}{% endblock %}
-    <script src="/site_media/js/jquery-1.7.2.min.js"></script>
+  <script src="/site_media/js/jquery-1.7.2.min.js"></script>
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
 
 	{% block feeds %}{% endblock %}
 </head>
 <body{% block noleftsidebar %}{% endblock %}>
 
+  <div class="container">
 {% block topnavbar %}
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <ul class="nav">
-                    <li><a class="brand" href="/">phtc</a></li>
-                    {% block topnavbarleftitems %}{% endblock %}
-                </ul>
-                <p class="navbar-text pull-right">
-                    {% block topnavbarrightitems %}{% endblock %}
-                    {% block usernav %}
-                    {% if request.user.is_anonymous %}
-                    <a href="/accounts/login/?next=/dashboard/" class="btn btn-success">login</a>
-                    {% else %}
-                    logged in as <span class="user_profile" rel="tooltip" title="view/edit profile"><a href="/profile/">{{request.user.username}} {{request.user.last_name}}</a></span> (<a href="/accounts/logout/?next=/accounts/login/">Log out</a>)
-                    [<a href="/dashboard/">Dashboard</a>]
-                    {% endif %}
-                    {% endblock %}
-                </p>
-            </div>
-        </div>
-    </div>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <ul class="nav">
+          <li><a class="brand" href="/">{% if request.user.is_anonymous %}Home{% else %}My Dashboard{% endif %}</a></li>
+          {% block topnavbarleftitems %}{% endblock %}
+        </ul>
+        <div class="usernav">
+          {% block topnavbarrightitems %}{% endblock %}
+          {% block usernav %}
+          {% if request.user.is_anonymous %}
+          <a href="/accounts/login/?next=/dashboard/" class="btn-small btn-primary">Log in</a>
+          {% else %}
+          Hello <span class="user_profile" rel="tooltip" title="View/Edit my profile"><a href="/profile/">{% comment %}{{request.user.username}} {% endcomment %}{{request.user.first_name}}</a></span> <a href="/accounts/logout/?next=/accounts/login/" class="btn-small btn-primary">Log out</a>
+          {% endif %}
+          {% endblock %}
+        </div><!-- usernav -->
+      </div><!-- navbar-inner -->
+    </div><!-- navbar -->
 {% endblock %}
 
-  <div class="container" id="outer-container">
-{% block masthead %}
-    <header class="subhead hidden-phone" id="masthead">
-      <h1><a href="/" title="Return to {% if request.user.is_anonymous %}Home Page{% else %}My Dashboard{% endif %}"><span>Return to
-        {% if request.user.is_anonymous %}
-            Home Page
-        {% else %}
-            My Dashboard
-        {% endif %}
-      </span></a></h1>
+ {% block masthead %}
+   <header id="masthead">
+      <h1><a href="/" title="Return to {% if request.user.is_anonymous %}Home Page{% else %}My Dashboard{% endif %}"><span>Return to {% if request.user.is_anonymous %} Home Page {% else %} My Dashboard {% endif %} </span></a></h1>
       <h4 id="logo-ccnmtl">
-        <a href="http://ccnmtl.columbia.edu" target="_blank"
-          title="Columbia Center for New Media Teaching and Learning">
-          <span>Produced by the Columbia Center for New Media Teaching
-          and Learning</span>
-        </a>
-      </h4>
-    </header>
-
+    <a href="http://ccnmtl.columbia.edu" target="_blank"
+    title="Columbia Center for New Media Teaching and Learning">
+    <span>Produced by the Columbia Center for New Media Teaching
+    and Learning</span>
+    </a>
+    </h4>
 {% block primarynav %}
-{% comment %}    <div class="navbar" id="primarynav">
-      <div class="navbar-inner">
-        <div class="container">
-          <ul class="nav">
-          {% block primarynavtabs %}
+{% comment %}  <div class="navbar" id="primarynav">
+    <div class="navbar-inner">
+    <div class="container">
+      <ul class="nav">
+      {% block primarynavtabs %}
 					{% for section in modules %}
-            <li{% ifequal section.id module.id %} class="active"{% endifequal %}><a href="{{section.get_absolute_url}}">{{section.label}}</a></li>
+      <li{% ifequal section.id module.id %} class="active"{% endifequal %}><a href="{{section.get_absolute_url}}">{{section.label}}</a></li>
 					{% endfor %}
-          {% endblock %}
+      {% endblock %}
 					{% block primarynavtabsextra %}{% endblock %}
-          </ul>
+      </ul>
 
-          <ul class="nav pull-right">
-            {% block primarynavrightextra %}{% endblock %}
-          </ul>
-        </div>
-      </div>
+      <ul class="nav pull-right">
+      {% block primarynavrightextra %}{% endblock %}
+      </ul>
     </div>
+    </div>
+  </div>
 {% endcomment %}
 {% endblock %}
-
+    </header><!-- masthead -->
 {% endblock %}
 
-    <div class="container-fluid" id="content">
+  <div class="content">
       <div class="row">
-        <div class="span3" id="sidebar">
-{% block sidebar %}{% endblock %}
-        </div>
-        <div class="span7" id="right-content">
-{% block pagetitle %}{% endblock %}
-{% block content %}{% endblock %}
-{% block content-nav %}{% endblock %}
-        </div>
-      </div>
+          <div class="span3" id="sidebarleft">
+            {% block sidebar %}{% endblock %}
+          </div><!-- sidebarleft -->
+          <div class="span9" id="maincontent">
+            {% block pagetitle %}{% endblock %}
+            {% block content %}{% endblock %}
+            {% block content-nav %}{% endblock %}
+          </div><!-- maincontent -->
+     </div>
+        <div class="divclearfix"></div><!-- divclearfix -->
+    </div><!-- content -->
+
+
+  </div><!-- container -->
+
+
+  <div class="container" id="outer-container">
+
+
+
+  <div class="container-fluid" id="content">
+    <div class="row">
+    <div class="span3" id="sidebar">
+
     </div>
+    <div class="span7" id="right-content">
+    </div>
+    </div>
+  </div>
   </div>
 </div>
 
 {% block footer %}
   <footer class="footer navbar-fixed-bottom hidden-phone">
-    <img src="/site_media/img/logo_ccnmtl_sidebar.gif" class="printonly pull-right" />
+  <img src="/site_media/img/logo_ccnmtl_sidebar.gif" class="printonly pull-right" />
   </footer>
 {% endblock %}
 
@@ -123,21 +131,21 @@
 {% block js %}{% endblock %}
 <script>
 //add tooltip
-    jQuery("span.user_profile").tooltip({
-      placement: 'bottom'
-    });
+  jQuery("span.user_profile").tooltip({
+    placement: 'bottom'
+  });
 //get URL params 
 (function(){
   function getUrlVars() {
-      var vars = {};
-      var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-          vars[key] = value;
-      });
-      return vars;
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
   }//end getUrlVars
   if (getUrlVars()['incomplete'] ){
-      var message = "You must complete the previous part in order to continue. \n\n We redirected you back to the dashboard so you can check your status and remeber where you left off."
-      alert(message);
+    var message = "You must complete the previous part in order to continue. \n\n We redirected you back to the dashboard so you can check your status and remeber where you left off."
+    alert(message);
   }
 })();//end anonymous function wrapper
 </script>
