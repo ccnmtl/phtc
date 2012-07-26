@@ -62,11 +62,15 @@ def user_visits(request):
     visits = UserPageVisit.objects.filter(user_id = request.user)
     return visits
 
-def send_post_test_email(user):
+def send_post_test_email(user, section, module):
     directory = os.path.dirname(__file__)
     email = EmailMessage()
     email.subject = "Public Health Training Diploma"
-    email.body = 'Congratulations on completing a public health training module. Please find the attached certificate of completion.'
+    if module.label == "Module 1":
+        section_msg = module.label + ' ' + section.label
+    else:
+        section_msg = module.label
+    email.body = 'Congratulations on completing ' + section_msg + '. Please find the attached certificate of completion.'
     email.from_email = "lowernysphtc.org <no-reply@lowernysphtc.org>"
     email.to = [ user.email, ] 
 
@@ -103,8 +107,8 @@ def page(request, path):
         #if request.POST.get('pre_test') == "true":
             #return HttpResponse('YES this is a PRE_test submit')
         if request.POST.get('post_test') == "true":
-            #return HttpResponse(send_post_test_email(request.user) )
-            send_post_test_email(request.user)
+            #return HttpResponse(send_post_test_email(request.user, section, module) )
+            send_post_test_email(request.user, section, module)
         if request.user.is_anonymous():
             return HttpResponse("you must login first")
         # user has submitted a form. deal with it
@@ -132,16 +136,19 @@ def page(request, path):
                 pass
 
         # make sure that "Parts" are allowed
-        parts = module.get_children()
-        for part in parts:
-            try:
-                part_status = UserPageVisit.objects.get(section_id = part.id, user_id = user_id)
-                if part_status == "in_progress":
-                    visit = UserPageVisit.objects.get(section_id = prev_section.id, user_id = user_id)
-                    visit.status = "complete"
-                    visit.save()
-            except:
-                part_status = UserPageVisit.objects.get_or_create(section_id = part.id, user_id = user_id, status ="allowed")
+        if module.label == "Module 1":
+            parts = module.get_children()
+            for part in parts:
+                try:
+                    part_status = UserPageVisit.objects.get(section_id = part.id, user_id = user_id)
+                    if part_status == "in_progress":
+                        visit = UserPageVisit.objects.get(section_id = prev_section.id, user_id = user_id)
+                        visit.status = "complete"
+                        visit.save()
+                except:
+                    part_status = UserPageVisit.objects.get_or_create(section_id = part.id, user_id = user_id, status ="allowed")
+        else:
+            update_status(section, request.user)
 
 
         if section.get_previous():
