@@ -10,7 +10,8 @@ from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
 from pagetree.models import Section
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
+import os.path
 
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:
@@ -61,9 +62,23 @@ def user_visits(request):
     visits = UserPageVisit.objects.filter(user_id = request.user)
     return visits
 
-def send_post_test_email():
-    send_mail('PHTC Training', 'Here is your digital diploma!', 'admin@lowernysphtc.org',
-    ['djredhand@gmail.com'], fail_silently=False)
+def send_post_test_email(user):
+    directory = os.path.dirname(__file__)
+    email = EmailMessage()
+    email.subject = "Public Health Training Diploma"
+    email.body = 'Congratulations on completing a public health training module. Please find the attached certificate of completion.'
+    email.from_email = "lowernysphtc.org <no-reply@lowernysphtc.org>"
+    email.to = [ user.email, ] 
+
+    #email.attach_file(directory + "/diploma.jpg") # Attach a file directly
+
+    # Or alternatively, if you want to attach the contents directly
+
+    file = open(directory + '/../../media/img/diploma.jpg', 'rb')
+    email.attach(filename = "diploma.jpg", mimetype = "image/jpeg", content = file.read())
+    file.close()
+
+    email.send(fail_silently=False)
 
 @login_required
 @render_to('main/page.html')
@@ -88,7 +103,8 @@ def page(request, path):
         #if request.POST.get('pre_test') == "true":
             #return HttpResponse('YES this is a PRE_test submit')
         if request.POST.get('post_test') == "true":
-            send_post_test_email()
+            #return HttpResponse(send_post_test_email(request.user) )
+            send_post_test_email(request.user)
         if request.user.is_anonymous():
             return HttpResponse("you must login first")
         # user has submitted a form. deal with it
