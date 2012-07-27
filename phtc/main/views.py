@@ -129,10 +129,8 @@ def page(request, path):
             mod.user_pagevisit(request.user, status="allowed")
             try:
                 mod_next_visit = UserPageVisit.objects.get(section_id = mod.get_next().id, user_id = user_id)
-                if mod_next_visit.status == "allowed":
+                if mod_next_visit.status == "in_progress":
                     mod.user_pagevisit(request.user, status="in_progress")
-                else:
-                    mod.user_pagevisit(request.user, status="complete")
             except:
                 pass
 
