@@ -71,11 +71,13 @@
 
 {% block content-nav %}
 <ul class="pager">
-{% if section.get_previous %}
-  <li class="previous">
-		<a href="{{section.get_previous.get_absolute_url}}">&larr; {{section.get_previous.label}}</a>
-  </li>
+{% ifnotequal module.id section.get_previous.id %}
+  {% if section.get_previous %}
+    <li class="previous">
+      <a href="{{section.get_previous.get_absolute_url}}">&larr; {{section.get_previous.label}}</a>
+    </li>
 {% endif %}
+{% endifnotequal %}
 
 {% if section.get_next %}
 {% with section.get_next as next_section %}

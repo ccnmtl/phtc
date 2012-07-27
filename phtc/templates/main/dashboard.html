@@ -16,8 +16,15 @@
 .module img{
 	float: right;
 }
+.toggle-on{
+	display: block !important;
+}
+.toggle-off{
+	display: none;
+}
 .part{
 	width:500px;
+	display: none;
 }
 .part img{
 	float: right;
@@ -37,10 +44,18 @@
 .clear{
 	clear:both;
 }
+#return{
+
+	position: absolute;
+	left: 700px;
+	background: white;
+	padding: 0 100px 0 0;
+}
 </style>
 <h1>Dashboard</h1>
+<div id="return"></div>
 {% for module in root.get_children %}
-	<div class='module'>
+	<div class='module' id ="{{ module.id }}">
 		{% for info in dashboard_info %}
 			{% ifequal module.id info.dashboard_id %}
 				{% ifnotequal info.info "" %}
@@ -50,23 +65,23 @@
 		{% endfor %}
 		{% get_user_section_status request.user module as status %}
 		{% ifequal status.status "complete" %}
-			<a href="{{ module.get_absolute_url }}">{{ module.label }}</a>
+			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
 			<img src="/site_media/img/status_completed.png"/><br class="clear"/>
 		{% endifequal %}
 		{% ifequal status.status "allowed" %}
-			<a href="{{ module.get_absolute_url }}">{{ module.label }}</a>
+			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
 			<img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
 		{% endifequal %}
 		{% ifequal status.status "in_progress" %}
-			<a href="{{ module.get_absolute_url }}">{{ module.label }}</a>
+			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
 			<img src="/site_media/img/status_inprogress.png"/><br class="clear"/>
 		{% endifequal %}
 		{% if not status %}
-			<a href="{{ module.get_absolute_url }}">{{ module.label }}</a>
+			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
 			<img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
 		{% endif %}
-	</div>
-
+	
+	<div id="part_id_{{ module.id }}">
 	{% for p in module.get_children %}
 		<div style="margin-left:25px" class='part'>
 		{% for info in dashboard_info %}
@@ -95,7 +110,7 @@
 		{% if not status %}
 			<span>{{ p.label }}</span> <img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
 		{% endif %}
-		</div>
+		
 
 		{% for s in p.get_children %}
 			<div style="margin-left:50px" class='section'>
@@ -154,12 +169,15 @@
 					</div>
 				{% endfor %}
 		{% endfor %}
+		</div><!--end .part-->
 	{% endfor %}
+	</div><!--end part_id_{{ module.id }}-->
+</div><!--end .module-->
 {% endfor %}
 <script>
 jQuery(document).ready(function(){ 
 /*
-* Initiate the bootstrap popup
+** Initiate the bootstrap popup
 */
 	$(".module-info-popover").popover({
     	offset: 10,
@@ -182,6 +200,33 @@ jQuery(document).ready(function(){
     }).mouseleave(function(){
     	$(this).popover('hide')
     });
-});
+
+
+ /*
+ ** Module/Part UI 
+ */
+ $('.show-module').click(function(){
+ 	var link = $(this).attr('rel')
+ 	var id = $(this).parent().attr('id')
+ 	var child = $('#'+id).children('.part')
+ 	var ch_clone = $(child).clone()
+ 	console.log(id)
+ 	ch_clone.css('display','block')
+  	$.ajax({
+		url: link,
+		mod_id: id,
+		type: "POST",
+		data: { module: link, mod_id: id }
+		}).done(function(data) {
+			$('#return').empty().load('/dashboard/ #part_id_'+ id, function(response, status, xhr){
+				if(status == "success"){
+					$('#return').children().children().css('display','block')
+				}
+			})
+		});
+ 	})//end click
+
+
+});//end doc.ready
 </script>
 {% endblock %}

@@ -91,7 +91,11 @@ def page(request, path):
     module = get_module(section)
     is_visited = user_visits(request)
     user_id = request.user.id
-        
+    
+    if request.POST.get('module'):
+        module.user_pagevisit(request.user, status="in_progress")
+        update_status(section, request.user)
+        return HttpResponse('/dashboard/')
 
     if not request.user.is_anonymous():
         section.user_visit(request.user)
