@@ -24,11 +24,10 @@ def redirect_to_first_section_if_root(section, root):
 
 
 def update_status(section, user):
-    prev_status = False
     try:
         prev_status = UserPageVisit.objects.get(section_id = section.get_previous().id, user_id =user.id).status
     except:
-        pass
+        prev_status = False
     uv = None
     if not user.is_anonymous():
         uv = section.get_uservisit(user)
@@ -130,8 +129,10 @@ def page(request, path):
             mod.user_pagevisit(request.user, status="allowed")
             try:
                 mod_next_visit = UserPageVisit.objects.get(section_id = mod.get_next().id, user_id = user_id)
-                if mod_next_visit.status == "in_progress":
+                if mod_next_visit.status == "allowed":
                     mod.user_pagevisit(request.user, status="in_progress")
+                else:
+                    mod.user_pagevisit(request.user, status="complete")
             except:
                 pass
 
