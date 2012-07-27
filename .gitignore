@@ -7,3 +7,4 @@ lettuce.db
 *\#
 chromedriver.log
 local_settings.py
+.\#*
