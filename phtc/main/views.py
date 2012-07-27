@@ -30,10 +30,12 @@ def update_status(section, user):
     prev_status = False
     prev_section = section.get_previous()
     if prev_section:
-        prev_status = UserPageVisit.objects.get(
-            section=prev_section,
-            user=user).status
-
+        try:
+            prev_status = UserPageVisit.objects.get(
+                section=prev_section,
+                user=user).status
+        except:
+            pass
     uv = section.get_uservisit(user)
     if not uv and not prev_status:
         return
@@ -61,6 +63,7 @@ def calculate_status(prev_status, uv):
 
 
 def user_visits(request):
+
     return UserPageVisit.objects.filter(user_id=request.user)
 
 
@@ -132,16 +135,11 @@ def make_sure_parts_are_allowed(module, user_id, request, section):
                 part_status = UserPageVisit.objects.get(section_id=part.id,
                                                         user_id=user_id)
                 if part_status == "in_progress":
-                    # ANDERS: the next couple lines are commented out
-                    # because they reference a "prev_section" variable
-                    # which is not defined. Thus, clearly a runtime error
-                    # Please fix.
-#                        visit = UserPageVisit.objects.get(
-#                            section_id=prev_section.id,
-#                            user_id=user_id)
-#                        visit.status = "complete"
-#                        visit.save()
-                    pass
+                    visit = UserPageVisit.objects.get(
+                    section_id=part.get_previous().id,
+                    user_id=user_id)
+                    visit.status = "complete"
+                    visit.save()
             except:
                 part_status = UserPageVisit.objects.get_or_create(
                     section_id=part.id,
@@ -169,7 +167,7 @@ def page(request, path):
 
     if request.POST.get('module'):
         module.user_pagevisit(request.user, status="in_progress")
-        update_status(section, request.user)
+        make_sure_parts_are_allowed(module, user_id, request, section)
         return HttpResponse('/dashboard/')
 
     if not request.user.is_anonymous():
@@ -184,7 +182,6 @@ def page(request, path):
         return page_post(request, section, module)
 
     make_sure_modules_are_allowed(root, request, user_id)
-
     make_sure_parts_are_allowed(module, user_id, request, section)
 
     if section.get_previous():
