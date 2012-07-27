@@ -60,7 +60,6 @@ class Quiz(models.Model):
     def redirect_to_self_on_submit(self):
         return True
 
-
     def unlocked(self, user):
         # meaning that the user can proceed *past* this one,
         # not that they can access this one. careful.
@@ -75,7 +74,10 @@ class Quiz(models.Model):
             matching = forms.BooleanField(initial=self.matching)
             pre_test = forms.BooleanField(initial=self.pre_test)
             post_test = forms.BooleanField(initial=self.post_test)
-            post_test_credit = forms.FloatField(widget = forms.widgets.TextInput(attrs={'class':'post_test_credit'}),initial= self.post_test_credit)
+            post_test_credit = forms.FloatField(
+                widget=forms.widgets.TextInput(
+                    attrs={'class': 'post_test_credit'}),
+                initial=self.post_test_credit)
             allow_redo = forms.BooleanField(initial=self.allow_redo)
             alt_text = ("<a href=\"" + reverse("edit-quiz", args=[self.id])
                         + "\">manage questions/answers</a>")
@@ -104,7 +106,7 @@ class Quiz(models.Model):
             allow_redo=request.POST.get('allow_redo', ''),
             pre_test=request.POST.get('pre_test', ''),
             post_test=request.POST.get('post_test', ''),
-            post_test_credit = request.POST.get('post_test_credit','')
+            post_test_credit=request.POST.get('post_test_credit', '')
             )
 
     @classmethod
@@ -116,7 +118,7 @@ class Quiz(models.Model):
             matching=d.get('matching', ''),
             pre_test=d.get('pre_test', ''),
             post_test=d.get('post_test', ''),
-            post_test_credit = d.get('post_test_credit', ''),
+            post_test_credit=d.get('post_test_credit', ''),
             allow_redo=d.get('allow_redo', True),
             )
         q.import_from_dict(d)
@@ -129,7 +131,7 @@ class Quiz(models.Model):
         self.matching = vals.get('matching', '')
         self.pre_test = vals.get('pre_test', '')
         self.post_test = vals.get('post_test', '')
-        self.post_test_credit = vals.get('post_test_credit','')
+        self.post_test_credit = vals.get('post_test_credit', '')
         self.allow_redo = vals.get('allow_redo', '')
         self.save()
 
@@ -149,7 +151,7 @@ class Quiz(models.Model):
                  matching=self.matching,
                  pre_test=self.pre_test,
                  post_test=self.post_test,
-                 post_test_credit = self.post_test_credit,
+                 post_test_credit=self.post_test_credit,
                  allow_redo=self.allow_redo)
         d['questions'] = [q.as_dict() for q in self.question_set.all()]
         return d
@@ -186,7 +188,8 @@ class Question(models.Model):
             ("multiple choice", "Multiple Choice: Multiple answers"),
             ("matching", "Matching: Match questions with set of answers"),
             ("single choice", "Multiple Choice: Single answer"),
-            ("single choice feedback", "Multiple Choice: Single answer with item feedback"),
+            ("single choice feedback",
+             "Multiple Choice: Single answer with item feedback"),
             ("single choice dropdown",
              "Multiple Choice: Single answer (dropdown)"),
             ("short text", "Short Text"),
@@ -225,16 +228,22 @@ class Question(models.Model):
             return None
         return chr(ord('A') + self.correct_answer_number())
 
-    def correct_answer_number(self):
-        if self.question_type != "single choice feedback":
-            return None
-        return self.answer_set.filter(correct=True)[0]._order
+# FIXME: this redefines an existing function.
+# please pick one or the other.
+#
+#    def correct_answer_number(self):
+#        if self.question_type != "single choice feedback":
+#            return None
+#        return self.answer_set.filter(correct=True)[0]._order
 
-    def correct_answer_letter(self):
-        if (self.question_type != "single choice feedback"
-            or self.answer_set.count() == 0):
-            return None
-        return chr(ord('A') + self.correct_answer_number())
+# FIXME: this redefines an existing function.
+# please pick one or the other.
+#
+#    def correct_answer_letter(self):
+#        if (self.question_type != "single choice feedback"
+#            or self.answer_set.count() == 0):
+#            return None
+#        return chr(ord('A') + self.correct_answer_number())
 
     def update_answers_order(self, answer_ids):
         self.set_answer_order(answer_ids)
