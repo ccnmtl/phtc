@@ -63,8 +63,11 @@ def calculate_status(prev_status, uv):
 
 
 def user_visits(request):
-
-    return UserPageVisit.objects.filter(user_id=request.user)
+    try:
+        upv = UserPageVisit.objects.filter(user_id=request.user)
+    except:
+        upv = False
+    return upv
 
 
 def send_post_test_email(user, section, module):
@@ -135,11 +138,14 @@ def make_sure_parts_are_allowed(module, user_id, request, section):
                 part_status = UserPageVisit.objects.get(section_id=part.id,
                                                         user_id=user_id)
                 if part_status == "in_progress":
-                    visit = UserPageVisit.objects.get(
-                    section_id=part.get_previous().id,
-                    user_id=user_id)
-                    visit.status = "complete"
-                    visit.save()
+                    try:
+                        visit = UserPageVisit.objects.get(
+                        section_id=part.get_previous().id,
+                        user_id=user_id)
+                        visit.status = "complete"
+                        visit.save()
+                    except:
+                        pass
             except:
                 part_status = UserPageVisit.objects.get_or_create(
                     section_id=part.id,
@@ -147,7 +153,10 @@ def make_sure_parts_are_allowed(module, user_id, request, section):
                     status="allowed")
     else:
         update_status(section, request.user)
-
+        try:
+            section.get_next().user_pagevisit(request.user, status="allowed")
+        except:
+            pass
 
 def part_flagged_as_allowed(upv):
     if upv.status == "allowed" or upv.status == "in_progress":
@@ -165,6 +174,7 @@ def page(request, path):
     is_visited = user_visits(request)
     user_id = request.user.id
 
+    # dashboard ajax 
     if request.POST.get('module'):
         module.user_pagevisit(request.user, status="in_progress")
         make_sure_parts_are_allowed(module, user_id, request, section)
@@ -191,17 +201,24 @@ def page(request, path):
                 section_id=prev_section.id,
                 user_id=user_id)
             if prev_section_visit.status == "in_progress":
-                visit = UserPageVisit.objects.get(
-                    section_id=prev_section.id,
-                    user_id=user_id)
-                visit.status = "complete"
-                visit.save()
+                try:
+                    visit = UserPageVisit.objects.get(
+                        section_id=prev_section.id,
+                        user_id=user_id)
+                    visit.status = "complete"
+                    visit.save()
+                except:
+                    pass
         except:
             # Need to catch whether a part has been flagged as "allowed"
-            upv = UserPageVisit.objects.get(
-                section_id=section.id,
-                user_id=user_id)
-            prev_section_visit = part_flagged_as_allowed(upv)
+            try:  
+                upv = UserPageVisit.objects.get(
+                    section_id=section.id,
+                    user_id=user_id)
+                prev_section_visit = part_flagged_as_allowed(upv)
+            except:
+                prev_section_visit = False
+                pass
         # make sure user cannot type in url by hand to skip around
         if not prev_section_visit:
             if request.user.is_staff:
