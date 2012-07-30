@@ -152,7 +152,8 @@ def make_sure_parts_are_allowed(module, user_id, request, section):
                     user_id=user_id,
                     status="allowed")
     else:
-        update_status(section, request.user)
+        #update_status(section, request.user)
+        section.user_pagevisit(request.user, status="in_progress")
         try:
             section.get_next().user_pagevisit(request.user, status="allowed")
         except:
@@ -193,6 +194,8 @@ def page(request, path):
 
     make_sure_modules_are_allowed(root, request, user_id)
     make_sure_parts_are_allowed(module, user_id, request, section)
+
+
 
     if section.get_previous():
         prev_section = section.get_previous()

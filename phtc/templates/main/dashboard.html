@@ -64,6 +64,7 @@
 			{% endifequal %}
 		{% endfor %}
 		{% get_user_section_status request.user module as status %}
+		
 		{% ifequal status.status "complete" %}
 			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
 			<img src="/site_media/img/status_completed.png"/><br class="clear"/>
@@ -92,6 +93,7 @@
 			{% endifequal %}
 		{% endfor %}
 		{% get_user_section_status request.user p as status %}
+		
 		{% ifequal status.status "complete" %}
 			<a href="{{ p.get_absolute_url }}">{{ p.label }}</a>
 			<img src="/site_media/img/status_completed.png"/><br class="clear"/>
