@@ -2,6 +2,7 @@ jQuery(document).ready(function(){
 /*
 ** Initiate the bootstrap popup
 */
+function add_bootstrap_popup(){
 	$(".module-info-popover").popover({
     	offset: 10,
     	trigger:'manual'
@@ -23,7 +24,7 @@ jQuery(document).ready(function(){
     }).mouseleave(function(){
     	$(this).popover('hide')
     });
-
+}
 
  /*
  ** Module/Part UI 
@@ -41,9 +42,10 @@ jQuery(document).ready(function(){
 		type: "POST",
 		data: { module: link, mod_id: id }
 		}).done(function(data) {
-			$('#return').empty().load('/dashboard/ #part_id_'+ id, function(response, status, xhr){
+			$('#return').empty().load('/dashboard_panel/ #part_id_'+ id, function(response, status, xhr){
 				if(status == "success"){
 					$('#return').children().children().css('display','block')
+                    add_bootstrap_popup();
 				}
 			})
 		});

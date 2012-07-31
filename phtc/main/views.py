@@ -120,17 +120,9 @@ def make_sure_modules_are_allowed(root, request, user_id):
     root_mods = root.get_children()
     for mod in root_mods:
         mod.user_pagevisit(request.user, status="allowed")
-        try:
-            mod_next_visit = UserPageVisit.objects.get(
-                section_id=mod.get_next().id,
-                user_id=user_id)
-            if mod_next_visit.status == "in_progress":
-                mod.user_pagevisit(request.user, status="in_progress")
-        except:
-            pass
 
 
-def make_sure_parts_are_allowed(module, user_id, request, section):
+def make_sure_parts_are_allowed(module, user_id, request, section, is_module):
     if module.label == "Module 1":
         parts = module.get_children()
         for part in parts:
@@ -152,12 +144,23 @@ def make_sure_parts_are_allowed(module, user_id, request, section):
                     user_id=user_id,
                     status="allowed")
     else:
-        #update_status(section, request.user)
-        section.user_pagevisit(request.user, status="in_progress")
-        try:
-            section.get_next().user_pagevisit(request.user, status="allowed")
-        except:
-            pass
+        if is_module == True:
+            module.user_pagevisit(request.user, status="in_progress")
+            try:
+                status= "exists"
+                UserPageVisit.objects.get(section_id=section.get_next().id, user_id=user_id)
+                
+            except:
+                status="created"
+
+            if status == "exists":
+                if UserPageVisit.objects.get(section_id=section.get_next().id, user_id=user_id).status =="in_progress":
+                    section.get_next().user_pagevisit(request.user, status="complete")
+                elif UserPageVisit.objects.get(section_id=section.get_next().id, user_id=user_id).status =="allowed":
+                    section.get_next().user_pagevisit(request.user, status="in_progress")
+            if status=="created":
+                section.get_next().user_pagevisit(request.user, status="allowed")
+
 
 def part_flagged_as_allowed(upv):
     if upv.status == "allowed" or upv.status == "in_progress":
@@ -165,6 +168,19 @@ def part_flagged_as_allowed(upv):
     else:
         return False
 
+def is_module(module, user_id, request, section):
+    try:
+        mod_obj=UserPageVisit.objects.get(
+            section_id=module.id,
+            user_id=user_id)
+        sec_obj = UserPageVisit.objects.get(
+            section_id=section.id,
+            user_id=user_id)
+        
+        if mod_obj.id == sec_obj.id:
+            return True
+    except:
+        return False
 
 @login_required
 @render_to('main/page.html')
@@ -178,7 +194,8 @@ def page(request, path):
     # dashboard ajax 
     if request.POST.get('module'):
         module.user_pagevisit(request.user, status="in_progress")
-        make_sure_parts_are_allowed(module, user_id, request, section)
+        make_sure_parts_are_allowed(module, user_id, request, section,
+            is_module(module, user_id, request, section) )
         return HttpResponse('/dashboard/')
 
     if not request.user.is_anonymous():
@@ -192,26 +209,30 @@ def page(request, path):
     if request.method == "POST":
         return page_post(request, section, module)
 
-    make_sure_modules_are_allowed(root, request, user_id)
-    make_sure_parts_are_allowed(module, user_id, request, section)
+    # only execute make_sure_modules and parts_are_allowed once
+    try: 
+        mod = UserPageVisit.objects.get(
+                section_id=prev_section.id,
+                user_id=user_id)
+        if mod.status:
+            mod_satus = False
+    except:
+        mod_satus = True
 
+    if mod_satus == False:
+        make_sure_modules_are_allowed(root, request, user_id)
+        make_sure_parts_are_allowed(module, user_id, request, section,
+            is_module(module, user_id, request, section))
 
-
+    # test if there is a previous section - if so then decide whether to change status
     if section.get_previous():
         prev_section = section.get_previous()
         try:
             prev_section_visit = UserPageVisit.objects.get(
                 section_id=prev_section.id,
                 user_id=user_id)
-            if prev_section_visit.status == "in_progress":
-                try:
-                    visit = UserPageVisit.objects.get(
-                        section_id=prev_section.id,
-                        user_id=user_id)
-                    visit.status = "complete"
-                    visit.save()
-                except:
-                    pass
+            if prev_section_visit.status == "in_progress" and not is_module(module, user_id, request, prev_section):
+                section.get_previous().user_pagevisit(request.user, status="complete")
         except:
             # Need to catch whether a part has been flagged as "allowed"
             try:  
@@ -223,13 +244,11 @@ def page(request, path):
                 prev_section_visit = False
                 pass
         # make sure user cannot type in url by hand to skip around
-        if not prev_section_visit:
-            if request.user.is_staff:
-                section.user_pagevisit(request.user, status="in_progress")
-            else:
-                section.user_pagevisit(request.user, status="incomplete")
-                go_back_message = "/dashboard/?incomplete=true"
-                return HttpResponseRedirect(go_back_message)
+        if not hand_type_secure(prev_section_visit, request, section):
+            section.user_pagevisit(request.user, status="incomplete")
+            return HttpResponseRedirect("/dashboard/?incomplete=true")
+
+        
 
     return dict(section=section,
                 module=module,
@@ -240,31 +259,42 @@ def page(request, path):
                 root=section.hierarchy.get_root(),
                 )
 
+def hand_type_secure(prev_section_visit, request, section):
+    if prev_section_visit == False:
+        if request.user.is_staff:
+            section.user_pagevisit(request.user, status="in_progress")
+            return True
+        return False
+    else:
+        return True
 
 @login_required
 @render_to('main/edit_page.html')
 def edit_page(request, path):
-    section = get_section_from_path(path)
-    root = section.hierarchy.get_root()
-    edit_page = True
-    try:
-        DashboardInfo.objects.get(dashboard_id=section.id)
-    except:
-        DashboardInfo.objects.create(dashboard_id=section.id)
+    if request.user.is_staff:
+        section = get_section_from_path(path)
+        root = section.hierarchy.get_root()
+        edit_page = True
+        try:
+            DashboardInfo.objects.get(dashboard_id=section.id)
+        except:
+            DashboardInfo.objects.create(dashboard_id=section.id)
 
-    dashboard = DashboardInfo.objects.get(dashboard_id=section.id)
-    if request.method == "POST":
-        dashboard_info = request.POST['dashboard_info']
-        dashboard.info = dashboard_info
+        dashboard = DashboardInfo.objects.get(dashboard_id=section.id)
+        if request.method == "POST":
+            dashboard_info = request.POST['dashboard_info']
+            dashboard.info = dashboard_info
 
-    dashboard.save()
+        dashboard.save()
 
-    return dict(section=section,
-                dashboard=dashboard,
-                module=get_module(section),
-                modules=root.get_children(),
-                root=section.hierarchy.get_root(),
-                edit_page=edit_page)
+        return dict(section=section,
+                    dashboard=dashboard,
+                    module=get_module(section),
+                    modules=root.get_children(),
+                    root=section.hierarchy.get_root(),
+                    edit_page=edit_page)
+    else:
+        return HttpResponseRedirect('/dashboard/')
 
 
 @render_to('main/instructor_page.html')
@@ -333,6 +363,14 @@ def update_user_profile(request):
 @login_required
 @render_to('main/dashboard.html')
 def dashboard(request):
+    return render_dashboard(request)
+
+@login_required
+@render_to('main/dashboard_panel.html')
+def dashboard_panel(request):
+    return render_dashboard(request)
+
+def render_dashboard(request):
     h = get_hierarchy("main")
     root = h.get_root()
     last_session = h.get_user_section(request.user)
@@ -342,4 +380,4 @@ def dashboard(request):
     empty = ""
     return dict(root=root, last_session=last_session,
                 dashboard_info=dashboard_info,
-                empty=empty, is_visited=is_visited)
+                empty=empty, is_visited=is_visited)    

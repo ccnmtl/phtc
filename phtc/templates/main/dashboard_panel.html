@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load user_status %}
+
+{% block content %}
+
+<style type="text/css">
+
+.module-info-popover, .section-info-popover{
+	cursor: pointer;
+	display:inline-block;
+	float: right;
+}
+.module{
+	width: 450px;
+}
+.module img{
+	float: right;
+}
+.toggle-on{
+	display: block !important;
+}
+.toggle-off{
+	display: none;
+}
+.part{
+	width:500px;
+	display: none;
+}
+.part img{
+	float: right;
+}
+.section{
+	width: 475px;
+}
+.section img{
+	float: right;
+}
+.sub{	
+	width: 450px;
+}
+.sub img{
+	float: right;	
+}
+.clear{
+	clear:both;
+}
+#return{
+
+	position: absolute;
+	left: 700px;
+	background: white;
+	padding: 0 100px 0 0;
+}
+</style>
+<h1>Dashboard</h1>
+<div id="return"></div>
+{% for module in root.get_children %}
+	
+	<div id="part_id_{{ module.id }}">
+	{% for p in module.get_children %}
+		<div style="margin-left:25px" class='part'>
+		{% for info in dashboard_info %}
+			{% ifequal p.id info.dashboard_id %}
+				{% ifnotequal info.info "" %}
+					<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/><br class="clear"/></div>
+				{% endifnotequal %}
+			{% endifequal %}
+		{% endfor %}
+		{% get_user_section_status request.user p as status %}
+		<span>{{status.status}}</span>
+		{% ifequal status.status "complete" %}
+			<a href="{{ p.get_absolute_url }}">{{ p.label }}</a>
+			<img src="/site_media/img/status_completed.png"/><br class="clear"/>
+		{% endifequal %}
+		{% ifequal status.status "in_progress" %}
+			<a href="{{ p.get_absolute_url }}">{{ p.label }}</a>
+			<img src="/site_media/img/status_inprogress.png"/><br class="clear"/>
+		{% endifequal %}
+		{% ifequal status.status "allowed" %}
+			<a href="{{ p.get_absolute_url }}">{{ p.label }}</a>
+			<img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
+		{% endifequal %}
+		{% ifequal status.status "incomplete" %}
+			<span>{{ p.label }}</span> <img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
+		{% endifequal %}
+		{% if not status %}
+			<span>{{ p.label }}</span> <img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
+		{% endif %}
+		
+
+		{% for s in p.get_children %}
+			<div style="margin-left:50px" class='section'>
+			{% for info in dashboard_info %}
+			{% ifequal s.id info.dashboard_id %}
+				{% ifnotequal info.info "" %}
+				<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/><br class="clear"/></div>
+				{% endifnotequal %}
+			{% endifequal %}
+			{% endfor %}
+			{% get_user_section_status request.user s as status %}
+			{% ifequal status.status "complete" %}
+				<a href="{{ s.get_absolute_url }}">{{ s.label }}</a>
+				<img src="/site_media/img/status_completed.png"/><br class="clear"/>
+			{% endifequal %}
+			{% ifequal status.status "in_progress" %}
+				<a href="{{ s.get_absolute_url }}">{{ s.label }}</a>
+				<img src="/site_media/img/status_inprogress.png"/><br class="clear"/>
+			{% endifequal %}
+			{% ifequal status.status "incomplete" %}
+				<span>{{ s.label }}</span> <img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
+			{% endifequal %}
+			{% if not status %}
+				<span>{{ s.label }}</span> <img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
+			{% endif %}
+			</div>
+				{% for sub in s.get_children %}
+					<div style="margin-left:75px;" class='sub'>
+					{% for info in dashboard_info %}
+						{% ifequal sub.id info.dashboard_id %}
+							{% ifnotequal info.info "" %}
+							<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/><br class="clear"/></div>
+							{% endifnotequal %}
+						{% endifequal %}
+					{% endfor %}
+					{% get_user_section_status request.user sub as status %}
+					{% ifequal status.status "complete" %}
+						<a href="{{ sub.get_absolute_url }}">{{ sub.label }}</a>
+						<img src="/site_media/img/status_completed.png"/><br class="clear"/>
+					{% endifequal %}
+					{% ifequal status.status "in_progress" %}
+						<a href="{{ sub.get_absolute_url }}">{{ sub.label }}</a>
+						<img src="/site_media/img/status_inprogress.png"/><br class="clear"/>
+					{% endifequal %}
+					{% ifequal status.status "allowed" %}
+						<a href="{{ sub.get_absolute_url }}">{{ sub.label }}</a>
+						<img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
+					{% endifequal %}
+					{% ifequal status.status "incomplete" %}
+						<span>{{ sub.label }}</span> <img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
+					{% endifequal %}
+					{% if not status %}
+						<span>{{ sub.label }}</span> <img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
+					{% endif %}
+					
+					</div>
+				{% endfor %}
+		{% endfor %}
+		</div><!--end .part-->
+	{% endfor %}
+	</div><!--end part_id_{{ module.id }}-->
+{% endfor %}
+<script src="/site_media/js/dashboard.js"></script>
+{% endblock %}
