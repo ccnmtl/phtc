@@ -23,10 +23,9 @@ def redirect_to_first_section_if_root(section, root):
             return HttpResponseRedirect("/dashboard/")
 
 
-def update_status(section, user):
+def update_status(section, user, module, user_id, request):
     if user.is_anonymous():
         return
-
     prev_status = False
     prev_section = section.get_previous()
     if prev_section:
@@ -39,9 +38,9 @@ def update_status(section, user):
     uv = section.get_uservisit(user)
     if not uv and not prev_status:
         return
-
-    status = calculate_status(prev_status, uv)
-    section.user_pagevisit(user, status=status)
+    if not is_module(module, user_id, request, section):
+        status = calculate_status(prev_status, uv)
+        section.user_pagevisit(user, status=status)
 
 
 def calculate_status(prev_status, uv):
@@ -83,10 +82,7 @@ def send_post_test_email(user, section, module):
     email.from_email = "lowernysphtc.org <no-reply@lowernysphtc.org>"
     email.to = [user.email, ]
 
-    #email.attach_file(directory + "/diploma.jpg") # Attach a file directly
-
-    # Or alternatively, if you want to attach the contents directly
-
+    #attach the file
     file = open(directory + '/../../media/img/diploma.jpg', 'rb')
     email.attach(filename="diploma.jpg",
                  mimetype="image/jpeg",
@@ -99,6 +95,8 @@ def send_post_test_email(user, section, module):
 def page_post(request, section, module):
     if request.POST.get('post_test') == "true":
         send_post_test_email(request.user, section, module)
+        section.user_pagevisit(request.user, status="complete")
+        module.user_pagevisit(request.user, status="complete")
     if request.user.is_anonymous():
         return HttpResponse("you must login first")
     # user has submitted a form. deal with it
@@ -110,6 +108,9 @@ def page_post(request, section, module):
     if proceed:
         section.user_pagevisit(request.user, status="complete")
         return HttpResponseRedirect(section.get_next().get_absolute_url())
+    elif request.POST.get('post_test') == "true":
+        #forward over to dashboard
+        return HttpResponseRedirect('/dashboard/')
     else:
         # giving them feedback before they proceed
         return HttpResponseRedirect(section.get_absolute_url())
@@ -123,6 +124,7 @@ def make_sure_modules_are_allowed(root, request, user_id):
 
 
 def make_sure_parts_are_allowed(module, user_id, request, section, is_module):
+    #handle Module one seperately
     if module.label == "Module 1":
         parts = module.get_children()
         for part in parts:
@@ -145,7 +147,10 @@ def make_sure_parts_are_allowed(module, user_id, request, section, is_module):
                     status="allowed")
     else:
         if is_module == True:
-            module.user_pagevisit(request.user, status="in_progress")
+            
+            if UserPageVisit.objects.get(section_id=module.id, user_id=user_id).status == "complete":
+                module.user_pagevisit(request.user, status="complete")
+                return 
             try:
                 status= "exists"
                 UserPageVisit.objects.get(section_id=section.get_next().id, user_id=user_id)
@@ -193,10 +198,22 @@ def page(request, path):
 
     # dashboard ajax 
     if request.POST.get('module'):
-        module.user_pagevisit(request.user, status="in_progress")
-        make_sure_parts_are_allowed(module, user_id, request, section,
-            is_module(module, user_id, request, section) )
-        return HttpResponse('/dashboard/')
+        try:
+            mod_satus=UserPageVisit.objects.get(
+                section_id=module.id,
+                user_id=user_id).status
+        except:
+            mod_satus = False
+            pass
+        if mod_satus =="complete":
+            for sec in module.get_children():
+                sec.user_pagevisit(request.user, status="complete")
+            return HttpResponse('/dashboard/')
+        else:
+            module.user_pagevisit(request.user, status="in_progress")
+            make_sure_parts_are_allowed(module, user_id, request, section,
+                is_module(module, user_id, request, section) )
+            return HttpResponse('/dashboard/')
 
     if not request.user.is_anonymous():
         section.user_visit(request.user)
@@ -204,7 +221,7 @@ def page(request, path):
     rv = redirect_to_first_section_if_root(section, root)
     if rv:
         return rv
-    update_status(section, request.user)
+    update_status(section, request.user, user_id, request, section)
 
     if request.method == "POST":
         return page_post(request, section, module)
