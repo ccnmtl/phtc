@@ -187,6 +187,29 @@ def is_module(module, user_id, request, section):
     except:
         return False
 
+def process_dashboard_ajax(request, user_id, section, module):
+    url = '/dashboard/'
+    try:
+        mod_satus=UserPageVisit.objects.get(
+            section_id=module.id,
+            user_id=user_id).status
+        mod_label = module.label
+    except:
+        mod_satus = False
+        mod_label = False
+        pass
+    #filter out Module 1 because of the Parts
+    if mod_satus =="complete" and not mod_label == "Module 1":
+        for sec in module.get_children():
+            sec.user_pagevisit(request.user, status="complete")
+        return url
+    elif not mod_label == "Module 1":
+        module.user_pagevisit(request.user, status="in_progress")
+        make_sure_parts_are_allowed(module, user_id, request, section,
+            is_module(module, user_id, request, section) )
+        return url
+
+
 @login_required
 @render_to('main/page.html')
 def page(request, path):
@@ -198,23 +221,10 @@ def page(request, path):
 
     # dashboard ajax 
     if request.POST.get('module'):
-        try:
-            mod_satus=UserPageVisit.objects.get(
-                section_id=module.id,
-                user_id=user_id).status
-        except:
-            mod_satus = False
-            pass
-        if mod_satus =="complete":
-            for sec in module.get_children():
-                sec.user_pagevisit(request.user, status="complete")
-            return HttpResponse('/dashboard/')
-        else:
-            module.user_pagevisit(request.user, status="in_progress")
-            make_sure_parts_are_allowed(module, user_id, request, section,
-                is_module(module, user_id, request, section) )
-            return HttpResponse('/dashboard/')
+        return HttpResponse(
+            process_dashboard_ajax(request, user_id, section, module) )
 
+    #is the user allowed?
     if not request.user.is_anonymous():
         section.user_visit(request.user)
 
@@ -225,21 +235,6 @@ def page(request, path):
 
     if request.method == "POST":
         return page_post(request, section, module)
-
-    # only execute make_sure_modules and parts_are_allowed once
-    try: 
-        mod = UserPageVisit.objects.get(
-                section_id=prev_section.id,
-                user_id=user_id)
-        if mod.status:
-            mod_satus = False
-    except:
-        mod_satus = True
-
-    if mod_satus == False:
-        make_sure_modules_are_allowed(root, request, user_id)
-        make_sure_parts_are_allowed(module, user_id, request, section,
-            is_module(module, user_id, request, section))
 
     # test if there is a previous section - if so then decide whether to change status
     if section.get_previous():

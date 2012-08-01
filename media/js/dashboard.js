@@ -32,21 +32,20 @@ function add_bootstrap_popup(){
  $('.show-module').click(function(){
  	var link = $(this).attr('rel')
  	var id = $(this).parent().attr('id')
- 	var child = $('#'+id).children('.part')
- 	var ch_clone = $(child).clone()
- 	console.log(id)
- 	ch_clone.css('display','block')
+    jQuery('.content').append('<div id="page-load"><h1>Loading...</h1</div>')
   	$.ajax({
 		url: link,
 		mod_id: id,
 		type: "POST",
 		data: { module: link, mod_id: id }
 		}).done(function(data) {
+            
 			$('#return').empty().load('/dashboard_panel/ #part_id_'+ id, function(response, status, xhr){
 				if(status == "success"){
 					$('#return').children().children().css('display','block')
                     add_bootstrap_popup();
 				}
+            jQuery('#page-load').remove();
 			})
 		});
  	})//end click

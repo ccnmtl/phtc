@@ -4,7 +4,9 @@
 {% block content %}
 
 <style type="text/css">
-
+.content{
+	min-height:500px;
+}
 .module-info-popover, .section-info-popover{
 	cursor: pointer;
 	display:inline-block;
@@ -47,9 +49,17 @@
 #return{
 
 	position: absolute;
-	left: 500px;
+	margin-left: 300px;
 	background: white;
 	padding: 0 100px 0 0;
+}
+#page-load{
+	width: 100%;
+	position: relative;
+	margin: -100px 0 0 0;
+}
+#page-load h1{
+	text-align: center;
 }
 </style>
 <h1>Dashboard</h1>
