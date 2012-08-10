@@ -287,12 +287,8 @@ def edit_page(request, path):
         section = get_section_from_path(path)
         root = section.hierarchy.get_root()
         edit_page = True
-        try:
-            DashboardInfo.objects.get(dashboard=section)
-        except DashboardInfo.DoesNotExist:
-            DashboardInfo.objects.create(dashboard=section)
-
-        dashboard = DashboardInfo.objects.get(dashboard=section)
+        dashboard, created = DashboardInfo.objects.get_or_create(
+            dashboard=section)
         if request.method == "POST":
             dashboard.info = request.POST['dashboard_info']
 
