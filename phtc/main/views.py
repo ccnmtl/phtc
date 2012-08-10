@@ -294,8 +294,7 @@ def edit_page(request, path):
 
         dashboard = DashboardInfo.objects.get(dashboard=section)
         if request.method == "POST":
-            dashboard_info = request.POST['dashboard_info']
-            dashboard.info = dashboard_info
+            dashboard.info = request.POST['dashboard_info']
 
         dashboard.save()
 
