@@ -200,16 +200,16 @@ def is_module(module, user_id, request, section):
 def process_dashboard_ajax(request, user_id, section, module):
     url = '/dashboard/'
     try:
-        mod_satus = UserPageVisit.objects.get(
+        mod_status = UserPageVisit.objects.get(
             section_id=module.id,
             user_id=user_id).status
         mod_label = module.label
     except UserPageVisit.DoesNotExist:
-        mod_satus = False
+        mod_status = False
         mod_label = False
         pass
     #filter out Module 1 because of the Parts
-    if mod_satus == "complete" and not mod_label == "Module 1":
+    if mod_status == "complete" and not mod_label == "Module 1":
         for sec in module.get_children():
             sec.user_pagevisit(request.user, status="complete")
         return url
