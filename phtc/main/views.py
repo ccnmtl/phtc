@@ -123,28 +123,32 @@ def make_sure_modules_are_allowed(root, request, user_id):
         mod.user_pagevisit(request.user, status="allowed")
 
 
+def make_sure_module1_parts_are_allowed(module, user_id):
+    parts = module.get_children()
+    for part in parts:
+        try:
+            part_status = UserPageVisit.objects.get(section_id=part.id,
+                                                    user_id=user_id)
+            if part_status == "in_progress":
+                try:
+                    visit = UserPageVisit.objects.get(
+                    section_id=part.get_previous().id,
+                    user_id=user_id)
+                    visit.status = "complete"
+                    visit.save()
+                except:
+                    pass
+        except:
+            part_status = UserPageVisit.objects.get_or_create(
+                section_id=part.id,
+                user_id=user_id,
+                status="allowed")
+
+
 def make_sure_parts_are_allowed(module, user_id, request, section, is_module):
     #handle Module one seperately
     if module.label == "Module 1":
-        parts = module.get_children()
-        for part in parts:
-            try:
-                part_status = UserPageVisit.objects.get(section_id=part.id,
-                                                        user_id=user_id)
-                if part_status == "in_progress":
-                    try:
-                        visit = UserPageVisit.objects.get(
-                        section_id=part.get_previous().id,
-                        user_id=user_id)
-                        visit.status = "complete"
-                        visit.save()
-                    except:
-                        pass
-            except:
-                part_status = UserPageVisit.objects.get_or_create(
-                    section_id=part.id,
-                    user_id=user_id,
-                    status="allowed")
+        make_sure_module1_parts_are_allowed(module, user_id)
     else:
         if is_module == True:
             if UserPageVisit.objects.get(
