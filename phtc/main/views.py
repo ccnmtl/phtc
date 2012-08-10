@@ -117,12 +117,12 @@ def make_sure_module1_parts_are_allowed(module, user):
     parts = module.get_children()
     for part in parts:
         try:
-            part_status = UserPageVisit.objects.get(section_id=part.id,
+            part_status = UserPageVisit.objects.get(section=part,
                                                     user=user)
             if part_status == "in_progress":
                 try:
                     visit = UserPageVisit.objects.get(
-                    section_id=part.get_previous().id,
+                    section=part.get_previous(),
                     user=user)
                     visit.status = "complete"
                     visit.save()
@@ -130,7 +130,7 @@ def make_sure_module1_parts_are_allowed(module, user):
                     pass
         except UserPageVisit.DoesNotExist:
             part_status = UserPageVisit.objects.get_or_create(
-                section_id=part.id,
+                section=part,
                 user=user,
                 status="allowed")
 
@@ -142,25 +142,25 @@ def make_sure_parts_are_allowed(module, user, request, section, is_module):
     else:
         if is_module == True:
             if UserPageVisit.objects.get(
-                section_id=module.id,
+                section=module,
                 user=user).status == "complete":
                 module.user_pagevisit(request.user, status="complete")
                 return
             try:
                 status = "exists"
                 UserPageVisit.objects.get(
-                    section_id=section.get_next().id, user=user)
+                    section=section.get_next(), user=user)
             except UserPageVisit.DoesNotExist:
                 status = "created"
 
             if status == "exists":
                 if UserPageVisit.objects.get(
-                    section_id=section.get_next().id,
+                    section=section.get_next(),
                     user=user).status == "in_progress":
                     section.get_next().user_pagevisit(request.user,
                                                       status="complete")
                 elif UserPageVisit.objects.get(
-                    section_id=section.get_next().id,
+                    section=section.get_next(),
                     user=user).status == "allowed":
                     section.get_next().user_pagevisit(request.user,
                                                       status="in_progress")
@@ -176,10 +176,10 @@ def part_flagged_as_allowed(upv):
 def is_module(module, user, request, section):
     try:
         mod_obj = UserPageVisit.objects.get(
-            section_id=module.id,
+            section=module,
             user=user)
         sec_obj = UserPageVisit.objects.get(
-            section_id=section.id,
+            section=section,
             user=user)
         if mod_obj.id == sec_obj.id:
             return True
@@ -193,7 +193,7 @@ def process_dashboard_ajax(request, user, section, module):
         return
     try:
         mod_status = UserPageVisit.objects.get(
-            section_id=module.id,
+            section=module,
             user=user).status
     except UserPageVisit.DoesNotExist:
         mod_status = False
@@ -289,11 +289,11 @@ def edit_page(request, path):
         root = section.hierarchy.get_root()
         edit_page = True
         try:
-            DashboardInfo.objects.get(dashboard_id=section.id)
+            DashboardInfo.objects.get(dashboard=section)
         except DashboardInfo.DoesNotExist:
-            DashboardInfo.objects.create(dashboard_id=section.id)
+            DashboardInfo.objects.create(dashboard=section)
 
-        dashboard = DashboardInfo.objects.get(dashboard_id=section.id)
+        dashboard = DashboardInfo.objects.get(dashboard=section)
         if request.method == "POST":
             dashboard_info = request.POST['dashboard_info']
             dashboard.info = dashboard_info
@@ -327,7 +327,7 @@ def exporter(request):
 @render_to('main/profile.html')
 def get_user_profile(request):
     try:
-        profile = UserProfile.objects.get(user=request.user.id)
+        profile = UserProfile.objects.get(user=request.user)
         user = User.objects.get(pk=request.user.id)
         form = UserRegistrationForm(initial={
                 'username': user.username,
