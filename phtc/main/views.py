@@ -107,6 +107,9 @@ def page_post(request, section, module):
     elif request.POST.get('post_test') == "true":
         #forward over to dashboard
         return HttpResponseRedirect(reverse('dashboard'))
+    elif request.POST.get('pre_test') == "true":
+        return HttpResponse(request.POST)
+        return HttpResponseRedirect(section.get_absolute_url())
     else:
         # giving them feedback before they proceed
         return HttpResponseRedirect(section.get_absolute_url())
@@ -136,7 +139,8 @@ def make_sure_module1_parts_are_allowed(module, user):
 
 def make_sure_parts_are_allowed(module, user, request, section, is_module):
     #handle Module one seperately
-    if module.label == "Module 1":
+    modArr = section.hierarchy.get_root().get_children()
+    if module.label == modArr[0].label:
         make_sure_module1_parts_are_allowed(module, user)
     else:
         if is_module == True:
