@@ -180,10 +180,7 @@ def make_sure_parts_are_allowed(module, user_id, request, section, is_module):
 
 
 def part_flagged_as_allowed(upv):
-    if upv.status == "allowed" or upv.status == "in_progress":
-        return True
-    else:
-        return False
+    return upv.status == "allowed" or upv.status == "in_progress"
 
 
 def is_module(module, user_id, request, section):
