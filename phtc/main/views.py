@@ -113,13 +113,6 @@ def page_post(request, section, module):
         return HttpResponseRedirect(section.get_absolute_url())
 
 
-def make_sure_modules_are_allowed(root, request, user_id):
-    #make sure modules are allowed
-    root_mods = root.get_children()
-    for mod in root_mods:
-        mod.user_pagevisit(request.user, status="allowed")
-
-
 def make_sure_module1_parts_are_allowed(module, user_id):
     parts = module.get_children()
     for part in parts:
