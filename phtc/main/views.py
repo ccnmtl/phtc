@@ -4,6 +4,7 @@ from pagetree.helpers import get_section_from_path, get_hierarchy
 from pagetree.helpers import get_module, needs_submit, submitted
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.utils.simplejson import dumps
 from phtc.main.models import UserProfile
 from phtc.main.forms import UserRegistrationForm
@@ -20,7 +21,7 @@ def redirect_to_first_section_if_root(section, root):
             # just send them to the first child
             # users will redirect to their dashboard
             # - if not logged in will goto login page
-            return HttpResponseRedirect("/dashboard/")
+            return HttpResponseRedirect(reverse("dashboard"))
 
 
 def update_status(section, user, module, user_id, request):
@@ -110,7 +111,7 @@ def page_post(request, section, module):
         return HttpResponseRedirect(section.get_next().get_absolute_url())
     elif request.POST.get('post_test') == "true":
         #forward over to dashboard
-        return HttpResponseRedirect('/dashboard/')
+        return HttpResponseRedirect(reverse('dashboard'))
     else:
         # giving them feedback before they proceed
         return HttpResponseRedirect(section.get_absolute_url())
@@ -201,7 +202,6 @@ def process_dashboard_ajax(request, user_id, section, module):
     #filter out Module 1 because of the Parts
     if module.label == "Module 1":
         return
-    url = '/dashboard/'
     try:
         mod_status = UserPageVisit.objects.get(
             section_id=module.id,
@@ -211,12 +211,12 @@ def process_dashboard_ajax(request, user_id, section, module):
     if mod_status == "complete":
         for sec in module.get_children():
             sec.user_pagevisit(request.user, status="complete")
-        return url
+        return reverse("dashboard")
     else:
         module.user_pagevisit(request.user, status="in_progress")
         make_sure_parts_are_allowed(module, user_id, request, section,
             is_module(module, user_id, request, section))
-        return url
+        return reverse("dashboard")
 
 
 @login_required
@@ -318,7 +318,7 @@ def edit_page(request, path):
                     root=section.hierarchy.get_root(),
                     edit_page=edit_page)
     else:
-        return HttpResponseRedirect('/dashboard/')
+        return HttpResponseRedirect(reverse("dashboard"))
 
 
 @render_to('main/instructor_page.html')
