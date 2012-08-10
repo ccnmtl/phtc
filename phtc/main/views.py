@@ -64,7 +64,7 @@ def calculate_status(prev_status, uv):
 
 def user_visits(request):
     try:
-        upv = UserPageVisit.objects.filter(user_id=request.user)
+        upv = UserPageVisit.objects.filter(user=request.user)
     except UserPageVisit.DoesNotExist:
         upv = False
     return upv
@@ -251,8 +251,8 @@ def page(request, path):
         prev_section = section.get_previous()
         try:
             prev_section_visit = UserPageVisit.objects.get(
-                section_id=prev_section.id,
-                user_id=user_id)
+                section=prev_section,
+                user=request.user)
             if (prev_section_visit.status == "in_progress"
                 and not is_module(module, user_id, request, prev_section)):
                 section.get_previous().user_pagevisit(
@@ -261,8 +261,8 @@ def page(request, path):
             # Need to catch whether a part has been flagged as "allowed"
             try:
                 upv = UserPageVisit.objects.get(
-                    section_id=section.id,
-                    user_id=user_id)
+                    section=section,
+                    user=request.user)
                 prev_section_visit = part_flagged_as_allowed(upv)
             except UserPageVisit.DoesNotExist:
                 prev_section_visit = False
