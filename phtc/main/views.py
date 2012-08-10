@@ -63,11 +63,7 @@ def calculate_status(prev_status, uv):
 
 
 def user_visits(request):
-    try:
-        upv = UserPageVisit.objects.filter(user=request.user)
-    except UserPageVisit.DoesNotExist:
-        upv = False
-    return upv
+    return UserPageVisit.objects.filter(user=request.user)
 
 
 def send_post_test_email(user, section, module):
