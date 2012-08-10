@@ -33,7 +33,7 @@ def update_status(section, user, module, user_id, request):
             prev_status = UserPageVisit.objects.get(
                 section=prev_section,
                 user=user).status
-        except:
+        except UserPageVisit.DoesNotExist:
             pass
     uv = section.get_uservisit(user)
     if not uv and not prev_status:
@@ -64,7 +64,7 @@ def calculate_status(prev_status, uv):
 def user_visits(request):
     try:
         upv = UserPageVisit.objects.filter(user_id=request.user)
-    except:
+    except UserPageVisit.DoesNotExist:
         upv = False
     return upv
 
@@ -136,9 +136,9 @@ def make_sure_module1_parts_are_allowed(module, user_id):
                     user_id=user_id)
                     visit.status = "complete"
                     visit.save()
-                except:
+                except UserPageVisit.DoesNotExist:
                     pass
-        except:
+        except UserPageVisit.DoesNotExist:
             part_status = UserPageVisit.objects.get_or_create(
                 section_id=part.id,
                 user_id=user_id,
@@ -160,7 +160,7 @@ def make_sure_parts_are_allowed(module, user_id, request, section, is_module):
                 status = "exists"
                 UserPageVisit.objects.get(
                     section_id=section.get_next().id, user_id=user_id)
-            except:
+            except UserPageVisit.DoesNotExist:
                 status = "created"
 
             if status == "exists":
@@ -196,7 +196,7 @@ def is_module(module, user_id, request, section):
             user_id=user_id)
         if mod_obj.id == sec_obj.id:
             return True
-    except:
+    except UserPageVisit.DoesNotExist:
         return False
 
 
@@ -207,7 +207,7 @@ def process_dashboard_ajax(request, user_id, section, module):
             section_id=module.id,
             user_id=user_id).status
         mod_label = module.label
-    except:
+    except UserPageVisit.DoesNotExist:
         mod_satus = False
         mod_label = False
         pass
@@ -244,7 +244,7 @@ def page(request, path):
     rv = redirect_to_first_section_if_root(section, root)
     if rv:
         return rv
-    update_status(section, request.user, user_id, request, section)
+    update_status(section, request.user, section, user_id, request)
 
     if request.method == "POST":
         return page_post(request, section, module)
@@ -261,14 +261,14 @@ def page(request, path):
                 and not is_module(module, user_id, request, prev_section)):
                 section.get_previous().user_pagevisit(
                     request.user, status="complete")
-        except:
+        except UserPageVisit.DoesNotExist:
             # Need to catch whether a part has been flagged as "allowed"
             try:
                 upv = UserPageVisit.objects.get(
                     section_id=section.id,
                     user_id=user_id)
                 prev_section_visit = part_flagged_as_allowed(upv)
-            except:
+            except UserPageVisit.DoesNotExist:
                 prev_section_visit = False
                 pass
         # make sure user cannot type in url by hand to skip around
@@ -305,7 +305,7 @@ def edit_page(request, path):
         edit_page = True
         try:
             DashboardInfo.objects.get(dashboard_id=section.id)
-        except:
+        except DashboardInfo.DoesNotExist:
             DashboardInfo.objects.create(dashboard_id=section.id)
 
         dashboard = DashboardInfo.objects.get(dashboard_id=section.id)
@@ -374,7 +374,7 @@ def update_user_profile(request):
         user.set_password(form.data["password1"])
     try:
         userprofile = UserProfile.objects.get(user=user)
-    except:
+    except UserProfile.DoesNotExist:
         userprofile = UserProfile.objects.create(user=user)
     userprofile.sex = form.data["sex"]
     userprofile.age = form.data["age"]
