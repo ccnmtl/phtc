@@ -16,7 +16,7 @@
 
 	<h3 class="log_in">Please log in</h3>
 
-	<form method="post" action="./?next=/dashboard/" class="well">
+	<form method="post" action="./?next={% url dashboard %}" class="well">
 	{% csrf_token %}
 	<p>If you have a project account...</p>
 
