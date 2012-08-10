@@ -2,7 +2,6 @@ from annoying.decorators import render_to
 from django.http import HttpResponseRedirect, HttpResponse
 from pagetree.helpers import get_section_from_path, get_hierarchy
 from pagetree.helpers import get_module, needs_submit, submitted
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.utils.simplejson import dumps
@@ -328,10 +327,9 @@ def exporter(request):
 def get_user_profile(request):
     try:
         profile = UserProfile.objects.get(user=request.user)
-        user = User.objects.get(pk=request.user.id)
         form = UserRegistrationForm(initial={
-                'username': user.username,
-                'email': user.email,
+                'username': request.user.username,
+                'email': request.user.email,
                 'sex': profile.sex,
                 'age': profile.age,
                 'origin': profile.origin,
@@ -342,25 +340,23 @@ def get_user_profile(request):
                 })
         return dict(profile=profile, form=form)
     except UserProfile.DoesNotExist:
-        user = User.objects.get(pk=request.user.id)
         form = UserRegistrationForm(initial={
-                'username': user.username,
-                'email': user.email,
+                'username': request.user.username,
+                'email': request.user.email,
                 })
-    return dict(form=form, user=user)
+    return dict(form=form, user=request.user)
 
 
 @login_required
 def update_user_profile(request):
     form = UserRegistrationForm(request.POST)
-    user = User.objects.get(pk=request.user.id)
-    user.username = form.data["username"]
+    request.user.username = form.data["username"]
     if form.data["password1"] != "":
-        user.set_password(form.data["password1"])
+        request.user.set_password(form.data["password1"])
     try:
-        userprofile = UserProfile.objects.get(user=user)
+        userprofile = UserProfile.objects.get(user=request.user)
     except UserProfile.DoesNotExist:
-        userprofile = UserProfile.objects.create(user=user)
+        userprofile = UserProfile.objects.create(user=request.user)
     userprofile.sex = form.data["sex"]
     userprofile.age = form.data["age"]
     userprofile.origin = form.data["origin"]
@@ -369,7 +365,7 @@ def update_user_profile(request):
     userprofile.employment_location = form.data["employment_location"]
     userprofile.position = form.data["position"]
     userprofile.save()
-    user.save()
+    request.user.save()
     return HttpResponseRedirect('/profile/?saved=true/')
 
 
