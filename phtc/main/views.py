@@ -108,7 +108,7 @@ def page_post(request, section, module):
         #forward over to dashboard
         return HttpResponseRedirect(reverse('dashboard'))
     elif request.POST.get('pre_test') == "true":
-        return HttpResponse(request.POST)
+        #return HttpResponse(request.POST)
         return HttpResponseRedirect(section.get_absolute_url())
     else:
         # giving them feedback before they proceed

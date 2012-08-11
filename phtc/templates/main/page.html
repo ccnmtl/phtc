@@ -50,10 +50,12 @@
 {% else %}
 
 {% if is_submitted %}
+{% if request.user.is_staff %}
 <form action="." method="post">
 <input type="hidden" name="action" value="reset" />
 <input type="submit" value="clear your answers and try again" class="btn" />
 </form>
+{% endif %}
 <script>
   jQuery(document).ready(function(){
     jQuery('.pager').css({ display: 'block'})
