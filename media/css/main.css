@@ -69,6 +69,16 @@ body > .container
     margin-top: -300px;
 }
 
+#greeting-login {
+    margin-right: 20px;
+}
+
+#welcome {
+    float: left;
+    width: 600px;
+    margin: 0 50px 0 0;
+}
+
 #user_log_in
 {
     width: 250px;
@@ -76,46 +86,11 @@ body > .container
     margin: 0;
 }
 
-#welcome
-{
-    float: left;
-    width: 500px;
-    padding: 0px 80px 0px 0px;
-}
+/*
 
-h3.log_in { color: #777; }
-
-p.smalltxt.login
-{
-    margin: 10px 0 0 0;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 13px;
-    line-height: 18px;
-}
+*/
 
 /* special classes */
-
-.errornote {
-    background: url("../img/icon_alert.png") no-repeat 5px 5px #FFEBE8;
-    border: 1px solid #C00;
-    display: block;
-    font-size: 11px !important;
-    margin: 0 0 10px 0;
-    padding: 5px 5px 5px 25px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-}
-
-.no-left-sidebar #sidebar,
-.no-left-sidebar #sidebarleft {
-    display: none;
-}
-
-.no-left-sidebar #right-content,
-.no-left-sidebar #maincontent {
-    width: 940px;
-    }
-    
 
 /* CSS overide special for PHTC */
 
@@ -130,11 +105,69 @@ body {
     width: 960px;
 }
 
-.content
-{
+.content {
     margin: 0;
     padding: 0;
     background-color: #ffffff;
+}
+
+.errornote {
+    background: url("../img/icon_alert.png") no-repeat 5px 5px #FFEBE8;
+    border: 1px solid #C00;
+    display: block;
+    font-size: 11px;
+    line-height: 120%;
+    margin: 10px 0 10px 0;
+    padding: 5px 5px 5px 25px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+
+.errornote span {
+    color: #cc0000;
+}
+
+h3.log_in { color: #777; }
+
+p.smalltxt
+{
+    margin: 10px 0 0 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    line-height: 18px;
+}
+
+.footer {
+    display: block;
+    clear: both;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    width: 960px;
+    background-color: #ffffff;
+}
+
+.footer p {
+    text-align: center;
+    font-weight: bold;
+}
+
+.footer ul {
+    list-style: none;
+    text-align: center;
+    padding-top: 12px;
+}
+
+.footer ul li{
+    display: inline;
+    margin: 10px;
+}
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 20px;
+    padding-bottom: 30px;
 }
 
 .navbar {
@@ -167,3 +200,19 @@ body {
     line-height: 40px;
     text-align: right;
 }
+
+.no-left-sidebar #sidebar,
+.no-left-sidebar #sidebarleft {
+    display: none;
+}
+
+.no-left-sidebar #right-content,
+.no-left-sidebar #maincontent {
+    width: 940px;
+    }
+
+.no-left-sidebar .row {
+    margin-left: 0;
+    }
+
+

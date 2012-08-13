@@ -2,43 +2,45 @@
 {% block title %}Welcome to the PHTC Training Environment{% endblock %}
 {% block noleftsidebar %} class="no-left-sidebar"{% endblock %}
 {% block content %}
-	<h2>Welcome to the PHTC Training Environment</h2>
-<div id="welcome">
-	
-	<p>But ere this was done, Pip, who had been slily hovering near by all this while, drew nigh to him where he lay, and with soft sobbings, took him by the hand; in the other, holding his tambourine.</p>
-	
-	<p>"Poor rover! will ye never have done with all this weary roving? where go ye now? But if the currents carry ye to those sweet Antilles where the beaches are only beat with water-lilies, will ye do one little errand for me? Seek out one Pip, who's now been missing long: I think he's in those far Antilles. If ye find him, then comfort him; for he must be very sad; for look! he's left his tambourine behind;—I found it. Rig-a-dig, dig, dig! Now, Queequeg, die; and I'll beat ye your dying march."</p>
-</div>
-<div id="user_log_in">
-	{% if form.errors%}
-    <p class="errornote"><span><b>ERROR:</b> Invalid username or password.</span> Please try again. Note that both username and password are case-sensitive.</p>
-{% endif %}
+    <h2>Welcome to the PHTC Training Environment</h2>
+    <div id="greeting-login">
+        <div id="welcome">
+            <p>But ere this was done, Pip, who had been slily hovering near by all this while, drew nigh to him where he lay, and with soft sobbings, took him by the hand; in the other, holding his tambourine.</p>
+            <p>"Poor rover! will ye never have done with all this weary roving? where go ye now? But if the currents carry ye to those sweet Antilles where the beaches are only beat with water-lilies, will ye do one little errand for me? Seek out one Pip, who's now been missing long: I think he's in those far Antilles. If ye find him, then comfort him; for he must be very sad; for look! he's left his tambourine behind;—I found it. Rig-a-dig, dig, dig! Now, Queequeg, die; and I'll beat ye your dying march."</p>
+        </div><!--end #welcome-->
+        <div id="user_log_in">            
+            <h3 class="log_in">Please log in</h3>
+            
+            <form method="post" action="./?next={% url dashboard %}" class="well">
+            {% csrf_token %}
+            <p>If you have a project account...</p>
+            
+            <label for="id_username">Username: {{ form.username }}</label>
+            <label for="id_password">Password: {{ form.password }}</label>
+            
+            <input type="submit" value="LOG IN" class="btn btn-primary" />
+            <input type="hidden" name="next" value="{{ next }}" />
+            
+            {% if form.errors%}
+            <p class="errornote"><span><b>ERROR:</b> Invalid username or password.</span> Please try again. Note that both username and password are case-sensitive.</p>
+            {% endif %}
 
-	<h3 class="log_in">Please log in</h3>
+            <p class="smalltxt"><span class="user_profile" rel="tooltip" title="Create your own PHTC account"><a href="/registration/register/">Need a new account?</a></span> | <span class="user_profile" rel="tooltip" title="Reset your password"><a href="/registration/password/reset/">Forgot password?</a></span></p>
+            </form>
+            
+            <form method="get" action="{{ wind_base }}login" class="well">
+            <input type="hidden" name="service" value="{{ wind_service }}" />
+            <input type="hidden" name="destination" value="http://{{ request.get_host }}/accounts/windlogin/?next={{ next }}" />
+            <p>If you have a Columbia University Network ID
+            (UNI)... </p><input type="submit" value="LOG IN" class="btn btn-primary"/></p>
+            </form>
+        </div><!--end #user_log_in-->
+    </div><!--end #greeting-login-->
 
-	<form method="post" action="./?next={% url dashboard %}" class="well">
-	{% csrf_token %}
-	<p>If you have a project account...</p>
 
-	<label for="id_username">Username: {{ form.username }}</label>
-	<label for="id_password">Password: {{ form.password }}</label>
 
-	<input type="submit" value="LOG IN" class="btn btn-primary" />
-	<input type="hidden" name="next" value="{{ next }}" />
 
-	<p class="smalltxt login"><a href="/registration/register/" title="Create your new project account">Need a new account?</a></p>
-	<p class="smalltxt login"><a href="/registration/password/reset/" title="Reset Password">Forgot Password?</a></p>
-	</form>
 
-	<form method="get" action="{{ wind_base }}login" class="well">
-	<input type="hidden" name="service" value="{{ wind_service }}" />
-	<input type="hidden" name="destination" value="http://{{ request.get_host }}/accounts/windlogin/?next={{ next }}" />
-	<p>If you have a Columbia University Network ID
-	        (UNI)... </p><input type="submit" value="LOG IN" class="btn btn-primary"/></p>
-	</form>
-
-	
-</div><!--end #user_log_in-->
 {% endblock %}
 
 
