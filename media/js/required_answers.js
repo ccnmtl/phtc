@@ -1,7 +1,6 @@
 jQuery(document).ready(function () {
 	var btn = jQuery('.btn.btn-primary');
 	var btn_hold = jQuery('<div class="btn btn-secondary" style="margin-top:-10px;">Submit*</div>') 
-    var pre_test_input = jQuery('<input name="pre_test" value="true" type="hidden" />');
     var form = jQuery('form');
 
 	function check_answers(questions){
@@ -19,6 +18,7 @@ jQuery(document).ready(function () {
 			btn_hold.css('display','none');
 			btn.css('display','block');
 		};
+		console.log(num_of_answers)
 	}//end check_answers()
 
 	function init(){
@@ -28,9 +28,8 @@ jQuery(document).ready(function () {
 		})
 	    jQuery('#content').append(btn_hold);
 	    jQuery('.pager').css('display','none');
-	    form.prepend(pre_test_input);
 		jQuery('.casequestion li input').click(function(){
-			var questions = jQuery('.casequestion');
+			var questions = jQuery('.casequestion').children('ol').parent();
 			check_answers(questions);
 		});
 	}//end init

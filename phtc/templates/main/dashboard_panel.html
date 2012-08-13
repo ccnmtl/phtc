@@ -67,6 +67,7 @@
 			{% endifequal %}
 		{% endfor %}
 		{% get_user_section_status request.user p as status %}
+		{{ status.status }}
 		{% ifequal status.status "complete" %}
 			<a href="{{ p.get_absolute_url }}">{{ p.label }}</a>
 			<img src="/site_media/img/status_completed.png"/><br class="clear"/>
