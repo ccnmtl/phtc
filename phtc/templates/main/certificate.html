@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load user_status %}
+
+{% block content %}
+
+<style type="text/css">
+.content{
+	min-height:500px;
+}
+#certificate{
+	position: relative;
+	margin: 50px 0 0 0;
+	background: url(/site_media/img/certificate_blank.jpg) no-repeat;
+	min-height:300px;
+	width:370px;
+}
+#inner-wrap{
+	position: absolute;
+	margin: -230px 0 0 70px;
+}
+#inner-wrap #user{
+	font-size: 14px;
+	font-weight: bold;
+}
+#inner-wrap #label{
+	width: 230px;
+	font-size: 14px;
+	font-weight: bold;
+	padding-top:15px; 
+}
+.printable {
+	padding: 10px;
+}
+
+img.certificate{
+	background-color: #E0E0E0 ;
+	padding: 5px 5px 5px 5px ;
+}
+
+a.print-certificate{
+	color: red ;
+}
+
+</style>
+<h2>Certificate Earned</h2>
+	<div class="printable">
+ 		<img class="certificate" src="/site_media/img/certificate_blank.jpg">
+ 		<div id="inner-wrap">
+			<div id="user">{{ user }} has completed</div>
+			<div id="label">{{ module.label }}</div>
+ 		</div><!--end inner-wrap-->
+	</div><!--end .printable-->
+	<p>
+		<a class="print-certificate">Print Certificate</a>
+	</p>
+	<script src="/site_media/js/jquery.print.js"></script>
+	<script>
+		jQuery( "a.print-certificate" )
+			.attr( "href", "javascript:void( 0 )" )
+			.click(function(){
+					// Print the DIV.
+					$( ".printable" ).print();
+
+					// Cancel click event.
+					return( false );
+				});//end .click
+ 
+	</script>
+
+{% endblock %}
