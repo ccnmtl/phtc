@@ -11,7 +11,7 @@ from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
 from django.core.mail import EmailMessage
 import os.path
-import pdb
+
 
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:
@@ -70,7 +70,11 @@ def send_post_test_email(user, section, module):
     email = EmailMessage()
     email.subject = "Public Health Training Diploma"
     if is_module_one(module, section, user):
-        section_msg = module.label + ' ' + section.label +'<a href="http://kang.ccnmtl.columbia.edu:13095/certificate' + module.get_absolute_url() + ' ">Click Here to print certificate</a>  '
+        section_msg = (
+            module.label + ' ' + section.label
+            + '<a href="http://kang.ccnmtl.columbia.edu:13095/certificate'
+            + module.get_absolute_url()
+            + ' ">Click Here to print certificate</a>  ')  # SAFE_PRINT
     else:
         section_msg = module.label
     email.body = ('Congratulations on completing ' + section_msg +
@@ -126,13 +130,13 @@ def make_sure_module1_parts_are_allowed(module, user):
     parts = module.get_children()
     for part in parts:
         try:
-            part_status = UserPageVisit.objects.get(section_id=part.id,
-                                                    user_id=user.id)
+            part_status = UserPageVisit.objects.get(section=part,
+                                                    user=user)
             if part_status == "in_progress":
                 try:
                     visit = UserPageVisit.objects.get(
-                    section_id=part.get_previous().id,
-                    user_id=user_id)
+                        section=part.get_previous(),
+                        user=user)
                     visit.status = "complete"
                     visit.save()
                 except:
@@ -142,6 +146,7 @@ def make_sure_module1_parts_are_allowed(module, user):
                 section_id=part.id,
                 user_id=user.id,
                 status="allowed")
+
 
 def make_sure_parts_are_allowed(module, user, request, section, is_module):
     #handle Module one seperately
@@ -180,12 +185,14 @@ def make_sure_parts_are_allowed(module, user, request, section, is_module):
 def part_flagged_as_allowed(upv):
     return upv.status == "allowed" or upv.status == "in_progress"
 
+
 def is_module_one(module, section, user):
     modArr = section.hierarchy.get_root().get_children()
     if module.label == modArr[0].label:
         return True
     else:
         return False
+
 
 def is_module(module, user, request, section):
     try:
@@ -388,6 +395,7 @@ def dashboard(request):
 def dashboard_panel(request):
     return render_dashboard(request)
 
+
 @login_required
 @render_to('main/certificate.html')
 def certificate(request, path):
@@ -402,8 +410,9 @@ def certificate(request, path):
             is_submitted=submitted(section, request.user),
             modules=root.get_children(),
             root=section.hierarchy.get_root(),
-            user = request.user,
+            user=request.user,
             )
+
 
 def render_dashboard(request):
     h = get_hierarchy("main")
