@@ -258,6 +258,16 @@ h2 {
     margin-left: 20px;
 }
 
+#sidebarleft li {
+    color: #999;
+    padding: 2px 0;
+    line-height: 130%;
+}
+
+#sidebarleft li b {
+    color: #000;
+}
+
 .parts {
   padding: 10px;
   border: 1px solid #999999;
