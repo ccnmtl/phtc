@@ -112,8 +112,8 @@ def make_sure_module1_parts_are_allowed(module, user):
             if part_status == "in_progress":
                 try:
                     visit = UserPageVisit.objects.get(
-                    section=part.get_previous(),
-                    user=user)
+                        section=part.get_previous(),
+                        user=user)
                     visit.status = "complete"
                     visit.save()
                 except:
