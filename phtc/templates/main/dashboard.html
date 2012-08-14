@@ -14,32 +14,11 @@
 	display:inline-block;
 	float: right;
 }
-.module img{
-	float: right;
-}
 .toggle-on{
 	display: block !important;
 }
 .toggle-off{
 	display: none;
-}
-.part{
-	display: none;
-}
-.part img{
-	float: right;
-}
-/*.section{
-	width: 475px;
-}*/
-.section img{
-	float: right;
-}
-.sub{	
-	width: 450px;
-}
-.sub img{
-	float: right;	
 }
 .clear{
 	clear:both;
@@ -47,7 +26,7 @@
 #page-load{
 	width: 100%;
 	position: relative;
-	margin: -100px 0 0 0;
+	margin: 0;
 }
 #page-load h1{
 	text-align: center;
@@ -60,32 +39,30 @@
     <div id="modules">
     
  {% for module in root.get_children %}
-	<div class='module' id ="{{ module.id }}">
-		{% for info in dashboard_info %}
+	<div class='module' id="{{ module.id }}">
+		{% comment %}{% for info in dashboard_info %}
 			{% ifequal module.id info.dashboard_id %}
 				{% ifnotequal info.info "" %}
 					<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/><br class="clear"/></div>
 				{% endifnotequal %}
 			{% endifequal %}
-		{% endfor %}
+		{% endfor %}{% endcomment %}
 		{% get_user_section_status request.user module as status %}
 		{% ifequal status.status "complete" %}
 			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
-			<a href="/certificate{{ module.get_absolute_url }}"><img src="/site_media/img/certificate_icon.jpg"/></a>
-			<img src="/site_media/img/status_completed.png"/>
-			<br class="clear"/>
+			<a class="certificate" href="/certificate{{ module.get_absolute_url }}"><img src="/site_media/img/certificate_icon.jpg"/></a>
+			<img class="completed" src="/site_media/img/status_completed.png"/>
 		{% endifequal %}
 		{% ifequal status.status "allowed" %}
 			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
-			<img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
+			{% comment %}<img src="/site_media/img/status_uninitiated.png"/>{% endcomment %}
 		{% endifequal %}
 		{% ifequal status.status "in_progress" %}
 			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
-			<img src="/site_media/img/status_inprogress.png"/><br class="clear"/>
+			<img class="in-progress" src="/site_media/img/status_inprogress.png"/>
 		{% endifequal %}
 		{% if not status %}
 			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
-			<img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
 		{% else %}
 		{% endif %}
 </div><!--end .module-->

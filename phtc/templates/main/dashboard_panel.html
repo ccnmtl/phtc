@@ -10,55 +10,23 @@
 	display:inline-block;
 	float: right;
 }
-.module{
-	width: 250px;
-}
-.module img{
-	float: right;
-}
 .toggle-on{
 	display: block !important;
 }
 .toggle-off{
 	display: none;
 }
-.part{
-	width:500px;
-	display: none;
-}
-.part img{
-	float: right;
-}
-.section{
-	width: 475px;
-}
-.section img{
-	float: right;
-}
-.sub{	
-	width: 450px;
-}
-.sub img{
-	float: right;	
-}
 .clear{
 	clear:both;
-}
-#return{
-
-	position: absolute;
-	left: 700px;
-	background: white;
-	padding: 0 100px 0 0;
 }
 </style>
 <h1>Dashboard</h1>
 <div id="return"></div>
 {% for module in root.get_children %}
 	
-	<div id="part_id_{{ module.id }}">
+	<div class="parts" id="part_id_{{ module.id }}">
 	{% for p in module.get_children %}
-		<div style="margin-left:25px" class='part'>
+		<div class='part'>
 		{% for info in dashboard_info %}
 			{% ifequal p.id info.dashboard_id %}
 				{% ifnotequal info.info "" %}
@@ -88,7 +56,7 @@
 		
 
 		{% for s in p.get_children %}
-			<div style="margin-left:50px" class='section'>
+			<div class='section'>
 			{% for info in dashboard_info %}
 			{% ifequal s.id info.dashboard_id %}
 				{% ifnotequal info.info "" %}
@@ -113,7 +81,7 @@
 			{% endif %}
 			</div>
 				{% for sub in s.get_children %}
-					<div style="margin-left:75px;" class='sub'>
+					<div class='sub'>
 					{% for info in dashboard_info %}
 						{% ifequal sub.id info.dashboard_id %}
 							{% ifnotequal info.info "" %}

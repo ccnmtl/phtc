@@ -111,10 +111,9 @@ body {
 }
 
 #modules {
-    border: 1px solid #fff;
     float: left;
-    width: 500px;
-    margin: 0 16px 0 0;
+    width: 510px;
+    margin: 0;
 }
 
 .module {
@@ -123,8 +122,11 @@ body {
 	line-height: 36px;
 }
 
+#modules .active {
+    background: url("../img/toc-arrow.png") right center no-repeat;
+}
+
 #return {
-    border: 1px solid #fff;
     width: 400px;
     float: left;
     margin: 0;
@@ -239,10 +241,39 @@ h2 {
     width: 940px;
     }
 
-.no-left-sidebar .row {
+.row {
     margin-left: 0;
     }
 
 .divclearfix {
     clear: both;
+}
+
+#sidebarleft ul {
+    margin: 0;
+    list-style: none;
+}
+
+#sidebarleft ul ul {
+    margin-left: 20px;
+}
+
+.parts {
+  padding: 10px;
+  border: 1px solid #999999;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+.part {
+	display: none;
+}
+
+.section {
+    margin-left: 20px;
+}
+
+.sub {
+    margin-left: 40px;
 }
