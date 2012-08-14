@@ -17,6 +17,16 @@
 	{% block css %}{% endblock %}
   <script src="/site_media/js/jquery-1.7.2.min.js"></script>
 
+<!-- shield -->
+<link rel="stylesheet" href="/site_media/js/shield-1.0/shield.css" type="text/css" media="all" />
+<script src="/site_media/js/shield-1.0/browserdetect.js" type="text/javascript" language="javascript"></script>
+<script type="text/javascript" src="/site_media/js/shield-1.0/shield.js"></script>
+<script type="text/javascript">
+/* Select from list: Chrome, Firefox, Safari, MSIE */
+shieldbrowser({"Chrome":13,"Firefox":6,"MSIE":9,"Safari":5});
+</script>
+
+
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -83,6 +93,7 @@
 
     <div class="content">
         <div class="row">
+        <div id="shieldbox"></div>
             <div class="span3" id="sidebarleft">
                 {% block sidebar %}{% endblock %}
             </div><!-- sidebarleft -->
