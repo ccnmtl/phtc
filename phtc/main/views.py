@@ -131,7 +131,7 @@ def make_sure_module1_parts_are_allowed(module, user):
             part.user_pagevisit("allowed")
 
 
-def make_sure_parts_are_allowed(module, user, request, section, is_module):
+def make_sure_parts_are_allowed(module, user, section, is_module):
     #handle Module one seperately
     if is_module_one(module, section, user):
         make_sure_module1_parts_are_allowed(module, user)
@@ -195,7 +195,7 @@ def process_dashboard_ajax(request, user, section, module):
             return reverse("dashboard")
     else:
         module.user_pagevisit(request.user, status="in_progress")
-        make_sure_parts_are_allowed(module, user, request, section,
+        make_sure_parts_are_allowed(module, user, section,
             is_module(module, user, request, section))
         return reverse("dashboard")
 
