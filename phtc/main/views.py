@@ -116,9 +116,9 @@ def make_sure_module1_parts_are_allowed(module, user):
                         user=user)
                     visit.status = "complete"
                     visit.save()
-                except:
+                except UserPageVisit.DoesNotExist:
                     pass
-        except:
+        except UserPageVisit.DoesNotExist:
             part_status = UserPageVisit.objects.get_or_create(
                 section=part,
                 user=user,
