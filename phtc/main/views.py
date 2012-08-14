@@ -11,7 +11,7 @@ from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
 from django.core.mail import EmailMessage
 import os.path
-import pdb
+
 
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:
@@ -38,7 +38,7 @@ def update_status(section, user, module, request):
     uv = section.get_uservisit(user)
     if not uv and not prev_status:
         return
-    if not is_module(module, user, request, section):
+    if not is_module(module, user, section):
         status = calculate_status(prev_status, uv)
         section.user_pagevisit(user, status=status)
 
@@ -64,41 +64,30 @@ def calculate_status(prev_status, uv):
 def user_visits(request):
     return UserPageVisit.objects.filter(user=request.user)
 
-
 def send_post_test_email(user, section, module):
-    directory = os.path.dirname(__file__)
-    email = EmailMessage()
-    email.subject = "Public Health Training Diploma"
-    if is_module_one(module, section, user):
-        section_msg = module.label + ' ' + section.label +'<a href="http://kang.ccnmtl.columbia.edu:13095/certificate' + module.get_absolute_url() + ' ">Click Here to print certificate</a>  '
-    else:
-        section_msg = module.label
-    email.body = ('Congratulations on completing ' + section_msg +
-                  '. Please find the attached certificate of completion.')
+    directory=os.path.dirname(__file__)
+    email=EmailMessage()
+    email.subject="Public Health Training Diploma"
+    section_msg=module.label
+    email.body = ('Congratulations on completing ' + section_msg + 'click the following link: '
+                'http://kang.ccnmtl.columbia.edu:13095/certificate'+module.get_absolute_url())
     email.from_email = "lowernysphtc.org <no-reply@lowernysphtc.org>"
     email.to = [user.email, ]
 
     #attach the file
-    file = open(directory + '/../../media/img/diploma.jpg', 'rb')
-    email.attach(filename="diploma.jpg",
-                 mimetype="image/jpeg",
-                 content=file.read())
-    file.close()
-
+    #file = open(directory + '/../../media/img/diploma.jpg', 'rb')
+    #email.attach(filename="diploma.jpg",
+    #             mimetype="image/jpeg",
+    #             content=file.read())
+    #file.close()
     email.send(fail_silently=False)
 
 
 def page_post(request, section, module):
     if request.POST.get('post_test') == "true":
-        # not sute sure yet if module 1 needs to be handled spererately
-        if is_module_one(module, section, request.user):
-            send_post_test_email(request.user, section, module)
-            module.user_pagevisit(request.user, status="complete")
-            section.user_pagevisit(request.user, status="complete")
-        else:
-            send_post_test_email(request.user, section, module)
-            module.user_pagevisit(request.user, status="complete")
-            section.user_pagevisit(request.user, status="complete")
+        send_post_test_email(request.user, section, module, request)
+        module.user_pagevisit(request.user, status="complete")
+        section.user_pagevisit(request.user, status="complete")
 
     if request.user.is_anonymous():
         return HttpResponse("you must login first")
@@ -125,60 +114,41 @@ def page_post(request, section, module):
 def make_sure_module1_parts_are_allowed(module, user):
     parts = module.get_children()
     for part in parts:
-        try:
-            part_status = UserPageVisit.objects.get(section_id=part.id,
-                                                    user_id=user.id)
-            if part_status == "in_progress":
-                try:
-                    visit = UserPageVisit.objects.get(
-                    section_id=part.get_previous().id,
-                    user_id=user_id)
-                    visit.status = "complete"
-                    visit.save()
-                except:
-                    pass
-        except:
-            part_status = UserPageVisit.objects.get_or_create(
-                section_id=part.id,
-                user_id=user.id,
-                status="allowed")
+        upv = part.get_uservisit(user)
+        if upv:
+            if upv.status == "in_progress":
+                part.user_pagevisit("complete")
+        else:
+            part.user_pagevisit("allowed")
 
-def make_sure_parts_are_allowed(module, user, request, section, is_module):
+
+def make_sure_parts_are_allowed(module, user, section, is_module):
     #handle Module one seperately
     if is_module_one(module, section, user):
         make_sure_module1_parts_are_allowed(module, user)
     else:
         if is_module == True:
-            if UserPageVisit.objects.get(
-                section=module,
-                user=user).status == "complete":
-                module.user_pagevisit(request.user, status="complete")
+            upv = module.get_uservisit(user)
+            if upv:
+                module.user_pagevisit(user, status="complete")
                 return
-            try:
-                status = "exists"
-                UserPageVisit.objects.get(
-                    section=section.get_next(), user=user)
-            except UserPageVisit.DoesNotExist:
-                status = "created"
+            next_upv = section.get_next().get_uservisit(user)
+            if next_upv:
+                if next_upv.status == "in_progress":
+                    section.get_next().user_pagevisit(
+                        user, status="complete")
+                elif next_upv.status == "allowed":
+                    section.get_next().user_pagevisit(
+                        user, status="in_progress")
 
-            if status == "exists":
-                if UserPageVisit.objects.get(
-                    section=section.get_next(),
-                    user=user).status == "in_progress":
-                    section.get_next().user_pagevisit(request.user,
-                                                      status="complete")
-                elif UserPageVisit.objects.get(
-                    section=section.get_next(),
-                    user=user).status == "allowed":
-                    section.get_next().user_pagevisit(request.user,
-                                                      status="in_progress")
-            if status == "created":
+            else:
                 section.get_next().user_pagevisit(
-                    request.user, status="allowed")
+                    user, status="allowed")
 
 
 def part_flagged_as_allowed(upv):
     return upv.status == "allowed" or upv.status == "in_progress"
+
 
 def is_module_one(module, section, user):
     modArr = section.hierarchy.get_root().get_children()
@@ -187,7 +157,8 @@ def is_module_one(module, section, user):
     else:
         return False
 
-def is_module(module, user, request, section):
+
+def is_module(module, user, section):
     try:
         mod_obj = UserPageVisit.objects.get(
             section=module,
@@ -201,7 +172,7 @@ def is_module(module, user, request, section):
         return False
 
 
-def process_dashboard_ajax(request, user, section, module):
+def process_dashboard_ajax(user, section, module):
     try:
         mod_status = UserPageVisit.objects.get(
             section=module,
@@ -211,12 +182,12 @@ def process_dashboard_ajax(request, user, section, module):
     if mod_status == "complete":
         if not is_module_one(module, section, user):
             for sec in module.get_children():
-                sec.user_pagevisit(request.user, status="complete")
+                sec.user_pagevisit(user, status="complete")
             return reverse("dashboard")
     else:
-        module.user_pagevisit(request.user, status="in_progress")
-        make_sure_parts_are_allowed(module, user, request, section,
-            is_module(module, user, request, section))
+        module.user_pagevisit(user, status="in_progress")
+        make_sure_parts_are_allowed(module, user, section,
+            is_module(module, user, section))
         return reverse("dashboard")
 
 
@@ -231,7 +202,7 @@ def page(request, path):
     # dashboard ajax
     if request.POST.get('module'):
         return HttpResponse(
-            process_dashboard_ajax(request, request.user, section, module))
+            process_dashboard_ajax(request.user, section, module))
 
     #is the user allowed?
     if not request.user.is_anonymous():
@@ -254,8 +225,7 @@ def page(request, path):
                 section=prev_section,
                 user=request.user)
             if (prev_section_visit.status == "in_progress"
-                and not is_module(module, request.user, request,
-                                  prev_section)):
+                and not is_module(module, request.user, prev_section)):
                 section.get_previous().user_pagevisit(
                     request.user, status="complete")
         except UserPageVisit.DoesNotExist:
@@ -300,15 +270,10 @@ def edit_page(request, path):
         section = get_section_from_path(path)
         root = section.hierarchy.get_root()
         edit_page = True
-        try:
-            DashboardInfo.objects.get(dashboard=section)
-        except DashboardInfo.DoesNotExist:
-            DashboardInfo.objects.create(dashboard=section)
-
-        dashboard = DashboardInfo.objects.get(dashboard=section)
+        dashboard, created = DashboardInfo.objects.get_or_create(
+            dashboard=section)
         if request.method == "POST":
-            dashboard_info = request.POST['dashboard_info']
-            dashboard.info = dashboard_info
+            dashboard.info = request.POST['dashboard_info']
 
         dashboard.save()
 
@@ -393,6 +358,7 @@ def dashboard(request):
 def dashboard_panel(request):
     return render_dashboard(request)
 
+
 @login_required
 @render_to('main/certificate.html')
 def certificate(request, path):
@@ -407,8 +373,9 @@ def certificate(request, path):
             is_submitted=submitted(section, request.user),
             modules=root.get_children(),
             root=section.hierarchy.get_root(),
-            user = request.user,
+            user=request.user,
             )
+
 
 def render_dashboard(request):
     h = get_hierarchy("main")
