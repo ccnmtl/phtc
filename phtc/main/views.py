@@ -241,13 +241,12 @@ def previous_section_handle_status(section, request, module):
 
 
 def hand_type_secure(prev_section_visit, request, section):
-    if not prev_section_visit:
-        if request.user.is_staff:
-            section.user_pagevisit(request.user, status="in_progress")
-            return True
-        return False
-    else:
+    if prev_section_visit:
         return True
+    if request.user.is_staff:
+        section.user_pagevisit(request.user, status="in_progress")
+        return True
+    return False
 
 
 @login_required
