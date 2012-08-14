@@ -86,7 +86,7 @@ def send_post_test_email(user, section, module, request):
     f = open(os.path.join(directory, '/../../media/img/diploma.jpg'), 'rb')
     email.attach(filename="diploma.jpg",
                  mimetype="image/jpeg",
-                 content=file.read())
+                 content=f.read())
     f.close()
 
     email.send(fail_silently=False)
