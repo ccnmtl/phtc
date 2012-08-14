@@ -30,8 +30,8 @@ jQuery(document).ready(function(){
     ** Module/Part UI 
     */
     $('.show-module').click(function(){
-        $('.show-module').removeClass('active')
-        $(this).toggleClass('active')
+        $('.show-module').parent().removeClass('active')
+        $(this).parent().toggleClass('active')
         var link = $(this).attr('rel');
         var id = $(this).parent().attr('id');
         jQuery('.content').append('<div id="page-load"><h1>Loading...</h1</div>');
