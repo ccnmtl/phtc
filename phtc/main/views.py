@@ -38,7 +38,7 @@ def update_status(section, user, module, request):
     uv = section.get_uservisit(user)
     if not uv and not prev_status:
         return
-    if not is_module(module, user, request, section):
+    if not is_module(module, user, section):
         status = calculate_status(prev_status, uv)
         section.user_pagevisit(user, status=status)
 
@@ -167,7 +167,7 @@ def is_module_one(module, section, user):
         return False
 
 
-def is_module(module, user, request, section):
+def is_module(module, user, section):
     try:
         mod_obj = UserPageVisit.objects.get(
             section=module,
@@ -181,7 +181,7 @@ def is_module(module, user, request, section):
         return False
 
 
-def process_dashboard_ajax(request, user, section, module):
+def process_dashboard_ajax(user, section, module):
     try:
         mod_status = UserPageVisit.objects.get(
             section=module,
@@ -191,12 +191,12 @@ def process_dashboard_ajax(request, user, section, module):
     if mod_status == "complete":
         if not is_module_one(module, section, user):
             for sec in module.get_children():
-                sec.user_pagevisit(request.user, status="complete")
+                sec.user_pagevisit(user, status="complete")
             return reverse("dashboard")
     else:
-        module.user_pagevisit(request.user, status="in_progress")
+        module.user_pagevisit(user, status="in_progress")
         make_sure_parts_are_allowed(module, user, section,
-            is_module(module, user, request, section))
+            is_module(module, user, section))
         return reverse("dashboard")
 
 
@@ -211,7 +211,7 @@ def page(request, path):
     # dashboard ajax
     if request.POST.get('module'):
         return HttpResponse(
-            process_dashboard_ajax(request, request.user, section, module))
+            process_dashboard_ajax(request.user, section, module))
 
     #is the user allowed?
     if not request.user.is_anonymous():
@@ -234,8 +234,7 @@ def page(request, path):
                 section=prev_section,
                 user=request.user)
             if (prev_section_visit.status == "in_progress"
-                and not is_module(module, request.user, request,
-                                  prev_section)):
+                and not is_module(module, request.user, prev_section)):
                 section.get_previous().user_pagevisit(
                     request.user, status="complete")
         except UserPageVisit.DoesNotExist:
