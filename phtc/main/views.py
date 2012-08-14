@@ -151,6 +151,10 @@ def is_module_one(module, section, user):
 
 
 def is_module(module, user, section):
+    # WTF?
+    # why is this not just module.id == section.id?
+    # why is it pulling out UserPageVisit objects
+    # and comparing those?
     try:
         mod_obj = UserPageVisit.objects.get(
             section=module,
