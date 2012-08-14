@@ -94,15 +94,9 @@ def send_post_test_email(user, section, module, request):
 
 def page_post(request, section, module):
     if request.POST.get('post_test') == "true":
-        # not sute sure yet if module 1 needs to be handled spererately
-        if is_module_one(module, section, request.user):
-            send_post_test_email(request.user, section, module, request)
-            module.user_pagevisit(request.user, status="complete")
-            section.user_pagevisit(request.user, status="complete")
-        else:
-            send_post_test_email(request.user, section, module, request)
-            module.user_pagevisit(request.user, status="complete")
-            section.user_pagevisit(request.user, status="complete")
+        send_post_test_email(request.user, section, module, request)
+        module.user_pagevisit(request.user, status="complete")
+        section.user_pagevisit(request.user, status="complete")
 
     if request.user.is_anonymous():
         return HttpResponse("you must login first")
