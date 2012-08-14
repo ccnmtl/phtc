@@ -143,11 +143,8 @@ def part_flagged_as_allowed(upv):
 
 
 def is_module_one(module, section, user):
-    modArr = section.hierarchy.get_root().get_children()
-    if module.label == modArr[0].label:
-        return True
-    else:
-        return False
+    module_one = section.hierarchy.get_root().get_children()[0]
+    return module.id == module_one.id
 
 
 def is_module(module, user, section):
