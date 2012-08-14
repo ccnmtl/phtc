@@ -143,8 +143,8 @@ def make_sure_module1_parts_are_allowed(module, user):
                     pass
         except:
             part_status = UserPageVisit.objects.get_or_create(
-                section_id=part.id,
-                user_id=user.id,
+                section=part,
+                user=user,
                 status="allowed")
 
 
