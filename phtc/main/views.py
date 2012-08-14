@@ -64,31 +64,22 @@ def calculate_status(prev_status, uv):
 def user_visits(request):
     return UserPageVisit.objects.filter(user=request.user)
 
-
-def send_post_test_email(user, section, module, request):
-    email = EmailMessage()
-    email.subject = "Public Health Training Diploma"
-    if is_module_one(module, section, user):
-        section_msg = (
-            module.label + ' ' + section.label
-            + '<a href="' + request.get_host() + 'certificate'
-            + module.get_absolute_url()
-            + ' ">Click Here to print certificate</a>  ')  # SAFE_PRINT
-    else:
-        section_msg = module.label
-    email.body = ('Congratulations on completing ' + section_msg +
-                  '. Please find the attached certificate of completion.')
+def send_post_test_email(user, section, module):
+    directory=os.path.dirname(__file__)
+    email=EmailMessage()
+    email.subject="Public Health Training Diploma"
+    section_msg=module.label
+    email.body = ('Congratulations on completing ' + section_msg + 'click the following link: '
+                'http://kang.ccnmtl.columbia.edu:13095/certificate'+module.get_absolute_url())
     email.from_email = "lowernysphtc.org <no-reply@lowernysphtc.org>"
     email.to = [user.email, ]
 
     #attach the file
-    f = open(os.path.join(os.path.dirname(__file__),
-                          '../../media/img/diploma.jpg'), 'rb')
-    email.attach(filename="diploma.jpg",
-                 mimetype="image/jpeg",
-                 content=f.read())
-    f.close()
-
+    #file = open(directory + '/../../media/img/diploma.jpg', 'rb')
+    #email.attach(filename="diploma.jpg",
+    #             mimetype="image/jpeg",
+    #             content=file.read())
+    #file.close()
     email.send(fail_silently=False)
 
 
