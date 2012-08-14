@@ -107,21 +107,21 @@ def make_sure_module1_parts_are_allowed(module, user):
     parts = module.get_children()
     for part in parts:
         try:
-            part_status = UserPageVisit.objects.get(section_id=part.id,
-                                                    user_id=user.id)
+            part_status = UserPageVisit.objects.get(section=part,
+                                                    user=user)
             if part_status == "in_progress":
                 try:
                     visit = UserPageVisit.objects.get(
-                    section_id=part.get_previous().id,
-                    user_id=user_id)
+                        section=part.get_previous(),
+                        user=user)
                     visit.status = "complete"
                     visit.save()
-                except:
+                except UserPageVisit.DoesNotExist:
                     pass
-        except:
+        except UserPageVisit.DoesNotExist:
             part_status = UserPageVisit.objects.get_or_create(
-                section_id=part.id,
-                user_id=user.id,
+                section=part,
+                user=user,
                 status="allowed")
 
 
