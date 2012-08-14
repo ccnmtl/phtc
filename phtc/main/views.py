@@ -114,12 +114,12 @@ def make_sure_module1_parts_are_allowed(module, user):
             part.user_pagevisit("allowed")
 
 
-def make_sure_parts_are_allowed(module, user, section, is_module):
+def make_sure_parts_are_allowed(module, user, section):
     #handle Module one seperately
-    if is_module_one(module, section, user):
+    if is_module_one(module):
         make_sure_module1_parts_are_allowed(module, user)
     else:
-        if is_module == True:
+        if is_module(module, user, section):
             upv = module.get_uservisit(user)
             if upv:
                 module.user_pagevisit(user, status="complete")
@@ -142,8 +142,8 @@ def part_flagged_as_allowed(upv):
     return upv.status == "allowed" or upv.status == "in_progress"
 
 
-def is_module_one(module, section, user):
-    module_one = section.hierarchy.get_root().get_children()[0]
+def is_module_one(module):
+    module_one = module.hierarchy.get_root().get_children()[0]
     return module.id == module_one.id
 
 
@@ -168,14 +168,13 @@ def is_module(module, user, section):
 def process_dashboard_ajax(user, section, module):
     upv = module.get_uservisit(user)
     if upv and upv.status == "complete":
-        if not is_module_one(module, section, user):
+        if not is_module_one(module):
             for sec in module.get_children():
                 sec.user_pagevisit(user, status="complete")
             return reverse("dashboard")
     else:
         module.user_pagevisit(user, status="in_progress")
-        make_sure_parts_are_allowed(module, user, section,
-            is_module(module, user, section))
+        make_sure_parts_are_allowed(module, user, section)
         return reverse("dashboard")
 
 
