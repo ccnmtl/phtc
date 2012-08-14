@@ -137,32 +137,22 @@ def make_sure_parts_are_allowed(module, user, request, section, is_module):
         make_sure_module1_parts_are_allowed(module, user)
     else:
         if is_module == True:
-            if UserPageVisit.objects.get(
-                section=module,
-                user=user).status == "complete":
-                module.user_pagevisit(request.user, status="complete")
+            upv = module.get_uservisit(user)
+            if upv:
+                module.user_pagevisit(user, status="complete")
                 return
-            try:
-                status = "exists"
-                UserPageVisit.objects.get(
-                    section=section.get_next(), user=user)
-            except UserPageVisit.DoesNotExist:
-                status = "created"
+            next_upv = section.get_next().get_uservisit(user)
+            if next_upv:
+                if next_upv.status == "in_progress":
+                    section.get_next().user_pagevisit(
+                        user, status="complete")
+                elif next_upv.status == "allowed":
+                    section.get_next().user_pagevisit(
+                        user, status="in_progress")
 
-            if status == "exists":
-                if UserPageVisit.objects.get(
-                    section=section.get_next(),
-                    user=user).status == "in_progress":
-                    section.get_next().user_pagevisit(request.user,
-                                                      status="complete")
-                elif UserPageVisit.objects.get(
-                    section=section.get_next(),
-                    user=user).status == "allowed":
-                    section.get_next().user_pagevisit(request.user,
-                                                      status="in_progress")
-            if status == "created":
+            else:
                 section.get_next().user_pagevisit(
-                    request.user, status="allowed")
+                    user, status="allowed")
 
 
 def part_flagged_as_allowed(upv):
