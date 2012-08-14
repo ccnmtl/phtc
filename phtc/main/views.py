@@ -169,13 +169,8 @@ def is_module(module, user, section):
 
 
 def process_dashboard_ajax(user, section, module):
-    try:
-        mod_status = UserPageVisit.objects.get(
-            section=module,
-            user=user).status
-    except UserPageVisit.DoesNotExist:
-        mod_status = False
-    if mod_status == "complete":
+    upv = module.get_uservisit(user)
+    if upv and upv.status == "complete":
         if not is_module_one(module, section, user):
             for sec in module.get_children():
                 sec.user_pagevisit(user, status="complete")
