@@ -14,9 +14,6 @@
 	display:inline-block;
 	float: right;
 }
-.module{
-	width: 250px;
-}
 .module img{
 	float: right;
 }
@@ -27,15 +24,14 @@
 	display: none;
 }
 .part{
-	width:500px;
 	display: none;
 }
 .part img{
 	float: right;
 }
-.section{
+/*.section{
 	width: 475px;
-}
+}*/
 .section img{
 	float: right;
 }
@@ -48,13 +44,6 @@
 .clear{
 	clear:both;
 }
-#return{
-
-	position: absolute;
-	margin-left: 300px;
-	background: white;
-	padding: 0 100px 0 0;
-}
 #page-load{
 	width: 100%;
 	position: relative;
@@ -64,9 +53,13 @@
 	text-align: center;
 }
 </style>
+
 <h1>Dashboard</h1>
-<div id="return"></div>
-{% for module in root.get_children %}
+
+<div id="dashboard-toc">
+    <div id="modules">
+    
+ {% for module in root.get_children %}
 	<div class='module' id ="{{ module.id }}">
 		{% for info in dashboard_info %}
 			{% ifequal module.id info.dashboard_id %}
@@ -97,5 +90,12 @@
 		{% endif %}
 </div><!--end .module-->
 {% endfor %}
+   
+    
+    </div>
+    <div id="return"></div><!-- end #return -->
+    <div class="divclearfix"></div><!-- divclearfix -->
+</div><!-- end #dashboard-toc -->
+
 <script src="/site_media/js/dashboard.js"></script>
 {% endblock %}

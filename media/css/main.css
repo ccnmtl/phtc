@@ -86,12 +86,6 @@ body > .container
     margin: 0;
 }
 
-/*
-
-*/
-
-/* special classes */
-
 /* CSS overide special for PHTC */
 
 body {
@@ -109,6 +103,25 @@ body {
     margin: 0;
     padding: 0;
     background-color: #ffffff;
+}
+
+#dashboard-toc {
+    margin: 0 20px 0 0;
+    padding: 0;
+}
+
+#modules {
+    border: 1px solid #fff;
+    float: left;
+    width: 500px;
+    margin: 0 16px 0 0;
+}
+
+#return {
+    border: 1px solid #fff;
+    width: 400px;
+    float: left;
+    margin: 0;
 }
 
 .errornote {
@@ -224,4 +237,6 @@ h2 {
     margin-left: 0;
     }
 
-
+.divclearfix {
+    clear: both;
+}
