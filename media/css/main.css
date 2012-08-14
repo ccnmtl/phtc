@@ -118,8 +118,8 @@ body {
 
 .module {
 	border-bottom: 1px dotted #ccc;
-	line-height: 120%;
-	line-height: 36px;
+	line-height: 26px;
+	padding-right: 15px;
 }
 
 #modules .active {
@@ -276,4 +276,19 @@ h2 {
 
 .sub {
     margin-left: 40px;
+}
+
+.show-module {
+    display: block;
+    float: left;
+}
+
+.in-progress {
+    display: block;
+    float: right;
+}
+
+.certificate {
+    display: block;
+    float: right;
 }

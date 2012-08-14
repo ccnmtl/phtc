@@ -52,17 +52,21 @@
 			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
 			<a class="certificate" href="/certificate{{ module.get_absolute_url }}"><img src="/site_media/img/certificate_icon.jpg"/></a>
 			<img class="completed" src="/site_media/img/status_completed.png"/>
+			<div class="divclearfix"></div>
 		{% endifequal %}
 		{% ifequal status.status "allowed" %}
 			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
+			<div class="divclearfix"></div>
 			{% comment %}<img src="/site_media/img/status_uninitiated.png"/>{% endcomment %}
 		{% endifequal %}
 		{% ifequal status.status "in_progress" %}
 			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
 			<img class="in-progress" src="/site_media/img/status_inprogress.png"/>
+			<div class="divclearfix"></div>
 		{% endifequal %}
 		{% if not status %}
 			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
+			<div class="divclearfix"></div>
 		{% else %}
 		{% endif %}
 </div><!--end .module-->
