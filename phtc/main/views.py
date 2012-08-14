@@ -68,7 +68,7 @@ def send_post_test_email(user, section, module, request):
     email.body = ('Congratulations on completing '
                   + section_msg
                   + 'click the following link: '
-                  + request.get_host() + 'certificate'
+                  + 'http://' + request.get_host() + '/certificate'
                   + module.get_absolute_url())
     email.from_email = "lowernysphtc.org <no-reply@lowernysphtc.org>"
     email.to = [user.email, ]
