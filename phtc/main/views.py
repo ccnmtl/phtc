@@ -123,23 +123,12 @@ def page_post(request, section, module):
 def make_sure_module1_parts_are_allowed(module, user):
     parts = module.get_children()
     for part in parts:
-        try:
-            part_status = UserPageVisit.objects.get(section=part,
-                                                    user=user)
-            if part_status == "in_progress":
-                try:
-                    visit = UserPageVisit.objects.get(
-                        section=part.get_previous(),
-                        user=user)
-                    visit.status = "complete"
-                    visit.save()
-                except:
-                    pass
-        except:
-            part_status = UserPageVisit.objects.get_or_create(
-                section=part,
-                user=user,
-                status="allowed")
+        upv = part.get_uservisit(user)
+        if upv:
+            if upv.status == "in_progress":
+                part.user_pagevisit("complete")
+        else:
+            part.user_pagevisit("allowed")
 
 
 def make_sure_parts_are_allowed(module, user, request, section, is_module):
