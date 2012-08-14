@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load user_status %}
 
+{% block title %}My Dashboard{% endblock %}
+{% block noleftsidebar %} class="no-left-sidebar"{% endblock %}
 {% block content %}
 
 <style type="text/css">
@@ -12,88 +14,69 @@
 	display:inline-block;
 	float: right;
 }
-.module{
-	width: 250px;
-}
-.module img{
-	float: right;
-}
 .toggle-on{
 	display: block !important;
 }
 .toggle-off{
 	display: none;
 }
-.part{
-	width:500px;
-	display: none;
-}
-.part img{
-	float: right;
-}
-.section{
-	width: 475px;
-}
-.section img{
-	float: right;
-}
-.sub{	
-	width: 450px;
-}
-.sub img{
-	float: right;	
-}
 .clear{
 	clear:both;
-}
-#return{
-
-	position: absolute;
-	margin-left: 300px;
-	background: white;
-	padding: 0 100px 0 0;
 }
 #page-load{
 	width: 100%;
 	position: relative;
-	margin: -100px 0 0 0;
+	margin: 0;
 }
 #page-load h1{
 	text-align: center;
 }
 </style>
+
 <h1>Dashboard</h1>
-<div id="return"></div>
-{% for module in root.get_children %}
-	<div class='module' id ="{{ module.id }}">
-		{% for info in dashboard_info %}
+
+<div id="dashboard-toc">
+    <div id="modules">
+    
+ {% for module in root.get_children %}
+	<div class='module' id="{{ module.id }}">
+		{% comment %}{% for info in dashboard_info %}
 			{% ifequal module.id info.dashboard_id %}
 				{% ifnotequal info.info "" %}
 					<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/><br class="clear"/></div>
 				{% endifnotequal %}
 			{% endifequal %}
-		{% endfor %}
+		{% endfor %}{% endcomment %}
 		{% get_user_section_status request.user module as status %}
 		{% ifequal status.status "complete" %}
 			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
-			<a href="/certificate{{ module.get_absolute_url }}"><img src="/site_media/img/certificate_icon.jpg"/></a>
-			<img src="/site_media/img/status_completed.png"/>
-			<br class="clear"/>
+			<a class="certificate" href="/certificate{{ module.get_absolute_url }}"><img src="/site_media/img/certificate_icon.jpg"/></a>
+			<img class="completed" src="/site_media/img/status_completed.png"/>
+			<div class="divclearfix"></div>
 		{% endifequal %}
 		{% ifequal status.status "allowed" %}
 			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
-			<img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
+			<div class="divclearfix"></div>
+			{% comment %}<img src="/site_media/img/status_uninitiated.png"/>{% endcomment %}
 		{% endifequal %}
 		{% ifequal status.status "in_progress" %}
 			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
-			<img src="/site_media/img/status_inprogress.png"/><br class="clear"/>
+			<img class="in-progress" src="/site_media/img/status_inprogress.png"/>
+			<div class="divclearfix"></div>
 		{% endifequal %}
 		{% if not status %}
 			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
-			<img src="/site_media/img/status_uninitiated.png"/><br class="clear"/>
+			<div class="divclearfix"></div>
 		{% else %}
 		{% endif %}
 </div><!--end .module-->
 {% endfor %}
+   
+    
+    </div>
+    <div id="return"></div><!-- end #return -->
+    <div class="divclearfix"></div><!-- divclearfix -->
+</div><!-- end #dashboard-toc -->
+
 <script src="/site_media/js/dashboard.js"></script>
 {% endblock %}

@@ -86,12 +86,6 @@ body > .container
     margin: 0;
 }
 
-/*
-
-*/
-
-/* special classes */
-
 /* CSS overide special for PHTC */
 
 body {
@@ -109,6 +103,33 @@ body {
     margin: 0;
     padding: 0;
     background-color: #ffffff;
+}
+
+#dashboard-toc {
+    margin: 0 20px 0 0;
+    padding: 0;
+}
+
+#modules {
+    float: left;
+    width: 510px;
+    margin: 0;
+}
+
+.module {
+	border-bottom: 1px dotted #ccc;
+	line-height: 26px;
+	padding-right: 15px;
+}
+
+#modules .active {
+    background: url("../img/toc-arrow.png") right center no-repeat;
+}
+
+#return {
+    width: 400px;
+    float: left;
+    margin: 0;
 }
 
 .errornote {
@@ -220,8 +241,64 @@ h2 {
     width: 940px;
     }
 
-.no-left-sidebar .row {
+.row {
     margin-left: 0;
     }
 
+.divclearfix {
+    clear: both;
+}
 
+#sidebarleft ul {
+    margin: 0;
+    list-style: none;
+}
+
+#sidebarleft ul ul {
+    margin-left: 20px;
+}
+
+#sidebarleft li {
+    color: #999;
+    padding: 2px 0;
+    line-height: 130%;
+}
+
+#sidebarleft li b {
+    color: #000;
+}
+
+.parts {
+  padding: 10px;
+  border: 1px solid #999999;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+.part {
+	display: none;
+}
+
+.section {
+    margin-left: 20px;
+}
+
+.sub {
+    margin-left: 40px;
+}
+
+.show-module {
+    display: block;
+    float: left;
+}
+
+.in-progress {
+    display: block;
+    float: right;
+}
+
+.certificate {
+    display: block;
+    float: right;
+}
