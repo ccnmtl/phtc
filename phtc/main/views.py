@@ -70,7 +70,7 @@ def send_post_test_email(user, section, module):
     email = EmailMessage()
     email.subject = "Public Health Training Diploma"
     if is_module_one(module, section, user):
-        section_msg = module.label + ' ' + section.label
+        section_msg = module.label + ' ' + section.label +'<a href="http://kang.ccnmtl.columbia.edu:13095/certificate' + module.get_absolute_url() + ' ">Click Here to print certificate</a>  '
     else:
         section_msg = module.label
     email.body = ('Congratulations on completing ' + section_msg +
@@ -393,6 +393,22 @@ def dashboard(request):
 def dashboard_panel(request):
     return render_dashboard(request)
 
+@login_required
+@render_to('main/certificate.html')
+def certificate(request, path):
+    section = get_section_from_path(path)
+    root = section.hierarchy.get_root()
+    module = get_module(section)
+    is_visited = user_visits(request)
+    return dict(section=section,
+            module=module,
+            is_visited=is_visited,
+            needs_submit=needs_submit(section),
+            is_submitted=submitted(section, request.user),
+            modules=root.get_children(),
+            root=section.hierarchy.get_root(),
+            user = request.user,
+            )
 
 def render_dashboard(request):
     h = get_hierarchy("main")
