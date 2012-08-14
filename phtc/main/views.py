@@ -10,8 +10,7 @@ from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
 from django.core.mail import EmailMessage
-import os.path
-import pdb
+
 
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:
@@ -23,22 +22,19 @@ def redirect_to_first_section_if_root(section, root):
             return HttpResponseRedirect(reverse("dashboard"))
 
 
-def update_status(section, user, module, request):
+def update_status(section, user, module):
     if user.is_anonymous():
         return
     prev_status = False
     prev_section = section.get_previous()
     if prev_section:
-        try:
-            prev_status = UserPageVisit.objects.get(
-                section=prev_section,
-                user=user).status
-        except UserPageVisit.DoesNotExist:
-            pass
+        upv = prev_section.get_uservisit(user)
+        if upv:
+            prev_status = upv.status
     uv = section.get_uservisit(user)
     if not uv and not prev_status:
         return
-    if not is_module(module, user, request, section):
+    if not is_module(module, user, section):
         status = calculate_status(prev_status, uv)
         section.user_pagevisit(user, status=status)
 
@@ -65,37 +61,25 @@ def user_visits(request):
     return UserPageVisit.objects.filter(user=request.user)
 
 
-def send_post_test_email(user, section, module):
-    directory=os.path.dirname(__file__)
-    email=EmailMessage()
-    email.subject="Public Health Training Diploma"
-    section_msg=module.label
-    email.body = ('Congratulations on completing ' + section_msg + 'click the following link: '
-                'http://kang.ccnmtl.columbia.edu:13095/certificate'+module.get_absolute_url())
+def send_post_test_email(user, section, module, request):
+    email = EmailMessage()
+    email.subject = "Public Health Training Diploma"
+    section_msg = module.label
+    email.body = ('Congratulations on completing '
+                  + section_msg
+                  + 'click the following link: '
+                  + request.get_host() + 'certificate'
+                  + module.get_absolute_url())
     email.from_email = "lowernysphtc.org <no-reply@lowernysphtc.org>"
     email.to = [user.email, ]
-
-    #attach the file
-    #file = open(directory + '/../../media/img/diploma.jpg', 'rb')
-    #email.attach(filename="diploma.jpg",
-    #             mimetype="image/jpeg",
-    #             content=file.read())
-    #file.close()
-
     email.send(fail_silently=False)
 
 
 def page_post(request, section, module):
     if request.POST.get('post_test') == "true":
-        # not sute sure yet if module 1 needs to be handled spererately
-        if is_module_one(module, section, request.user):
-            send_post_test_email(request.user, section, module)
-            module.user_pagevisit(request.user, status="complete")
-            section.user_pagevisit(request.user, status="complete")
-        else:
-            send_post_test_email(request.user, section, module)
-            module.user_pagevisit(request.user, status="complete")
-            section.user_pagevisit(request.user, status="complete")
+        send_post_test_email(request.user, section, module, request)
+        module.user_pagevisit(request.user, status="complete")
+        section.user_pagevisit(request.user, status="complete")
 
     if request.user.is_anonymous():
         return HttpResponse("you must login first")
@@ -140,51 +124,45 @@ def make_sure_module1_parts_are_allowed(module, user):
                 user_id=user.id,
                 status="allowed")
 
-def make_sure_parts_are_allowed(module, user, request, section, is_module):
+
+def make_sure_parts_are_allowed(module, user, section):
     #handle Module one seperately
-    if is_module_one(module, section, user):
+    if is_module_one(module):
         make_sure_module1_parts_are_allowed(module, user)
     else:
-        if is_module == True:
-            if UserPageVisit.objects.get(
-                section=module,
-                user=user).status == "complete":
-                module.user_pagevisit(request.user, status="complete")
+        if is_module(module, user, section):
+            upv = module.get_uservisit(user)
+            if upv:
+                module.user_pagevisit(user, status="complete")
                 return
-            try:
-                status = "exists"
-                UserPageVisit.objects.get(
-                    section=section.get_next(), user=user)
-            except UserPageVisit.DoesNotExist:
-                status = "created"
+            next_upv = section.get_next().get_uservisit(user)
+            if next_upv:
+                if next_upv.status == "in_progress":
+                    section.get_next().user_pagevisit(
+                        user, status="complete")
+                elif next_upv.status == "allowed":
+                    section.get_next().user_pagevisit(
+                        user, status="in_progress")
 
-            if status == "exists":
-                if UserPageVisit.objects.get(
-                    section=section.get_next(),
-                    user=user).status == "in_progress":
-                    section.get_next().user_pagevisit(request.user,
-                                                      status="complete")
-                elif UserPageVisit.objects.get(
-                    section=section.get_next(),
-                    user=user).status == "allowed":
-                    section.get_next().user_pagevisit(request.user,
-                                                      status="in_progress")
-            if status == "created":
+            else:
                 section.get_next().user_pagevisit(
-                    request.user, status="allowed")
+                    user, status="allowed")
 
 
 def part_flagged_as_allowed(upv):
     return upv.status == "allowed" or upv.status == "in_progress"
 
-def is_module_one(module, section, user):
-    modArr = section.hierarchy.get_root().get_children()
-    if module.label == modArr[0].label:
-        return True
-    else:
-        return False
 
-def is_module(module, user, request, section):
+def is_module_one(module):
+    module_one = module.hierarchy.get_root().get_children()[0]
+    return module.id == module_one.id
+
+
+def is_module(module, user, section):
+    # WTF?
+    # why is this not just module.id == section.id?
+    # why is it pulling out UserPageVisit objects
+    # and comparing those?
     try:
         mod_obj = UserPageVisit.objects.get(
             section=module,
@@ -198,22 +176,16 @@ def is_module(module, user, request, section):
         return False
 
 
-def process_dashboard_ajax(request, user, section, module):
-    try:
-        mod_status = UserPageVisit.objects.get(
-            section=module,
-            user=user).status
-    except UserPageVisit.DoesNotExist:
-        mod_status = False
-    if mod_status == "complete":
-        if not is_module_one(module, section, user):
+def process_dashboard_ajax(user, section, module):
+    upv = module.get_uservisit(user)
+    if upv and upv.status == "complete":
+        if not is_module_one(module):
             for sec in module.get_children():
-                sec.user_pagevisit(request.user, status="complete")
+                sec.user_pagevisit(user, status="complete")
             return reverse("dashboard")
     else:
-        module.user_pagevisit(request.user, status="in_progress")
-        make_sure_parts_are_allowed(module, user, request, section,
-            is_module(module, user, request, section))
+        module.user_pagevisit(user, status="in_progress")
+        make_sure_parts_are_allowed(module, user, section)
         return reverse("dashboard")
 
 
@@ -228,7 +200,7 @@ def page(request, path):
     # dashboard ajax
     if request.POST.get('module'):
         return HttpResponse(
-            process_dashboard_ajax(request, request.user, section, module))
+            process_dashboard_ajax(request.user, section, module))
 
     #is the user allowed?
     if not request.user.is_anonymous():
@@ -237,38 +209,14 @@ def page(request, path):
     rv = redirect_to_first_section_if_root(section, root)
     if rv:
         return rv
-    update_status(section, request.user, module, request)
+    update_status(section, request.user, module)
 
     if request.method == "POST":
         return page_post(request, section, module)
 
     # test if there is a previous section - if so then
     # decide whether to change status
-    if section.get_previous():
-        prev_section = section.get_previous()
-        try:
-            prev_section_visit = UserPageVisit.objects.get(
-                section=prev_section,
-                user=request.user)
-            if (prev_section_visit.status == "in_progress"
-                and not is_module(module, request.user, request,
-                                  prev_section)):
-                section.get_previous().user_pagevisit(
-                    request.user, status="complete")
-        except UserPageVisit.DoesNotExist:
-            # Need to catch whether a part has been flagged as "allowed"
-            try:
-                upv = UserPageVisit.objects.get(
-                    section=section,
-                    user=request.user)
-                prev_section_visit = part_flagged_as_allowed(upv)
-            except UserPageVisit.DoesNotExist:
-                prev_section_visit = False
-                pass
-        # make sure user cannot type in url by hand to skip around
-        if not hand_type_secure(prev_section_visit, request, section):
-            section.user_pagevisit(request.user, status="incomplete")
-            return HttpResponseRedirect("/dashboard/?incomplete=true")
+    previous_section_handle_status(section, request, module)
 
     return dict(section=section,
                 module=module,
@@ -280,14 +228,32 @@ def page(request, path):
                 )
 
 
+def previous_section_handle_status(section, request, module):
+    if section.get_previous():
+        prev_section = section.get_previous()
+        prev_section_visit = prev_section.get_uservisit(request.user)
+        if (prev_section_visit
+            and prev_section_visit.status == "in_progress"
+            and not is_module(module, request.user, prev_section)):
+            prev_section.user_pagevisit(request.user, status="complete")
+        else:
+            # Need to catch whether a part has been flagged as "allowed"
+            upv = section.get_uservisit(request.user)
+            if upv:
+                prev_section_visit = part_flagged_as_allowed(upv)
+        # make sure user cannot type in url by hand to skip around
+        if not hand_type_secure(prev_section_visit, request, section):
+            section.user_pagevisit(request.user, status="incomplete")
+            return HttpResponseRedirect("/dashboard/?incomplete=true")
+
+
 def hand_type_secure(prev_section_visit, request, section):
-    if prev_section_visit == False:
-        if request.user.is_staff:
-            section.user_pagevisit(request.user, status="in_progress")
-            return True
-        return False
-    else:
+    if prev_section_visit:
         return True
+    if request.user.is_staff:
+        section.user_pagevisit(request.user, status="in_progress")
+        return True
+    return False
 
 
 @login_required
@@ -297,15 +263,10 @@ def edit_page(request, path):
         section = get_section_from_path(path)
         root = section.hierarchy.get_root()
         edit_page = True
-        try:
-            DashboardInfo.objects.get(dashboard=section)
-        except DashboardInfo.DoesNotExist:
-            DashboardInfo.objects.create(dashboard=section)
-
-        dashboard = DashboardInfo.objects.get(dashboard=section)
+        dashboard, created = DashboardInfo.objects.get_or_create(
+            dashboard=section)
         if request.method == "POST":
-            dashboard_info = request.POST['dashboard_info']
-            dashboard.info = dashboard_info
+            dashboard.info = request.POST['dashboard_info']
 
         dashboard.save()
 
@@ -390,6 +351,7 @@ def dashboard(request):
 def dashboard_panel(request):
     return render_dashboard(request)
 
+
 @login_required
 @render_to('main/certificate.html')
 def certificate(request, path):
@@ -404,8 +366,9 @@ def certificate(request, path):
             is_submitted=submitted(section, request.user),
             modules=root.get_children(),
             root=section.hierarchy.get_root(),
-            user = request.user,
+            user=request.user,
             )
+
 
 def render_dashboard(request):
     h = get_hierarchy("main")
