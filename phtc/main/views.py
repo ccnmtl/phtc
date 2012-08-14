@@ -209,30 +209,7 @@ def page(request, path):
 
     # test if there is a previous section - if so then
     # decide whether to change status
-    if section.get_previous():
-        prev_section = section.get_previous()
-        try:
-            prev_section_visit = UserPageVisit.objects.get(
-                section=prev_section,
-                user=request.user)
-            if (prev_section_visit.status == "in_progress"
-                and not is_module(module, request.user, prev_section)):
-                section.get_previous().user_pagevisit(
-                    request.user, status="complete")
-        except UserPageVisit.DoesNotExist:
-            # Need to catch whether a part has been flagged as "allowed"
-            try:
-                upv = UserPageVisit.objects.get(
-                    section=section,
-                    user=request.user)
-                prev_section_visit = part_flagged_as_allowed(upv)
-            except UserPageVisit.DoesNotExist:
-                prev_section_visit = False
-                pass
-        # make sure user cannot type in url by hand to skip around
-        if not hand_type_secure(prev_section_visit, request, section):
-            section.user_pagevisit(request.user, status="incomplete")
-            return HttpResponseRedirect("/dashboard/?incomplete=true")
+    previous_section_handle_status(section, request, module)
 
     return dict(section=section,
                 module=module,
@@ -244,8 +221,27 @@ def page(request, path):
                 )
 
 
+def previous_section_handle_status(section, request, module):
+    if section.get_previous():
+        prev_section = section.get_previous()
+        prev_section_visit = prev_section.get_uservisit(request.user)
+        if (prev_section_visit
+            and prev_section_visit.status == "in_progress"
+            and not is_module(module, request.user, prev_section)):
+            prev_section.user_pagevisit(request.user, status="complete")
+        else:
+            # Need to catch whether a part has been flagged as "allowed"
+            upv = section.get_uservisit(request.user)
+            if upv:
+                prev_section_visit = part_flagged_as_allowed(upv)
+        # make sure user cannot type in url by hand to skip around
+        if not hand_type_secure(prev_section_visit, request, section):
+            section.user_pagevisit(request.user, status="incomplete")
+            return HttpResponseRedirect("/dashboard/?incomplete=true")
+
+
 def hand_type_secure(prev_section_visit, request, section):
-    if prev_section_visit == False:
+    if not prev_section_visit:
         if request.user.is_staff:
             section.user_pagevisit(request.user, status="in_progress")
             return True
