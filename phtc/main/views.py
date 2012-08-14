@@ -10,7 +10,6 @@ from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
 from django.core.mail import EmailMessage
-import os.path
 
 
 def redirect_to_first_section_if_root(section, root):
@@ -23,18 +22,15 @@ def redirect_to_first_section_if_root(section, root):
             return HttpResponseRedirect(reverse("dashboard"))
 
 
-def update_status(section, user, module, request):
+def update_status(section, user, module):
     if user.is_anonymous():
         return
     prev_status = False
     prev_section = section.get_previous()
     if prev_section:
-        try:
-            prev_status = UserPageVisit.objects.get(
-                section=prev_section,
-                user=user).status
-        except UserPageVisit.DoesNotExist:
-            pass
+        upv = prev_section.get_uservisit(user)
+        if upv:
+            prev_status = upv.status
     uv = section.get_uservisit(user)
     if not uv and not prev_status:
         return
@@ -64,22 +60,18 @@ def calculate_status(prev_status, uv):
 def user_visits(request):
     return UserPageVisit.objects.filter(user=request.user)
 
-def send_post_test_email(user, section, module):
-    directory=os.path.dirname(__file__)
-    email=EmailMessage()
-    email.subject="Public Health Training Diploma"
-    section_msg=module.label
-    email.body = ('Congratulations on completing ' + section_msg + 'click the following link: '
-                'http://kang.ccnmtl.columbia.edu:13095/certificate'+module.get_absolute_url())
+
+def send_post_test_email(user, section, module, request):
+    email = EmailMessage()
+    email.subject = "Public Health Training Diploma"
+    section_msg = module.label
+    email.body = ('Congratulations on completing '
+                  + section_msg
+                  + 'click the following link: '
+                  + request.get_host() + 'certificate'
+                  + module.get_absolute_url())
     email.from_email = "lowernysphtc.org <no-reply@lowernysphtc.org>"
     email.to = [user.email, ]
-
-    #attach the file
-    #file = open(directory + '/../../media/img/diploma.jpg', 'rb')
-    #email.attach(filename="diploma.jpg",
-    #             mimetype="image/jpeg",
-    #             content=file.read())
-    #file.close()
     email.send(fail_silently=False)
 
 
@@ -159,6 +151,10 @@ def is_module_one(module, section, user):
 
 
 def is_module(module, user, section):
+    # WTF?
+    # why is this not just module.id == section.id?
+    # why is it pulling out UserPageVisit objects
+    # and comparing those?
     try:
         mod_obj = UserPageVisit.objects.get(
             section=module,
@@ -211,7 +207,7 @@ def page(request, path):
     rv = redirect_to_first_section_if_root(section, root)
     if rv:
         return rv
-    update_status(section, request.user, module, request)
+    update_status(section, request.user, module)
 
     if request.method == "POST":
         return page_post(request, section, module)
