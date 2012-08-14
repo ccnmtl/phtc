@@ -10,7 +10,6 @@ from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
 from django.core.mail import EmailMessage
-import os.path
 
 
 def redirect_to_first_section_if_root(section, root):
@@ -64,22 +63,18 @@ def calculate_status(prev_status, uv):
 def user_visits(request):
     return UserPageVisit.objects.filter(user=request.user)
 
-def send_post_test_email(user, section, module):
-    directory=os.path.dirname(__file__)
-    email=EmailMessage()
-    email.subject="Public Health Training Diploma"
-    section_msg=module.label
-    email.body = ('Congratulations on completing ' + section_msg + 'click the following link: '
-                'http://kang.ccnmtl.columbia.edu:13095/certificate'+module.get_absolute_url())
+
+def send_post_test_email(user, section, module, request):
+    email = EmailMessage()
+    email.subject = "Public Health Training Diploma"
+    section_msg = module.label
+    email.body = ('Congratulations on completing '
+                  + section_msg
+                  + 'click the following link: '
+                  + request.get_host() + 'certificate'
+                  + module.get_absolute_url())
     email.from_email = "lowernysphtc.org <no-reply@lowernysphtc.org>"
     email.to = [user.email, ]
-
-    #attach the file
-    #file = open(directory + '/../../media/img/diploma.jpg', 'rb')
-    #email.attach(filename="diploma.jpg",
-    #             mimetype="image/jpeg",
-    #             content=file.read())
-    #file.close()
     email.send(fail_silently=False)
 
 
