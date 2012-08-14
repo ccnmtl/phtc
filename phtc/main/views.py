@@ -28,12 +28,9 @@ def update_status(section, user, module, request):
     prev_status = False
     prev_section = section.get_previous()
     if prev_section:
-        try:
-            prev_status = UserPageVisit.objects.get(
-                section=prev_section,
-                user=user).status
-        except UserPageVisit.DoesNotExist:
-            pass
+        upv = prev_section.get_uservisit(user)
+        if upv:
+            prev_status = upv.status
     uv = section.get_uservisit(user)
     if not uv and not prev_status:
         return
