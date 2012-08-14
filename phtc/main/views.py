@@ -22,7 +22,7 @@ def redirect_to_first_section_if_root(section, root):
             return HttpResponseRedirect(reverse("dashboard"))
 
 
-def update_status(section, user, module, request):
+def update_status(section, user, module):
     if user.is_anonymous():
         return
     prev_status = False
@@ -203,7 +203,7 @@ def page(request, path):
     rv = redirect_to_first_section_if_root(section, root)
     if rv:
         return rv
-    update_status(section, request.user, module, request)
+    update_status(section, request.user, module)
 
     if request.method == "POST":
         return page_post(request, section, module)
