@@ -3747,6 +3747,7 @@ input[type="submit"].btn.btn-mini {
 
 .navbar-fixed-bottom {
   bottom: 0;
+  position: relative;
 }
 
 .navbar .nav {

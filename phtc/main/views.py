@@ -11,7 +11,7 @@ from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
 from django.core.mail import EmailMessage
 import os.path
-
+import pdb
 
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:
@@ -69,8 +69,8 @@ def send_post_test_email(user, section, module):
     directory = os.path.dirname(__file__)
     email = EmailMessage()
     email.subject = "Public Health Training Diploma"
-    if module.label == "Module 1":
-        section_msg = module.label + ' ' + section.label
+    if is_module_one(module, section, user):
+        section_msg = module.label + ' ' + section.label +'<a href="http://kang.ccnmtl.columbia.edu:13095/certificate' + module.get_absolute_url() + ' ">Click Here to print certificate</a>  '
     else:
         section_msg = module.label
     email.body = ('Congratulations on completing ' + section_msg +
@@ -90,9 +90,16 @@ def send_post_test_email(user, section, module):
 
 def page_post(request, section, module):
     if request.POST.get('post_test') == "true":
-        send_post_test_email(request.user, section, module)
-        section.user_pagevisit(request.user, status="complete")
-        module.user_pagevisit(request.user, status="complete")
+        # not sute sure yet if module 1 needs to be handled spererately
+        if is_module_one(module, section, request.user):
+            send_post_test_email(request.user, section, module)
+            module.user_pagevisit(request.user, status="complete")
+            section.user_pagevisit(request.user, status="complete")
+        else:
+            send_post_test_email(request.user, section, module)
+            module.user_pagevisit(request.user, status="complete")
+            section.user_pagevisit(request.user, status="complete")
+
     if request.user.is_anonymous():
         return HttpResponse("you must login first")
     # user has submitted a form. deal with it
@@ -107,6 +114,9 @@ def page_post(request, section, module):
     elif request.POST.get('post_test') == "true":
         #forward over to dashboard
         return HttpResponseRedirect(reverse('dashboard'))
+    elif request.POST.get('pre_test') == "true":
+        #return HttpResponse(request.POST)
+        return HttpResponseRedirect(section.get_absolute_url())
     else:
         # giving them feedback before they proceed
         return HttpResponseRedirect(section.get_absolute_url())
@@ -116,27 +126,26 @@ def make_sure_module1_parts_are_allowed(module, user):
     parts = module.get_children()
     for part in parts:
         try:
-            part_status = UserPageVisit.objects.get(section=part,
-                                                    user=user)
+            part_status = UserPageVisit.objects.get(section_id=part.id,
+                                                    user_id=user.id)
             if part_status == "in_progress":
                 try:
                     visit = UserPageVisit.objects.get(
-                    section=part.get_previous(),
-                    user=user)
+                    section_id=part.get_previous().id,
+                    user_id=user_id)
                     visit.status = "complete"
                     visit.save()
-                except UserPageVisit.DoesNotExist:
+                except:
                     pass
-        except UserPageVisit.DoesNotExist:
+        except:
             part_status = UserPageVisit.objects.get_or_create(
-                section=part,
-                user=user,
+                section_id=part.id,
+                user_id=user.id,
                 status="allowed")
-
 
 def make_sure_parts_are_allowed(module, user, request, section, is_module):
     #handle Module one seperately
-    if module.label == "Module 1":
+    if is_module_one(module, section, user):
         make_sure_module1_parts_are_allowed(module, user)
     else:
         if is_module == True:
@@ -171,6 +180,12 @@ def make_sure_parts_are_allowed(module, user, request, section, is_module):
 def part_flagged_as_allowed(upv):
     return upv.status == "allowed" or upv.status == "in_progress"
 
+def is_module_one(module, section, user):
+    modArr = section.hierarchy.get_root().get_children()
+    if module.label == modArr[0].label:
+        return True
+    else:
+        return False
 
 def is_module(module, user, request, section):
     try:
@@ -187,9 +202,6 @@ def is_module(module, user, request, section):
 
 
 def process_dashboard_ajax(request, user, section, module):
-    #filter out Module 1 because of the Parts
-    if module.label == "Module 1":
-        return
     try:
         mod_status = UserPageVisit.objects.get(
             section=module,
@@ -197,9 +209,10 @@ def process_dashboard_ajax(request, user, section, module):
     except UserPageVisit.DoesNotExist:
         mod_status = False
     if mod_status == "complete":
-        for sec in module.get_children():
-            sec.user_pagevisit(request.user, status="complete")
-        return reverse("dashboard")
+        if not is_module_one(module, section, user):
+            for sec in module.get_children():
+                sec.user_pagevisit(request.user, status="complete")
+            return reverse("dashboard")
     else:
         module.user_pagevisit(request.user, status="in_progress")
         make_sure_parts_are_allowed(module, user, request, section,
@@ -227,7 +240,7 @@ def page(request, path):
     rv = redirect_to_first_section_if_root(section, root)
     if rv:
         return rv
-    update_status(section, request.user, section, request)
+    update_status(section, request.user, module, request)
 
     if request.method == "POST":
         return page_post(request, section, module)
@@ -375,6 +388,22 @@ def dashboard(request):
 def dashboard_panel(request):
     return render_dashboard(request)
 
+@login_required
+@render_to('main/certificate.html')
+def certificate(request, path):
+    section = get_section_from_path(path)
+    root = section.hierarchy.get_root()
+    module = get_module(section)
+    is_visited = user_visits(request)
+    return dict(section=section,
+            module=module,
+            is_visited=is_visited,
+            needs_submit=needs_submit(section),
+            is_submitted=submitted(section, request.user),
+            modules=root.get_children(),
+            root=section.hierarchy.get_root(),
+            user = request.user,
+            )
 
 def render_dashboard(request):
     h = get_hierarchy("main")
