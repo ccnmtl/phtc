@@ -66,7 +66,6 @@ def user_visits(request):
 
 
 def send_post_test_email(user, section, module, request):
-    directory = os.path.dirname(__file__)
     email = EmailMessage()
     email.subject = "Public Health Training Diploma"
     if is_module_one(module, section, user):
@@ -83,7 +82,8 @@ def send_post_test_email(user, section, module, request):
     email.to = [user.email, ]
 
     #attach the file
-    f = open(os.path.join(directory, '/../../media/img/diploma.jpg'), 'rb')
+    f = open(os.path.join(os.path.dirname(__file__),
+                          '../../media/img/diploma.jpg'), 'rb')
     email.attach(filename="diploma.jpg",
                  mimetype="image/jpeg",
                  content=f.read())
