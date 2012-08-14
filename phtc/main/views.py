@@ -107,21 +107,21 @@ def make_sure_module1_parts_are_allowed(module, user):
     parts = module.get_children()
     for part in parts:
         try:
-            part_status = UserPageVisit.objects.get(section=part,
-                                                    user=user)
+            part_status = UserPageVisit.objects.get(section_id=part.id,
+                                                    user_id=user.id)
             if part_status == "in_progress":
                 try:
                     visit = UserPageVisit.objects.get(
-                        section=part.get_previous(),
-                        user=user)
+                    section_id=part.get_previous().id,
+                    user_id=user_id)
                     visit.status = "complete"
                     visit.save()
-                except UserPageVisit.DoesNotExist:
+                except:
                     pass
-        except UserPageVisit.DoesNotExist:
+        except:
             part_status = UserPageVisit.objects.get_or_create(
-                section=part,
-                user=user,
+                section_id=part.id,
+                user_id=user.id,
                 status="allowed")
 
 
@@ -144,11 +144,14 @@ def make_sure_parts_are_allowed(module, user, section, is_module):
                 status = "created"
 
             if status == "exists":
-                prev_section = section.get_previous()
-                if prev_section.get_uservisit(user).status == "in_progress":
+                ns = section.get_next()
+                if UserPageVisit.objects.get(
+                    section=ns, user=user).status == "in_progress":
                     section.get_next().user_pagevisit(user,
                                                       status="complete")
-                elif prev_section.get_uservisit(user).status == "allowed":
+                elif UserPageVisit.objects.get(
+                    section=ns, 
+                    user=user).status == "allowed":
                     section.get_next().user_pagevisit(user,
                                                       status="in_progress")
             if status == "created":
