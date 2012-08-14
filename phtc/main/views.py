@@ -113,7 +113,7 @@ def make_sure_module1_parts_are_allowed(module, user):
                 try:
                     visit = UserPageVisit.objects.get(
                     section_id=part.get_previous().id,
-                    user_id=user_id)
+                    user=user)
                     visit.status = "complete"
                     visit.save()
                 except:
