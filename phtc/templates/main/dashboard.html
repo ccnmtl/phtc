@@ -45,7 +45,7 @@
 			<a class="show-module" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
 			<div class="divclearfix"></div>
 		{% endifequal %}
-		{% ifequal status.status "in_progress" %}
+		{% ifequal status.status "in_progress" %}<!-- **** IN PROGRESS -->
 			<div class="inprogress-icon"></div>
 			<a class="show-module inprogress" rel="{{ module.get_absolute_url }}" href="#">{{ module.label }}</a>
 			<div class="divclearfix"></div>

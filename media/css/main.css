@@ -282,17 +282,32 @@ h2 {
 	display: none;
 }
 
+.parttitle {
+    line-height: 24px;
+}
+
 .section {
     margin-left: 20px;
+    line-height: 24px;
 }
 
 .sub {
     margin-left: 40px;
+   line-height: 24px;
 }
 
 .show-module {
     display: block;
     float: left;
+}
+
+.link-title {
+    display: block;
+    float: left;
+}
+
+.unavailable {
+    color: #999;
 }
 
 .inprogress-icon {
@@ -303,6 +318,14 @@ h2 {
     background: transparent url('../img/status_inprogress.png') left center no-repeat;
 }
 
+.inprogress-icon-sml {
+    width: 24px;
+    height: 24px;
+    display: block;
+    float: left;
+    background: transparent url('../img/status_inprogress_sml.png') center center no-repeat;
+}
+
 .uninitiated-icon {
     width: 30px;
     height: 30px;
@@ -311,12 +334,44 @@ h2 {
     background: transparent url('../img/status_uninitiated_gray.png') left center no-repeat;
 }
 
+.uninitiated-icon-sml {
+    width: 24px;
+    height: 24px;
+    display: block;
+    float: left;
+    background: transparent url('../img/status_uninitiated_gray_sml.png') center center no-repeat;
+}
+
+.unavailable-icon {
+    width: 30px;
+    height: 30px;
+    display: block;
+    float: left;
+    background: transparent url('../img/shim.png') left center no-repeat;
+}
+
+.unavailable-icon-sml {
+    width: 24px;
+    height: 24px;
+    display: block;
+    float: left;
+    background: transparent url('../img/shim.png') left center no-repeat;
+}
+
 .completed-icon {
     width: 30px;
     height: 30px;
     display: block;
     float: left;
     background: transparent url('../img/status_completed.png') left center no-repeat;
+}
+
+.completed-icon-sml {
+    width: 24px;
+    height: 24px;
+    display: block;
+    float: left;
+    background: transparent url('../img/status_completed_sml.png') center center no-repeat;
 }
 
 .certificate {
