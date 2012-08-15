@@ -42,11 +42,20 @@ shieldbrowser({"Chrome":13,"Firefox":6,"MSIE":9,"Safari":5});
       <div class="navbar-inner">
         <ul class="nav">
           <li><a class="brand" href="/">{% if request.user.is_anonymous %}Home{% else %}My Dashboard{% endif %}</a></li>
+          {% if request.user.is_superuser %}
+            {% ifequal section.get_absolute_url NONE  %}
+            {% else %}
+              <a class="btn" id="" href="/edit{{section.get_absolute_url}}">Edit</a>
+              <a class="btn" href="{{section.get_absolute_url}}" >view page</a>
+            {% endifequal %}
+            
+          {% endif %}
           {% block topnavbarleftitems %}{% endblock %}
         </ul>
         <div class="usernav">
           {% block topnavbarrightitems %}{% endblock %}
           {% block usernav %}
+
           {% if request.user.is_anonymous %}
           <a href="/accounts/login/?next={% url dashboard %}" class="btn-small btn-primary">Log in</a>
           {% else %}
