@@ -24,7 +24,8 @@ td.td-ui{
 }
 .td-answer-comparison{
   width: 100px;
-  padding: 0 8px 0 0; 
+  padding: 0 8px 0 0;
+  text-transform: capitalize;
 }
 .explanation{
   margin: 20px 0;
@@ -68,17 +69,36 @@ td.td-ui{
     <div id="comparison"></div>
 
 {# Create the correct answer object #}
-  <script>
+<script>
   var explanation = {explanation : '{{ question.explanation }}'};
-  var correct_answers = {
-    {% for answer in question.answer_set.all %}
-      {% if forloop.last %}
-        '{{ answer.label }}' : '{{ answer.value }}'
-      {% else %}
-        '{{ answer.label }}' : '{{ answer.value }}',
-      {% endif %}
-    {% endfor %}
-  };
+  function cleanup_string(str, kill_space){
+        // only replace the hyphen because django is slugifying the strings
+        var punctuationless = str.replace(/-/g," ")
+        if(kill_space == true){
+            var spaceless = punctuationless.replace(/\s/g, "");
+        }else{
+            var spaceless = punctuationless;
+        }
+        var filter = spaceless.replace(/'/g,"");//take out the single quotes
+        var filter1 = filter.replace(/\[/g,"");//replace [
+        var filter2 = filter1.replace(/\]/g,"");//replace ]
+        var clean_lower = filter2.toLowerCase();//to lowercase
+        return clean_lower;
+    }
+  var correct_answers = { };
+  
+  {% for answer in question.answer_set.all %}
+    var aws_label = cleanup_string('{{ answer.label|slugify }}', true);
+    var aws_value = cleanup_string('{{ answer.value|slugify }}', false);
+    correct_answers[aws_label] = aws_value;
+  {% endfor %} 
 
-  </script>
+
+
+</script>
+
+
+
+
+
 

@@ -32,13 +32,27 @@ jQuery(document).ready(function ($) {
     //private
     var btn = $('input.btn.btn-primary');
 
+    //clean string function
+    function cleanup_string(str, kill_space){
+        var punctuationless = str.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+        if(kill_space == true){
+            var spaceless = punctuationless.replace(/\s/g, "");
+        }else{
+            var spaceless = punctuationless;
+        }
+        var filter = spaceless.replace(/'/g,"");//take out the single quotes
+        var filter1 = filter.replace(/\[/g,"");//replace [
+        var filter2 = filter1.replace(/\]/g,"");//replace ]
+        var clean_lower = filter2.toLowerCase();//to lowercase
+        return clean_lower;
+    }
     //add event listener
     btn.click(function () {
         $('.user-selection').each(function (i) {
             if ($(this).children().attr("checked")) {
                 var answer_length = $('.answer-label').length;
-                var answer = jQuery(jQuery('.answer-label')[(Math.floor(i / answer_length))]).html();
-                _user_answers[answer] = $(this).children().val();
+                var answer = cleanup_string(jQuery(jQuery('.answer-label')[(Math.floor(i / answer_length))]).html(), true );
+                _user_answers[answer] = cleanup_string($(this).children().val(), false );
             }
         });
         window.user_answers = _user_answers;
@@ -61,20 +75,19 @@ jQuery(document).ready(function ($) {
         $(btn).attr('value', 'try again');
         $('input.btn.btn-primary').replaceWith(btn);
         $(btn).click(function () { window.location.reload(); });
-
         $('#header-table td.td-ui').remove();
         $('#header-table tr')
             .append('<td class="td-answer-header">Your Answers</td> <td class="td-answer-header">Our Answers</td>');
-
         $('td.td-ui.user-selection').remove();
     
         for (var key in _answer_key) {
             if (_answer_key.hasOwnProperty(key)) {
+                var label =  cleanup_string( jQuery(jQuery('.answer-label')[_index]).html(), true );
                 jQuery(jQuery('.table-matching')[_index]).children().children()
                     .append('<td class="td-answer-comparison">' +
-                            _user_answers[jQuery(jQuery('.answer-label')[_index]).html()] +
+                            _user_answers[label] +
                             '</td><td class="td-answer-comparison">' +
-                            _answer_key[jQuery(jQuery('.answer-label')[_index]).html()] +
+                            _answer_key[label] +
                             '</td>');
                 _index += 1;
             }
