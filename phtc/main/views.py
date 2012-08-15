@@ -25,6 +25,7 @@ def redirect_to_first_section_if_root(section, root):
 def update_status(section, user, module):
     if user.is_anonymous():
         return
+        
     prev_status = False
     prev_section = section.get_previous()
     if prev_section:
@@ -116,9 +117,9 @@ def make_sure_module1_parts_are_allowed(module, user):
                     user_id=user_id)
                     visit.status = "complete"
                     visit.save()
-                except:
+                except UserPageVisit.DoesNotExist:
                     pass
-        except:
+        except UserPageVisit.DoesNotExist:
             part_status = UserPageVisit.objects.get_or_create(
                 section_id=part.id,
                 user_id=user.id,
@@ -131,6 +132,7 @@ def make_sure_parts_are_allowed(module, user, section, is_module):
         make_sure_module1_parts_are_allowed(module, user)
     else:
         if is_module == True:
+
             if UserPageVisit.objects.get(
                 section=module,
                 user=user).status == "complete":
@@ -169,20 +171,9 @@ def is_module_one(module):
 
 
 def is_module(module, user, section):
-    # WTF?
-    # why is this not just module.id == section.id?
-    # why is it pulling out UserPageVisit objects
-    # and comparing those?
-    try:
-        mod_obj = UserPageVisit.objects.get(
-            section=module,
-            user=user)
-        sec_obj = UserPageVisit.objects.get(
-            section=section,
-            user=user)
-        if mod_obj.id == sec_obj.id:
-            return True
-    except UserPageVisit.DoesNotExist:
+    if module.id == section.id:
+        return True
+    else:
         return False
 
 
@@ -207,6 +198,14 @@ def page(request, path):
     root = section.hierarchy.get_root()
     module = get_module(section)
     is_visited = user_visits(request)
+    page_dict = dict(section=section,
+                module=module,
+                is_visited=is_visited,
+                needs_submit=needs_submit(section),
+                is_submitted=submitted(section, request.user),
+                modules=root.get_children(),
+                root=section.hierarchy.get_root(),
+                )
 
     # dashboard ajax
     if request.POST.get('module'):
@@ -214,13 +213,19 @@ def page(request, path):
             process_dashboard_ajax(request.user, section, module))
 
     #is the user allowed?
-    if not request.user.is_anonymous():
-        section.user_visit(request.user)
+    if request.user.is_anonymous():
+        section.user_pagevisit(request.user)
 
     rv = redirect_to_first_section_if_root(section, root)
     if rv:
         return rv
-    update_status(section, request.user, module)
+
+    # is the page already completed? If so, do not update status
+    if(section.get_uservisit(request.user) and 
+        section.get_uservisit(request.user).status =="complete"):
+        return page_dict
+    else:    
+        update_status(section, request.user, module)
 
     if request.method == "POST":
         return page_post(request, section, module)
@@ -229,14 +234,8 @@ def page(request, path):
     # decide whether to change status
     previous_section_handle_status(section, request, module)
 
-    return dict(section=section,
-                module=module,
-                is_visited=is_visited,
-                needs_submit=needs_submit(section),
-                is_submitted=submitted(section, request.user),
-                modules=root.get_children(),
-                root=section.hierarchy.get_root(),
-                )
+    #return page
+    return page_dict
 
 
 def previous_section_handle_status(section, request, module):
