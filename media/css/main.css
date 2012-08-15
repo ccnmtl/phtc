@@ -118,7 +118,7 @@ body {
 
 .module {
 	border-bottom: 1px dotted #ccc;
-	line-height: 26px;
+	line-height: 30px;
 	padding-right: 15px;
 }
 
@@ -162,7 +162,7 @@ p.smalltxt
 .footer {
     display: block;
     clear: both;
-    padding-top: 30px;
+    padding-top: 50px;
     padding-bottom: 10px;
     width: 960px;
     background-color: #ffffff;
@@ -189,14 +189,14 @@ h1 {
     line-height: 36px;
     margin-top: 0;
     margin-bottom: 0;
-    padding-top: 20px;
+    padding-top: 0;
     padding-bottom: 30px;
 }
 
 h2 {
     margin-top: 0;
     margin-bottom: 0;
-    padding-top: 20px;
+    padding-top: 0;
     padding-bottom: 30px;
 }
 
@@ -242,8 +242,9 @@ h2 {
     }
 
 .row {
+    padding-top: 20px;
     margin-left: 0;
-    }
+}
 
 .divclearfix {
     clear: both;
@@ -274,6 +275,7 @@ h2 {
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
           border-radius: 6px;
+    min-height: 400px;
 }
 
 .part {
@@ -293,12 +295,67 @@ h2 {
     float: left;
 }
 
-.in-progress {
+.inprogress-icon {
+    width: 30px;
+    height: 30px;
     display: block;
-    float: right;
+    float: left;
+    background: transparent url('../img/status_inprogress.png') left center no-repeat;
+}
+
+.uninitiated-icon {
+    width: 30px;
+    height: 30px;
+    display: block;
+    float: left;
+    background: transparent url('../img/status_uninitiated_gray.png') left center no-repeat;
+}
+
+.completed-icon {
+    width: 30px;
+    height: 30px;
+    display: block;
+    float: left;
+    background: transparent url('../img/status_completed.png') left center no-repeat;
 }
 
 .certificate {
+    width: 30px;
+    height: 30px;
     display: block;
     float: right;
+    background: transparent url('../img/icon_printer.png') center center no-repeat;
 }
+
+body.dashboard .content{
+	min-height:500px;
+}
+
+#page-load {
+	width: 400px;
+	position: relative !important;
+	margin: -60px 0 0 535px;
+}
+
+#page-load h1 {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	color: #ccc;
+	font-style: italic;
+	font-size: 24px;
+	font-weight: normal;
+}
+
+a.uninitiated {
+    color: #0099cc;
+}
+
+a.inprogress {
+    color: #336699;
+}
+
+a.completed {
+    color: #333;
+}
+
