@@ -231,16 +231,6 @@ h2 {
     text-align: right;
 }
 
-.no-left-sidebar #sidebar,
-.no-left-sidebar #sidebarleft {
-    display: none;
-}
-
-.no-left-sidebar #right-content,
-.no-left-sidebar #maincontent {
-    width: 940px;
-    }
-
 .row {
     padding-top: 20px;
     margin-left: 0;
@@ -248,6 +238,18 @@ h2 {
 
 .divclearfix {
     clear: both;
+}
+
+#maincontent {
+    width: 680px;
+    padding-right: 20px;
+}
+
+#sidebarleft {
+    width: 209px;
+    border-right: 1px dotted #ccc;
+    padding-right: 10px;
+    font-size: 12px;
 }
 
 #sidebarleft ul {
@@ -261,13 +263,24 @@ h2 {
 
 #sidebarleft li {
     color: #999;
-    padding: 2px 0;
+    padding: 8px 0 0 0;
     line-height: 130%;
 }
 
 #sidebarleft li b {
     color: #000;
 }
+
+.no-left-sidebar #sidebar,
+.no-left-sidebar #sidebarleft {
+    display: none;
+}
+
+.no-left-sidebar #right-content,
+.no-left-sidebar #maincontent {
+    width: 940px;
+    padding-right: 0;
+    }
 
 .parts {
   padding: 10px;
@@ -282,17 +295,32 @@ h2 {
 	display: none;
 }
 
+.parttitle {
+    line-height: 24px;
+}
+
 .section {
     margin-left: 20px;
+    line-height: 24px;
 }
 
 .sub {
     margin-left: 40px;
+   line-height: 24px;
 }
 
 .show-module {
     display: block;
     float: left;
+}
+
+.link-title {
+    display: block;
+    float: left;
+}
+
+.unavailable {
+    color: #999;
 }
 
 .inprogress-icon {
@@ -303,6 +331,14 @@ h2 {
     background: transparent url('../img/status_inprogress.png') left center no-repeat;
 }
 
+.inprogress-icon-sml {
+    width: 24px;
+    height: 24px;
+    display: block;
+    float: left;
+    background: transparent url('../img/status_inprogress_sml.png') center center no-repeat;
+}
+
 .uninitiated-icon {
     width: 30px;
     height: 30px;
@@ -311,12 +347,44 @@ h2 {
     background: transparent url('../img/status_uninitiated_gray.png') left center no-repeat;
 }
 
+.uninitiated-icon-sml {
+    width: 24px;
+    height: 24px;
+    display: block;
+    float: left;
+    background: transparent url('../img/status_uninitiated_gray_sml.png') center center no-repeat;
+}
+
+.unavailable-icon {
+    width: 30px;
+    height: 30px;
+    display: block;
+    float: left;
+    background: transparent url('../img/shim.png') left center no-repeat;
+}
+
+.unavailable-icon-sml {
+    width: 24px;
+    height: 24px;
+    display: block;
+    float: left;
+    background: transparent url('../img/shim.png') left center no-repeat;
+}
+
 .completed-icon {
     width: 30px;
     height: 30px;
     display: block;
     float: left;
     background: transparent url('../img/status_completed.png') left center no-repeat;
+}
+
+.completed-icon-sml {
+    width: 24px;
+    height: 24px;
+    display: block;
+    float: left;
+    background: transparent url('../img/status_completed_sml.png') center center no-repeat;
 }
 
 .certificate {
@@ -359,3 +427,6 @@ a.completed {
     color: #333;
 }
 
+.pager {
+    margin-top: 50px;
+}
