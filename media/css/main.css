@@ -191,6 +191,7 @@ h1 {
     margin-bottom: 0;
     padding-top: 0;
     padding-bottom: 30px;
+    color: #000;
 }
 
 h2 {
@@ -430,3 +431,128 @@ a.completed {
 .pager {
     margin-top: 50px;
 }
+
+
+
+
+
+
+
+.show-answer .cases
+{
+	margin: 0 0 2em 0;
+	padding: 10px;
+	border: 1px solid #ffcc99;
+	background-color: #FCF8E3;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+.show-answer .casetitle
+{
+    font-weight: bold;
+    color: #cc6633;
+    font-style: italic;
+    font-size: 14px;
+}
+
+.show-answer .casequestion p
+{
+	margin: 0 0 20px;
+	padding: 0;
+	border: 0;
+	font-weight: normal;
+    font-size: 18px;
+}
+
+.answerchoices li
+{
+	margin: 0 0 1em 0;
+	padding: 0;
+	border: 0;
+	list-style-type:lower-alpha;
+}
+
+.answerchoices li a
+{
+	display: block;
+	padding-left: 20px;
+	background: url('../img/radio_off.jpg') top left no-repeat;
+	color: #000 !important;
+	text-decoration: none;
+}
+
+.answerchoices li a:hover
+{
+	display: block;
+	background: url('../img/radio_hover.jpg') top left no-repeat;
+	color: #000;
+	text-decoration: none;
+}
+
+.answerchoices li a.radiobutton_on
+{
+	display: block;
+	padding-left: 20px;
+	background: url('../img/radio_check.jpg') top left no-repeat;
+}
+
+.answerchoices li a.radiobutton_on:hover
+{
+	display: block;
+	background: url('../img/radio_check.jpg') top left no-repeat;
+}
+
+.answerkeys
+{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background-color: #fff;
+}
+
+.showtoggle
+{
+	margin: 0;
+	padding: 5px;
+	border: 0;
+	border: 1px solid #999;
+}
+
+.correct
+{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-weight: bold;
+	color: #393;
+	text-transform: capitalize;
+}
+
+.incorrect
+{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-weight: bold;
+	color: #c00;
+	text-transform: capitalize;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
