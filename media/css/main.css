@@ -432,15 +432,9 @@ a.completed {
     margin-top: 50px;
 }
 
-
-
-
-
-
-
-.show-answer .cases
+.cases
 {
-	margin: 0 0 2em 0;
+	margin: 0 0 20px 0;
 	padding: 10px;
 	border: 1px solid #ffcc99;
 	background-color: #FCF8E3;
@@ -449,15 +443,16 @@ a.completed {
           border-radius: 6px;
 }
 
-.show-answer .casetitle
+.casetitle
 {
     font-weight: bold;
     color: #cc6633;
     font-style: italic;
     font-size: 14px;
+    margin-bottom: 5px;
 }
 
-.show-answer .casequestion p
+.casequestion p
 {
 	margin: 0 0 20px;
 	padding: 0;
@@ -466,58 +461,17 @@ a.completed {
     font-size: 18px;
 }
 
-.answerchoices li
+.casequestion li
 {
-	margin: 0 0 1em 0;
+	margin: 0 0 13px 0;
 	padding: 0;
 	border: 0;
-	list-style-type:lower-alpha;
+	list-style:none;
 }
 
-.answerchoices li a
+.case-feedback .well
 {
-	display: block;
-	padding-left: 20px;
-	background: url('../img/radio_off.jpg') top left no-repeat;
-	color: #000 !important;
-	text-decoration: none;
-}
-
-.answerchoices li a:hover
-{
-	display: block;
-	background: url('../img/radio_hover.jpg') top left no-repeat;
-	color: #000;
-	text-decoration: none;
-}
-
-.answerchoices li a.radiobutton_on
-{
-	display: block;
-	padding-left: 20px;
-	background: url('../img/radio_check.jpg') top left no-repeat;
-}
-
-.answerchoices li a.radiobutton_on:hover
-{
-	display: block;
-	background: url('../img/radio_check.jpg') top left no-repeat;
-}
-
-.answerkeys
-{
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background-color: #fff;
-}
-
-.showtoggle
-{
-	margin: 0;
-	padding: 5px;
-	border: 0;
-	border: 1px solid #999;
+    background-color: #fff;
 }
 
 .correct
