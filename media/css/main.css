@@ -96,7 +96,8 @@ body {
 
 .pageblock,
 .pageblock p,
-.pageblock li {
+.pageblock li,
+#welcome p {
     font-size: 14px;
     line-height: 140%;
     margin: 0 0 14px; 0;
