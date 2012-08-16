@@ -25,7 +25,6 @@ def redirect_to_first_section_if_root(section, root):
 def update_status(section, user, module):
     if user.is_anonymous():
         return
-        
     prev_status = False
     prev_section = section.get_previous()
     if prev_section:
@@ -113,8 +112,8 @@ def make_sure_module1_parts_are_allowed(module, user):
             if part_status == "in_progress":
                 try:
                     visit = UserPageVisit.objects.get(
-                    section_id=part.get_previous().id,
-                    user_id=user_id)
+                        section=part.get_previous(),
+                        user=user)
                     visit.status = "complete"
                     visit.save()
                 except UserPageVisit.DoesNotExist:
@@ -136,7 +135,7 @@ def make_sure_parts_are_allowed(module, user, section, is_module):
             if UserPageVisit.objects.get(
                 section=module,
                 user=user).status == "complete":
-                module.user_pagevisit(request.user, status="complete")
+                module.user_pagevisit(user, status="complete")
                 return
             try:
                 status = "exists"
@@ -152,7 +151,7 @@ def make_sure_parts_are_allowed(module, user, section, is_module):
                     section.get_next().user_pagevisit(user,
                                                       status="complete")
                 elif UserPageVisit.objects.get(
-                    section=ns, 
+                    section=ns,
                     user=user).status == "allowed":
                     section.get_next().user_pagevisit(user,
                                                       status="in_progress")
@@ -221,10 +220,10 @@ def page(request, path):
         return rv
 
     # is the page already completed? If so, do not update status
-    if(section.get_uservisit(request.user) and 
-        section.get_uservisit(request.user).status =="complete"):
+    if(section.get_uservisit(request.user) and
+        section.get_uservisit(request.user).status == "complete"):
         return page_dict
-    else:    
+    else:
         update_status(section, request.user, module)
 
     if request.method == "POST":
