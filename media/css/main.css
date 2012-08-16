@@ -541,8 +541,22 @@ td
 	background-color: #fff;
 	text-align: left;
 	font-weight: bold;
+	border-left: none;
+	border-right: none;
+	border-top: none;
+}
+
+.th00
+{
+	background-color: #fff;
+	text-align: left;
+	font-weight: bold;
+	font-size: 11px;
 	border: 1px solid #999;
-	
+	color: #666;
+	border-left: none;
+	border-right: none;
+	border-bottom: none;
 }
 
 .th1
