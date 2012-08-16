@@ -197,10 +197,7 @@ def is_module_one(module):
 
 
 def is_module(module, section):
-    if module.id == section.id:
-        return True
-    else:
-        return False
+    return module.id == section.id
 
 
 def process_dashboard_ajax(user, section, module):
