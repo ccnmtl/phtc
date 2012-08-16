@@ -72,10 +72,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'tagging',
     'typogrify',
-# TODO: update raven config to this:
-#  http://raven.readthedocs.org/en/latest/config/django.html
-# disable until then
-#    'raven.contrib.django',
+    'raven.contrib.django',
     'munin',
     'south',
     'django_nose',
@@ -116,11 +113,6 @@ STATSD_PREFIX = 'phtc'
 STATSD_HOST = '127.0.0.1'
 STATSD_PORT = 8125
 STATSD_PATCHES = ['django_statsd.patches.db', ]
-
-SENTRY_REMOTE_URL = 'http://sentry.ccnmtl.columbia.edu/sentry/store/'
-# remember to set the SENTRY_KEY in a local_settings.py
-# as documented in the wiki
-SENTRY_SITE = 'phtc'
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 if 'test' in sys.argv:
