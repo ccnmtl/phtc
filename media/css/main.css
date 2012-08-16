@@ -251,8 +251,8 @@ h2 {
 }
 
 #maincontent {
-    width: 680px;
-    padding-right: 20px;
+    width: 670px;
+    padding-right: 30px;
 }
 
 #sidebarleft {
@@ -513,19 +513,51 @@ a.completed {
 	text-transform: capitalize !important;
 }
 
+table
+{
+	margin: 14px 0;
+	padding: 0;
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	font-size: 100%;
+}
 
+th
+{
+	border: 1px solid #999;
+	border-collapse: collapse;
+	padding: 5px;
+}
 
+td
+{
+	border: 1px solid #999;
+	border-collapse: collapse;
+	padding: 5px;
+}
 
+.th0
+{
+	background-color: #fff;
+	text-align: left;
+	font-weight: bold;
+	border: 1px solid #999;
+	
+}
 
+.th1
+{
+	background-color: #ffcc99;
+	text-align: left;
+	font-weight: bold;
+	border: 1px solid #999;
+}
 
-
-
-
-
-
-
-
-
-
-
+.th2
+{
+	background-color: #fff1e1;
+	text-align: left;
+	vertical-align: top;
+	font-weight: bold;
+}
 
