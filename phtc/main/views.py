@@ -10,6 +10,7 @@ from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
 from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
 
 
 def redirect_to_first_section_if_root(section, root):
@@ -62,17 +63,29 @@ def user_visits(request):
 
 
 def send_post_test_email(user, section, module, request):
-    email = EmailMessage()
-    email.subject = "Public Health Training Diploma"
-    section_msg = module.label
-    email.body = ('Congratulations on completing '
-                  + section_msg
-                  + 'click the following link: '
-                  + 'http://' + request.get_host() + '/certificate'
-                  + module.get_absolute_url())
-    email.from_email = "lowernysphtc.org <no-reply@lowernysphtc.org>"
-    email.to = [user.email, ]
-    email.send(fail_silently=False)
+    subject, from_email, to = 'Public Health Training Diploma', 'no-reply@lowernysphtc.org', user.email
+    text_content = ''
+    html_content = ('<p>Congratulations on successfully completing the online training program ' +module.label+ '.</p>'
+                    '<p>You may now access your certificate of completion for this program. Simply, '+
+                    '<a href="http://' + request.get_host() + '/dashboard/">click here</a> '+
+                    'to return to your personal dashboard; a link to your certificate is '+
+                    '<a href="'+ 'http://' + request.get_host() + '/certificate' + module.get_absolute_url()+
+                    '">here</a>.</p>'+
+                    '<p>To request continuing education credit for this training program, please write to '+
+                    'phtc@columbia.edu. In an email, please include your name, contact information, and the type '+
+                    'of credit you are requesting, and a staff member of the New York City-Long Island-Lower Tri '+
+                    'County Public Health Training Center will follow-up with you shortly.</p>'+
+                    '<p>If you experience any technical difficulties in accessing the certificate or the dashboard, '+
+                    'please also contact phtc@clumbia.edu.</p>'+
+                    '<p>Thank you for choosing the New York City-Long Island-Lower Tri County Public Health Training '+
+                    'Center. We hope you will return to our site often and take advantage of new content and other '+
+                    'training offerings</p>'+
+                    '<p>New York City-Long Island-Lower Tri-County Public Health Training Center</br>'+
+                    'Columbia University | Mailman School of Public Health</br>722 West 168th Street, Room 552<br/>'+
+                    'New York, NY 10032</br>Phone: (212) 305-6984</br>Fax: (212) 342-9004</br>Email: phtc@columbia.edu</p>')
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
 
 
 def page_post(request, section, module):
@@ -368,15 +381,20 @@ def certificate(request, path):
     root = section.hierarchy.get_root()
     module = get_module(section)
     is_visited = user_visits(request)
-    return dict(section=section,
-            module=module,
-            is_visited=is_visited,
-            needs_submit=needs_submit(section),
-            is_submitted=submitted(section, request.user),
-            modules=root.get_children(),
-            root=section.hierarchy.get_root(),
-            user=request.user,
-            )
+    #return HttpResponse(module.get_uservisit(request.user).status )
+    #make sure this page is only viewable if the module is completed. 
+    if module.get_uservisit(request.user) and module.get_uservisit(request.user).status == "complete":
+        return dict(section=section,
+                module=module,
+                is_visited=is_visited,
+                needs_submit=needs_submit(section),
+                is_submitted=submitted(section, request.user),
+                modules=root.get_children(),
+                root=section.hierarchy.get_root(),
+                user=request.user,
+                )
+    else:
+        return HttpResponseRedirect('/dashboard/')
 
 
 def render_dashboard(request):
