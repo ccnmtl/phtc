@@ -94,6 +94,15 @@ body {
     border: 0;
 }
 
+.pageblock,
+.pageblock p,
+.pageblock li {
+    font-size: 14px;
+    line-height: 140%;
+    margin: 0 0 14px; 0;
+    padding: 0 0 0 0;
+}
+
 .container {
     margin: auto;
     width: 960px;
@@ -289,7 +298,9 @@ h2 {
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
           border-radius: 6px;
-    min-height: 400px;
+    min-height: 330px;
+    height: 330px;
+    overflow: auto;
 }
 
 .part {
@@ -459,9 +470,17 @@ a.completed {
 	border: 0;
 	font-weight: normal;
     font-size: 18px;
+    line-height: 120%;
 }
 
 .casequestion li
+{
+	margin: 0 0 13px 0;
+	padding: 0;
+	border: 0;
+}
+
+.casequestion .answerchoices li
 {
 	margin: 0 0 13px 0;
 	padding: 0;
@@ -481,7 +500,7 @@ a.completed {
 	border: 0;
 	font-weight: bold;
 	color: #393;
-	text-transform: capitalize;
+	text-transform: capitalize !important;
 }
 
 .incorrect
@@ -491,7 +510,7 @@ a.completed {
 	border: 0;
 	font-weight: bold;
 	color: #c00;
-	text-transform: capitalize;
+	text-transform: capitalize !important;
 }
 
 
