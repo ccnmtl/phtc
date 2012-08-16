@@ -191,6 +191,7 @@ h1 {
     margin-bottom: 0;
     padding-top: 0;
     padding-bottom: 30px;
+    color: #000;
 }
 
 h2 {
@@ -430,3 +431,82 @@ a.completed {
 .pager {
     margin-top: 50px;
 }
+
+.cases
+{
+	margin: 0 0 20px 0;
+	padding: 10px;
+	border: 1px solid #ffcc99;
+	background-color: #FCF8E3;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+.casetitle
+{
+    font-weight: bold;
+    color: #cc6633;
+    font-style: italic;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.casequestion p
+{
+	margin: 0 0 20px;
+	padding: 0;
+	border: 0;
+	font-weight: normal;
+    font-size: 18px;
+}
+
+.casequestion li
+{
+	margin: 0 0 13px 0;
+	padding: 0;
+	border: 0;
+	list-style:none;
+}
+
+.case-feedback .well
+{
+    background-color: #fff;
+}
+
+.correct
+{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-weight: bold;
+	color: #393;
+	text-transform: capitalize;
+}
+
+.incorrect
+{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-weight: bold;
+	color: #c00;
+	text-transform: capitalize;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
