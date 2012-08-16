@@ -137,14 +137,8 @@ def make_sure_module1_parts_are_allowed(module, user):
             part_status = UserPageVisit.objects.get(section=part,
                                                     user=user)
             if part_status == "in_progress":
-                try:
-                    visit = UserPageVisit.objects.get(
-                        section=part.get_previous(),
-                        user=user)
-                    visit.status = "complete"
-                    visit.save()
-                except UserPageVisit.DoesNotExist:
-                    pass
+                if part.get_previous().get_uservisit(user):
+                    part.get_previous().user_pagevisit(user, status="complete")
         except UserPageVisit.DoesNotExist:
             part_status = UserPageVisit.objects.get_or_create(
                 section=part,
