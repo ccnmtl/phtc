@@ -452,7 +452,7 @@ a.completed {
 	background-color: #FCF8E3;
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
-          border-radius: 6px;
+    border-radius: 6px;
 }
 
 .casetitle
