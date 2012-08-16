@@ -34,7 +34,7 @@ def update_status(section, user, module):
     uv = section.get_uservisit(user)
     if not uv and not prev_status:
         return
-    if not is_module(module, user, section):
+    if not is_module(module, section):
         status = calculate_status(prev_status, uv)
         section.user_pagevisit(user, status=status)
 
@@ -134,21 +134,15 @@ def make_sure_module1_parts_are_allowed(module, user):
     parts = module.get_children()
     for part in parts:
         try:
-            part_status = UserPageVisit.objects.get(section_id=part.id,
-                                                    user_id=user.id)
+            part_status = UserPageVisit.objects.get(section=part,
+                                                    user=user)
             if part_status == "in_progress":
-                try:
-                    visit = UserPageVisit.objects.get(
-                        section=part.get_previous(),
-                        user=user)
-                    visit.status = "complete"
-                    visit.save()
-                except UserPageVisit.DoesNotExist:
-                    pass
+                if part.get_previous().get_uservisit(user):
+                    part.get_previous().user_pagevisit(user, status="complete")
         except UserPageVisit.DoesNotExist:
             part_status = UserPageVisit.objects.get_or_create(
-                section_id=part.id,
-                user_id=user.id,
+                section=part,
+                user=user,
                 status="allowed")
 
 
@@ -196,11 +190,8 @@ def is_module_one(module):
     return module.id == module_one.id
 
 
-def is_module(module, user, section):
-    if module.id == section.id:
-        return True
-    else:
-        return False
+def is_module(module, section):
+    return module.id == section.id
 
 
 def process_dashboard_ajax(user, section, module):
@@ -213,7 +204,7 @@ def process_dashboard_ajax(user, section, module):
     else:
         module.user_pagevisit(user, status="in_progress")
         make_sure_parts_are_allowed(module, user, section,
-            is_module(module, user, section))
+            is_module(module, section))
         return reverse("dashboard")
 
 
@@ -270,7 +261,7 @@ def previous_section_handle_status(section, request, module):
         prev_section_visit = prev_section.get_uservisit(request.user)
         if (prev_section_visit
             and prev_section_visit.status == "in_progress"
-            and not is_module(module, request.user, prev_section)):
+            and not is_module(module, prev_section)):
             prev_section.user_pagevisit(request.user, status="complete")
         else:
             # Need to catch whether a part has been flagged as "allowed"
