@@ -16,15 +16,18 @@
 }
 #inner-wrap{
 	position: absolute;
-	margin: -230px 0 0 70px;
+	margin-top: -450px;
+	margin-left: 80px;
+	text-align: center;
 }
 #inner-wrap #user{
-	font-size: 14px;
+	font-size: 24px;
 	font-weight: bold;
 }
 #inner-wrap #label{
-	width: 230px;
-	font-size: 14px;
+	width: 500px;
+	font-size: 24px;
+	line-height: 28px;
 	font-weight: bold;
 	padding-top:15px; 
 }
@@ -32,17 +35,47 @@
 	padding: 10px;
 }
 
+/*
 img.certificate-diploma{
 	background-color: #E0E0E0 ;
 	padding: 5px 5px 5px 5px ;
 }
+*/
 
 a.print-certificate{
 	color: red ;
 }
 
+@media print 
+{
+
+	#inner-wrap{
+		position: absolute;
+		margin-top: -500px;
+		margin-left: 160px;
+		text-align: center;
+		font-family: arial, helvetica, sans-serif !important;
+	}
+	
+	#inner-wrap #user{
+		font-size: 28px;
+		font-weight: bold;
+	}
+	
+	#inner-wrap #label{
+		width: 500px;
+		font-size: 24px;
+		line-height: 28px;
+		font-weight: bold;
+		padding-top:15px; 
+	}
+
+
+}
 </style>
+
 <h2>Certificate Earned</h2>
+
 	<div class="printable">
  		<img class="certificate-diploma" src="/site_media/img/certificate_blank.jpg">
  		<div id="inner-wrap">
@@ -50,9 +83,11 @@ a.print-certificate{
 			<div id="label">{{ module.label }}</div>
  		</div><!--end inner-wrap-->
 	</div><!--end .printable-->
+	
 	<p>
 		<a class="print-certificate">Print Certificate</a>
 	</p>
+	
 	<script src="/site_media/js/jquery.print.js"></script>
 	<script>
 		jQuery( "a.print-certificate" )
