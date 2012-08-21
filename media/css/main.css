@@ -444,6 +444,13 @@ a.completed {
     margin-top: 50px;
 }
 
+.well {
+    border-color: #ccc;
+    margin-right: 5px;
+    margin-left: 5px;
+    padding: 10px;
+}
+
 .cases
 {
 	margin: 0 0 20px 0;
