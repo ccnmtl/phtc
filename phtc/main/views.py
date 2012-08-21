@@ -322,15 +322,27 @@ def get_user_profile(request):
     try:
         profile = UserProfile.objects.get(user=request.user)
         form = UserRegistrationForm(initial={
+                'fname': profile.fname,
+                'lname': profile.lname,
                 'username': request.user.username,
                 'email': request.user.email,
                 'sex': profile.sex,
                 'age': profile.age,
                 'origin': profile.origin,
                 'ethnicity': profile.ethnicity,
-                'disadvantaged': profile.disadvantaged,
+                'degree': profile.degree,
+                'work_city': profile.work_city,
+                'work_state': profile.work_state,
+                'work_zip': profile.work_zip,
                 'employment_location': profile.employment_location,
+                'other_employment_location':profile.other_employment_location,
                 'position': profile.position,
+                'other_position_category': profile.other_position_category,
+                'dept_health': profile.dept_health,
+                'geo_dept_health': profile.geo_dept_health,
+                'experience': profile.experience,
+                'rural': profile.rural
+
                 })
         return dict(profile=profile, form=form)
     except UserProfile.DoesNotExist:
@@ -351,13 +363,32 @@ def update_user_profile(request):
         userprofile = UserProfile.objects.get(user=request.user)
     except UserProfile.DoesNotExist:
         userprofile = UserProfile.objects.create(user=request.user)
+
+    if userprofile.other_employment_location:
+        userprofile.other_employment_location = form.data["other_employment_location"]
+
+    if userprofile.other_position_category:
+        userprofile.other_position_category = form.data["other_position_category"]
+
+    userprofile.fname = form.data["fname"]
+    userprofile.lname = form.data["lname"]
+    userprofile.degree = form.data["degree"]
     userprofile.sex = form.data["sex"]
     userprofile.age = form.data["age"]
     userprofile.origin = form.data["origin"]
     userprofile.ethnicity = form.data["ethnicity"]
-    userprofile.disadvantaged = form.data["disadvantaged"]
+    userprofile.degree = form.data["degree"]
+    userprofile.work_city = form.data["work_city"]
+    userprofile.work_state = form.data["work_state"]
+    userprofile.work_zip = form.data["work_zip"]
     userprofile.employment_location = form.data["employment_location"]
+    
     userprofile.position = form.data["position"]
+    
+    userprofile.dept_health = form.data["dept_health"]
+    userprofile.geo_dept_health = form.data["geo_dept_health"]
+    userprofile.experience = form.data["experience"]
+    userprofile.rural = form.data["rural"]
     userprofile.save()
     request.user.save()
     return HttpResponseRedirect('/profile/?saved=true/')

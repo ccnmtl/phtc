@@ -1,14 +1,15 @@
 //get the form we are dealing with - profile or registration
-alert(jQuery('form') )
-
-
-jQuery('#id_password1')
-    .parent()
-    .append('<span>Leave Blank to keep the same password</span>');
-jQuery('#id_password2')
-    .parent()
-    .append('<span>Leave Blank to keep the same password</span>');
-
+if(jQuery('form').attr('id') == "registration"){
+    var _form = jQuery()
+}else{
+    // add password notes
+    jQuery('#id_password1')
+        .parent()
+        .append('<span>Leave Blank to keep the same password</span>');
+    jQuery('#id_password2')
+        .parent()
+        .append('<span>Leave Blank to keep the same password</span>');
+}
 jQuery('input.btn').click(function () {
     var valid = 0;
     var password_valid = 0;
@@ -40,8 +41,9 @@ jQuery('input.btn').click(function () {
         jQuery(".alert").show();
         password_valid += 1;
     }
+    //submit the form if valid
     if (valid === 0 && password_valid === 0) {
-        jQuery('#user_profile').submit();
+        jQuery('#' + jQuery('form').attr('id')).submit();
     }
 });//end .click
 
