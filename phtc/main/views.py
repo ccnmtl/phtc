@@ -364,11 +364,15 @@ def update_user_profile(request):
     except UserProfile.DoesNotExist:
         userprofile = UserProfile.objects.create(user=request.user)
 
-    if userprofile.other_employment_location:
+    try:
         userprofile.other_employment_location = form.data["other_employment_location"]
+    except:
+        pass
 
-    if userprofile.other_position_category:
+    try:
         userprofile.other_position_category = form.data["other_position_category"]
+    except:
+        pass
 
     userprofile.fname = form.data["fname"]
     userprofile.lname = form.data["lname"]
