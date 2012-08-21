@@ -9,12 +9,12 @@ header#masthead
 header h1 {
     background: url('/site_media/img/banner.jpg') 0 0 no-repeat;
     height: 100px;
-    width: 669px;
+    width: 940px;
 }
 header h1 a {
     display: block;
     height: 100px;
-    width: 669px;
+    width: 640px;
 }
 header h1 a span {
     display: none;
