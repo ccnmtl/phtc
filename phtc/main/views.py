@@ -335,7 +335,7 @@ def get_user_profile(request):
                 'work_state': profile.work_state,
                 'work_zip': profile.work_zip,
                 'employment_location': profile.employment_location,
-                'other_employment_location':profile.other_employment_location,
+                'other_employment_location': profile.other_employment_location,
                 'position': profile.position,
                 'other_position_category': profile.other_position_category,
                 'dept_health': profile.dept_health,
@@ -365,12 +365,14 @@ def update_user_profile(request):
         userprofile = UserProfile.objects.create(user=request.user)
 
     try:
-        userprofile.other_employment_location = form.data["other_employment_location"]
+        userprofile.other_employment_location = form.data[
+            "other_employment_location"]
     except:
         pass
 
     try:
-        userprofile.other_position_category = form.data["other_position_category"]
+        userprofile.other_position_category = form.data[
+            "other_position_category"]
     except:
         pass
 
@@ -386,9 +388,7 @@ def update_user_profile(request):
     userprofile.work_state = form.data["work_state"]
     userprofile.work_zip = form.data["work_zip"]
     userprofile.employment_location = form.data["employment_location"]
-    
     userprofile.position = form.data["position"]
-    
     userprofile.dept_health = form.data["dept_health"]
     userprofile.geo_dept_health = form.data["geo_dept_health"]
     userprofile.experience = form.data["experience"]
