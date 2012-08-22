@@ -11,7 +11,6 @@ Feature: Registration Form
         Then there is an "id_age" select
         Then there is an "id_origin" select
         Then there is an "id_ethnicity" select
-        Then there is an "id_disadvantaged" select
         Then there is an "id_employment_location" select
         Then there is an "id_position" select
-        Then there is a "Send activation email" submit button
+
