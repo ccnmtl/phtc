@@ -4,8 +4,11 @@ jQuery(document).ready(function(){
     var this_scenario = this_scenario + 'form';
     
     function generaterow() {
-        for (i=0; i<4; i++) {
-            jQuery('form').append('<input type="text" size="1" maxlength="1" />');
+        for (i=0; i<2; i++) {
+            for (j=0; j<4; j++) {
+                jQuery('form').append('<input type="text" size="1" maxlength="1" id="r'+i+'c'+j+'" />');
+            }
+        jQuery('form').append('<br />');
         }
     }
 
