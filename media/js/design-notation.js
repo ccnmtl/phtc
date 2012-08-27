@@ -1,5 +1,5 @@
-var this_scenario = jQuery('.interactive-scenario').attr('id');
-var this_scenario = this_scenario + 'form';
+var scenario = jQuery('.interactive-scenario').attr('id');
+var this_scenario = scenario + 'form';
 
 function generaterow() {
     for (i=0; i<2; i++) {
@@ -43,12 +43,33 @@ function check_input_validity() {
  }
 
 function check_answer() {
+    var scenario2_answer = ' '+'O'+'X'+'O'+' '+' '+' '+' ';
+    var scenario3_answer = 'R'+'O'+'X'+'O'+'R'+'O'+' '+'O';
     jQuery('#checkanswer').click(function() {
-        var values = jQuery('input[ name="notation"]').map(function(){return $(this).val();}).get();
-        alert(values);
+        // get the values of the input
+        var useranswer = "";
+        jQuery('.hasvalue').each(function(){
+            useranswer+=(jQuery(this).val());            
+        });
+        useranswer = useranswer.toUpperCase();
+        
+        if (useranswer==scenario2_answer) {alert('correct');}
+        else {alert('my cat is smarter than you are');}
+        
+      //  console.log(useranswer);
+      //  var useranswer = [];
+     //   jQuery('.hasvalue').each(function(){
+     //       useranswer.push(jQuery(this).val());            
+     //   });
+     //   console.log(useranswer);
+     // check for null values, if null (not blank or -), return error saying user needs to completer everything
+     // transform to lower case or uppercase, convert 0s if necessary
+     // compare to the correct answer
+     // return some kind of answer
+     // 
+     // 
     });
 }
-
 jQuery(document).ready(function(){
 
     create_designform();
