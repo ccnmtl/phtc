@@ -18,8 +18,15 @@ jQuery(document).ready(function(){
         generaterow();
     }
     
-    
-    
     create_designform();
+
+    jQuery('input').keyup(function() {
+    var value = jQuery(this).val();
+    if (value=="0") { value = 'o'; jQuery(this).val('o');}
+    if (value!="") {jQuery(this).addClass('hasvalue');}
+    else if (jQuery(this).attr('class')) {jQuery(this).removeClass();}
+    });
+    
+    
     
 });//end doc.ready
