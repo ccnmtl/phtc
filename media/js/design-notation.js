@@ -1,5 +1,3 @@
-jQuery(document).ready(function(){
-
     var this_scenario = jQuery('.interactive-scenario').attr('id');
     var this_scenario = this_scenario + 'form';
     
@@ -18,15 +16,28 @@ jQuery(document).ready(function(){
         generaterow();
     }
     
-    create_designform();
+    function check_input_validity() {
+        jQuery('input').keyup(function() {
+        var value = jQuery(this).val();
+        if (value!="") {
+            if (value=="0") { value = jQuery(this).val('o');}
+            if (value=="-") { value = jQuery(this).val(' ');}
+            value = jQuery(this).val();
+            value = value.toUpperCase();
+            if (value=='O' || value=='X' || value=='R' || value=='NR' || value==' ') {
+             jQuery(this).addClass('hasvalue');
+           }
+           else {
+               alert('You have entered an illegal value "' + value +'". Please read the instructions and try again.');
+           }
+        }
+        else if (jQuery(this).attr('class')) {jQuery(this).removeClass();}
+        });
+     }
 
-    jQuery('input').keyup(function() {
-    var value = jQuery(this).val();
-    if (value=="0") { value = 'o'; jQuery(this).val('o');}
-    if (value!="") {jQuery(this).addClass('hasvalue');}
-    else if (jQuery(this).attr('class')) {jQuery(this).removeClass();}
-    });
-    
-    
+jQuery(document).ready(function(){
+
+    create_designform();
+    check_input_validity();
     
 });//end doc.ready
