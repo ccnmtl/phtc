@@ -605,7 +605,7 @@ td
 }
 
 .designNotation .notation_row {
-    width: 230px;
+    width: 255px;
     height: 60px;
 }
 
@@ -680,7 +680,7 @@ td
 }
 
 .designNotation .answerkeyrow {
-    width: 230px;
+    width: 255px;
     height: 60px;
 }
 
@@ -706,7 +706,7 @@ td
 
 .designNotation .answerkeybox {
     border: none;
-    width: 230px;
+    width: 255px;
 }
 
 .designNotation .answerkeybox:hover .answerkey_cell {

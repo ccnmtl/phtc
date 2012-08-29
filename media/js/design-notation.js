@@ -27,7 +27,7 @@ function initScenario() {
        colNum = 5;
        rowNum = 2;
        cellTotal = 10;
-       correctAnswer = scenario3_answer;
+       correctAnswer = finaldesign_answer;
    }
 }
 
