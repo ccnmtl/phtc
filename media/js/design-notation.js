@@ -108,7 +108,7 @@ function check_answer() {
             jQuery('.notation_feedback').addClass('visible');
             jQuery('.no_entry').addClass('visible');
         }
-        else if ((blank_answer<8)&&(blank_answer!=0)) {
+        else if ((blank_answer<cellTotal)&&(blank_answer!=0)) {
             resetFeedback();
             jQuery('.notation_feedback').addClass('visible');
             jQuery('.notation_undetermined').addClass('visible');
