@@ -42,8 +42,9 @@ function generateSelector() {
 }
 
 function generateGrid() {
+    jQuery('.interactive-scenario').append('<div class="notation_gridbox">')
     for (i=0; i<2; i++) {
-        jQuery('.interactive-scenario').append('<div class="notation_row">');
+        jQuery('.notation_gridbox').append('<div class="notation_row">');
     }
     for (j=0; j<colNum; j++) {
         jQuery('.notation_row').append('<div class="notation_field" id="r'+i+'c'+j+'" />')
@@ -56,11 +57,13 @@ function show_notation_select() {
     jQuery(document).click(function() {
         jQuery('.notation_select').removeClass('visible');
         jQuery('.notation_field').removeClass('active');
+        jQuery('.notation_gridbox').removeClass('nomargin_gridbox');
     });
     
     jQuery('.notation_field').click(function(evt) {
         jQuery('.notation_field').removeClass('active');
         jQuery('.notation_select').addClass('visible');
+        jQuery('.notation_gridbox').addClass('nomargin_gridbox');
         evt.stopPropagation();
         srcElement = evt.srcElement || evt.target || evt.originalTarget;
         jQuery(srcElement).addClass('active');
@@ -72,6 +75,7 @@ function show_notation_select() {
         jQuery(srcElement).html(notation_value);
         jQuery('.notation_select').removeClass('visible');
         jQuery('.notation_field').removeClass('active');
+        jQuery('.notation_gridbox').removeClass('nomargin_gridbox');
         jQuery(srcElement).addClass('hasvalue');
     });
 }

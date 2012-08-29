@@ -585,16 +585,32 @@ td
 
 /* MODULE2 INTERACTIVE */
 
+.designNotation .interactive-scenario {
+    margin: 0 auto;
+    width: 300px;
+}
+
+.designNotation .notation_gridbox {
+    padding: 45px 0 0 0;
+}
+
+.designNotation .nomargin_gridbox {
+    padding: 5px 0 0 0;
+}
+
 .designNotation .notation_row {
-    width: 200px;
-    height: 40px;
+    width: 230px;
+    height: 60px;
 }
 
 .designNotation .notation_field {
     float: left;
-    margin: 0px 5px 0px 0px;
-    width: 20px;
-    height: 20px;
+    margin: 0px 8px 0px 0px;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
     border: 1px solid #ccc;
     text-align: center;
     background: #efefef;
@@ -604,7 +620,7 @@ td
 
 .designNotation .hasvalue {
     background-color: #fff !important;
-    border: none;
+    border: 1px solid #fff;
     font-weight: bold;
     text-transform: capitalize;
 }
@@ -613,9 +629,10 @@ td
     background-color: #dfecf9 !important;
 }
 
-.designNotation .active {
+.designNotation .nomargin_gridbox .active {
     border: 2px solid #3399ff;
     background-color: #d8e8f8;
+    margin: 0px 6px 0px 0px;
 }
 
 .designNotation .notation_select {
@@ -623,6 +640,11 @@ td
     width: 250px;
     height: 40px;
     border: none;
+}
+
+.designNotation .notation_feedback {
+    margin: 10px auto;
+   width: 300px;
 }
 
 .designNotation .notation_feedback,
@@ -644,8 +666,9 @@ td
     width: 20px;
     height: 20px;
     line-height: 20px;
-    /*border: 1px solid #ccc;
     padding: 5px;
+    /*border: 1px solid #ccc;
+    padding: ;
     text-align: center;*/
     cursor: pointer;
 }
