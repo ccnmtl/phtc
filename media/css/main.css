@@ -583,3 +583,129 @@ td
 	font-weight: bold;
 }
 
+/* MODULE2 INTERACTIVE */
+
+.designNotation {
+    background-color: #fff !important;
+    margin-right: 100px !important;
+    margin-left: 100px !important;
+}
+
+.designNotation .interactive-scenario {
+    margin: 0 auto;
+    width: 300px;
+}
+
+.designNotation .notation_gridbox {
+    padding: 45px 0 0 0;
+}
+
+.designNotation .nomargin_gridbox {
+    padding: 5px 0 0 0;
+}
+
+.designNotation .notation_row {
+    width: 230px;
+    height: 60px;
+}
+
+.designNotation .notation_field {
+    float: left;
+    margin: 0px 8px 0px 0px;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    text-align: center;
+    background: #efefef;
+    cursor: pointer;
+}
+
+
+.designNotation .hasvalue {
+    background-color: #fff !important;
+    border: 1px solid #fff;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.designNotation .hasvalue:hover {
+    background-color: #dfecf9 !important;
+}
+
+.designNotation .nomargin_gridbox .active {
+    border: 2px solid #3399ff;
+    background-color: #d8e8f8;
+    margin: 0px 6px 0px 0px;
+}
+
+.designNotation .notation_select {
+    display: none;
+    width: 250px;
+    height: 40px;
+    border: none;
+}
+
+.designNotation .notation_feedback {
+    margin: 10px auto;
+   width: 300px;
+}
+
+.designNotation .notation_feedback,
+.designNotation .no_entry,
+.designNotation .notation_undetermined,
+.designNotation .notation_incorrect,
+.designNotation .notation_correct,
+.designNotation .notation_answerkey {
+    display: none;
+}
+
+.designNotation .visible {
+    display: block;
+}
+
+.designNotation .notation_option {
+    float: left;
+    margin-right: 2px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    padding: 5px;
+    /*border: 1px solid #ccc;
+    padding: ;
+    text-align: center;*/
+    cursor: pointer;
+}
+
+.designNotation .answerkeyrow {
+    width: 150px;
+    height: 40px;
+}
+
+.designNotation .answerkey_cell {
+    float: left;
+    margin: 1px 5px 0px 0px;
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
+    border: 1px dotted #fff;
+    text-align: center;
+    background: #fff;
+    font-weight: bold;
+}
+
+.designNotation .notation_answerkey {
+    border: none;
+    width: 150px;
+}
+
+.designNotation .notation_answerkey:hover .answerkey_cell {
+    border: 1px dotted #99ccff;
+}
+
+.designNotation #show_answerkey_grid {
+    cursor: pointer;
+    color: #0099ff;
+}
