@@ -585,6 +585,12 @@ td
 
 /* MODULE2 INTERACTIVE */
 
+.designNotation {
+    background-color: #fff !important;
+    margin-right: 100px !important;
+    margin-left: 100px !important;
+}
+
 .designNotation .interactive-scenario {
     margin: 0 auto;
     width: 300px;
@@ -674,27 +680,29 @@ td
 }
 
 .designNotation .answerkeyrow {
-    width: 200px;
+    width: 150px;
     height: 40px;
-    
 }
 
 .designNotation .answerkey_cell {
     float: left;
     margin: 1px 5px 0px 0px;
-    width: 20px;
-    height: 20px;
-    border: none;
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
+    border: 1px dotted #fff;
     text-align: center;
     background: #fff;
     font-weight: bold;
 }
 
+.designNotation .notation_answerkey {
+    border: none;
+    width: 150px;
+}
+
 .designNotation .notation_answerkey:hover .answerkey_cell {
-    margin: 0px 5px 0px 0px;
     border: 1px dotted #99ccff;
-    width: 18px;
-    height: 18px;
 }
 
 .designNotation #show_answerkey_grid {
