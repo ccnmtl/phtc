@@ -593,7 +593,7 @@ td
 
 .designNotation .interactive-scenario {
     margin: 0 auto;
-    width: 300px;
+    width: 350px;
 }
 
 .designNotation .notation_gridbox {
@@ -650,7 +650,7 @@ td
 
 .designNotation .notation_feedback {
     margin: 10px auto;
-   width: 300px;
+   width: 350px;
 }
 
 .designNotation .notation_feedback,
@@ -680,28 +680,36 @@ td
 }
 
 .designNotation .answerkeyrow {
-    width: 150px;
-    height: 40px;
+    width: 230px;
+    height: 60px;
 }
 
 .designNotation .answerkey_cell {
     float: left;
-    margin: 1px 5px 0px 0px;
-    width: 22px;
-    height: 22px;
-    line-height: 22px;
-    border: 1px dotted #fff;
+    margin: 0px 8px 0px 0px;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+    border: 1px solid #fff;
     text-align: center;
     background: #fff;
     font-weight: bold;
+    text-transform: capitalize;
 }
 
 .designNotation .notation_answerkey {
     border: none;
-    width: 150px;
+    width: 350px;
 }
 
-.designNotation .notation_answerkey:hover .answerkey_cell {
+.designNotation .answerkeybox {
+    border: none;
+    width: 230px;
+}
+
+.designNotation .answerkeybox:hover .answerkey_cell {
     border: 1px dotted #99ccff;
 }
 
