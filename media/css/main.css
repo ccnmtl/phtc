@@ -717,3 +717,7 @@ td
     cursor: pointer;
     color: #0099ff;
 }
+p.your-answer{
+    padding: 0 !important;
+    margin: 0 !important;
+}

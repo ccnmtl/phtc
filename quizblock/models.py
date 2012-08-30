@@ -11,6 +11,7 @@ class Quiz(models.Model):
     pageblocks = generic.GenericRelation(PageBlock)
     description = models.TextField(blank=True)
     rhetorical = models.BooleanField(default=False)
+    reading_exercise = models.BooleanField(default=False)
     feedback = models.BooleanField(default=False)
     matching = models.BooleanField(default=False)
     allow_redo = models.BooleanField(default=True)
@@ -71,6 +72,7 @@ class Quiz(models.Model):
                                           initial=self.description)
             rhetorical = forms.BooleanField(initial=self.rhetorical)
             feedback = forms.BooleanField(initial=self.feedback)
+            reading_exercise = forms.BooleanField(initial=self.reading_exercise)
             matching = forms.BooleanField(initial=self.matching)
             pre_test = forms.BooleanField(initial=self.pre_test)
             post_test = forms.BooleanField(initial=self.post_test)
@@ -89,6 +91,7 @@ class Quiz(models.Model):
             description = forms.CharField(widget=forms.widgets.Textarea())
             rhetorical = forms.BooleanField()
             feedback = forms.BooleanField()
+            reading_exercise = forms.BooleanField()
             matching = forms.BooleanField()
             allow_redo = forms.BooleanField()
             pre_test = forms.BooleanField()
@@ -102,6 +105,7 @@ class Quiz(models.Model):
             description=request.POST.get('description', ''),
             rhetorical=request.POST.get('rhetorical', ''),
             feedback=request.POST.get('feedback', ''),
+            reading_exercise=request.POST.get('reading_exercise', ''),
             matching=request.POST.get('matching', ''),
             allow_redo=request.POST.get('allow_redo', ''),
             pre_test=request.POST.get('pre_test', ''),
@@ -115,6 +119,7 @@ class Quiz(models.Model):
             description=d.get('description', ''),
             rhetorical=d.get('rhetorical', False),
             feedback=d.get('feedback', ''),
+            reading_exercise=d.get('reading_exercise', ''),
             matching=d.get('matching', ''),
             pre_test=d.get('pre_test', ''),
             post_test=d.get('post_test', ''),
@@ -128,6 +133,7 @@ class Quiz(models.Model):
         self.description = vals.get('description', '')
         self.rhetorical = vals.get('rhetorical', '')
         self.feedback = vals.get('feedback', '')
+        self.reading_exercise = vals.get('reading_exercise', '')
         self.matching = vals.get('matching', '')
         self.pre_test = vals.get('pre_test', '')
         self.post_test = vals.get('post_test', '')
@@ -148,6 +154,7 @@ class Quiz(models.Model):
         d = dict(description=self.description,
                  rhetorical=self.rhetorical,
                  feedback=self.feedback,
+                 reading_exercise=self.reading_exercise,
                  matching=self.matching,
                  pre_test=self.pre_test,
                  post_test=self.post_test,
@@ -160,6 +167,7 @@ class Quiz(models.Model):
         self.description = d['description']
         self.rhetorical = d['rhetorical']
         self.feedback = d['feedback']
+        self.reading_exercise = d['reading_exercise']
         self.matching = d['matching']
         self.allow_redo = d.get('allow_redo', True)
         self.save()

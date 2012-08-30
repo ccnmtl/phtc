@@ -1,5 +1,11 @@
 {% load markup %}
   {% comment %} short/long text questions {% endcomment %}
+  {% if block.reading_exercise %}
+  	  <div class="casesanswerdisplay">
+  	  	  <p class="your-answer-feedback">Feedback:</p>
+          <p>{{question.explanation|markdown}}</p>
+      </div>
+  {% else %}
   {% if question.explanation %}
       <div class="casesanswerdisplay">
         <a href="#q{{question.id}}" class="moretoggle">Show explanation &gt;&gt;</a>
@@ -7,4 +13,6 @@
           <p>{{question.explanation|markdown}}</p>
         </div>
       </div>
+   {% endif %}
+
   {% endif %}
