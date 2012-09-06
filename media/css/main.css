@@ -721,3 +721,7 @@ p.your-answer{
     padding: 0 !important;
     margin: 0 !important;
 }
+
+.modalpageNav {
+    float: right;
+}
