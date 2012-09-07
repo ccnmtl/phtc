@@ -725,3 +725,39 @@ p.your-answer{
 .modalpageNav {
     float: right;
 }
+
+.modal
+{
+    width: 700px;
+}
+
+.modal table
+{
+	margin: 14px 0;
+	padding: 0;
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	font-size: 100%;
+}
+
+.modal th
+{
+	border: 1px solid #999;
+	border-collapse: collapse;
+	padding: 5px;
+}
+
+.modal td
+{
+	border: 1px solid #999;
+	border-collapse: collapse;
+	padding: 5px;
+}
+
+.modal .th1
+{
+	background-color: #ffcc99;
+	text-align: left;
+	font-weight: bold;
+	border: 1px solid #999;
+}
