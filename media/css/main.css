@@ -745,6 +745,7 @@ p.your-answer{
 	border: 1px solid #999;
 	border-collapse: collapse;
 	padding: 5px;
+	vertical-align: bottom;
 }
 
 .modal td
@@ -752,6 +753,7 @@ p.your-answer{
 	border: 1px solid #999;
 	border-collapse: collapse;
 	padding: 5px;
+	vertical-align: top;
 }
 
 .modal .th1
