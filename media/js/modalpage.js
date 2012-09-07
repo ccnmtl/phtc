@@ -4,13 +4,13 @@ jQuery(document).ready(function() {
         var modalSet;
         
         modalSet = [
-            {"modalContentPath":"/sadowl/","modalTitle":"Sad Owl"},
-            {"modalContentPath":"/roostercat/","modalTitle":"Rooster Cat"},
-            {"modalContentPath":"/nyancat/","modalTitle":"Nyan Cat"}
+            {"modalContentPath":"/stakeholders/","modalTitle":"Stakeholders"},
+            {"modalContentPath":"/logicmodel/","modalTitle":"Logic Model"},
+            {"modalContentPath":"/evaluationqs/","modalTitle":"Evaluation Questions"}
         ];
         
         for (i=0; i<modalSet.length; i++) {
-            jQuery('.modalpageNav').append('<a href="'+modalSet[i].modalContentPath+'" role="button" class="btn btn-mini btn-primary" data-toggle="modal" data-target="#modalBox"'+i+1+'>'+modalSet[i].modalTitle+'</a> ');
+            jQuery('.modalpageNav').append('<a href="'+modalSet[i].modalContentPath+'" role="button" class="btn btn-mini btn-default" data-toggle="modal" data-target="#modalBox"'+i+1+'>'+modalSet[i].modalTitle+'</a> ');
         }
     
         jQuery('.modalpageNav').append('<div class="modal hide" id="modalBox"></div>');
