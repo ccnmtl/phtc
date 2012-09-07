@@ -72,7 +72,8 @@ class Quiz(models.Model):
                                           initial=self.description)
             rhetorical = forms.BooleanField(initial=self.rhetorical)
             feedback = forms.BooleanField(initial=self.feedback)
-            reading_exercise = forms.BooleanField(initial=self.reading_exercise)
+            reading_exercise = forms.BooleanField(
+                initial=self.reading_exercise)
             matching = forms.BooleanField(initial=self.matching)
             pre_test = forms.BooleanField(initial=self.pre_test)
             post_test = forms.BooleanField(initial=self.post_test)

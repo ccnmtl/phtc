@@ -1,29 +1,29 @@
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
 
 var scenario;
 var colNum = 0;
 var rowNum = 0;
 var cellTotal = 0;
-var scenario2_answer = ' '+'O'+'X'+'O'+' '+' '+' '+' ';
-var scenario3_answer = 'R'+'O'+'X'+'O'+'R'+'O'+' '+'O';
+var scenario2_answer = ' ' + 'O' + 'X' + 'O' + ' ' + ' ' + ' ' + ' ';
+var scenario3_answer = 'R' + 'O' + 'X' + 'O' + 'R' + 'O' + ' ' + 'O';
 var finaldesign_answer = 'NR' + 'O' + 'X' + 'O' + 'O' + 'NR' + 'O' + ' ' + 'O' + 'O';
 var correctAnswer = "";
 
 function initScenario() {
    scenario = jQuery('.interactive-scenario').attr('id');
-   if (scenario=='scenario2') {
+   if (scenario === 'scenario2') {
        colNum = 4;
        rowNum = 2;
        cellTotal = 8;
        correctAnswer = scenario2_answer;
    }
-   if (scenario=='scenario3') {
+   if (scenario === 'scenario3') {
        colNum = 4;
        rowNum = 2;
        cellTotal = 8;
        correctAnswer = scenario3_answer;
    }
-   if (scenario=='finaldesign') {
+   if (scenario === 'finaldesign') {
        colNum = 5;
        rowNum = 2;
        cellTotal = 10;
@@ -32,22 +32,22 @@ function initScenario() {
 }
 
 function generateSelector() {
-    var notationValue = ['NR','R','X','O','&nbsp;'];
+    var notationValue = ['NR', 'R', 'X', 'O', '&nbsp;'];
     var divCell = [];
     jQuery('.interactive-scenario').append('<div class="notation_select" id="notation_selections">');
     for (i=0; i<notationValue.length; i++) {
-        divCell[i] = '<div class="notation_option btn btn-primary">'+notationValue[i]+'</div>';
+        divCell[i] = '<div class="notation_option btn btn-primary">' + notationValue[i] + '</div>';
         jQuery('.notation_select').append(divCell[i]);
     }
 }
 
 function generateGrid() {
-    jQuery('.interactive-scenario').append('<div class="notation_gridbox">')
+    jQuery('.interactive-scenario').append('<div class="notation_gridbox">');
     for (i=0; i<2; i++) {
         jQuery('.notation_gridbox').append('<div class="notation_row">');
     }
     for (j=0; j<colNum; j++) {
-        jQuery('.notation_row').append('<div class="notation_field" id="r'+i+'c'+j+'" />')
+        jQuery('.notation_row').append('<div class="notation_field" id="r'+i+'c'+j+'" />');
     }
     jQuery('.interactive-scenario').append('<button id="checkanswer" type="submit" class="btn">Check answer</button>');
 }
@@ -94,21 +94,21 @@ function check_answer() {
         var useranswer = "";
         var blank_answer = 0;
         jQuery('.notation_field').each(function(index){
-            if (jQuery(this).html()=='') {
+            if (jQuery(this).html() === '') {
                 blank_answer++;
             }
-            if (jQuery(this).html()=='&nbsp;') {
+            if (jQuery(this).html() == '&nbsp;') {
                 jQuery(this).html(' ');
             }
-            useranswer+=(jQuery(this).html());
+            useranswer += (jQuery(this).html());
         });
         
-        if (blank_answer==cellTotal) {
+        if (blank_answer === cellTotal) {
             resetFeedback();
             jQuery('.notation_feedback').addClass('visible');
             jQuery('.no_entry').addClass('visible');
         }
-        else if ((blank_answer<cellTotal)&&(blank_answer!=0)) {
+        else if ((blank_answer < cellTotal) && (blank_answer !== 0)) {
             resetFeedback();
             jQuery('.notation_feedback').addClass('visible');
             jQuery('.notation_undetermined').addClass('visible');
