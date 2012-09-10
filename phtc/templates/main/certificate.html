@@ -47,7 +47,6 @@ a.print-certificate{
 }
 
 @media print 
-{
 
 	#inner-wrap{
 		position: absolute;
@@ -70,8 +69,12 @@ a.print-certificate{
 		padding-top:15px; 
 	}
 
+	#inner-wrap #date-completed{
+		font-size: 24px;
+		font-weight: bold;
+		margin: 20px 0 0 0;
+	}
 
-}
 </style>
 
 <h2>Certificate Earned</h2>
@@ -81,6 +84,7 @@ a.print-certificate{
  		<div id="inner-wrap">
 			<div id="user">{{ profile.fname }} {{ profile.lname }} has completed</div>
 			<div id="label">{{ module.label }}</div>
+			<div id="date-completed">{{ date|date:"F d, Y" }}</div>
  		</div><!--end inner-wrap-->
 	</div><!--end .printable-->
 	

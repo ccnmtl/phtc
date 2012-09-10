@@ -431,7 +431,8 @@ def certificate(request, path):
                 modules=root.get_children(),
                 root=section.hierarchy.get_root(),
                 user=request.user,
-                profile = UserProfile.objects.get(user=request.user)
+                profile = UserProfile.objects.get(user=request.user),
+                date = UserPageVisit.objects.get(user=request.user, section=module).last_visit
                 )
     else:
         return HttpResponseRedirect('/dashboard/')
