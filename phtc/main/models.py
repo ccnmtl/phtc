@@ -49,7 +49,6 @@ def user_created(sender, user, request, **kwargs):
     data.umc = form.data["umc"]
     data.employment_location = form.data["employment_location"]
     data.position = form.data["position"]
-    data.other_position = form.data["other_position"]
     data.dept_health = form.data["dept_health"]
     data.geo_dept_health = form.data["geo_dept_health"]
     data.experience = form.data["experience"]

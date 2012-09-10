@@ -1,7 +1,7 @@
 Hello,
 
-We recently received a request to register an account for you at 
-{{ site.name }}. If this wasn't you, please ignore this email
+We recently received a request to register an account for you at
+NYC-LI-LTC Public Health Training Center. If this wasn't you, please ignore this email
 and your address will be removed from our records.
 
 To activate your account, please click the following link within the next 
@@ -12,4 +12,5 @@ http://{{site.domain}}/registration/activate/{{ activation_key }}/
 Thank you.
 
 Sincerely,
-{{ site.name }} Management
+
+NYC-LI-LTC Public Health Training Center
