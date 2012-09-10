@@ -334,6 +334,7 @@ def get_user_profile(request):
                 'work_city': profile.work_city,
                 'work_state': profile.work_state,
                 'work_zip': profile.work_zip,
+                'umc': profile.umc,
                 'employment_location': profile.employment_location,
                 'other_employment_location': profile.other_employment_location,
                 'position': profile.position,
@@ -388,6 +389,7 @@ def update_user_profile(request):
     userprofile.work_state = form.data["work_state"]
     userprofile.work_zip = form.data["work_zip"]
     userprofile.employment_location = form.data["employment_location"]
+    userprofile.umc = form.data["umc"]
     userprofile.position = form.data["position"]
     userprofile.dept_health = form.data["dept_health"]
     userprofile.geo_dept_health = form.data["geo_dept_health"]

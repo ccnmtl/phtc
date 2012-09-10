@@ -28,7 +28,7 @@ class UserRegistrationForm(RegistrationForm):
         )
     sex = forms.CharField(
         max_length=6,
-        label="What is your sex?",
+        label="Select your gender.",
         widget=forms.Select(choices=[('Please Select', 'Please Select'),
                                      ('male', 'Male'),
                                      ('female', 'Female')])
@@ -43,8 +43,7 @@ class UserRegistrationForm(RegistrationForm):
                                       'I prefer not to answer')])
         )
     ethnicity = forms.CharField(
-        label=("Which of these best represent your race/ethnicity? "
-               "(select all that apply)"),
+        label=("Select the option(s) which best represents your race (select all that apply)"),
         widget=forms.Select(
             choices=[
                 ('Please Select', 'Please Select'),
@@ -65,7 +64,7 @@ class UserRegistrationForm(RegistrationForm):
                 ('Prefer not to answer', 'I prefer not to answer')])
         )
     degree = forms.CharField(
-        label=("Select the highest degree earned "),
+        label=("Select the highest degree earned."),
         widget=forms.Select(choices=[('Please Select', 'Please Select'),
                                      ('High school/GED', 'High school/GED'),
                                      ('Associate degree', 'Associate degree'),
@@ -143,7 +142,7 @@ class UserRegistrationForm(RegistrationForm):
         )
 
     position = forms.CharField(
-        label="Which general job category best describes your position?",
+        label="Which of the following categories best describes your primary discipline/specialty?",
         widget=forms.Select(
             attrs={'class': 'position-category'},
             choices=[
@@ -251,6 +250,15 @@ class UserRegistrationForm(RegistrationForm):
                      ('25+', '25+'),
                      ('I do not work in public health',
                       'I do not work in public health')])
+        )
+
+    umc = forms.CharField(
+        label="Do you work in a medically underserved community (MUC)?",
+        widget=forms.Select(
+            choices=[('Please Select', 'Please Select'),
+                     ('Yes', 'Yes'),
+                     ('No', 'No'),
+                     ('I do not know', 'I do not konw')])
         )
 
     rural = forms.CharField(

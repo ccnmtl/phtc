@@ -18,7 +18,7 @@ class UserProfile(models.Model):
     age = models.TextField()
     origin = models.TextField()
     ethnicity = models.TextField()
-    disadvantaged = models.TextField()
+    umc = models.TextField(default='')
     employment_location = models.TextField()
     other_employment_location = models.TextField()
     position = models.TextField()
@@ -28,6 +28,7 @@ class UserProfile(models.Model):
     experience = models.TextField()
     rural = models.TextField()
     degree = models.TextField()
+    disadvantaged = models.TextField()
 
     def __str__(self):
         return "%s's profile" % self.user
@@ -45,8 +46,10 @@ def user_created(sender, user, request, **kwargs):
     data.age = form.data["age"]
     data.origin = form.data["origin"]
     data.ethnicity = form.data["ethnicity"]
+    data.umc = form.data["umc"]
     data.employment_location = form.data["employment_location"]
     data.position = form.data["position"]
+    data.other_position = form.data["other_position"]
     data.dept_health = form.data["dept_health"]
     data.geo_dept_health = form.data["geo_dept_health"]
     data.experience = form.data["experience"]
