@@ -63,7 +63,7 @@ def user_visits(request):
 
 def send_post_test_email(user, section, module, request):
     (subject, from_email, to) = (
-        'Public Health Training Diploma',
+        'Public Health Training Certificate',
         'NYC-LI-LTC Public Health Training Center <no-reply@lowernysphtc.org>',
         user.email)
     text_content = ''
