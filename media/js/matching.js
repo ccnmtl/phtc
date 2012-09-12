@@ -34,7 +34,7 @@ jQuery(document).ready(function ($) {
 
     //clean string function
     function cleanup_string(str, kill_space){
-        var punctuationless = str.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+        var punctuationless = str.replace(/[\.,-\/?#!$%\^&\*;:{}=\-_`~()]/g,"");
         if(kill_space == true){
             var spaceless = punctuationless.replace(/\s/g, "");
         }else{
