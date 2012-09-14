@@ -63,7 +63,11 @@ var saveOrder = function() {
 <li class="draggable" id="answer-{{answer.id}}">
 <span title="drag to reorder answers" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span>[<a href="{% url delete-answer answer.id %}">delete</a>] 
 Answer {{ answer.display_number }}: 
-<a href="{% url edit-answer answer.id %}">{{answer.label}}</a>
+<a href="{% url edit-answer answer.id %}">
+  {% if answer.label == "" %}
+    Edit
+  {% endif %}
+  {{answer.label}}</a>
 {% if answer.correct %}<i class="icon-ok"></i>{% endif %}
 </li>
 {% endfor %}
