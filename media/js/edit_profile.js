@@ -52,10 +52,13 @@ jQuery('button.close-alert').click(function () {
     jQuery(this).parent().css('display', 'none');
 });
 
-//catch if the profile has been saved
+//catch if the profile has been saved or profile needs editing
 jQuery(document).ready(function () {
     var loc = document.location.href.split('profile').pop();
     if (typeof(loc) === 'string' && loc === "/?saved=true/") {
         jQuery('#myModal').modal('toggle');
+    }
+    if (typeof(loc) === 'string' && loc === "/?needs_edit=true/") {
+        jQuery('#myModal2').modal('toggle');
     }
 });
