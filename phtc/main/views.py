@@ -399,11 +399,14 @@ def update_user_profile(request):
     request.user.save()
     return HttpResponseRedirect('/profile/?saved=true/')
 
-
 @login_required
 @render_to('main/dashboard.html')
 def dashboard(request):
-    return render_dashboard(request)
+    # test if the user profile has been completed
+    if not (UserProfile.objects.get(user=request.user).fname):
+        return HttpResponseRedirect('/profile/?needs_edit=true/')
+    else:
+        return render_dashboard(request)
 
 
 @login_required
