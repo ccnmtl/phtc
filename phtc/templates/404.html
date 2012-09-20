@@ -7,12 +7,29 @@
    base_one_col.html : layout is [ content ]
 {% endcomment %}
 
-{% block title %}Page Not Found{% endblock %}
 
+{% block title %}Page Not Found{% endblock %}
 {% block usernav %}
-<ul id="usernav">
-	<li><a href="#">Login</a></li>
-</ul><!-- id="usernav" -->
+{% if request.user.is_anonymous %}
+	<div class="navbar">
+	  <div class="navbar-inner">
+	    <div class="usernav">Hello 
+	    	<span class="user_profile" rel="tooltip" data-original-title="View/Edit my profile">
+	    		<a href="/profile/">demo</a>
+	    	</span>
+	    	<a href="/accounts/login/" class="btn btn-small">Log in</a>
+	    </div><!-- usernav -->
+	  </div><!-- navbar-inner -->
+	</div>
+{% else %}
+	<div class="navbar">
+	  <div class="navbar-inner">
+	    <div class="usernav">Hello 
+			<span class="user_profile" rel="tooltip" title="View/Edit my profile"><a href="/profile/">{% if request.user.last_name %}{{request.user.first_name}}{% else %}{{request.user.username}}{% endif %}</a></span> <a href="/accounts/logout/?next=/accounts/login/" class="btn btn-small btn-danger">Log out</a>
+	    </div><!-- usernav -->
+	  </div><!-- navbar-inner -->
+	</div>
+{% endif %}
 {% endblock %}
 
 
