@@ -376,7 +376,7 @@ def update_user_profile(request):
             "other_position_category"]
     except:
         pass
-
+    request.user.email= form.data["email"]
     userprofile.fname = form.data["fname"]
     userprofile.lname = form.data["lname"]
     userprofile.degree = form.data["degree"]
@@ -403,11 +403,11 @@ def update_user_profile(request):
 @render_to('main/dashboard.html')
 def dashboard(request):
     # test if the user profile has been completed
-    if not (UserProfile.objects.get(user=request.user).fname):
-        return HttpResponseRedirect('/profile/?needs_edit=true/')
-    else:
+    try:
+        UserProfile.objects.get(user=request.user).fname
         return render_dashboard(request)
-
+    except UserProfile.DoesNotExist:
+        return HttpResponseRedirect('/profile/?needs_edit=true/')
 
 @login_required
 @render_to('main/dashboard_panel.html')
