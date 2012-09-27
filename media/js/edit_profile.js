@@ -44,6 +44,9 @@ jQuery('input.btn').click(function () {
     //submit the form if valid
     if (valid === 0 && password_valid === 0) {
         jQuery('#' + jQuery('form').attr('id')).submit();
+    }else{
+        var first_error_position = jQuery(jQuery('.error')[0]).position().top;
+        jQuery(document).scrollTop(first_error_position-125);
     }
 });//end .click
 
