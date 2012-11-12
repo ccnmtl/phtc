@@ -11,6 +11,18 @@ from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
 from django.core.mail import EmailMultiAlternatives
 
+def nynj(request):
+    if (request.user.is_active):
+        return HttpResponseRedirect(reverse("dashboard"))
+    elif (request.GET.get('username') and request.GET.get('user') and request.GET.get('course')):
+        username = request.GET.get('username')
+        user = request.GET.get('user')
+        course = request.GET.get('course')
+        return HttpResponseRedirect(
+            '/registration/register/?'+
+            'username=' + username + 
+            '&user=' + user + 
+            '&course=' + course)
 
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:

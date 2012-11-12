@@ -80,3 +80,19 @@ class DashboardInfo(models.Model):
             dashboard_info = forms.CharField(widget=forms.Textarea,
                                              initial=self.info)
         return EditSectionForm()
+
+class NYNJ_Course_ID(models.Model):
+    id = models.AutoField(primary_key=True)
+    courseID = models.TextField()
+
+    def __unicode__(self):
+        return "course id: %s" % self.courseID
+
+class NYNJ_Course_Map(models.Model):
+    id = models.AutoField(primary_key=True)
+    course_map = models.OneToOneField(NYNJ_Course_ID)
+    phtc_url = models.TextField()
+
+    def __unicode__(self):
+        return "url path: %s" % self.phtc_url
+

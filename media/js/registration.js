@@ -30,4 +30,11 @@
 	})
 
 
-
+// set username to form if exists in URL
+jQuery(document).ready(function(){
+	var Url_vars = PHTC.getUrlVars();
+	console.log(Url_vars);
+	if(Url_vars['username']){
+		jQuery('#id_username').val(Url_vars['username'])
+	}
+})
