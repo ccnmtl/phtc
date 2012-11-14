@@ -284,3 +284,23 @@ class UserRegistrationForm(RegistrationForm):
                      ('No', 'No'),
                      ('I do not know', 'I do not konw')])
         )
+
+    is_nynj = forms.BooleanField(
+        required=False,
+        widget = forms.HiddenInput(),
+        initial = False
+        )
+
+    nynj_username = forms.CharField(
+        required = False,
+        widget = forms.HiddenInput(),
+        initial = "none"
+        )
+
+    nynj_course_init = forms.CharField(
+        required = False,
+        widget = forms.HiddenInput(),
+        initial = "none"
+        )
+
+

@@ -30,6 +30,12 @@ class UserProfile(models.Model):
     degree = models.TextField()
     disadvantaged = models.TextField()
 
+    #NYNJ additions
+    is_nynj = models.BooleanField(default=False)
+    nynj_username = models.TextField(default='none')
+    nynj_course_init = models.TextField(default='none')
+
+
     def __str__(self):
         return "%s's profile" % self.user
 
