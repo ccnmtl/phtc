@@ -37,4 +37,11 @@ jQuery(document).ready(function(){
 	if(Url_vars['username']){
 		jQuery('#id_username').val(Url_vars['username'])
 	}
+	if(Url_vars['user_id']){
+		jQuery('#nynj_user_id').val(Url_vars['username'])
+	}
+	if(Url_vars['course']){
+		jQuery('#id_username').val(Url_vars['username'])
+	}
+
 })
