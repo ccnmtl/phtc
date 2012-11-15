@@ -35,13 +35,21 @@ jQuery(document).ready(function(){
 	var Url_vars = PHTC.getUrlVars();
 	console.log(Url_vars);
 	if(Url_vars['username']){
-		jQuery('#id_username').val(Url_vars['username'])
+		//we know this is a nynj user from the URL parmas
+		jQuery('#id_is_nynj').val('True')
+		// set the form's username to try the original nynj username if not already filled out
+		var usrnm_val = jQuery('#id_username').attr('value')
+		if (usrnm_val == '' ){
+			jQuery('#id_username').val(Url_vars['username'])
+		}
+		// set the hidden field's value to record original nynj usernamein userprofile
+		jQuery('#id_nynj_username').val(Url_vars['username'])
 	}
 	if(Url_vars['user_id']){
-		jQuery('#nynj_user_id').val(Url_vars['username'])
+		jQuery('#id_nynj_user_id').val(Url_vars['user_id'])
 	}
 	if(Url_vars['course']){
-		jQuery('#id_username').val(Url_vars['username'])
+		jQuery('#id_nynj_course_init').val(Url_vars['course'])
 	}
 
 })

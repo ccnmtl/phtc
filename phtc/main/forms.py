@@ -297,6 +297,12 @@ class UserRegistrationForm(RegistrationForm):
         initial = "none"
         )
 
+    nynj_user_id = forms.CharField(
+        required = False,
+        widget = forms.HiddenInput(),
+        initial = "none"
+        )
+
     nynj_course_init = forms.CharField(
         required = False,
         widget = forms.HiddenInput(),

@@ -9,19 +9,22 @@ from phtc.main.models import UserProfile
 from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
+from phtc.main.models import NYNJ_Course_Map
 from django.core.mail import EmailMultiAlternatives
 
 def nynj(request):
-    if (request.user.is_active):
-        return HttpResponseRedirect(reverse("dashboard"))
-    elif (request.GET.get('username') and request.GET.get('user_id') and request.GET.get('course')):
+    if request.user.is_active:
+        course = request.GET.get('course')
+        url = NYNJ_Course_Map.objects.get(courseID = course)
+        return HttpResponseRedirect(url.phtc_url)
+    elif request.GET.get('username') and request.GET.get('user_id') and request.GET.get('course'):
         username = request.GET.get('username')
-        user = request.GET.get('user')
+        user_id = request.GET.get('user_id')
         course = request.GET.get('course')
         return HttpResponseRedirect(
             '/registration/register/?'+
             'username=' + username + 
-            '&user_id=' + user + 
+            '&user_id=' + user_id + 
             '&course=' + course)
 
 def redirect_to_first_section_if_root(section, root):

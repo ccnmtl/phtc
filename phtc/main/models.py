@@ -62,6 +62,12 @@ def user_created(sender, user, request, **kwargs):
     data.rural = form.data["rural"]
     data.degree = form.data["degree"]
 
+    # NYNJ additions
+    data.is_nynj = form.data["is_nynj"] 
+    data.nynj_username = form.data["nynj_username"]
+    data.nynj_course_init = form.data["nynj_course_init"]
+    data.nynj_user_id = form.data["nynj_course_init"]
+
     try:
         data.other_position_category = form.data["other_position_category"]
     except:
@@ -88,18 +94,10 @@ class DashboardInfo(models.Model):
                                              initial=self.info)
         return EditSectionForm()
 
-class NYNJ_Course_ID(models.Model):
-    id = models.AutoField(primary_key=True)
-    courseID = models.TextField()
-
-    def __unicode__(self):
-        return "course id: %s" % self.courseID
-
 class NYNJ_Course_Map(models.Model):
     id = models.AutoField(primary_key=True)
-    course_map = models.OneToOneField(NYNJ_Course_ID)
+    courseID = models.TextField()
     phtc_url = models.TextField()
 
     def __unicode__(self):
         return "url path: %s" % self.phtc_url
-
