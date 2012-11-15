@@ -1,7 +1,4 @@
 //get the form we are dealing with - profile or registration
-alert(jQuery('form') )
-
-
 jQuery('#id_password1')
     .parent()
     .append('<span>Leave Blank to keep the same password</span>');
