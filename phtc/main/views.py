@@ -15,57 +15,14 @@ from registration.signals import user_registered
 
 @render_to('registration/registration_form.html')
 def nynj(request):
-    if request.method == "POST":
-        user_registered.connect(user_created)
-        return HttpResponse ('all set')
-    else:
-        form = UserRegistrationForm(initial={
-            'is_nynj' : 'True',
-            'nynj_username' : request.GET.get('username'),
-            'username' : request.GET.get('username'),
-            'nynj_user_id' : request.GET.get('user_id'),
-            'nynj_course_init' : request.GET.get('course')
-            })
-        return dict(form=form)
-def user_created(sender, user, request, **kwargs):
-    form = UserRegistrationForm(request.POST)
-    data = UserProfile(user=user)
-    data.fname = form.data["fname"]
-    data.lname = form.data["lname"]
-    data.work_city = form.data["work_city"]
-    data.work_state = form.data["work_state"]
-    data.work_zip = form.data["work_zip"]
-    data.sex = form.data["sex"]
-    data.age = form.data["age"]
-    data.origin = form.data["origin"]
-    data.ethnicity = form.data["ethnicity"]
-    data.umc = form.data["umc"]
-    data.employment_location = form.data["employment_location"]
-    data.position = form.data["position"]
-    data.dept_health = form.data["dept_health"]
-    data.geo_dept_health = form.data["geo_dept_health"]
-    data.experience = form.data["experience"]
-    data.rural = form.data["rural"]
-    data.degree = form.data["degree"]
-
-    # NYNJ additions
-    data.is_nynj = form.data["is_nynj"] 
-    data.nynj_username = form.data["nynj_username"]
-    data.nynj_course_init = form.data["nynj_course_init"]
-    data.nynj_user_id = form.data["nynj_course_init"]
-
-    try:
-        data.other_position_category = form.data["other_position_category"]
-    except:
-        pass
-
-    try:
-        data.other_employment_location = form.data["other_location"]
-    except:
-        pass
-
-    data.save()
-    statsd.incr('user_registered')
+    form = UserRegistrationForm(initial={
+        'is_nynj' : 'True',
+        'nynj_username' : request.GET.get('usrnm'),
+        'username' : request.GET.get('usrnm'),
+        'nynj_user_id' : request.GET.get('user_id'),
+        'nynj_course_init' : request.GET.get('course')
+        })
+    return dict(form=form)
 
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:
