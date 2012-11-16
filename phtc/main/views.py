@@ -11,10 +11,15 @@ from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
 from phtc.main.models import NYNJ_Course_Map
 from django.core.mail import EmailMultiAlternatives
-from registration.signals import user_registered
+from django.template import RequestContext
+from django.shortcuts import render_to_response
 
 @render_to('registration/registration_form.html')
 def nynj(request):
+    if request.method == "POST":
+        form = UserRegistrationForm(request.POST)
+        return render_to_response('registration/registration_form.html',form)
+    register = "/registration/register/"
     form = UserRegistrationForm(initial={
         'is_nynj' : 'True',
         'nynj_username' : request.GET.get('usrnm'),
@@ -22,7 +27,7 @@ def nynj(request):
         'nynj_user_id' : request.GET.get('user_id'),
         'nynj_course_init' : request.GET.get('course')
         })
-    return dict(form=form)
+    return dict(form=form, register = register)
 
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:
