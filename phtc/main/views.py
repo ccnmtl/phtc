@@ -18,8 +18,11 @@ from django.shortcuts import render_to_response
 def nynj(request):
     if not request.user.is_anonymous():
         course = request.GET.get('course')
-        course_map = NYNJ_Course_Map.objects.get(courseID = course)
-        return HttpResponseRedirect(course_map.phtc_url)
+        try:
+            course_map = NYNJ_Course_Map.objects.get(courseID = course)
+            return HttpResponseRedirect(course_map.phtc_url)
+        except NYNJ_Course_Map.DoesNotExist:
+            return HttpResponseRedirect('/dashboard/?course_not_available=true')
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         return render_to_response('registration/registration_form.html',form)
