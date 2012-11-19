@@ -1,5 +1,6 @@
 from django import forms
 from registration.forms import RegistrationForm
+from django.contrib.auth.models import User
 
 attrs_dict = {'class': 'required'}
 
@@ -309,4 +310,9 @@ class UserRegistrationForm(RegistrationForm):
         initial = "none"
         )
 
+    def clean_email(self):
+      data = self.cleaned_data['email']
+      if User.objects.filter(email=data).exists():
+          raise forms.ValidationError("This email is already in use. Are you sure that you don't already have an account?")
+      return data
 

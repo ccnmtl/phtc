@@ -5,6 +5,7 @@ from pagetree.helpers import get_module, needs_submit, submitted
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.utils.simplejson import dumps
+from django.contrib.auth.models import User
 from phtc.main.models import UserProfile
 from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
