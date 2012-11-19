@@ -16,6 +16,8 @@ from django.shortcuts import render_to_response
 
 @render_to('registration/registration_form.html')
 def nynj(request):
+    if not request.user.is_anonymous():
+        return HttpResponseRedirect('/dashboard/')
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         return render_to_response('registration/registration_form.html',form)

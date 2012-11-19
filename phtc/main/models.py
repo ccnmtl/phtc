@@ -66,7 +66,7 @@ def user_created(sender, user, request, **kwargs):
     data.is_nynj = form.data["is_nynj"] 
     data.nynj_username = form.data["nynj_username"]
     data.nynj_course_init = form.data["nynj_course_init"]
-    data.nynj_user_id = form.data["nynj_course_init"]
+    data.nynj_user_id = form.data["nynj_user_id"]
 
     try:
         data.other_position_category = form.data["other_position_category"]
