@@ -14,9 +14,23 @@ from phtc.main.models import NYNJ_Course_Map
 from django.core.mail import EmailMultiAlternatives
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+from django.contrib.auth.forms import AuthenticationForm
 
 @render_to('registration/registration_form.html')
 def nynj(request):
+    username = request.GET.get('usrnm')
+    user_id = request.GET.get('user_id')
+    course = request.GET.get('course')
+    register = "/registration/register/" #this is for the form action src
+    
+    form = UserRegistrationForm(initial={
+        'is_nynj' : 'True',
+        'nynj_username' : username,
+        'username' : username,
+        'nynj_user_id' : user_id,
+        'nynj_course_init' : course
+        })
+
     if not request.user.is_anonymous():
         course = request.GET.get('course')
         try:
@@ -24,18 +38,17 @@ def nynj(request):
             return HttpResponseRedirect(course_map.phtc_url)
         except NYNJ_Course_Map.DoesNotExist:
             return HttpResponseRedirect('/dashboard/?course_not_available=true')
+    
     if request.method == "POST":
-        form = UserRegistrationForm(request.POST)
+        form = UserRegistrationForm()
         return render_to_response('registration/registration_form.html',form)
-    register = "/registration/register/" #this is for the form action src
-    form = UserRegistrationForm(initial={
-        'is_nynj' : 'True',
-        'nynj_username' : request.GET.get('usrnm'),
-        'username' : request.GET.get('usrnm'),
-        'nynj_user_id' : request.GET.get('user_id'),
-        'nynj_course_init' : request.GET.get('course')
-        })
-    return dict(form=form, register = register)
+    
+    if not request.GET.get('has_account'):
+        form = AuthenticationForm(request.POST)
+        args = dict(username=username, user_id=user_id, course=course)
+        return render_to_response('registration/nynj_login.html', {'form': form, 'args': args} )
+    else:
+        return dict(form=form, register = register)
 
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:

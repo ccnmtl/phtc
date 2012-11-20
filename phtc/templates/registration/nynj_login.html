@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Welcome to the PHTC Training Environment{% endblock %}
+{% block noleftsidebar %} class="no-left-sidebar"{% endblock %}
+{% block content %}
+    <h1>Welcome to the PHTC Training Environment</h1>
+    <div id="greeting-login">
+        <div id="user_log_in">            
+            <h3 class="log_in">Please log in</h3>
+            
+            <form method="post" action="/accounts/login/?next={% url dashboard %}" class="well">
+            {% csrf_token %}
+	            <p>If you have a project account...</p>
+	            
+	            <label for="id_username">Username: {{ form.username }}</label>
+	            <label for="id_password">Password: {{ form.password }}</label>
+	            
+	            <input type="submit" value="LOG IN" class="btn btn-primary" />
+	            <input type="hidden" name="next" value="{{ next }}" />
+	            
+	            {% if form.errors%}
+	            <p class="errornote"><span><b>ERROR:</b> Invalid username or password.</span> Please try again. Note that both username and password are case-sensitive.</p>
+	            {% endif %}
+
+	            <p class="smalltxt">
+	            	<span class="tooltip-bottom" rel="tooltip" title="Create your own PHTC account">
+	            		<a href="/nynj/?usrnm={{ args.username }}&user_id={{ args.user_id }}&course={{ args.course }}&has_account=0">Need a new account?</a>
+	            	</span> | 
+	            	<span class="tooltip-bottom" rel="tooltip" title="Reset your password">
+	            		<a href="/registration/password/reset/">Forgot password?</a>
+	            	</span>
+	            </p>
+            </form>
+            
+        </div><!--end #user_log_in-->
+    </div><!--end #greeting-login-->
+
+
+
+
+
+{% endblock %}
+
+
