@@ -243,7 +243,7 @@ def process_dashboard_ajax(user, section, module):
 
 def get_module_admin_lock():
     # set the variable to equal the protected module id
-    protected_module_id = 152
+    protected_module_id = 185
     return protected_module_id
 
 @login_required
