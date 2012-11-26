@@ -22,9 +22,6 @@
         <!-- ###### Secondary Navigation ###### -->
         {% if module.get_children %}
         <h3>Sections</h3>
-        {% if user.is_active and user.is_staff and module.id > 152  %}
-        <p> {{ module.id }} </p>
-        {% endif %}<!--end is_staff -->
         {% include "main/menu.html" %}
         {% endif %}
 {% endblock %}
