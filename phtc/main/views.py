@@ -204,9 +204,16 @@ def process_dashboard_ajax(user, section, module):
         return reverse("dashboard")
 
 
+def get_module_admin_lock():
+    # set the variable to equal the protected module id
+    protected_module_id = 185
+    return protected_module_id
+
+
 @login_required
 @render_to('main/page.html')
 def page(request, path):
+    admin_lock = get_module_admin_lock()
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
     module = get_module(section)
@@ -218,6 +225,7 @@ def page(request, path):
                 is_submitted=submitted(section, request.user),
                 modules=root.get_children(),
                 root=section.hierarchy.get_root(),
+                admin_lock = admin_lock,
                 )
 
     # dashboard ajax
@@ -248,7 +256,12 @@ def page(request, path):
     previous_section_handle_status(section, request, module)
 
     #return page
-    return page_dict
+    if request.user.is_staff:
+        return page_dict
+    elif module.id < admin_lock:
+        return page_dict
+    else:
+        return HttpResponse('We are sorry, this module is not quite ready!')
 
 
 def previous_section_handle_status(section, request, module):
@@ -442,6 +455,7 @@ def certificate(request, path):
 
 
 def render_dashboard(request):
+    admin_lock = get_module_admin_lock()
     h = get_hierarchy("main")
     root = h.get_root()
     last_session = h.get_user_section(request.user)
@@ -451,4 +465,4 @@ def render_dashboard(request):
     empty = ""
     return dict(root=root, last_session=last_session,
                 dashboard_info=dashboard_info,
-                empty=empty, is_visited=is_visited)
+                empty=empty, is_visited=is_visited, admin_lock = admin_lock)
