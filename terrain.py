@@ -71,7 +71,6 @@ def setup_database(_foo):
 def teardown_database(_foo):
     os.system("rm -f lettuce.db")
 
-
 @after.harvest
 def teardown_browser(total):
     if not skip_selenium():
@@ -291,7 +290,7 @@ def i_am_logged_as_a_student(step):
         return
 
     if not world.using_selenium:
-        world.client.login(username='testuser', password='test')
+        world.client.login(username='test', password='test')
     else:
         assert False, "this needs to be implemented for selenium"
 
