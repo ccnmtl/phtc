@@ -31,7 +31,7 @@
             <label for="id_username">Username: {{ form.username }}</label>
             <label for="id_password">Password: {{ form.password }}</label>
             
-            <input type="submit" value="LOG IN" class="btn btn-primary" />
+            <input id="login_form_submit_button" type="submit" value="LOG IN" class="btn btn-primary" />
             <input type="hidden" name="next" value="{{ next }}" />
             
             {% if form.errors%}

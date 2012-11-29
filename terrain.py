@@ -69,7 +69,8 @@ def setup_database(_foo):
 
 @after.harvest
 def teardown_database(_foo):
-    os.system("rm -f lettuce.db")
+    #os.system("rm -f lettuce.db")
+    a=1
 
 @after.harvest
 def teardown_browser(total):
@@ -292,7 +293,13 @@ def i_am_logged_as_a_student(step):
     if not world.using_selenium:
         world.client.login(username='test', password='test')
     else:
-        assert False, "this needs to be implemented for selenium"
+        world.browser.get(django_url())
+        username_field = world.browser.find_element_by_id("id_username")
+        password_field = world.browser.find_element_by_id("id_password")
+        submit_button = world.browser.find_element_by_id("login_form_submit_button") 
+        username_field.send_keys('test')
+        password_field.send_keys('test')
+        submit_button.click()
 
 
 @step(u'I am logged in as an admin')
