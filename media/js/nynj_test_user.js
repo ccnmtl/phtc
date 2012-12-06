@@ -9,7 +9,8 @@
 				if (data == 'True'){//username already exists
 					$('#nynj-greeting').html('<p class="alert">Welcome Back!</p>')
 				}else{
-					var register = $('#nynj-register-link').clone().text('here')
+					var register = $('#nynj-register-link').clone()
+					register.attr('id', 'clone-nynj-register-link').text('here')
 					$('#nynj-greeting').html('<p class="alert">That Username does not exist. Please register </p>')
 					$('.alert').append(register).append('.')
 				}

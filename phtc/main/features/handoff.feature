@@ -7,8 +7,7 @@ to the correct place
         Using selenium
         Given I am not logged in
         When I access the url "/nynj/?course=0102&userID=123&usrnm=test123"
-        And it fails when I try to use my NYLearns login info
-        And I click on the link "Need a new account"
+        And I click on the link "Need a new account?"
         And I fill out the form
         Then I see the header "Dashboard" 
         Finished using selenium

@@ -345,8 +345,10 @@ def then_i_see_the_handoff_module(step, courseID):
 def and_i_click_on_the_link_group1(step, link_text):
     if world.skipping:
         return
-    link = world.browser.find_element_by_partial_link_text(link_text)
+    link = world.browser.find_element_by_id('nynj-register-link')
+    link.click() # there is a bug here that will not focus on the right element
     link.click()
+
 
 @step(u'And it fails when I try to use my NYLearns login info')
 def and_it_fails_when_i_try_to_use_my_nylearns_login_info(step):
