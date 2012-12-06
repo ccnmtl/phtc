@@ -300,12 +300,7 @@ def logged_in_as_student_with_selenium(step):
         world.browser.find_element_by_id('dashboard-header')
         return True
     except:
-        username_field = world.browser.find_element_by_id("id_username")
-        password_field = world.browser.find_element_by_id("id_password")
-        submit_button = world.browser.find_element_by_id("login_form_submit_button") 
-        username_field.send_keys('test')
-        password_field.send_keys('test')
-        submit_button.click()
+        login_user_from_home_page('test','test')
 
 
 @step(u'I am logged in as an admin')
@@ -333,6 +328,8 @@ def then_i_see_an_edit_link(step):
 
 @step(u'When I access the handoff url "([^"]*)"')
 def when_i_access_the_handoff_url(step, url):
+    if world.skipping:
+        return
     world.browser.get(django_url(url))
     h1 = world.browser.find_element_by_id('section-header')
     if h1.text == u'Part 1: Introduction to Qualitative Research':
@@ -346,11 +343,15 @@ def then_i_see_the_handoff_module(step, courseID):
 
 @step(u'And I click on the link "([^"]*)"')
 def and_i_click_on_the_link_group1(step, link_text):
+    if world.skipping:
+        return
     link = world.browser.find_element_by_partial_link_text(link_text)
     link.click()
 
 @step(u'And I fill out the form')
 def and_i_fill_out_the_form(step):
+    if world.skipping:
+        return
     email = world.browser.find_element_by_id('id_email').send_keys('djredhand@gmail.com')
     pass1 = world.browser.find_element_by_id('id_password1').send_keys('test')
     pass2 = world.browser.find_element_by_id('id_password2').send_keys('test')
@@ -372,16 +373,24 @@ def and_i_fill_out_the_form(step):
     umc = world.browser.find_element_by_id('id_umc').send_keys('Yes')
     rural = world.browser.find_element_by_id('id_rural').send_keys('No')
 
-    activate = world.browser.find_element_by_css_selector('input.btn-primary').click()
-
-    import pdb
-    pdb.set_trace()
+    register = world.browser.find_element_by_css_selector('input.btn-primary').click()
+    activate_user()
+    world.browser.get(django_url() )
+    login_user_from_home_page('test123','test')
     
-    from django.contrib.auth import authenticate, login
-    user = authenticate('test123', 'test')
-    if user is not None:
-        login(request, user)
+def activate_user():
+    from django.contrib.auth.models import User
+    user = User.objects.get(username = 'test123')
+    user.is_active = True
+    user.save()
 
+def login_user_from_home_page(username, password):
+    username_field = world.browser.find_element_by_id("id_username")
+    password_field = world.browser.find_element_by_id("id_password")
+    submit_button = world.browser.find_element_by_id("login_form_submit_button") 
+    username_field.send_keys(username)
+    password_field.send_keys(password)
+    submit_button.click()
     
 
 
