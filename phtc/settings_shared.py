@@ -96,8 +96,10 @@ LETTUCE_SERVER_PORT = 7000
 
 ACCOUNT_ACTIVATION_DAYS = 7
 AUTH_PROFILE_MODULE = "phtc.main.UserProfile"
-SERVER_EMAIL = "NYC-LI-LTC Public Health Training Center <no-reply@lowernysphtc.org>"
-DEFAULT_FROM_EMAIL = "NYC-LI-LTC Public Health Training Center <no-reply@lowernysphtc.org>"
+SERVER_EMAIL = ("NYC-LI-LTC Public Health Training Center "
+                "<no-reply@lowernysphtc.org>")
+DEFAULT_FROM_EMAIL = ("NYC-LI-LTC Public Health Training Center "
+                      "<no-reply@lowernysphtc.org>")
 
 PAGEBLOCKS = ['pageblocks.TextBlock',
               'pageblocks.HTMLBlock',

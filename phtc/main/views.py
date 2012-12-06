@@ -225,7 +225,7 @@ def page(request, path):
                 is_submitted=submitted(section, request.user),
                 modules=root.get_children(),
                 root=section.hierarchy.get_root(),
-                admin_lock = admin_lock,
+                admin_lock=admin_lock,
                 )
 
     # dashboard ajax
@@ -389,7 +389,7 @@ def update_user_profile(request):
             "other_position_category"]
     except:
         pass
-    request.user.email= form.data["email"]
+    request.user.email = form.data["email"]
     userprofile.fname = form.data["fname"]
     userprofile.lname = form.data["lname"]
     userprofile.degree = form.data["degree"]
@@ -412,6 +412,7 @@ def update_user_profile(request):
     request.user.save()
     return HttpResponseRedirect('/profile/?saved=true/')
 
+
 @login_required
 @render_to('main/dashboard.html')
 def dashboard(request):
@@ -421,6 +422,7 @@ def dashboard(request):
         return render_dashboard(request)
     except UserProfile.DoesNotExist:
         return HttpResponseRedirect('/profile/?needs_edit=true/')
+
 
 @login_required
 @render_to('main/dashboard_panel.html')
@@ -447,8 +449,9 @@ def certificate(request, path):
                 modules=root.get_children(),
                 root=section.hierarchy.get_root(),
                 user=request.user,
-                profile = UserProfile.objects.get(user=request.user),
-                date = UserPageVisit.objects.get(user=request.user, section=module).last_visit
+                profile=UserProfile.objects.get(user=request.user),
+                date=UserPageVisit.objects.get(user=request.user,
+                                               section=module).last_visit
                 )
     else:
         return HttpResponseRedirect('/dashboard/')
@@ -465,4 +468,4 @@ def render_dashboard(request):
     empty = ""
     return dict(root=root, last_session=last_session,
                 dashboard_info=dashboard_info,
-                empty=empty, is_visited=is_visited, admin_lock = admin_lock)
+                empty=empty, is_visited=is_visited, admin_lock=admin_lock)
