@@ -129,6 +129,11 @@ if 'test' in sys.argv:
             }
         }
 
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=phtc',
+]
+
 if 'harvest' in sys.argv:
     DATABASES = {
         'default': {
