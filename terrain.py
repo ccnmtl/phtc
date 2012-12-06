@@ -300,7 +300,7 @@ def logged_in_as_student_with_selenium(step):
         world.browser.find_element_by_id('dashboard-header')
         return True
     except:
-        login_user_from_home_page('test','test')
+        login_user('test','test')
 
 
 @step(u'I am logged in as an admin')
@@ -348,6 +348,13 @@ def and_i_click_on_the_link_group1(step, link_text):
     link = world.browser.find_element_by_partial_link_text(link_text)
     link.click()
 
+@step(u'And it fails when I try to use my NYLearns login info')
+def and_it_fails_when_i_try_to_use_my_nylearns_login_info(step):
+    #import pdb
+    #pdb.set_trace()
+    login_user('nylearns_username', 'nylearns_pass')
+
+
 @step(u'And I fill out the form')
 def and_i_fill_out_the_form(step):
     if world.skipping:
@@ -376,7 +383,7 @@ def and_i_fill_out_the_form(step):
     register = world.browser.find_element_by_css_selector('input.btn-primary').click()
     activate_user()
     world.browser.get(django_url() )
-    login_user_from_home_page('test123','test')
+    login_user('test123','test')
     
 def activate_user():
     from django.contrib.auth.models import User
@@ -384,7 +391,7 @@ def activate_user():
     user.is_active = True
     user.save()
 
-def login_user_from_home_page(username, password):
+def login_user(username, password):
     username_field = world.browser.find_element_by_id("id_username")
     password_field = world.browser.find_element_by_id("id_password")
     submit_button = world.browser.find_element_by_id("login_form_submit_button") 

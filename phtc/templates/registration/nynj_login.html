@@ -2,6 +2,11 @@
 {% block title %}Welcome to the PHTC Training Environment{% endblock %}
 {% block noleftsidebar %} class="no-left-sidebar"{% endblock %}
 {% block content %}
+<style>
+#nynj-greeting{
+	color:#777;
+}
+</style>
     <h1>Welcome to the PHTC Training Environment</h1>
     <div id="greeting-login">
         <div id="user_log_in">            
@@ -12,9 +17,9 @@
 	            <p>If you have a project account...</p>
 	            
 	            <label for="id_username">Username: {{ form.username }}</label>
+	            <div id="nynj-greeting"></div>
 	            <label for="id_password">Password: {{ form.password }}</label>
-	            
-	            <input type="submit" value="LOG IN" class="btn btn-primary" />
+	            <input id="login_form_submit_button" type="submit" value="LOG IN" class="btn btn-primary" />
 	            <input type="hidden" name="next" value="{{ next }}" />
 	            
 	            {% if form.errors%}
@@ -23,7 +28,7 @@
 
 	            <p class="smalltxt">
 	            	<span class="tooltip-bottom" rel="tooltip" title="Create your own PHTC account">
-	            		<a href="/nynj/?usrnm={{ args.username }}&user_id={{ args.user_id }}&course={{ args.course }}&has_account=0">Need a new account?</a>
+	            		<a id="nynj-register-link" href="/nynj/?usrnm={{ args.username }}&user_id={{ args.user_id }}&course={{ args.course }}&has_account=0">Need a new account?</a>
 	            	</span> | 
 	            	<span class="tooltip-bottom" rel="tooltip" title="Reset your password">
 	            		<a href="/registration/password/reset/">Forgot password?</a>
@@ -33,7 +38,7 @@
             
         </div><!--end #user_log_in-->
     </div><!--end #greeting-login-->
-
+    <script src="/site_media/js/nynj_test_user.js"></script>
 {% endblock %}
 
 

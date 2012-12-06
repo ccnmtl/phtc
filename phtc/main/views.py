@@ -17,6 +17,21 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.forms import AuthenticationForm
 
 @render_to('registration/registration_form.html')
+def test_nynj_username(request):
+    if request.POST:
+        username = request.POST.get('username')
+        try:
+            User.objects.get(username = username)
+            return HttpResponse(True)
+        except User.DoesNotExist:
+            return HttpResponse(False)
+        
+
+    else:
+        return HttpResponse('It got')
+    return HttpResponse('Simple return')
+
+@render_to('registration/registration_form.html')
 def nynj(request):
     username = request.GET.get('usrnm')
     user_id = request.GET.get('user_id')
@@ -40,11 +55,14 @@ def nynj(request):
             return HttpResponseRedirect('/dashboard/?course_not_available=true')
     
     if request.method == "POST":
+
         form = UserRegistrationForm()
         return render_to_response('registration/registration_form.html',form)
     
     if not request.GET.get('has_account'):
-        form = AuthenticationForm()
+        form = AuthenticationForm(initial={
+            'username': username 
+            })
         args = dict(username=username, user_id=user_id, course=course)
         return render_to_response('registration/nynj_login.html', {'form': form, 'args': args, 'request': request} )
     else:
