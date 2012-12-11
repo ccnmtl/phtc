@@ -466,3 +466,13 @@ def render_dashboard(request):
     return dict(root=root, last_session=last_session,
                 dashboard_info=dashboard_info,
                 empty=empty, is_visited=is_visited, admin_lock = admin_lock)
+
+@login_required
+@render_to('main/reports.html')
+def reports(request, path):
+    h = get_hierarchy("main")
+    root = h.get_root()
+    modules = root.get_children()
+    return dict(modules=modules)
+
+

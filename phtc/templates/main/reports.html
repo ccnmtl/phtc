@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load user_status %}
+
+{% block title %}My Dashboard{% endblock %}
+
+{% block content %}
+
+{% for module in modules %}
+
+	<p>{{ module }}</p>
+
+{% endfor %}
+
+
+
+{% endblock %}
