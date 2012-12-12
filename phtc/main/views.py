@@ -469,7 +469,7 @@ def render_dashboard(request):
 
 @login_required
 @render_to('main/reports.html')
-def reports(request, path):
+def reports(request):
     h = get_hierarchy("main")
     root = h.get_root()
     modules = root.get_children()
