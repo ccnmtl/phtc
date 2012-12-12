@@ -138,8 +138,8 @@ def make_sure_module1_parts_are_allowed(module, user):
         v = part.get_uservisit(user)
         if v:
             if (v.status == "in_progress"
-                and part.get_previous().get_uservisit(user)):
-                part.get_previous().user_pagevisit(user, status="complete")
+            and part.get_previous().get_uservisit(user)):
+            part.get_previous().user_pagevisit(user, status="complete")
         else:
             part.user_pagevisit(user, status="allowed")
 
