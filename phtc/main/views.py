@@ -5,10 +5,12 @@ from pagetree.helpers import get_module, needs_submit, submitted
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.utils.simplejson import dumps
+from django.contrib.auth.models import User
 from phtc.main.models import UserProfile
 from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
+from pagetree.models import Section
 from django.core.mail import EmailMultiAlternatives
 
 
@@ -473,6 +475,15 @@ def reports(request):
     h = get_hierarchy("main")
     root = h.get_root()
     modules = root.get_children()
-    return dict(modules=modules)
+    users = User.objects.all()
+    pagevisits = UserPageVisit.objects.all()
+    complete_modules = []
+    for module in modules:
+        check_each_module(pagevisits, module, complete_modules)
+    return dict(modules=modules, users = users, complete_modules = complete_modules)
 
-
+def check_each_module(pagevisits, module, complete_modules):
+        for visit in pagevisits:
+            if (visit.status == "complete"
+                and Section.objects.get(id=visit.section_id).id == module.id):
+                complete_modules.append([visit,Section.objects.get(id=visit.section_id)])

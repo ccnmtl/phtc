@@ -7,10 +7,16 @@
 
 {% for module in modules %}
 
-	<p>{{ module }}</p>
+	<p>{{ module }} , {{ c.status }}</p>
 
 {% endfor %}
 
+{% for user in users %}
+	<p>{{ user.username }}</p>
+{% endfor %}
 
+{% for module in complete_modules %}
+	<p>{{ module.0.id }} , {{  module.1 }}</p>
+{% endfor %}
 
 {% endblock %}
