@@ -495,7 +495,7 @@ def get_all_completed_modules(root, modules, pagevisits):
     for module in modules:
         completed_modules[module] = []
         for pv in pagevisits:
-            if module.id == pv.section_id:
+            if module.id == pv.section_id and pv.status == "complete":
                 completed_modules[module].append(pv)
     return completed_modules
 
