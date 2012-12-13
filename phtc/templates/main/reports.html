@@ -5,18 +5,9 @@
 
 {% block content %}
 
-{% for module in modules %}
-
-	<p>{{ module }} , {{ c.status }}</p>
-
+{% for item in a %}
+	<p class="users">{{ item.1 }} - {{ item.0 }} completers</p>
 {% endfor %}
 
-{% for user in users %}
-	<p>{{ user.username }}</p>
-{% endfor %}
-
-{% for module in complete_modules %}
-	<p>{{ module.0.user_id }} , {{  module.1 }}</p>
-{% endfor %}
 
 {% endblock %}

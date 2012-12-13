@@ -138,8 +138,8 @@ def make_sure_module1_parts_are_allowed(module, user):
         v = part.get_uservisit(user)
         if v:
             if (v.status == "in_progress"
-            and part.get_previous().get_uservisit(user)):
-            part.get_previous().user_pagevisit(user, status="complete")
+                and part.get_previous().get_uservisit(user)):
+                part.get_previous().user_pagevisit(user, status="complete")
         else:
             part.user_pagevisit(user, status="allowed")
 
@@ -477,13 +477,32 @@ def reports(request):
     modules = root.get_children()
     users = User.objects.all()
     pagevisits = UserPageVisit.objects.all()
-    complete_modules = []
-    for module in modules:
-        check_each_module(pagevisits, module, complete_modules)
-    return dict(modules=modules, users = users, complete_modules = complete_modules)
 
-def check_each_module(pagevisits, module, complete_modules):
-        for visit in pagevisits:
-            if (visit.status == "complete"
-                and Section.objects.get(id=visit.section_id).id == module.id):
-                complete_modules.append([visit,Section.objects.get(id=visit.section_id)])
+    completed_modules = get_all_completed_modules(root, modules, pagevisits)
+    a = []
+    for k,v in completed_modules.iteritems():
+        a.append([len(v), k])
+
+    #sorted_modules = sort_completed_modules(completed_modules)
+    return dict(completed_modules = completed_modules, a=a, modules = modules)
+
+def create_array():
+    array = []
+    return array
+
+def get_all_completed_modules(root, modules, pagevisits):
+    completed_modules = {}
+    for module in modules:
+        completed_modules[module] = []
+        for pv in pagevisits:
+            if module.id == pv.section_id:
+                completed_modules[module].append(pv)
+    return completed_modules
+
+def sort_completed_modules(completed_modules):
+    return completed_modules
+
+
+
+
+
