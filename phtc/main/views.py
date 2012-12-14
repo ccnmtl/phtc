@@ -475,20 +475,18 @@ def reports(request):
     h = get_hierarchy("main")
     root = h.get_root()
     modules = root.get_children()
-    users = User.objects.all()
     pagevisits = UserPageVisit.objects.all()
-
     completed_modules = get_all_completed_modules(root, modules, pagevisits)
-    a = []
-    for k,v in completed_modules.iteritems():
-        a.append([len(v), k])
+    completed_modules_counted = count_modules_completed(completed_modules)
+    completers = create_completers_list(completed_modules)
+    age_gender = create_age_gender_dict(completers)
 
-    #sorted_modules = sort_completed_modules(completed_modules)
-    return dict(completed_modules = completed_modules, a=a, modules = modules)
+    return dict(completed_modules=completed_modules,
+            completed_modules_counted=completed_modules_counted, 
+            completers=completers,
+            age_gender = age_gender
+            )
 
-def create_array():
-    array = []
-    return array
 
 def get_all_completed_modules(root, modules, pagevisits):
     completed_modules = {}
@@ -499,9 +497,116 @@ def get_all_completed_modules(root, modules, pagevisits):
                 completed_modules[module].append(pv)
     return completed_modules
 
-def sort_completed_modules(completed_modules):
-    return completed_modules
 
+def count_modules_completed(completed_modules):
+    completed_modules_counted = []
+    for k,v in completed_modules.iteritems():
+        completed_modules_counted.append([k,len(v)])
+    return completed_modules_counted
+
+
+def create_completers_list(completed_modules):
+    completers_list = {}
+    for k,v in completed_modules.iteritems():
+        for completer in completed_modules[k]:
+            user = UserProfile.objects.get(user_id = completer.user_id)
+            completers_list[user] = user
+    return completers_list
+
+
+def create_age_gender_dict(completers):
+    items = [
+    {
+        'Age': 'Under 20',
+        'Male': 0,
+        'Female': 0,
+        'Total': 0
+    },
+    {
+        'Age': '20-29',
+        'Male': 0,
+        'Female': 0,
+        'Total': 0
+    },
+    {
+        'Age': '30-39',
+        'Male': 0,
+        'Female': 0,
+        'Total': 0
+    },
+    {
+        'Age': '40-49',
+        'Male': 0,
+        'Female': 0,
+        'Total': 0
+    },
+    {
+        'Age': '50-59',
+        'Male': 0,
+        'Female': 0,
+        'Total': 0
+    },
+    {
+        'Age': '60 or Older',
+        'Male': 0,
+        'Female': 0,
+        'Total': 0
+    },
+    {
+        'Age': 'Total',
+        'Male': 0,
+        'Female': 0,
+        'Total': 0
+    }]
+    calculate_age_gender(completers, items)
+    return items
+
+
+def calculate_age_gender(completers, items):
+    for completer in completers:
+        if completer.age == "Under 20":
+            row = 0
+            set_row(completer, items, row)
+            items[row]['Total'] += 1
+
+        if completer.age == "20-29":
+            row = 1
+            set_row(completer, items, row)
+            items[row]['Total'] += 1
+
+        if completer.age == "30-39":
+            row = 2
+            set_row(completer, items, row)
+            items[row]['Total'] += 1
+
+        if completer.age == "40-49":
+            row = 3
+            set_row(completer, items, row)
+            items[row]['Total'] += 1
+
+        if completer.age == "50-59":
+            row = 4
+            set_row(completer, items, row)
+            items[row]['Total'] += 1
+
+        if completer.age == "60-69":
+            row = 5
+            set_row(completer, items, row)
+            items[row]['Total'] += 1
+        
+        #set Totals of male and Female
+        items[6]['Total'] += 1
+    return items
+
+def set_row(completer, items, row):
+    if completer.sex == "male":
+        items[row]['Male'] += 1
+        items[6]['Male'] += 1 # this is the Total row
+
+    if completer.sex == "female":
+        items[row]['Female'] += 1
+        items[6]['Female'] += 1 # this is the Total row
+    return items
 
 
 

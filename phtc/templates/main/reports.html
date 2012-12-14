@@ -4,9 +4,23 @@
 {% block title %}My Dashboard{% endblock %}
 
 {% block content %}
+<div id="number-of-completers">
+	<h2> Number of Completers</h2>
+	{{ completed_modules_counted }}
+	{% for mod in completed_modules_counted %}
+	<p class="users">{{ mod.0 }} - {{ mod.1 }} completers</p>
+	{% endfor %}
+</div><!--end #number-of-completers-->
 
-{% for item in a %}
-	<p class="users">{{ item.1 }} - {{ item.0 }} completers</p>
+<div id="age-gender">
+	<h2>Age &amp; Gender</h2>
+	<p>{{ age_gender }}</p>
+</div><!--end #age-gender-->
+
+{% for completer in completers %}
+	<!--
+	<p class="completer">{{ completer.fname }}</p>
+	-->
 {% endfor %}
 
 
