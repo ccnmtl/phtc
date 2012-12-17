@@ -12,7 +12,7 @@
         <div id="user_log_in">            
             <h3 class="log_in">Please log in</h3>
             
-            <form method="post" action="/accounts/login/?next=module-1/one/learning-objectives/" class="well">
+            <form method="post" action="/accounts/login/?next=/nynj/&usrnm={{ args.username }}&user_id={{ args.user_id }}&course={{ args.course }}" class="well">
             {% csrf_token %}
 	            <p>If you have a project account...</p>
 	            
