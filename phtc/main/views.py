@@ -499,10 +499,14 @@ def get_all_completed_modules(root, modules, pagevisits):
 
 
 def count_modules_completed(completed_modules):
-    completed_modules_counted = []
+    mod_list = []
     for k,v in completed_modules.iteritems():
-        completed_modules_counted.append([k,len(v)])
-    return completed_modules_counted
+        mod=dict([
+                ('Section', k.label.encode("ascii")),
+                ('Number_of_completers', len(v))
+            ])
+        mod_list.append(mod)
+    return mod_list
 
 
 def create_completers_list(completed_modules):
