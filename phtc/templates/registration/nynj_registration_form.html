@@ -1,0 +1,17 @@
+{% extends "registration/registration_base.html" %}
+{% load bootstrap %}
+{% block title %}Register for an account{% endblock %}
+{% block content %}
+<h3>Create a new PHTC account</h3>
+<p>Use the following form to create a new account to access PHTC modules.</p>
+
+    <form method='post' id="registration" action='{{ register }}' class="well form-horizontal">{% csrf_token %}
+			{{form|bootstrap}}
+	
+	<div class="fieldwrapper">
+        <input class="btn btn-primary" value="Send activation email" /></td>
+	</div><!-- fieldwrapper -->
+    </form>
+	<script src="/site_media/js/registration.js"></script>
+	<script src="/site_media/js/edit_profile.js"></script>
+{% endblock %}
