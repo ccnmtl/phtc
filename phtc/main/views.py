@@ -52,8 +52,6 @@ def nynj(request):
             course_map = NYNJ_Course_Map.objects.get(courseID = course)
             return HttpResponseRedirect(course_map.phtc_url)
         except NYNJ_Course_Map.DoesNotExist:
-            #import pdb
-            #pdb.set_trace()
             return HttpResponseRedirect('/dashboard/?course_not_available=true')
     
     if request.method == "POST":
@@ -458,25 +456,18 @@ def update_user_profile(request):
 @login_required
 @render_to('main/dashboard.html')
 def dashboard(request):
-    if request.GET.get('course_not_available') == 'true':
-        return HttpResponseRedirect('/dashboard/')
-    try:
-        next_path = request.META['HTTP_REFERER']
-        if (len(next_path.split('/nynj/?')[1].split('&')) > 1):
-            params = next_path.split('/nynj/?')[1].split('&')
-            if (params[0].split('=')[0] == "course" 
-            or params[1].split('=')[0] == "course" ):
-                url ='/nynj/?' + params[0] + '&' + params[1]
-                return HttpResponseRedirect(url)
-    except:
-        pass
-
     # test if the user profile has been completed
+    if request.GET and request.GET.get('course_not_available'):
+        #return HttpResponseRedirect('/profile/')
+        request.META['HTTP_REFERER'] = ''
+        HttpResponseRedirect('/dashboard/?course_not_available=true')
     try:
         UserProfile.objects.get(user=request.user).fname
         return render_dashboard(request)
     except UserProfile.DoesNotExist:
         return HttpResponseRedirect('/profile/?needs_edit=true/')
+
+    
 
 @login_required
 @render_to('main/dashboard_panel.html')
@@ -511,6 +502,17 @@ def certificate(request, path):
 
 
 def render_dashboard(request):
+    try:
+        next_path = request.META['HTTP_REFERER']
+        if (len(next_path.split('/nynj/?')[1].split('&')) > 1):
+            params = next_path.split('/nynj/?')[1].split('&')
+            if (params[0].split('=')[0] == "course" 
+            or params[1].split('=')[0] == "course" ):
+                url ='/nynj/?' + params[0] + '&' + params[1]
+                return HttpResponseRedirect(url)
+    except:
+        pass
+
     h = get_hierarchy("main")
     root = h.get_root()
     last_session = h.get_user_section(request.user)
