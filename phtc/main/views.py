@@ -10,6 +10,7 @@ from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
 from django.core.mail import EmailMultiAlternatives
+from django.contrib.flatpages.models import FlatPage
 
 
 def redirect_to_first_section_if_root(section, root):
@@ -469,3 +470,20 @@ def render_dashboard(request):
     return dict(root=root, last_session=last_session,
                 dashboard_info=dashboard_info,
                 empty=empty, is_visited=is_visited, admin_lock=admin_lock)
+
+@render_to('flatpages/about.html')
+def about_page(request):
+    page = FlatPage.objects.get(title="About")
+    return dict(flatpage=page)
+
+
+@render_to('flatpages/help.html')
+def help_page(request):
+    page = FlatPage.objects.get(title="Help")
+    return dict(flatpage=page)
+
+
+@render_to('flatpages/about.html')
+def contact_page(request):
+    page = FlatPage.objects.get(title="Contact")
+    return dict(flatpage=page)
