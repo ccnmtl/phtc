@@ -31,7 +31,7 @@ def test_nynj_username(request):
         return HttpResponse('It got')
     return HttpResponse('Simple return')
 
-@render_to('registration/registration_form.html')
+@render_to('registration/nynj_registration_form.html')
 def nynj(request):
     username = request.GET.get('usrnm')
     user_id = request.GET.get('user_id')
