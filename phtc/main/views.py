@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.utils.simplejson import dumps
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 from phtc.main.models import UserProfile
 from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
@@ -37,7 +38,7 @@ def nynj(request):
     user_id = request.GET.get('user_id')
     course = request.GET.get('course')
     register = "/registration/register/" #this is for the form action src
-    
+    args = dict(username=username, user_id=user_id, course=course)
     form = UserRegistrationForm(initial={
         'is_nynj' : 'True',
         'nynj_username' : username,
@@ -63,10 +64,60 @@ def nynj(request):
         form = AuthenticationForm(initial={
             'username': username 
             })
-        args = dict(username=username, user_id=user_id, course=course)
         return render_to_response('registration/nynj_login.html', {'form': form, 'args': args, 'request': request} )
     else:
-        return dict(form=form, register = register)
+        return dict(form=form, register = register, args = args)
+
+@render_to('registration/nynj_registration_form.html')
+def create_nynj_user(request):
+    if request.GET and request.GET.get('course'):
+        course = request.GET.get('course')
+    form = UserRegistrationForm(request.POST)
+    email = form.data["email"]
+    username = form.data["username"]
+    password = form.data["password1"]
+    user = User.objects.create_user(username, email, password)
+    user.save()
+    userprofile = UserProfile.objects.create(user=user)
+    try:
+        userprofile.other_employment_location = form.data[
+            "other_employment_location"]
+    except:
+        pass
+
+    try:
+        userprofile.other_position_category = form.data[
+            "other_position_category"]
+    except:
+        pass
+    request.user.email= form.data["email"]
+    userprofile.is_nynj = form.data["is_nynj"]    
+    userprofile.fname = form.data["fname"]
+    userprofile.lname = form.data["lname"]
+    userprofile.degree = form.data["degree"]
+    userprofile.sex = form.data["sex"]
+    userprofile.age = form.data["age"]
+    userprofile.origin = form.data["origin"]
+    userprofile.ethnicity = form.data["ethnicity"]
+    userprofile.degree = form.data["degree"]
+    userprofile.work_city = form.data["work_city"]
+    userprofile.work_state = form.data["work_state"]
+    userprofile.work_zip = form.data["work_zip"]
+    userprofile.employment_location = form.data["employment_location"]
+    userprofile.umc = form.data["umc"]
+    userprofile.position = form.data["position"]
+    userprofile.dept_health = form.data["dept_health"]
+    userprofile.geo_dept_health = form.data["geo_dept_health"]
+    userprofile.experience = form.data["experience"]
+    userprofile.rural = form.data["rural"]
+    userprofile.save()
+    user.is_active = True
+    user.save()
+    authenticated_user = authenticate(username=username, password=password)
+    login(request, authenticated_user)
+    return HttpResponseRedirect('/nynj/?profile_created=true&course=' + course)
+
+
 
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:
@@ -523,3 +574,10 @@ def render_dashboard(request):
     return dict(root=root, last_session=last_session,
                 dashboard_info=dashboard_info,
                 empty=empty, is_visited=is_visited)
+
+
+
+
+
+
+

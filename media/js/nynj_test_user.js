@@ -1,7 +1,6 @@
 (function(jQuery){
 	$(document).ready(function(){
-		$('#id_username').focus()
-		$('#id_username').blur(function(){
+		$('#id_password').focus(function(){
 			url_var_username = $('#id_username').val()
 			$.post('/test_nynj_username/',{ username: url_var_username}
 			)
