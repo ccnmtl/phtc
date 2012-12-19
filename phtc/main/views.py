@@ -56,7 +56,6 @@ def nynj(request):
             return HttpResponseRedirect('/dashboard/?course_not_available=true')
     
     if request.method == "POST":
-
         form = UserRegistrationForm()
         return render_to_response('registration/registration_form.html',form)
     
@@ -116,6 +115,24 @@ def create_nynj_user(request):
     authenticated_user = authenticate(username=username, password=password)
     login(request, authenticated_user)
     return HttpResponseRedirect('/nynj/?profile_created=true&course=' + course)
+
+def nynj_login(request):
+    if request.GET and not request.GET.get('course') == '':
+        course = request.GET.get('course')
+    else:
+        course = 'none'
+    if request.method == "POST":
+        req = request.POST
+        if not req.get('username') == '' and not req.get('password') == '':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            authenticated_user = authenticate(username=username, password=password)
+            try:
+                login(request, authenticated_user)
+                return HttpResponseRedirect('/dashboard/')
+            except:
+                return HttpResponseRedirect('/nynj/?not_valid_login&course=' + course)
+    return HttpResponseRedirect('/nynj/?not_valid_login&course=' + course)
 
 
 
