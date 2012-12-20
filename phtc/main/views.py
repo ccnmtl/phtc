@@ -117,23 +117,32 @@ def create_nylearns_user(request):
     return HttpResponseRedirect('/nylearns/?profile_created=true&course=' + course)
 
 
+@render_to('registration/nylearns_login.html')
 def nylearns_login(request):
-    if request.GET and not request.GET.get('course') == '':
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    course = request.GET.get('course')
+    form = AuthenticationForm(initial={'username':username})
+    if request.POST.get('args'):
+        args = request.POST.get('args')
+    else:
+        args = {'course':course}
+    if not request.GET.get('course') == '':
         course = request.GET.get('course')
     else:
         course = 'none'
     if request.method == "POST":
         req = request.POST
         if not req.get('username') == '' and not req.get('password') == '':
-            username = request.POST.get('username')
-            password = request.POST.get('password')
             authenticated_user = authenticate(username=username, password=password)
             try:
                 login(request, authenticated_user)
-                return HttpResponseRedirect('/dashboard/')
+                return HttpResponseRedirect('/nylearns/?course=' + course)
             except:
-                return HttpResponseRedirect('/nylearns/?not_valid_login&course=' + course)
-    return HttpResponseRedirect('/nylearns/?not_valid_login&course=' + course)
+                pass
+    if args:
+      return dict(form=form, errors=True, args=args)  
+    return dict(form=form, errors=True)
 
 
 

@@ -21,8 +21,7 @@
 	            <label for="id_password">Password: {{ form.password }}</label>
 	            <input id="login_form_submit_button" type="submit" value="LOG IN" class="btn btn-primary" />
 	            <input type="hidden" name="next" value="{{ next }}" />
-	            {{ form.errors}}asdasd
-	            {% if form_error%}
+	            {% if errors%}
 	            <p class="errornote"><span><b>ERROR:</b> Invalid username or password.</span> Please try again. Note that both username and password are case-sensitive.</p>
 	            {% endif %}
 	            <p class="smalltxt">
