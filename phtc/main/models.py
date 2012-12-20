@@ -31,10 +31,10 @@ class UserProfile(models.Model):
     disadvantaged = models.TextField()
 
     #NYNJ additions
-    is_nynj = models.BooleanField(default=False)
-    nynj_username = models.TextField(default='none')
-    nynj_course_init = models.TextField(default='none')
-    nynj_user_id = models.TextField(default='none')
+    is_nylearns = models.BooleanField(default=False)
+    nylearns_username = models.TextField(default='none')
+    nylearns_course_init = models.TextField(default='none')
+    nylearns_user_id = models.TextField(default='none')
 
 
     def __str__(self):
@@ -63,10 +63,10 @@ def user_created(sender, user, request, **kwargs):
     data.degree = form.data["degree"]
 
     # NYNJ additions
-    data.is_nynj = form.data["is_nynj"] 
-    data.nynj_username = form.data["nynj_username"]
-    data.nynj_course_init = form.data["nynj_course_init"]
-    data.nynj_user_id = form.data["nynj_user_id"]
+    data.is_nylearns = form.data["is_nylearns"] 
+    data.nylearns_username = form.data["nylearns_username"]
+    data.nylearns_course_init = form.data["nylearns_course_init"]
+    data.nylearns_user_id = form.data["nylearns_user_id"]
 
     try:
         data.other_position_category = form.data["other_position_category"]
@@ -94,10 +94,10 @@ class DashboardInfo(models.Model):
                                              initial=self.info)
         return EditSectionForm()
 
-class NYNJ_Course_Map(models.Model):
+class NYLEARNS_Course_Map(models.Model):
     id = models.AutoField(primary_key=True)
     courseID = models.TextField()
     phtc_url = models.TextField()
 
     def __unicode__(self):
-        return "url path: %s" % self.phtc_url
+        return "url path:%s" % self.phtc_url

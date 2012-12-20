@@ -3,7 +3,7 @@
 {% block noleftsidebar %} class="no-left-sidebar"{% endblock %}
 {% block content %}
 <style>
-#nynj-greeting{
+#nylearns-greeting{
 	color:#777;
 }
 </style>
@@ -12,23 +12,22 @@
         <div id="user_log_in">            
             <h3 class="log_in">Please log in</h3>
             
-            <form method="post" action="/nynj_login/?next=/nynj/&usrnm={{ args.username }}&user_id={{ args.user_id }}&course={{ args.course }}" class="well">
+            <form method="post" action="/nylearns_login/?next=/nylearns/&usrnm={{ args.username }}&user_id={{ args.user_id }}&course={{ args.course }}" class="well">
             {% csrf_token %}
 	            <p>If you have a project account...</p>
 	            
 	            <label for="id_username">Username: {{ form.username }}</label>
-	            <div id="nynj-greeting"></div>
+	            <div id="nylearns-greeting"></div>
 	            <label for="id_password">Password: {{ form.password }}</label>
 	            <input id="login_form_submit_button" type="submit" value="LOG IN" class="btn btn-primary" />
 	            <input type="hidden" name="next" value="{{ next }}" />
-	            
-	            {% if form.errors%}
+	            {{ form.errors}}asdasd
+	            {% if form_error%}
 	            <p class="errornote"><span><b>ERROR:</b> Invalid username or password.</span> Please try again. Note that both username and password are case-sensitive.</p>
 	            {% endif %}
-
 	            <p class="smalltxt">
 	            	<span class="tooltip-bottom" rel="tooltip" title="Create your own PHTC account">
-	            		<a id="nynj-register-link" href="/nynj/?usrnm={{ args.username }}&user_id={{ args.user_id }}&course={{ args.course }}&has_account=0">Need a new account?</a>
+	            		<a id="nylearns-register-link" href="/nylearns/?usrnm={{ args.username }}&user_id={{ args.user_id }}&course={{ args.course }}&has_account=0">Need a new account?</a>
 	            	</span> | 
 	            	<span class="tooltip-bottom" rel="tooltip" title="Reset your password">
 	            		<a href="/registration/password/reset/">Forgot password?</a>
@@ -38,7 +37,7 @@
             
         </div><!--end #user_log_in-->
     </div><!--end #greeting-login-->
-    <script src="/site_media/js/nynj_test_user.js"></script>
+    <script src="/site_media/js/nylearns_test_user.js"></script>
 {% endblock %}
 
 

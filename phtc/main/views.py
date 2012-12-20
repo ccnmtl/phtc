@@ -11,14 +11,14 @@ from phtc.main.models import UserProfile
 from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
-from phtc.main.models import NYNJ_Course_Map
+from phtc.main.models import NYLEARNS_Course_Map
 from django.core.mail import EmailMultiAlternatives
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.auth.forms import AuthenticationForm
 
 @render_to('registration/registration_form.html')
-def test_nynj_username(request):
+def test_nylearns_username(request):
     if request.POST:
         username = request.POST.get('username')
         try:
@@ -32,27 +32,27 @@ def test_nynj_username(request):
         return HttpResponse('It got')
     return HttpResponse('Simple return')
 
-@render_to('registration/nynj_registration_form.html')
-def nynj(request):
+@render_to('registration/nylearns_registration_form.html')
+def nylearns(request):
     username = request.GET.get('usrnm')
     user_id = request.GET.get('user_id')
     course = request.GET.get('course')
     register = "/registration/register/" #this is for the form action src
     args = dict(username=username, user_id=user_id, course=course)
     form = UserRegistrationForm(initial={
-        'is_nynj' : 'True',
-        'nynj_username' : username,
+        'is_nylearns' : 'True',
+        'nylearns_username' : username,
         'username' : username,
-        'nynj_user_id' : user_id,
-        'nynj_course_init' : course
+        'nylearns_user_id' : user_id,
+        'nylearns_course_init' : course
         })
 
     if not request.user.is_anonymous():
         course = request.GET.get('course')
         try:
-            course_map = NYNJ_Course_Map.objects.get(courseID = course)
+            course_map = NYLEARNS_Course_Map.objects.get(courseID = course)
             return HttpResponseRedirect(course_map.phtc_url)
-        except NYNJ_Course_Map.DoesNotExist:
+        except NYLEARNS_Course_Map.DoesNotExist:
             return HttpResponseRedirect('/dashboard/?course_not_available=true')
     
     if request.method == "POST":
@@ -63,12 +63,12 @@ def nynj(request):
         form = AuthenticationForm(initial={
             'username': username 
             })
-        return render_to_response('registration/nynj_login.html', {'form': form, 'args': args, 'request': request} )
+        return render_to_response('registration/nylearns_login.html', {'form': form, 'args': args, 'request': request} )
     else:
         return dict(form=form, register = register, args = args)
 
-@render_to('registration/nynj_registration_form.html')
-def create_nynj_user(request):
+@render_to('registration/nylearns_registration_form.html')
+def create_nylearns_user(request):
     if request.GET and request.GET.get('course'):
         course = request.GET.get('course')
     form = UserRegistrationForm(request.POST)
@@ -90,7 +90,7 @@ def create_nynj_user(request):
     except:
         pass
     request.user.email= form.data["email"]
-    userprofile.is_nynj = form.data["is_nynj"]    
+    userprofile.is_nylearns = form.data["is_nylearns"]    
     userprofile.fname = form.data["fname"]
     userprofile.lname = form.data["lname"]
     userprofile.degree = form.data["degree"]
@@ -114,9 +114,10 @@ def create_nynj_user(request):
     user.save()
     authenticated_user = authenticate(username=username, password=password)
     login(request, authenticated_user)
-    return HttpResponseRedirect('/nynj/?profile_created=true&course=' + course)
+    return HttpResponseRedirect('/nylearns/?profile_created=true&course=' + course)
 
-def nynj_login(request):
+
+def nylearns_login(request):
     if request.GET and not request.GET.get('course') == '':
         course = request.GET.get('course')
     else:
@@ -131,8 +132,8 @@ def nynj_login(request):
                 login(request, authenticated_user)
                 return HttpResponseRedirect('/dashboard/')
             except:
-                return HttpResponseRedirect('/nynj/?not_valid_login&course=' + course)
-    return HttpResponseRedirect('/nynj/?not_valid_login&course=' + course)
+                return HttpResponseRedirect('/nylearns/?not_valid_login&course=' + course)
+    return HttpResponseRedirect('/nylearns/?not_valid_login&course=' + course)
 
 
 
@@ -572,11 +573,11 @@ def certificate(request, path):
 def render_dashboard(request):
     try:
         next_path = request.META['HTTP_REFERER']
-        if (len(next_path.split('/nynj/?')[1].split('&')) > 1):
-            params = next_path.split('/nynj/?')[1].split('&')
+        if (len(next_path.split('/nylearns/?')[1].split('&')) > 1):
+            params = next_path.split('/nylearns/?')[1].split('&')
             if (params[0].split('=')[0] == "course" 
             or params[1].split('=')[0] == "course" ):
-                url ='/nynj/?' + params[0] + '&' + params[1]
+                url ='/nylearns/?' + params[0] + '&' + params[1]
                 return HttpResponseRedirect(url)
     except:
         pass
