@@ -292,12 +292,6 @@ class UserRegistrationForm(RegistrationForm):
         initial = False
         )
 
-    nylearns_username = forms.CharField(
-        required = False,
-        widget = forms.HiddenInput(),
-        initial = "none"
-        )
-
     nylearns_user_id = forms.CharField(
         required = False,
         widget = forms.HiddenInput(),
