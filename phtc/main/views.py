@@ -139,8 +139,6 @@ def nylearns_login(request):
                 return HttpResponseRedirect('/nylearns/?course=' + course)
             except:
                 pass
-    if args:
-      return dict(form=form, errors=True, args=args)  
     return dict(form=form, errors=True, args=args)
 
 
