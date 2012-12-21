@@ -26,23 +26,19 @@ def test_nylearns_username(request):
             return HttpResponse(True)
         except User.DoesNotExist:
             return HttpResponse(False)
-        
-
     else:
         return HttpResponse('It got')
     return HttpResponse('Simple return')
 
+
 @render_to('registration/nylearns_registration_form.html')
 def nylearns(request):
-    username = request.GET.get('usrnm')
     user_id = request.GET.get('user_id')
     course = request.GET.get('course')
     register = "/registration/register/" #this is for the form action src
-    args = dict(username=username, user_id=user_id, course=course)
+    args = dict(user_id=user_id, course=course)
     form = UserRegistrationForm(initial={
         'is_nylearns' : 'True',
-        'nylearns_username' : username,
-        'username' : username,
         'nylearns_user_id' : user_id,
         'nylearns_course_init' : course
         })
@@ -60,12 +56,11 @@ def nylearns(request):
         return render_to_response('registration/registration_form.html',form)
     
     if not request.GET.get('has_account'):
-        form = AuthenticationForm(initial={
-            'username': username 
-            })
+        form = AuthenticationForm()
         return render_to_response('registration/nylearns_login.html', {'form': form, 'args': args, 'request': request} )
     else:
         return dict(form=form, register = register, args = args)
+
 
 @render_to('registration/nylearns_registration_form.html')
 def create_nylearns_user(request):
@@ -89,8 +84,11 @@ def create_nylearns_user(request):
             "other_position_category"]
     except:
         pass
+
     request.user.email= form.data["email"]
-    userprofile.is_nylearns = form.data["is_nylearns"]    
+    userprofile.is_nylearns = form.data["is_nylearns"]
+    userprofile.nylearns_user_id = form.data["nylearns_user_id"]
+    userprofile.nylearns_course_init = form.data["nylearns_course_init"]
     userprofile.fname = form.data["fname"]
     userprofile.lname = form.data["lname"]
     userprofile.degree = form.data["degree"]
@@ -122,11 +120,12 @@ def nylearns_login(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     course = request.GET.get('course')
+    user_id = request.GET.get('user_id')
     form = AuthenticationForm(initial={'username':username})
     if request.POST.get('args'):
         args = request.POST.get('args')
     else:
-        args = {'course':course}
+        args = {'course':course, 'user_id':user_id}
     if not request.GET.get('course') == '':
         course = request.GET.get('course')
     else:
@@ -142,7 +141,7 @@ def nylearns_login(request):
                 pass
     if args:
       return dict(form=form, errors=True, args=args)  
-    return dict(form=form, errors=True)
+    return dict(form=form, errors=True, args=args)
 
 
 

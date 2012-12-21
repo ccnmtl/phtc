@@ -12,7 +12,7 @@
         <div id="user_log_in">            
             <h3 class="log_in">Please log in</h3>
             
-            <form method="post" action="/nylearns_login/?next=/nylearns/&usrnm={{ args.username }}&user_id={{ args.user_id }}&course={{ args.course }}" class="well">
+            <form method="post" action="/nylearns_login/?next=/nylearns/&user_id={{ args.user_id }}&course={{ args.course }}" class="well">
             {% csrf_token %}
 	            <p>If you have a project account...</p>
 	            
@@ -26,7 +26,7 @@
 	            {% endif %}
 	            <p class="smalltxt">
 	            	<span class="tooltip-bottom" rel="tooltip" title="Create your own PHTC account">
-	            		<a id="nylearns-register-link" href="/nylearns/?usrnm={{ args.username }}&user_id={{ args.user_id }}&course={{ args.course }}&has_account=0">Need a new account?</a>
+	            		<a id="nylearns-register-link" href="/nylearns/?user_id={{ args.user_id }}&course={{ args.course }}&has_account=0">Need a new account?</a>
 	            	</span> | 
 	            	<span class="tooltip-bottom" rel="tooltip" title="Reset your password">
 	            		<a href="/registration/password/reset/">Forgot password?</a>

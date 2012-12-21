@@ -32,7 +32,6 @@ class UserProfile(models.Model):
 
     #NYNJ additions
     is_nylearns = models.BooleanField(default=False)
-    nylearns_username = models.TextField(default='none')
     nylearns_course_init = models.TextField(default='none')
     nylearns_user_id = models.TextField(default='none')
 
