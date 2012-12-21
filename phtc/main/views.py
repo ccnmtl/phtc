@@ -16,6 +16,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.auth.forms import AuthenticationForm
+from django.template.loader import get_template
+from django.template import Context
+
 
 @render_to('registration/registration_form.html')
 def test_nylearns_username(request):
@@ -142,7 +145,6 @@ def nylearns_login(request):
     return dict(form=form, errors=True, args=args)
 
 
-
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:
         # trying to visit the root page
@@ -191,43 +193,50 @@ def calculate_status(prev_status, uv):
 def user_visits(request):
     return UserPageVisit.objects.filter(user=request.user)
 
+def send_nylearns_email(request, user, profile, module):
+    send_to_email = 'jedavis@columbia.edu'
+    (subject, from_email, to) = (
+        'PHTC - NYLearns Notification',
+        'NYC-LI-LTC Public Health Training Center <no-reply@lowernysphtc.org>',
+        send_to_email)
+    text_content = ''
+    username = profile.lname + ', ' + profile.fname
+    nylearns_userid = profile.nylearns_user_id
+    user_email = user.email
+    html = get_template('main/nylearns_email.html')
+    html_context = Context({
+                            'username':username,
+                            'module': module,
+                            'nylearns_userid': nylearns_userid,
+                            'user_email': user_email
+                            })
+    html_content = html.render(html_context)
+
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
 
 def send_post_test_email(user, section, module, request):
+    profile = UserProfile.objects.get(user_id = user.id)
+    if profile.is_nylearns == True:
+        send_nylearns_email(request, user, profile, module)
+
     (subject, from_email, to) = (
         'Public Health Training Certificate',
         'NYC-LI-LTC Public Health Training Center <no-reply@lowernysphtc.org>',
         user.email)
     text_content = ''
-    # this really should go in a template instead of being inlined
-    html_content = (
-        '<p>Congratulations on successfully completing the online '
-        'training program ' + module.label + '.</p>'
-        '<p>You may now access your certificate of completion for '
-        'this program. Simply, ' + '<a href="http://' +
-        request.get_host() + '/dashboard/">click here</a> ' +
-        'to return to your personal dashboard; a link to your '
-        'certificate is ' + '<a href="' + 'http://' +
-        request.get_host() + '/certificate' + module.get_absolute_url() +
-        '">here</a>.</p>' + '<p>To request continuing education credit '
-        'for this training program, please write to ' +
-        'phtc@columbia.edu. In an email, please include your name, '
-        'contact information, and the type ' +
-        'of credit you are requesting, and a staff member of the New '
-        'York City-Long Island-Lower Tri ' +
-        'County Public Health Training Center will follow-up with you '
-        'shortly.</p><p>If you experience any technical difficulties in'
-        ' accessing the certificate or the dashboard, ' +
-        'please also contact phtc@clumbia.edu.</p>' +
-        '<p>Thank you for choosing the New York City-Long Island-Lower '
-        'Tri County Public Health Training ' +
-        'Center. We hope you will return to our site often and take '
-        'advantage of new content and other ' +
-        'training offerings</p>' +
-        '<p>New York City-Long Island-Lower Tri-County Public Health '
-        'Training Center</br>Columbia University | Mailman School of '
-        'Public Health</br>722 West 168th Street, Room 552<br/>' +
-        'New York, NY 10032</br>Phone: (212) 305-6984</br>Fax: (212) '
-        '342-9004</br>Email: phtc@columbia.edu</p>')
+    label = module.label
+    host = request.get_host()
+    abs_url = module.get_absolute_url()
+    html = get_template('main/completer_email.html')
+    html_context = Context({
+                            'label':label,
+                            'host': host,
+                            'abs_url': abs_url
+                            })
+    html_content = html.render(html_context)
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
