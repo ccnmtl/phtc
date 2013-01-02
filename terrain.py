@@ -332,7 +332,7 @@ def when_i_access_the_handoff_url(step, url):
         return
     world.browser.get(django_url(url))
     h1 = world.browser.find_element_by_id('section-header')
-    if h1.text == u'Part 1: Introduction to Qualitative Research':
+    if h1.text == 'Part 1: Introduction to Qualitative Research':
         assert True
     else:
         assert False
