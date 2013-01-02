@@ -3,7 +3,7 @@ Feature: Handoff
 Tests to check that users coming from NYLearns are being redirected
 to the correct place
 
-    Scenario: Unregistered new NYNJ user clicks on link from the NYLearns Site going to PHTC
+    Scenario: Unregistered new NYLears user clicks on link from the NYLearns Site going to PHTC
         Using selenium
         Given I am not logged in
         When I access the url "/nylearns/?course=123&userID=123"

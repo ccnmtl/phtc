@@ -384,9 +384,7 @@ def and_i_fill_out_the_form(step):
     rural = world.browser.find_element_by_id('id_rural').send_keys('No')
 
     register = world.browser.find_element_by_css_selector('input.btn-primary').click()
-    #activate_user()
-    #world.browser.get(django_url() )
-    #login_user('test123','test123')
+
 '''
 # These functions are no longer needed because we are automatically 
 # activating and loggin in NYLearns users upon correctly filling out
