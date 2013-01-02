@@ -337,23 +337,23 @@ def when_i_access_the_handoff_url(step, url):
     else:
         assert False
 
+
 @step(u'Then I see the handoff module "([^"]*)"')
 def then_i_see_the_handoff_module(step, courseID):
-    assert True, 'This step must be implemented'
+    header = world.browser.find_element_by_id('section-header')
+    assert header.text == 'Part 1: Introduction to Qualitative Research'
+
 
 @step(u'And I click on the link "([^"]*)"')
 def and_i_click_on_the_link_group1(step, link_text):
     if world.skipping:
         return
-    link = world.browser.find_element_by_id('nynj-register-link')
-    link.click() # there is a bug here that will not focus on the right element
+    link = world.browser.find_element_by_id('nylearns-register-link')
     link.click()
 
 
 @step(u'And it fails when I try to use my NYLearns login info')
 def and_it_fails_when_i_try_to_use_my_nylearns_login_info(step):
-    #import pdb
-    #pdb.set_trace()
     login_user('nylearns_username', 'nylearns_pass')
 
 
@@ -361,9 +361,10 @@ def and_it_fails_when_i_try_to_use_my_nylearns_login_info(step):
 def and_i_fill_out_the_form(step):
     if world.skipping:
         return
-    email = world.browser.find_element_by_id('id_email').send_keys('djredhand@gmail.com')
-    pass1 = world.browser.find_element_by_id('id_password1').send_keys('test')
-    pass2 = world.browser.find_element_by_id('id_password2').send_keys('test')
+    username = world.browser.find_element_by_id('id_username').send_keys('test123') 
+    email = world.browser.find_element_by_id('id_email').send_keys('testing@gmail.com')
+    pass1 = world.browser.find_element_by_id('id_password1').send_keys('test123')
+    pass2 = world.browser.find_element_by_id('id_password2').send_keys('test123')
     fname = world.browser.find_element_by_id('id_fname').send_keys('test123')
     lname = world.browser.find_element_by_id('id_lname').send_keys('test123')
     age = world.browser.find_element_by_id('id_age').send_keys('20-29')
@@ -383,10 +384,14 @@ def and_i_fill_out_the_form(step):
     rural = world.browser.find_element_by_id('id_rural').send_keys('No')
 
     register = world.browser.find_element_by_css_selector('input.btn-primary').click()
-    activate_user()
-    world.browser.get(django_url() )
-    login_user('test123','test')
-    
+    #activate_user()
+    #world.browser.get(django_url() )
+    #login_user('test123','test123')
+'''
+# These functions are no longer needed because we are automatically 
+# activating and loggin in NYLearns users upon correctly filling out
+# the registration form.
+#
 def activate_user():
     from django.contrib.auth.models import User
     user = User.objects.get(username = 'test123')
@@ -401,7 +406,7 @@ def login_user(username, password):
     password_field.send_keys(password)
     submit_button.click()
     
-
+'''
 
     
 
