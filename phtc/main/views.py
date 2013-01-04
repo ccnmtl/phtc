@@ -62,24 +62,29 @@ def nylearns(request):
         form = AuthenticationForm()
         return render_to_response('registration/nylearns_login.html', {'form': form, 'args': args, 'request': request} )
     else:
-        return dict(form=form, register = register, args = args)
+        return dict(form=form, register=register, args=args)
 
 
 @render_to('registration/nylearns_registration_form.html')
 def create_nylearns_user(request):
     import pdb
-    if request.GET and request.GET.get('course'):
-        course = request.GET.get('course')
+    if request.POST and request.POST.get('nylearns_course_init'):
+        course = request.POST.get('nylearns_course_init')
     else:
-        course = 'none'
+        course='none'
+    if request.POST and request.POST.get('nylearns_user_id'):
+        user_id = request.POST.get('nylearns_user_id')
+    else:
+        user_id = 'none'
+    register = "/registration/register/" #this is for the form action src
     form = UserRegistrationForm(request.POST)
     email = form.data["email"]
     username = form.data["username"]
     password = form.data["password1"]
-
+    args = dict(user_id=user_id, course=course)
     if (User.objects.filter(email=email).exists() or 
         User.objects.filter(username=username).exists()):
-        return dict(form=form, course=course, test=1)
+        return dict(form=form, register=register, args=args)
         
     else:
         user = User.objects.create_user(username, email, password)
@@ -619,10 +624,5 @@ def render_dashboard(request):
     return dict(root=root, last_session=last_session,
                 dashboard_info=dashboard_info,
                 empty=empty, is_visited=is_visited)
-
-
-
-
-
 
 
