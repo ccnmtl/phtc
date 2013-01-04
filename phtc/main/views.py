@@ -479,6 +479,7 @@ def reports(request):
     completed_modules = get_all_completed_modules(root, modules, pagevisits)
     completed_modules_counted = count_modules_completed(completed_modules)
     completers = create_completers_list(completed_modules)
+    create_user_report_table(completed_modules, completers)
     age_gender = create_age_gender_dict(completers)
 
     return dict(completed_modules=completed_modules,
@@ -516,6 +517,48 @@ def create_completers_list(completed_modules):
             user = UserProfile.objects.get(user_id = completer.user_id)
             completers_list[user] = user
     return completers_list
+
+
+def create_user_report_table(completed_modules, completers):
+    import copy
+    completer_objects=[]
+    completer_obj ={
+        '# of courses completed': '',
+        'Username': '',
+        'Email Address': '',
+        'First Name': '',
+        'Last Name': '',
+        'Age': '',
+        'Gender': '',
+        'Hispanic Origin': '',
+        'Race': '',
+        'Highest Degree Earned': '',
+        'Work City': '',
+        'Work State': '',
+        'Work Zip Code': '',
+        'Primary Discipline/Seciality': '',
+        'Employment Location': '',
+        'Work in DOH': '',
+        'Experience in Public Health': '',
+        'MUC': '',
+        'Rural': ''
+    }
+    counter = 0 # the first module that shows up is empty, just skip to next one to debug with PDB
+    for key,val in completers.iteritems():
+        obj = completer_obj.copy()
+        obj['# of courses completed'] = counter
+        completer_count = 0
+        for k,v in completed_modules.iteritems():
+            for pv in v:
+                if v[counter].user_id == val.user_id:
+                    a=1
+                if counter == 2:
+                    #import pdb
+                    #pdb.set_trace()  
+                    a=1
+
+        completer_objects.append(obj)
+        counter +=1
 
 
 def create_age_gender_dict(completers):
@@ -570,39 +613,39 @@ def calculate_age_gender(completers, items):
     for completer in completers:
         if completer.age == "Under 20":
             row = 0
-            set_row(completer, items, row)
+            set_row_total(completer, items, row)
             items[row]['Total'] += 1
 
         if completer.age == "20-29":
             row = 1
-            set_row(completer, items, row)
+            set_row_total(completer, items, row)
             items[row]['Total'] += 1
 
         if completer.age == "30-39":
             row = 2
-            set_row(completer, items, row)
+            set_row_total(completer, items, row)
             items[row]['Total'] += 1
 
         if completer.age == "40-49":
             row = 3
-            set_row(completer, items, row)
+            set_row_total(completer, items, row)
             items[row]['Total'] += 1
 
         if completer.age == "50-59":
             row = 4
-            set_row(completer, items, row)
+            set_row_total(completer, items, row)
             items[row]['Total'] += 1
 
         if completer.age == "60-69":
             row = 5
-            set_row(completer, items, row)
+            set_row_total(completer, items, row)
             items[row]['Total'] += 1
         
         #set Totals of male and Female
         items[6]['Total'] += 1
     return items
 
-def set_row(completer, items, row):
+def set_row_total(completer, items, row):
     if completer.sex == "male":
         items[row]['Male'] += 1
         items[6]['Male'] += 1 # this is the Total row
