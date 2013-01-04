@@ -67,15 +67,25 @@ def nylearns(request):
 
 @render_to('registration/nylearns_registration_form.html')
 def create_nylearns_user(request):
+    import pdb
     if request.GET and request.GET.get('course'):
         course = request.GET.get('course')
+    else:
+        course = 'none'
     form = UserRegistrationForm(request.POST)
     email = form.data["email"]
     username = form.data["username"]
     password = form.data["password1"]
-    user = User.objects.create_user(username, email, password)
-    user.save()
-    userprofile = UserProfile.objects.create(user=user)
+
+    if (User.objects.filter(email=email).exists() or 
+        User.objects.filter(username=username).exists()):
+        return dict(form=form, course=course, test=1)
+        
+    else:
+        user = User.objects.create_user(username, email, password)
+        user.save()
+        userprofile = UserProfile.objects.create(user=user)
+
     try:
         userprofile.other_employment_location = form.data[
             "other_employment_location"]
@@ -115,6 +125,8 @@ def create_nylearns_user(request):
     user.save()
     authenticated_user = authenticate(username=username, password=password)
     login(request, authenticated_user)
+
+    #pdb.set_trace()
     return HttpResponseRedirect('/nylearns/?profile_created=true&course=' + course)
 
 
@@ -194,7 +206,7 @@ def user_visits(request):
     return UserPageVisit.objects.filter(user=request.user)
 
 def send_nylearns_email(request, user, profile, module):
-    send_to_email = 'jedavis@columbia.edu'
+    send_to_email = 'ssw2117@gccnmtl.columbia.edu'
     (subject, from_email, to) = (
         'PHTC - NYLearns Notification',
         'NYC-LI-LTC Public Health Training Center <no-reply@lowernysphtc.org>',
