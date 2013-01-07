@@ -82,10 +82,12 @@ def create_nylearns_user(request):
     username = form.data["username"]
     password = form.data["password1"]
     args = dict(user_id=user_id, course=course)
+    # check if user or email exist and make sure pass is not blank
     if (User.objects.filter(email=email).exists() or 
-        User.objects.filter(username=username).exists()):
+        User.objects.filter(username=username).exists() or
+        password == ""):
         return dict(form=form, register=register, args=args)
-        
+
     else:
         user = User.objects.create_user(username, email, password)
         user.save()
