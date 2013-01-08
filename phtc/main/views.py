@@ -29,16 +29,12 @@ def test_nylearns_username(request):
             return HttpResponse(True)
         except User.DoesNotExist:
             return HttpResponse(False)
-    else:
-        return HttpResponse('It got')
-    return HttpResponse('Simple return')
 
 
 @render_to('registration/nylearns_registration_form.html')
 def nylearns(request):
     user_id = request.GET.get('user_id')
     course = request.GET.get('course')
-    register = "/registration/register/" #this is for the form action src
     args = dict(user_id=user_id, course=course)
     form = UserRegistrationForm(initial={
         'is_nylearns' : 'True',
@@ -51,6 +47,7 @@ def nylearns(request):
         try:
             course_map = NYLEARNS_Course_Map.objects.get(courseID = course)
             url = course_map.phtc_url.split('/')
+            #courses must be mapped to first page in module
             course_url = url[1] + '/' + url[2]
             section = get_section_from_path(course_url)
             module = get_module(section)
@@ -65,14 +62,14 @@ def nylearns(request):
     
     if not request.GET.get('has_account'):
         form = AuthenticationForm()
-        return render_to_response('registration/nylearns_login.html', {'form': form, 'args': args, 'request': request} )
+        return render_to_response('registration/nylearns_login.html', 
+            {'form': form, 'args': args, 'request': request} )
     else:
-        return dict(form=form, register=register, args=args)
+        return dict(form=form, args=args)
 
 
 @render_to('registration/nylearns_registration_form.html')
 def create_nylearns_user(request):
-    import pdb
     if request.POST and request.POST.get('nylearns_course_init'):
         course = request.POST.get('nylearns_course_init')
     else:
@@ -81,7 +78,6 @@ def create_nylearns_user(request):
         user_id = request.POST.get('nylearns_user_id')
     else:
         user_id = 'none'
-    register = "/registration/register/" #this is for the form action src
     form = UserRegistrationForm(request.POST)
     email = form.data["email"]
     username = form.data["username"]
@@ -91,7 +87,7 @@ def create_nylearns_user(request):
     if (User.objects.filter(email=email).exists() or 
         User.objects.filter(username=username).exists() or
         password == ""):
-        return dict(form=form, register=register, args=args)
+        return dict(form=form, args=args)
 
     else:
         user = User.objects.create_user(username, email, password)
@@ -137,8 +133,6 @@ def create_nylearns_user(request):
     user.save()
     authenticated_user = authenticate(username=username, password=password)
     login(request, authenticated_user)
-
-    #pdb.set_trace()
     return HttpResponseRedirect('/nylearns/?profile_created=true&course=' + course)
 
 
