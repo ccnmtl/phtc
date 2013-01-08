@@ -50,6 +50,11 @@ def nylearns(request):
         course = request.GET.get('course')
         try:
             course_map = NYLEARNS_Course_Map.objects.get(courseID = course)
+            url = course_map.phtc_url.split('/')
+            course_url = url[1] + '/' + url[2]
+            section = get_section_from_path(course_url)
+            module = get_module(section)
+            process_dashboard_ajax(request.user, section, module)
             return HttpResponseRedirect(course_map.phtc_url)
         except NYLEARNS_Course_Map.DoesNotExist:
             return HttpResponseRedirect('/dashboard/?course_not_available=true')

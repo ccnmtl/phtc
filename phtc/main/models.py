@@ -63,7 +63,6 @@ def user_created(sender, user, request, **kwargs):
 
     # NYNJ additions
     data.is_nylearns = form.data["is_nylearns"] 
-    data.nylearns_username = form.data["nylearns_username"]
     data.nylearns_course_init = form.data["nylearns_course_init"]
     data.nylearns_user_id = form.data["nylearns_user_id"]
 
