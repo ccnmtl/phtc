@@ -345,10 +345,10 @@ def then_i_see_the_handoff_module(step, courseID):
 
 
 @step(u'And I click on the link "([^"]*)"')
-def and_i_click_on_the_link_group1(step, link_text):
+def and_i_click_on_the_link_group1(step, link_id):
     if world.skipping:
         return
-    link = world.browser.find_element_by_id('nylearns-register-link')
+    link = world.browser.find_element_by_id(link_id)
     link.click()
 
 
@@ -382,32 +382,16 @@ def and_i_fill_out_the_form(step):
     experience = world.browser.find_element_by_id('id_experience').send_keys('0-5')
     umc = world.browser.find_element_by_id('id_umc').send_keys('Yes')
     rural = world.browser.find_element_by_id('id_rural').send_keys('No')
-
     register = world.browser.find_element_by_css_selector('input.btn-primary').click()
 
-'''
-# These functions are no longer needed because we are automatically 
-# activating and loggin in NYLearns users upon correctly filling out
-# the registration form.
-#
-def activate_user():
-    from django.contrib.auth.models import User
-    user = User.objects.get(username = 'test123')
-    user.is_active = True
-    user.save()
 
-def login_user(username, password):
-    username_field = world.browser.find_element_by_id("id_username")
-    password_field = world.browser.find_element_by_id("id_password")
-    submit_button = world.browser.find_element_by_id("login_form_submit_button") 
-    username_field.send_keys(username)
-    password_field.send_keys(password)
-    submit_button.click()
+@step (u'the previous section is available')
+def previous_section(step):
+    if world.skipping:
+        return
+    link = world.browser.find_element_by_link_text('Part 1: Introduction to Qualitative Research')
+    assert link
     
-'''
-
-    
-
 
 
 
