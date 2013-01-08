@@ -1,12 +1,12 @@
 //get the form we are dealing with - profile or registration
 if(jQuery('form').attr('id') == "registration"){
     var _form = jQuery();
-    //Make sure the password field is not left blank for nyLeans registration
+    //Make sure the password field is not left blank for nyLearns registration
     
     loc_split = window.location.href.split('/');
     $(loc_split).each(function(i){
-        console.log(loc_split[i])
-        if(loc_split[i] == 'create_nylearns_user'){
+        var l = loc_split[i]
+        if(l == 'create_nylearns_user' || l == 'nylearns'){
             window.nylearns = true;
         }
     })
