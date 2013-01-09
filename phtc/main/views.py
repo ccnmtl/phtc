@@ -479,13 +479,14 @@ def reports(request):
     completed_modules = get_all_completed_modules(root, modules, pagevisits)
     completed_modules_counted = count_modules_completed(completed_modules)
     completers = create_completers_list(completed_modules)
-    create_user_report_table(completed_modules, completers)
+    user_report_table = create_user_report_table(completed_modules, completers)
     age_gender = create_age_gender_dict(completers)
 
     return dict(completed_modules=completed_modules,
             completed_modules_counted=completed_modules_counted, 
             completers=completers,
-            age_gender = age_gender
+            age_gender = age_gender,
+            user_report_table=user_report_table
             )
 
 
@@ -520,46 +521,46 @@ def create_completers_list(completed_modules):
 
 
 def create_user_report_table(completed_modules, completers):
-    import copy
     completer_objects=[]
-    completer_obj ={
-        '# of courses completed': '',
-        'Username': '',
-        'Email Address': '',
-        'First Name': '',
-        'Last Name': '',
-        'Age': '',
-        'Gender': '',
-        'Hispanic Origin': '',
-        'Race': '',
-        'Highest Degree Earned': '',
-        'Work City': '',
-        'Work State': '',
-        'Work Zip Code': '',
-        'Primary Discipline/Seciality': '',
-        'Employment Location': '',
-        'Work in DOH': '',
-        'Experience in Public Health': '',
-        'MUC': '',
-        'Rural': ''
-    }
-    counter = 0 # the first module that shows up is empty, just skip to next one to debug with PDB
     for key,val in completers.iteritems():
-        obj = completer_obj.copy()
-        obj['# of courses completed'] = counter
+        obj = {}
         completer_count = 0
+        this_user = User.objects.get(id=val.user_id)
+        obj['# of courses completed'] = 0
+        obj['Username'] = this_user.username
+        obj['Email Address'] = this_user.email
+        obj['First Name'] = val.fname
+        obj['Last Name'] = val.lname
+        obj['Age'] = val.age
+        obj['Gender'] = val.sex
+        obj['Hispanic Origin'] = val.origin
+        obj['Race'] = val.ethnicity
+        obj['Highest Degree Earned'] = val.degree
+        obj['Work City'] = val.work_city
+        obj['Work State'] = val.work_state
+        obj['Work Zip Code'] = val.work_zip
+        obj['Work in DOH'] = val.dept_health
+        obj['Experience in Public Health'] = val.experience
+        obj['MUC'] = val.umc
+        obj['Rural'] = val.rural
+
+        if val.other_employment_location == '':
+            obj['Employment Location'] = val.employment_location
+        else:
+            obj['Employment Location'] = val.other_employment_location
+            
+        if val.other_position_category == '':
+            obj['Primary Discipline/Seciality'] = val.position
+        else:
+            obj['Primary Discipline/Seciality'] = val.other_position_category
+
         for k,v in completed_modules.iteritems():
             for pv in v:
-                if v[counter].user_id == val.user_id:
-                    a=1
-                if counter == 2:
-                    #import pdb
-                    #pdb.set_trace()  
-                    a=1
-
+                
+                if pv.user_id == val.user_id:
+                    obj['# of courses completed'] += 1
         completer_objects.append(obj)
-        counter +=1
-
+    return completer_objects
 
 def create_age_gender_dict(completers):
     items = [

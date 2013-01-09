@@ -17,6 +17,14 @@
 	<p>{{ age_gender }}</p>
 </div><!--end #age-gender-->
 
+
+<div id="user_report_table">
+<h2>User Report Table</h2>
+{% for user in user_report_table %}
+	<p class="user">{{ user }}</p>
+{% endfor %}
+</div>
+
 {% for completer in completers %}
 	<!--
 	<p class="completer">{{ completer.fname }}</p>
