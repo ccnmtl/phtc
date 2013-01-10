@@ -305,8 +305,9 @@ class UserRegistrationForm(RegistrationForm):
         )
 
     def clean_email(self):
+      from django.utils.safestring import mark_safe
       data = self.cleaned_data['email']
       if User.objects.filter(email=data).exists():
-          raise forms.ValidationError("This email is already in use. Are you sure that you don't already have an account?")
+          raise forms.ValidationError(mark_safe("This email is already in use. Are you sure that you don't already have an account? Click <a href=\"/registration/password/reset/\">Here</a> to retrieve password."))
       return data
 
