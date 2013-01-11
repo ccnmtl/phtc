@@ -212,7 +212,7 @@ def user_visits(request):
     return UserPageVisit.objects.filter(user=request.user)
 
 def send_nylearns_email(request, user, profile, module):
-    send_to_email = 'ssw2117@gccnmtl.columbia.edu'
+    send_to_email = 'edlearn@health.state.ny.us'
     (subject, from_email, to) = (
         'PHTC - NYLearns Notification',
         'NYC-LI-LTC Public Health Training Center <no-reply@lowernysphtc.org>',
