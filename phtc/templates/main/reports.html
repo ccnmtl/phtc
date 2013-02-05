@@ -4,9 +4,11 @@
 {% block title %}My Dashboard{% endblock %}
 
 {% block content %}
+<p>{{ completed_modules|length }}</p>
 <div id="number-of-completers">
-	<h2> Number of Completers</h2>
-	{{ completed_modules_counted }}
+	<h2>Completers</h2>
+	<p>Completers unduplicated: {{ completers|length }}</p>
+	<p>Completed Modules obj: {{ completed_modules_counted }}</p>
 	{% for mod in completed_modules_counted %}
 	<p class="users">{{ mod.Section}} - {{ mod.Number_of_completers }} completers</p>
 	{% endfor %}
@@ -17,19 +19,20 @@
 	<p>{{ age_gender }}</p>
 </div><!--end #age-gender-->
 
+<p>{{ course_table_report|length }}</p>
 
 <div id="user_report_table">
 <h2>User Report Table</h2>
+<p>Completer's info: </p>
 {% for user in user_report_table %}
 	<p class="user">{{ user }}</p>
 {% endfor %}
 </div>
 
-{% for completer in completers %}
-	<!--
-	<p class="completer">{{ completer.fname }}</p>
-	-->
-{% endfor %}
+<div id="training_environment_report">
+	<h2>Training Environment Report Table</h2>
+	{{ training_env_report }}
+</div>
 
 
 {% endblock %}

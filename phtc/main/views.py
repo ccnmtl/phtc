@@ -476,18 +476,80 @@ def reports(request):
     root = h.get_root()
     modules = root.get_children()
     pagevisits = UserPageVisit.objects.all()
+    total_number_of_users = len(UserProfile.objects.all())
     completed_modules = get_all_completed_modules(root, modules, pagevisits)
     completed_modules_counted = count_modules_completed(completed_modules)
     completers = create_completers_list(completed_modules)
     user_report_table = create_user_report_table(completed_modules, completers)
     age_gender = create_age_gender_dict(completers)
+    training_env_report = create_training_env_report(completers, 
+        total_number_of_users, completed_modules_counted)
+    course_table_report = create_course_table_report(completed_modules)
 
     return dict(completed_modules=completed_modules,
             completed_modules_counted=completed_modules_counted, 
             completers=completers,
             age_gender = age_gender,
-            user_report_table=user_report_table
+            user_report_table=user_report_table,
+            training_env_report=training_env_report,
+            course_table_report=course_table_report
             )
+
+
+def create_course_table_report(completed_modules):
+    course_table = []
+    counter = 0
+    #date = UserPageVisit.objects.get(user=request.user, section=module).last_visit
+    for k,v in completed_modules.iteritems():
+        for mod in v:
+            course = {}
+            date = UserPageVisit.objects.get(user=mod.user, section=mod.section).last_visit
+            
+            try:
+                user = UserProfile.objects.get(id = mod.user_id)
+                course['course_name']= k
+                course['requested_cues'] = ''
+                course['date_completed'] = date.strftime("%D")
+                course['username'] = user.user.username
+                course['email'] = user.user.email
+                course['first_name']= user.fname
+                course['last_name'] = user.lname
+                course['age']= user.age
+                course['gender'] = user.sex
+                course['hispanic_origin'] = user.origin
+                course['race'] = user.ethnicity
+                course['heighest_degree_earned'] = user.degree
+                course['work_city'] = user.work_city
+                course['work_state'] = user.work_state
+                course['work_zip_code']= user.work_zip
+                course['primary_discipline_specialty'] = user.employment_location
+                course['work_in_doh'] = user.dept_health
+                course['target_doh'] = user.dept_health
+                course['experience_in_pulic_health'] = user.experience
+                course['muc'] = user.umc
+                course['rural'] = user.rural
+                course_table.append(course)
+                '''
+                if counter ==2:
+                    import pdb
+                    pdb.set_trace()
+                '''
+            except:
+                UserProfile.DoesNotExist
+            counter += 1
+    return course_table
+
+
+def create_training_env_report(completers, 
+    total_number_of_users, completed_modules_counted):
+        report = {}
+        num_of_completers_duplicated = 0
+        for mod in completed_modules_counted:
+            num_of_completers_duplicated += mod['Number_of_completers']
+        report['Total_unique_registered_users'] = total_number_of_users
+        report['Total_number_completers_unduplicated'] = len(completers)
+        report['Total_number_completers_duplicated'] = num_of_completers_duplicated
+        return report
 
 
 def get_all_completed_modules(root, modules, pagevisits):
