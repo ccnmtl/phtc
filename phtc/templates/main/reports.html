@@ -4,35 +4,30 @@
 {% block title %}My Dashboard{% endblock %}
 
 {% block content %}
-<p>{{ completed_modules|length }}</p>
-<div id="number-of-completers">
-	<h2>Completers</h2>
-	<p>Completers unduplicated: {{ completers|length }}</p>
-	<p>Completed Modules obj: {{ completed_modules_counted }}</p>
-	{% for mod in completed_modules_counted %}
-	<p class="users">{{ mod.Section}} - {{ mod.Number_of_completers }} completers</p>
-	{% endfor %}
-</div><!--end #number-of-completers-->
+{% if user.is_staff %}
+<h2>{{welcome_msg}}</h2>
 
-<div id="age-gender">
-	<h2>Age &amp; Gender</h2>
-	<p>{{ age_gender }}</p>
-</div><!--end #age-gender-->
+<form method="post" action="/reports/" class="w">
+    <input type="submit" value="Training Environment Report" class="btn btn-primary">
+    <input type="hidden" name="report" value="training_env">
+</form>
 
-<p>{{ course_table_report|length }}</p>
+<form method="post" action="/reports/" class="w">
+    <input type="submit" value="User Report" class="btn btn-primary">
+    <input type="hidden" name="report" value="user_report">
+</form>
 
-<div id="user_report_table">
-<h2>User Report Table</h2>
-<p>Completer's info: </p>
-{% for user in user_report_table %}
-	<p class="user">{{ user }}</p>
-{% endfor %}
-</div>
+<form method="post" action="/reports/" class="w">
+    <input type="submit" value="Age & Gender Report" class="btn btn-primary">
+    <input type="hidden" name="report" value="age_gender_report">
+</form>
 
-<div id="training_environment_report">
-	<h2>Training Environment Report Table</h2>
-	{{ training_env_report }}
-</div>
+<form method="post" action="/reports/" class="w">
+    <input type="submit" value="Course Report" class="btn btn-primary">
+    <input type="hidden" name="report" value="course_report">
+</form>
 
-
+{% else %}
+<h2>This page is not available...</h2>
+{% endif %}
 {% endblock %}

@@ -12,6 +12,7 @@ from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
 from pagetree.models import Section
 from django.core.mail import EmailMultiAlternatives
+import csv
 
 
 def redirect_to_first_section_if_root(section, root):
@@ -469,44 +470,70 @@ def render_dashboard(request):
                 dashboard_info=dashboard_info,
                 empty=empty, is_visited=is_visited, admin_lock = admin_lock)
 
+def create_csv_report(request, report, report_name):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="' + report_name + '.csv"'
+    writer = csv.writer(response)
+    header = []
+    header_row = report[0]
+    for k,v in header_row.iteritems():
+        header.append(k)
+    writer.writerow(header)
+
+    for row in report:
+        data = []
+        for k,v in row.iteritems():
+                data.append(v)
+        writer.writerow(data)
+    return response
+
+
 @login_required
 @render_to('main/reports.html')
 def reports(request):
-    h = get_hierarchy("main")
-    root = h.get_root()
-    modules = root.get_children()
-    pagevisits = UserPageVisit.objects.all()
-    total_number_of_users = len(UserProfile.objects.all())
-    completed_modules = get_all_completed_modules(root, modules, pagevisits)
-    completed_modules_counted = count_modules_completed(completed_modules)
-    completers = create_completers_list(completed_modules)
-    user_report_table = create_user_report_table(completed_modules, completers)
-    age_gender = create_age_gender_dict(completers)
-    training_env_report = create_training_env_report(completers, 
-        total_number_of_users, completed_modules_counted)
-    course_table_report = create_course_table_report(completed_modules)
+    welcome_msg = "PHTC Reports"
+    if request.method=="POST":
+        report = request.POST.get('report')
 
-    return dict(completed_modules=completed_modules,
-            completed_modules_counted=completed_modules_counted, 
-            completers=completers,
-            age_gender = age_gender,
-            user_report_table=user_report_table,
-            training_env_report=training_env_report,
-            course_table_report=course_table_report
-            )
+        #vars used for reports
+        h = get_hierarchy("main")
+        root = h.get_root()
+        modules = root.get_children()
+        pagevisits = UserPageVisit.objects.all()
+        total_number_of_users = len(UserProfile.objects.all())
+        completed_modules = get_all_completed_modules(root, modules, pagevisits)
+        completed_modules_counted = count_modules_completed(completed_modules)
+        completers = create_completers_list(completed_modules)
+        
+        if report == "training_env":
+            training_env_report = create_training_env_report(completers,
+                total_number_of_users, completed_modules_counted)
+            return create_csv_report(request, training_env_report, report)
 
+        if report == "user_report":
+            user_report_table = create_user_report_table(completed_modules, completers)
+            return create_csv_report(request, user_report_table, report)
 
-def create_course_table_report(completed_modules):
+        if report == "age_gender_report":
+            age_gender = create_age_gender_dict(completers)
+            return create_csv_report(request, age_gender, report)
+
+        if report == "course_report":
+            course_report_table = create_course_report_table(completed_modules)
+            return create_csv_report(request, course_report_table, report)
+
+    return dict(welcome_msg=welcome_msg)
+
+def create_course_report_table(completed_modules):
     course_table = []
-    counter = 0
-    #date = UserPageVisit.objects.get(user=request.user, section=module).last_visit
     for k,v in completed_modules.iteritems():
         for mod in v:
             course = {}
             date = UserPageVisit.objects.get(user=mod.user, section=mod.section).last_visit
             
             try:
-                user = UserProfile.objects.get(id = mod.user_id)
+                user = UserProfile.objects.get(user_id = mod.user_id)
                 course['course_name']= k
                 course['requested_cues'] = ''
                 course['date_completed'] = date.strftime("%D")
@@ -529,27 +556,23 @@ def create_course_table_report(completed_modules):
                 course['muc'] = user.umc
                 course['rural'] = user.rural
                 course_table.append(course)
-                '''
-                if counter ==2:
-                    import pdb
-                    pdb.set_trace()
-                '''
             except:
                 UserProfile.DoesNotExist
-            counter += 1
     return course_table
 
 
 def create_training_env_report(completers, 
     total_number_of_users, completed_modules_counted):
-        report = {}
+        table = []
+        report ={}
         num_of_completers_duplicated = 0
         for mod in completed_modules_counted:
             num_of_completers_duplicated += mod['Number_of_completers']
         report['Total_unique_registered_users'] = total_number_of_users
         report['Total_number_completers_unduplicated'] = len(completers)
         report['Total_number_completers_duplicated'] = num_of_completers_duplicated
-        return report
+        table.append(report)
+        return table
 
 
 def get_all_completed_modules(root, modules, pagevisits):
