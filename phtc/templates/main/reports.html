@@ -27,6 +27,13 @@
     <input type="hidden" name="report" value="course_report">
 </form>
 
+<form method="post" action="/reports/" class="w">
+    <input type="submit" value="Evaluation Report" class="btn btn-primary">
+    <input type="hidden" name="report" value="eval_report">
+</form>
+
+{{ evaluation_report }}
+
 {% else %}
 <h2>This page is not available...</h2>
 {% endif %}

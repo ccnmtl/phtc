@@ -11,6 +11,8 @@ from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
 from pagetree.models import UserPageVisit
 from pagetree.models import Section
+from pagetree.models import PageBlock
+from quizblock.models import Quiz
 from django.core.mail import EmailMultiAlternatives
 import csv
 
@@ -496,7 +498,7 @@ def reports(request):
     if request.method=="POST":
         report = request.POST.get('report')
 
-        #vars used for reports
+        #vars used to create reports
         h = get_hierarchy("main")
         root = h.get_root()
         modules = root.get_children()
@@ -523,7 +525,29 @@ def reports(request):
             course_report_table = create_course_report_table(completed_modules)
             return create_csv_report(request, course_report_table, report)
 
+        if report == "eval_report":
+            evaluation_report = create_eval_report(completed_modules, modules)
+            return dict(evaluation_report=evaluation_report)
+
     return dict(welcome_msg=welcome_msg)
+
+
+def create_eval_report(completed_modules, modules):
+    module_post_test_map = {}
+    post_tests = []
+    post_test_quizes = Quiz.objects.filter(post_test='TRUE')
+    for q in post_test_quizes:
+        try:
+            print q
+            post_tests.append(q)
+        except IndexError:
+            pass
+    
+    
+    for t in post_tests:
+        module_post_test_map[t.pageblock().section.get_module()] = t.id
+    return module_post_test_map
+
 
 def create_course_report_table(completed_modules):
     course_table = []
