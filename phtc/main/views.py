@@ -13,6 +13,8 @@ from pagetree.models import UserPageVisit
 from pagetree.models import Section
 from pagetree.models import PageBlock
 from quizblock.models import Quiz
+from quizblock.models import Question
+from quizblock.models import Response
 from django.core.mail import EmailMultiAlternatives
 import csv
 
@@ -533,7 +535,7 @@ def reports(request):
 
 
 def create_eval_report(completed_modules, modules):
-    module_post_test_map = {}
+    module_post_test_map = []
     post_tests = []
     post_test_quizes = Quiz.objects.filter(post_test='TRUE')
     for q in post_test_quizes:
@@ -542,12 +544,44 @@ def create_eval_report(completed_modules, modules):
             post_tests.append(q)
         except IndexError:
             pass
-    
-    
+
     for t in post_tests:
-        module_post_test_map[t.pageblock().section.get_module()] = t.id
+        # get questions
+        questions = Question.objects.filter(quiz_id=t.id)
+        
+        obj = {
+                'module' : t.pageblock().section.get_module(),
+                'quiz' : t
+            }
+
+        qr = []
+        for q in questions:
+
+            if is_question_of_interest(q):
+                question_answer = {
+                        'question': q,
+                        'responses': Response.objects.filter(question_id=q.id)
+                }
+                qr.append(question_answer)
+        obj['question_response'] = qr
+
+        module_post_test_map.append(obj)
+    
     return module_post_test_map
 
+
+def is_question_of_interest(question):
+    questions_of_interest = [
+        'The course was of overall high quality.',
+        'I would recommend this course for employees in positions similar to mine.',
+        'The course content achieved the objectives.',
+        'This online training was an effective method for me to learn this material.',
+        'Approximately how long did it take you to complete the course?',
+        'Please add any additional comments, including suggestions for improving the course and requests for future web-based training modules.'
+    ]
+    for q in questions_of_interest:
+        if question.text == q:
+            return True
 
 def create_course_report_table(completed_modules):
     course_table = []
