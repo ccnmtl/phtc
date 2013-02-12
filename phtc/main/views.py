@@ -18,7 +18,6 @@ from quizblock.models import Response
 from django.core.mail import EmailMultiAlternatives
 import csv
 
-
 def redirect_to_first_section_if_root(section, root):
     if section.id == root.id:
         # trying to visit the root page
@@ -509,7 +508,16 @@ def reports(request):
         completed_modules = get_all_completed_modules(root, modules, pagevisits)
         completed_modules_counted = count_modules_completed(completed_modules)
         completers = create_completers_list(completed_modules)
-        
+        qoi = [
+            'The course was of overall high quality.',
+            'I would recommend this course for employees in positions similar to mine.',
+            'The course content achieved the objectives.',
+            'This online training was an effective method for me to learn this material.',
+            'Approximately how long did it take you to complete the course?',
+            'Please add any additional comments, including suggestions for improving the course and requests for future web-based training modules.'
+        ]
+
+
         if report == "training_env":
             training_env_report = create_training_env_report(completers,
                 total_number_of_users, completed_modules_counted)
@@ -528,13 +536,62 @@ def reports(request):
             return create_csv_report(request, course_report_table, report)
 
         if report == "eval_report":
-            evaluation_report = create_eval_report(completed_modules, modules)
+            # filename = evaluation_report[n]['module'].label
+            # question = evaluation_report[n]['question_response'][x]['question'].text
+            # response = evaluation_report[n]['question_response'][x]['responses'][y].value
+            
+            header = []
+            response_list = ['Strongly disagree','Disagree', 'Neither agree nor disagree',
+                            'Agree', 'Strongly agree','','','']
+            response_time_list = ['30 minutes or less', '1 hour', '1.5 hours', '2 hours',
+                                    '2.5 hours', '3 hours', '3.5 hours', '4 hours'] 
+            evaluation_report = create_eval_report(completed_modules, modules, qoi)
+            
+            for n in range(len(qoi) ):
+                header.append(qoi[n])
+                header.append('')
+            header.pop()
+            header[-1] = 'Please add any additional comments.'
+            
+            # create single report
+            eval_report = evaluation_report[0]['module'].label
+            for ev in evaluation_report[0]['question_response']:
+                # clean question text after? that way it can be used as a key? # 
+                question = ev['question'].text.strip(' \t\n\r')
+                
+                response_list_count = {'Strongly disagree':0,'Neither agree nor disagree':0,
+                                        'Disagree':0, 'Agree':0,'Strongly agree':0}
+                response_time_list_count = {'30 minutes or less':0,'1 hour':0,'1.5 hours':0,
+                                            '2 hours':0,'2.5 hours':0,'3 hours':0,'3.5 hours':0,
+                                            '4 hours':0}
+                for res in ev['responses']:
+                    response = res.value
+                    
+                    if question == 'Approximately how long did it take you to complete the course?':
+                        for k,v in response_time_list_count.iteritems():
+                            #import pdb
+                            #pdb.set_trace()
+
+                            if response == k:
+                                print response_time_list_count
+                                response_time_list_count[k]+=1
+
+                    elif question.startswith('Please add'):
+                        a=1
+
+                    else:
+                        for k,v in response_list_count.iteritems():
+                            if response == k:
+                                response_list_count[k]+=1
+            #import pdb
+            #pdb.set_trace()
+
             return dict(evaluation_report=evaluation_report)
 
     return dict(welcome_msg=welcome_msg)
 
 
-def create_eval_report(completed_modules, modules):
+def create_eval_report(completed_modules, modules, qoi):
     module_post_test_map = []
     post_tests = []
     post_test_quizes = Quiz.objects.filter(post_test='TRUE')
@@ -557,7 +614,7 @@ def create_eval_report(completed_modules, modules):
         qr = []
         for q in questions:
 
-            if is_question_of_interest(q):
+            if is_question_of_interest(q, qoi):
                 question_answer = {
                         'question': q,
                         'responses': Response.objects.filter(question_id=q.id)
@@ -570,17 +627,9 @@ def create_eval_report(completed_modules, modules):
     return module_post_test_map
 
 
-def is_question_of_interest(question):
-    questions_of_interest = [
-        'The course was of overall high quality.',
-        'I would recommend this course for employees in positions similar to mine.',
-        'The course content achieved the objectives.',
-        'This online training was an effective method for me to learn this material.',
-        'Approximately how long did it take you to complete the course?',
-        'Please add any additional comments, including suggestions for improving the course and requests for future web-based training modules.'
-    ]
-    for q in questions_of_interest:
-        if question.text == q:
+def is_question_of_interest(question, qoi):
+    for q in qoi:
+        if question.text.strip(' \t\n\r') == q:
             return True
 
 def create_course_report_table(completed_modules):
