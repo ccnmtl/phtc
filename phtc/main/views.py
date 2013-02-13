@@ -541,52 +541,51 @@ def reports(request):
             # response = evaluation_report[n]['question_response'][x]['responses'][y].value
             
             header = []
-            response_list = ['Strongly disagree','Disagree', 'Neither agree nor disagree',
-                            'Agree', 'Strongly agree','','','']
-            response_time_list = ['30 minutes or less', '1 hour', '1.5 hours', '2 hours',
-                                    '2.5 hours', '3 hours', '3.5 hours', '4 hours'] 
+            response_list = ['strongly_disagree','disagree', 'neither_agree_nor_disagree',
+                            'agree', 'strongly_agree','','','']
+            response_time_list = ['30_minutes_or_less', '1_hour', '1.5_hours', '2_hours',
+                                    '2.5_hours', '3_hours', '3.5_hours', '4_hours'] 
             evaluation_report = create_eval_report(completed_modules, modules, qoi)
             
             for n in range(len(qoi) ):
                 header.append(qoi[n])
                 header.append('')
             header.pop()
-            header[-1] = 'Please add any additional comments.'
+            header[-1] = 'please_add_any_additional_comments.'
             
             # create single report
             eval_report = evaluation_report[0]['module'].label
+            qr = {}
             for ev in evaluation_report[0]['question_response']:
                 # clean question text after? that way it can be used as a key? # 
-                question = ev['question'].text.strip(' \t\n\r')
+                question = ev['question'].text.strip(' \t\n\r').replace(" ", "_").lower()
                 
-                response_list_count = {'Strongly disagree':0,'Neither agree nor disagree':0,
-                                        'Disagree':0, 'Agree':0,'Strongly agree':0}
-                response_time_list_count = {'30 minutes or less':0,'1 hour':0,'1.5 hours':0,
-                                            '2 hours':0,'2.5 hours':0,'3 hours':0,'3.5 hours':0,
-                                            '4 hours':0}
+                response_list_count = {'strongly_disagree':0,'neither_agree_nor_disagree':0,
+                                        'disagree':0, 'agree':0,'strongly_agree':0}
+                response_time_list_count = {'30_minutes_or_less':0,'1_hour':0,'1.5_hours':0,
+                                            '2_hours':0,'2.5_hours':0,'3_hours':0,'3.5_hours':0,
+                                            '4_hours':0}
                 for res in ev['responses']:
-                    response = res.value
+                    response = res.value.strip(' \t\n\r').replace(" ", "_").lower()
                     
-                    if question == 'Approximately how long did it take you to complete the course?':
+                    if question.startswith('approximately_how_long_did'):
                         for k,v in response_time_list_count.iteritems():
-                            #import pdb
-                            #pdb.set_trace()
-
                             if response == k:
-                                print response_time_list_count
                                 response_time_list_count[k]+=1
+                        qr[question] = response_time_list_count
 
-                    elif question.startswith('Please add'):
+                    elif question.startswith('please_add'):
                         a=1
 
                     else:
                         for k,v in response_list_count.iteritems():
                             if response == k:
                                 response_list_count[k]+=1
+                        qr[question] = response_list_count
             #import pdb
             #pdb.set_trace()
 
-            return dict(evaluation_report=evaluation_report)
+            return dict(evaluation_report=qr, module_title=eval_report)
 
     return dict(welcome_msg=welcome_msg)
 
