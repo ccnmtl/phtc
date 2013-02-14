@@ -554,38 +554,73 @@ def reports(request):
             header[-1] = 'please_add_any_additional_comments.'
             
             # create single report
-            eval_report = evaluation_report[0]['module'].label
+            eval_report = evaluation_report[1]['module'].label
             qr = {}
-            for ev in evaluation_report[0]['question_response']:
+            users = []
+            for ev in evaluation_report[1]['question_response']:
                 # clean question text after? that way it can be used as a key? # 
                 question = ev['question'].text.strip(' \t\n\r').replace(" ", "_").lower()
-                
+
                 response_list_count = {'strongly_disagree':0,'neither_agree_nor_disagree':0,
-                                        'disagree':0, 'agree':0,'strongly_agree':0}
+                                        'disagree':0, 'agree':0,'strongly_agree':0,'else':0}
                 response_time_list_count = {'30_minutes_or_less':0,'1_hour':0,'1.5_hours':0,
                                             '2_hours':0,'2.5_hours':0,'3_hours':0,'3.5_hours':0,
-                                            '4_hours':0}
-                for res in ev['responses']:
-                    response = res.value.strip(' \t\n\r').replace(" ", "_").lower()
+                                            '4_hours':0,'else':0}
+                
                     
-                    if question.startswith('approximately_how_long_did'):
+                if question.startswith('approximately_how_long_did'):
+                    for res in ev['responses']:
+                        users.append({'username': res.submission.user.username})
+                        #qr['user_id'] = ev['responses'][0].submission.user.id
+                        response = res.value.strip(' \t\n\r').replace(" ", "_").lower()
                         for k,v in response_time_list_count.iteritems():
                             if response == k:
                                 response_time_list_count[k]+=1
                         qr[question] = response_time_list_count
 
-                    elif question.startswith('please_add'):
-                        a=1
+                elif question.startswith('please_add'):
+                   
+                   a=1
 
-                    else:
-                        for k,v in response_list_count.iteritems():
+                else:
+                    #print question
+                    for k,v in response_list_count.iteritems():
+                        for res in ev['responses']:
+                            response = res.value.strip(' \t\n\r').replace(" ", "_").lower()
                             if response == k:
+                                #print response
                                 response_list_count[k]+=1
                         qr[question] = response_list_count
-            #import pdb
-            #pdb.set_trace()
 
-            return dict(evaluation_report=qr, module_title=eval_report)
+            ## Completer Coount Undupe##
+
+            ccu = {}
+            for k,v in completers.iteritems():
+                ccu[k.user.username] = v.user.id
+
+            ##
+
+            ## question answer count
+            qac ={}
+            for k,v in qr.iteritems():
+                count = 0
+                
+                for x, y in v.iteritems():
+                    count += y
+                qac[k] = count
+            ##
+            countwe = 0
+            completed_user =[]
+            for k,v in completed_modules.iteritems():
+                for userpv in v:
+                    #import pdb
+                    #pdb.set_trace()
+                    completed_user.append(userpv.user.username + " " + str(userpv.user.is_staff) +" " + str(countwe) )
+                countwe +=1
+            print completed_user
+
+            return dict(evaluation_report=qr, module_title=eval_report, counted=completed_modules_counted,
+                qac=qac, users=users, completed_user=completed_user)
 
     return dict(welcome_msg=welcome_msg)
 
