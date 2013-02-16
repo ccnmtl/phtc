@@ -34,6 +34,7 @@
     <input type="submit" value="Evaluation Report" class="btn btn-primary">
     <input type="hidden" name="report" value="eval_report">
 </form>
+
 <p>{{ users }}</p>
 <p>{{ users|length }}</p>
 <p>{{ completed_user }}</p>
@@ -41,7 +42,11 @@
 <p>{{ counted }}</p>
 <p>{{ qac }}</p>
 <h2>{{ module_title }}</h2>
+
 {{ evaluation_report }}
+<p>--------------------</p>
+
+{{ qr_response }}
 
 {% else %}
 <h2>This page is not available...</h2>

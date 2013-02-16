@@ -548,13 +548,13 @@ def reports(request):
             evaluation_report = create_eval_report(completed_modules, modules, qoi)
             
             for n in range(len(qoi) ):
-                header.append(qoi[n])
-                header.append('')
+                header.append(qoi[n].strip(' \t\n\r').replace(" ", "_").lower())
+                #header.append('')
             header.pop()
-            header[-1] = 'please_add_any_additional_comments.'
+            #header[-1] = 'please_add_any_additional_comments.'
             
             # create single report
-            eval_report = evaluation_report[1]['module'].label
+            module_title = evaluation_report[1]['module'].label
             qr = {}
             users = []
             for ev in evaluation_report[1]['question_response']:
@@ -571,7 +571,6 @@ def reports(request):
                 if question.startswith('approximately_how_long_did'):
                     for res in ev['responses']:
                         users.append({'username': res.submission.user.username})
-                        #qr['user_id'] = ev['responses'][0].submission.user.id
                         response = res.value.strip(' \t\n\r').replace(" ", "_").lower()
                         for k,v in response_time_list_count.iteritems():
                             if response == k:
@@ -580,47 +579,38 @@ def reports(request):
 
                 elif question.startswith('please_add'):
                    
-                   a=1
+                   qr[question] = 'comments'
 
                 else:
-                    #print question
                     for k,v in response_list_count.iteritems():
                         for res in ev['responses']:
                             response = res.value.strip(' \t\n\r').replace(" ", "_").lower()
                             if response == k:
-                                #print response
                                 response_list_count[k]+=1
                         qr[question] = response_list_count
 
-            ## Completer Coount Undupe##
+            
 
-            ccu = {}
-            for k,v in completers.iteritems():
-                ccu[k.user.username] = v.user.id
+            qr_response = []
 
-            ##
-
-            ## question answer count
-            qac ={}
-            for k,v in qr.iteritems():
+            for num in range(len(response_time_list_count)):
+                row = {}
                 count = 0
-                
-                for x, y in v.iteritems():
-                    count += y
-                qac[k] = count
-            ##
-            countwe = 0
-            completed_user =[]
-            for k,v in completed_modules.iteritems():
-                for userpv in v:
-                    #import pdb
-                    #pdb.set_trace()
-                    completed_user.append(userpv.user.username + " " + str(userpv.user.is_staff) +" " + str(countwe) )
-                countwe +=1
-            print completed_user
+                for n in range(len(header)):
+                    
+                    for k,v in qr[header[n]].iteritems():
+                        row[header[n] +'_' + str(n)] = k
+                        row['r'+str(n)] = v 
+                    qr_response.append(row) 
+                    
+            #import pdb
+            #pdb.set_trace()  
+            
 
-            return dict(evaluation_report=qr, module_title=eval_report, counted=completed_modules_counted,
-                qac=qac, users=users, completed_user=completed_user)
+
+            return create_csv_report(request, qr_response, report)
+            return dict(evaluation_report=qr, module_title=module_title, counted=completed_modules_counted,
+                        users=users, qr_response=qr_response)
 
     return dict(welcome_msg=welcome_msg)
 
@@ -628,11 +618,11 @@ def reports(request):
 def create_eval_report(completed_modules, modules, qoi):
     module_post_test_map = []
     post_tests = []
-    post_test_quizes = Quiz.objects.filter(post_test='TRUE')
-    for q in post_test_quizes:
+    post_test_quizes = Quiz.objects.filter(post_test ='TRUE')
+    for quiz in post_test_quizes:
         try:
-            print q
-            post_tests.append(q)
+            print quiz
+            post_tests.append(quiz)
         except IndexError:
             pass
 
