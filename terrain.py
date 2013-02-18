@@ -340,8 +340,11 @@ def when_i_access_the_handoff_url(step, url):
 
 @step(u'Then I see the handoff module "([^"]*)"')
 def then_i_see_the_handoff_module(step, courseID):
-    header = world.browser.find_element_by_id('section-header')
-    assert header.text == 'Part 1: Introduction to Qualitative Research'
+    if world.skipping:
+        return
+    else:
+        header = world.browser.find_element_by_id('section-header')
+        assert header.text == 'Part 1: Introduction to Qualitative Research'
 
 
 @step(u'And I click on the link "([^"]*)"')
