@@ -750,7 +750,6 @@ def reports(request):
                                                 '2_hours':0,'2.5_hours':0,'3_hours':0,'3.5_hours':0,
                                                 '4_hours':0}
                     
-                    print question
                     if question.startswith('approximately_how_long_did'):
                         for res in ev['responses']:
                             users.append({'username': res.submission.user.username})
