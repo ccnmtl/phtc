@@ -496,16 +496,18 @@ def create_csv_report(request, report, report_name):
 @render_to('main/reports.html')
 def reports(request):
     welcome_msg = "PHTC Reports"
+    h = get_hierarchy("main")
+    root = h.get_root()
+    modules = root.get_children()
+    pagevisits = UserPageVisit.objects.all()
+    total_number_of_users = len(UserProfile.objects.all())
+    completed_modules = get_all_completed_modules(root, modules, pagevisits)
     if request.method=="POST":
+        
         report = request.POST.get('report')
-
+        ev_report = request.POST.get('eval_report')
         #vars used to create reports
-        h = get_hierarchy("main")
-        root = h.get_root()
-        modules = root.get_children()
-        pagevisits = UserPageVisit.objects.all()
-        total_number_of_users = len(UserProfile.objects.all())
-        completed_modules = get_all_completed_modules(root, modules, pagevisits)
+        
         completed_modules_counted = count_modules_completed(completed_modules)
         completers = create_completers_list(completed_modules)
         qoi = [
@@ -535,84 +537,77 @@ def reports(request):
             course_report_table = create_course_report_table(completed_modules)
             return create_csv_report(request, course_report_table, report)
 
-        if report == "eval_report":
-            # filename = evaluation_report[n]['module'].label
-            # question = evaluation_report[n]['question_response'][x]['question'].text
-            # response = evaluation_report[n]['question_response'][x]['responses'][y].value
+        if ev_report:
+            
+            mod = Section.objects.get(label=ev_report)
             
             header = []
             response_list = ['strongly_disagree','disagree', 'neither_agree_nor_disagree',
                             'agree', 'strongly_agree','','','']
             response_time_list = ['30_minutes_or_less', '1_hour', '1.5_hours', '2_hours',
                                     '2.5_hours', '3_hours', '3.5_hours', '4_hours'] 
-            evaluation_report = create_eval_report(completed_modules, modules, qoi)
+            evaluation_reports = create_eval_report(completed_modules, modules, qoi)
             
             for n in range(len(qoi) ):
                 header.append(qoi[n].strip(' \t\n\r').replace(" ", "_").lower())
-                #header.append('')
+
             header.pop()
-            #header[-1] = 'please_add_any_additional_comments.'
-            
-            # create single report
-            module_title = evaluation_report[1]['module'].label
-            qr = {}
-            users = []
-            for ev in evaluation_report[1]['question_response']:
-                # clean question text after? that way it can be used as a key? # 
-                question = ev['question'].text.strip(' \t\n\r').replace(" ", "_").lower()
 
-                response_list_count = {'strongly_disagree':0,'neither_agree_nor_disagree':0,
-                                        'disagree':0, 'agree':0,'strongly_agree':0,'else':0}
-                response_time_list_count = {'30_minutes_or_less':0,'1_hour':0,'1.5_hours':0,
-                                            '2_hours':0,'2.5_hours':0,'3_hours':0,'3.5_hours':0,
-                                            '4_hours':0,'else':0}
+            
+            for ev in evaluation_reports:
+                if ev['module'] == mod:
+                    evaluation_report = ev
+
+            try:
+
+                # create single report
+                module_title = evaluation_report['module'].label
                 
+
+                qr = {}
+                users = []
+                for ev in evaluation_report['question_response']:
+                    # clean question text after? that way it can be used as a key? # 
+                    question = ev['question'].text.strip(' \t\n\r').replace(" ", "_").lower()
+
+                    response_list_count = {'strongly_disagree':0,'neither_agree_nor_disagree':0,
+                                            'disagree':0, 'agree':0,'strongly_agree':0}
+                    response_time_list_count = {'30_minutes_or_less':0,'1_hour':0,'1.5_hours':0,
+                                                '2_hours':0,'2.5_hours':0,'3_hours':0,'3.5_hours':0,
+                                                '4_hours':0}
                     
-                if question.startswith('approximately_how_long_did'):
-                    for res in ev['responses']:
-                        users.append({'username': res.submission.user.username})
-                        response = res.value.strip(' \t\n\r').replace(" ", "_").lower()
-                        for k,v in response_time_list_count.iteritems():
-                            if response == k:
-                                response_time_list_count[k]+=1
-                        qr[question] = response_time_list_count
-
-                elif question.startswith('please_add'):
-                   
-                   qr[question] = 'comments'
-
-                else:
-                    for k,v in response_list_count.iteritems():
+                    print question
+                    if question.startswith('approximately_how_long_did'):
                         for res in ev['responses']:
+                            users.append({'username': res.submission.user.username})
                             response = res.value.strip(' \t\n\r').replace(" ", "_").lower()
-                            if response == k:
-                                response_list_count[k]+=1
-                        qr[question] = response_list_count
+                            for k,v in response_time_list_count.iteritems():
+                                if response == k:
+                                    response_time_list_count[k]+=1
+                            qr[question] = response_time_list_count
 
-            
+                    elif question.startswith('please_add'):
+                        comments = {}
+                        for i in range(len(ev['responses'])):
+                            if not ev['responses'][i].value == '':
+                                comments[i] = ev['responses'][i].value
+                        qr[question]=comments
 
-            qr_response = []
+                    else:
+                        for k,v in response_list_count.iteritems():
+                            for res in ev['responses']:
+                                response = res.value.strip(' \t\n\r').replace(" ", "_").lower()
+                                if response == k:
+                                    response_list_count[k]+=1
+                            qr[question] = response_list_count
 
-            for num in range(len(response_time_list_count)):
-                row = {}
-                count = 0
-                for n in range(len(header)):
-                    
-                    for k,v in qr[header[n]].iteritems():
-                        row[header[n] +'_' + str(n)] = k
-                        row['r'+str(n)] = v 
-                    qr_response.append(row) 
-                    
-            #import pdb
-            #pdb.set_trace()  
-            
+                return dict(qr=qr, module_title=module_title, completed_modules=completed_modules.keys())
 
-
-            return create_csv_report(request, qr_response, report)
-            return dict(evaluation_report=qr, module_title=module_title, counted=completed_modules_counted,
-                        users=users, qr_response=qr_response)
-
-    return dict(welcome_msg=welcome_msg)
+            except UnboundLocalError:
+                return dict(welcome_msg = 'Report could not be found.',
+                                completed_modules=completed_modules.keys())
+        
+    return dict(welcome_msg=welcome_msg, completed_modules=completed_modules.keys())
 
 
 def create_eval_report(completed_modules, modules, qoi):

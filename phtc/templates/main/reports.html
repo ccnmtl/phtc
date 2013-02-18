@@ -21,9 +21,6 @@
     <input type="submit" value="Age & Gender Report" class="btn btn-primary">
     <input type="hidden" name="report" value="age_gender_report">
 </form>
-<p>
-    {{ age_gender_report }}
-</p>
 
 <form method="post" action="/reports/" class="w">
     <input type="submit" value="Course Report" class="btn btn-primary">
@@ -31,22 +28,42 @@
 </form>
 
 <form method="post" action="/reports/" class="w">
-    <input type="submit" value="Evaluation Report" class="btn btn-primary">
-    <input type="hidden" name="report" value="eval_report">
+        <input type="submit" value="Select Module for Evaluation Report" class="btn btn-primary">
+        <br/>
+        <select name="eval_report">
+            {% for mod in completed_modules %}
+                    <option value="{{mod}}" >  {{ mod }}</option>
+            {% endfor %}
+        </select>
 </form>
 
-<p>{{ users }}</p>
-<p>{{ users|length }}</p>
-<p>{{ completed_user }}</p>
-<p>{{ completed_user|length }}</p>
-<p>{{ counted }}</p>
-<p>{{ qac }}</p>
+<style>
+table{border:0;}
+th{border:0;max-width:300px;text-align:left;}
+
+</style>
+
 <h2>{{ module_title }}</h2>
-
-{{ evaluation_report }}
-<p>--------------------</p>
-
-{{ qr_response }}
+{% for key, value in qr.items %}
+    <table>
+    <th>{{ key }}</th>
+        <tr>
+            <td>&nbsp;</td>
+            <td>Response</td>
+        </tr>
+    {% for key2, value2 in value.items%}
+        <tr>
+            {% if key2 == "comments"%}
+                <td>{{value2}}<br/></td>
+                <td>&nbsp;</td>
+            {% else %}
+                <td>{{ key2 }}</td> 
+                <td>{{ value2 }}</td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </table>
+{% endfor %}
 
 {% else %}
 <h2>This page is not available...</h2>
