@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load user_status %}
+
+{% block title %}My Dashboard{% endblock %}
+
+{% block content %}
+{% if user.is_staff %}
+<h2>{{welcome_msg}}</h2>
+
+<form method="post" action="/reports/" class="w">
+    <input type="submit" value="Training Environment Report" class="btn btn-primary">
+    <input type="hidden" name="report" value="training_env">
+</form>
+
+<form method="post" action="/reports/" class="w">
+    <input type="submit" value="User Report" class="btn btn-primary">
+    <input type="hidden" name="report" value="user_report">
+</form>
+
+<form method="post" action="/reports/" class="w">
+    <input type="submit" value="Age & Gender Report" class="btn btn-primary">
+    <input type="hidden" name="report" value="age_gender_report">
+</form>
+
+<form method="post" action="/reports/" class="w">
+    <input type="submit" value="Course Report" class="btn btn-primary">
+    <input type="hidden" name="report" value="course_report">
+</form>
+
+<form method="post" action="/reports/" class="w">
+        <input type="submit" value="Select Module for Evaluation Report" class="btn btn-primary">
+        <br/>
+        <select name="eval_report">
+            {% for mod in completed_modules %}
+                    <option value="{{mod}}" >  {{ mod }}</option>
+            {% endfor %}
+        </select>
+</form>
+
+<style>
+table{border:0;}
+th{border:0;max-width:300px;text-align:left;}
+
+</style>
+
+<h2>{{ module_title }}</h2>
+{% for key, value in qr.items %}
+    <table>
+    <th>{{ key }}</th>
+        <tr>
+            <td>&nbsp;</td>
+            <td>Response</td>
+        </tr>
+    {% for key2, value2 in value.items%}
+        <tr>
+            {% if key2 == "comments"%}
+                <td>{{value2}}<br/></td>
+                <td>&nbsp;</td>
+            {% else %}
+                <td>{{ key2 }}</td> 
+                <td>{{ value2 }}</td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </table>
+{% endfor %}
+
+{% else %}
+<h2>This page is not available...</h2>
+{% endif %}
+{% endblock %}

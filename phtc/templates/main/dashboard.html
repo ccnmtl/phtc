@@ -23,7 +23,8 @@
 
 <div id="dashboard-toc">
     <div id="modules">
- {% for module in root.get_children %}	
+ {% for module in root.get_children %}
+ {% if  module.id < admin_lock %}	
 	<div class='module' id="{{ module.id }}">
 		{% comment %}{% for info in dashboard_info %}
 			{% ifequal module.id info.dashboard_id %}
@@ -57,6 +58,45 @@
 		{% else %}
 		{% endif %}
 </div><!--end .module-->
+{% endif %}
+{% endfor %}
+
+{% for module in root.get_children %}
+ {% if  user.is_staff and module.id >= admin_lock  %}	
+	<div class='module' id="{{ module.id }}">
+		{% comment %}{% for info in dashboard_info %}
+			{% ifequal module.id info.dashboard_id %}
+				{% ifnotequal info.info "" %}
+					<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/></div>
+				{% endifnotequal %}
+			{% endifequal %}
+		{% endfor %}{% endcomment %}
+
+		{% get_user_section_status request.user module as status %}
+		{% ifequal status.status "complete" %}<!-- **** COMPLETED -->
+			<div class="completed-icon"></div>
+			<a class="show-module completed" rel="{{ module.get_absolute_url }}" href="javascript:void(0);">{{ module.label }}</a>
+			<a class="certificate" href="/certificate{{ module.get_absolute_url }}"><span class="tooltip-bottom" rel="tooltip" title="Print your completion certificate"><img src="/site_media/img/shim.png" width="30" height="30" /></span></a>
+			<div class="divclearfix"></div>
+		{% endifequal %}
+		{% ifequal status.status "allowed" %}
+			<div class="uninitiated-icon"></div>
+			<a class="show-module" rel="{{ module.get_absolute_url }}" href="javascript:void(0);">{{ module.label }}</a>
+			<div class="divclearfix"></div>
+		{% endifequal %}
+		{% ifequal status.status "in_progress" %}<!-- **** IN PROGRESS -->
+			<div class="inprogress-icon"></div>
+			<a class="show-module inprogress" rel="{{ module.get_absolute_url }}" href="javascript:void(0);">{{ module.label }}</a>
+			<div class="divclearfix"></div>
+		{% endifequal %}
+		{% if not status %}
+			<div class="uninitiated-icon"></div>
+			<a class="show-module uninitiated" rel="{{ module.get_absolute_url }}" href="javascript:void(0);">{{ module.label }}</a>
+			<div class="divclearfix"></div>
+		{% else %}
+		{% endif %}
+</div><!--end .module-->
+{% endif %}
 {% endfor %}
     
     </div>
@@ -67,7 +107,7 @@
 	<div class="modal hide" id="myModal">
 	  <div class="modal-header">
 	    <button type="button" class="close" data-dismiss="modal">×</button>
-	    <h3>We apologize.</h3>
+	    <h3>We appologize.</h3>
 	  </div>
 	  <div class="modal-body">
 	    <p>That course is not available. Please choose from one of the currently available modules.</p>

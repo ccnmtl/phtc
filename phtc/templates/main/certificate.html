@@ -31,6 +31,12 @@
 	font-weight: bold;
 	padding-top:15px; 
 }
+
+#inner-wrap #date-completed{
+	font-size: 24px;
+	font-weight: bold;
+	margin: 20px 0 0 0;
+}
 .printable {
 	padding: 10px;
 }
@@ -42,28 +48,36 @@ img.certificate-diploma{
 }
 */
 
-a.print-certificate{
-	color: red ;
+a.print-certificate
+{
+	display: block;
+	width: 110px;
+	border: 1px dotted gray;
+	background-position: 10px center;
+	padding-top: 10px;
+	padding-left: 40px;
+	float: right;
 }
 
+/*start - printout style as seen in browser print dialog box*/
 @media print 
-
+{
 	#inner-wrap{
 		position: absolute;
-		margin-top: -500px;
+		margin-top: -600px;
 		margin-left: 160px;
 		text-align: center;
 		font-family: arial, helvetica, sans-serif !important;
 	}
 	
 	#inner-wrap #user{
-		font-size: 28px;
+		font-size: 24px;
 		font-weight: bold;
 	}
 	
 	#inner-wrap #label{
 		width: 500px;
-		font-size: 24px;
+		font-size: 28px;
 		line-height: 28px;
 		font-weight: bold;
 		padding-top:15px; 
@@ -74,10 +88,17 @@ a.print-certificate{
 		font-weight: bold;
 		margin: 20px 0 0 0;
 	}
+}
+/*stop - printout style as seen in browser print dialog box*/
 
 </style>
 
 <h2>Certificate Earned</h2>
+
+<p>To request continuing education credits, email <a href="mailto:phtc@columbia.edu">phtc@columbia.edu</a>.</p>
+	<p>
+		<a class="certificate print-certificate">Print Certificate</a>
+	</p>
 
 	<div class="printable">
  		<img class="certificate-diploma" src="/site_media/img/certificate_blank.jpg">
@@ -88,9 +109,6 @@ a.print-certificate{
  		</div><!--end inner-wrap-->
 	</div><!--end .printable-->
 	
-	<p>
-		<a class="print-certificate">Print Certificate</a>
-	</p>
 	
 	<script src="/site_media/js/jquery.print.js"></script>
 	<script>
