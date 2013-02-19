@@ -24,6 +24,7 @@ from quizblock.models import Quiz
 from quizblock.models import Question
 from quizblock.models import Response
 from django.core.mail import EmailMultiAlternatives
+from django.contrib.contenttypes.models import ContentType
 import csv
 
 
@@ -786,12 +787,13 @@ def reports(request):
 def create_eval_report(completed_modules, modules, qoi):
     module_post_test_map = []
     post_tests = []
+    p_t = []
     post_test_quizes = Quiz.objects.filter(post_test ='TRUE')
     for quiz in post_test_quizes:
         try:
-            print quiz
+            print quiz    
             post_tests.append(quiz)
-        except IndexError:
+        except:
             pass
 
     for t in post_tests:
