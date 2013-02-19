@@ -26,7 +26,6 @@ from quizblock.models import Response
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.contenttypes.models import ContentType
 import csv
-import sys
 
 
 @render_to('registration/registration_form.html')
@@ -789,14 +788,11 @@ def create_eval_report(completed_modules, modules, qoi):
     module_post_test_map = []
     post_tests = []
     p_t = []
-    post_test_quizes = Quiz.objects.filter(post_test ='TRUE')
-    sys.stdout = sys.stderr
-    for quiz in post_test_quizes:
-        try:
-            print quiz    
-            post_tests.append(quiz)
-        except:
-            pass
+    quizes = [x for x in Quiz.objects.filter(post_test="TRUE")]
+    
+    for index in range(len(quizes)):
+        if quizes[index]:  
+            post_tests.append(quizes[index])
 
     for t in post_tests:
         # get questions
