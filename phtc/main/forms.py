@@ -317,7 +317,7 @@ class UserRegistrationForm(RegistrationForm):
             choices=[('Please Select', 'Please Select'),
                      ('Yes', 'Yes'),
                      ('No', 'No'),
-                     ('I do not know', 'I do not konw')])
+                     ('I do not know', 'I do not know')])
         )
 
     rural = forms.CharField(
@@ -326,5 +326,5 @@ class UserRegistrationForm(RegistrationForm):
             choices=[('Please Select', 'Please Select'),
                      ('Yes', 'Yes'),
                      ('No', 'No'),
-                     ('I do not know', 'I do not konw')])
+                     ('I do not know', 'I do not know')])
         )
