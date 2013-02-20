@@ -787,12 +787,12 @@ def reports(request):
 def create_eval_report(completed_modules, modules, qoi):
     module_post_test_map = []
     post_tests = []
-    p_t = []
+
     quizes = [x for x in Quiz.objects.filter(post_test="TRUE")]
     
-    for index in range(len(quizes)):
-        if quizes[index]:  
-            post_tests.append(quizes[index])
+    for q in quizes:
+        if q.pageblocks.all().count() > 0: 
+            post_tests.append(q)
 
     for t in post_tests:
         # get questions
