@@ -1,6 +1,15 @@
 //get the form we are dealing with - profile or registration
 if(jQuery('form').attr('id') == "registration"){
-    var _form = jQuery()
+    var _form = jQuery();
+    //Make sure the password field is not left blank for nyLearns registration
+    
+    loc_split = window.location.href.split('/');
+    $(loc_split).each(function(i){
+        var l = loc_split[i]
+        if(l == 'create_nylearns_user' || l == 'nylearns'){
+            window.nylearns = true;
+        }
+    })
 }else{
     // add password notes
     jQuery('#id_password1')
@@ -10,6 +19,7 @@ if(jQuery('form').attr('id') == "registration"){
         .parent()
         .append('<span>Leave Blank to keep the same password</span>');
 }
+
 jQuery('input.btn').click(function () {
     var valid = 0;
     var password_valid = 0;
@@ -19,6 +29,12 @@ jQuery('input.btn').click(function () {
     jQuery('.controls').each(function (i) {
         if (jQuery(this).children().attr('id') === 'id_password1' ||
             jQuery(this).children().attr('id') === 'id_password2') {
+                if(window.nylearns=== true && jQuery(this).children().val() === ''){
+                    jQuery(jQuery('.controls')[i])
+                    .append('<span class="help-inline">this field is required</span>')
+                    .parent().addClass('error');
+                    valid += 1;
+                }
             //skip password validation
         } else {
             jQuery(this).parent().removeClass('error');
@@ -32,12 +48,14 @@ jQuery('input.btn').click(function () {
         }  //end if password
     });  //end each
 
+
+
     //password validation
     if (p1 === '' && p2 === '') {
         password_valid  = 0;
     } else if (p1 === p2) {
         password_valid = 0;
-    } else {
+    }else {
         jQuery(".alert").show();
         password_valid += 1;
     }
@@ -65,3 +83,4 @@ jQuery(document).ready(function () {
         jQuery('#myModal2').modal('toggle');
     }
 });
+

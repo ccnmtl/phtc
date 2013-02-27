@@ -30,6 +30,12 @@ class UserProfile(models.Model):
     degree = models.TextField()
     disadvantaged = models.TextField()
 
+    #NYNJ additions
+    is_nylearns = models.BooleanField(default=False)
+    nylearns_course_init = models.TextField(default='none')
+    nylearns_user_id = models.TextField(default='none')
+
+
     def __str__(self):
         return "%s's profile" % self.user
 
@@ -54,6 +60,11 @@ def user_created(sender, user, request, **kwargs):
     data.experience = form.data["experience"]
     data.rural = form.data["rural"]
     data.degree = form.data["degree"]
+
+    # NYNJ additions
+    data.is_nylearns = form.data["is_nylearns"] 
+    data.nylearns_course_init = form.data["nylearns_course_init"]
+    data.nylearns_user_id = form.data["nylearns_user_id"]
 
     try:
         data.other_position_category = form.data["other_position_category"]
@@ -80,3 +91,11 @@ class DashboardInfo(models.Model):
             dashboard_info = forms.CharField(widget=forms.Textarea,
                                              initial=self.info)
         return EditSectionForm()
+
+class NYLEARNS_Course_Map(models.Model):
+    id = models.AutoField(primary_key=True)
+    courseID = models.TextField()
+    phtc_url = models.TextField()
+
+    def __unicode__(self):
+        return "url path:%s" % self.phtc_url

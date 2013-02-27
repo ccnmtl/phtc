@@ -51,4 +51,10 @@ jQuery(document).ready(function(){
             });
         });
     });//end click
+
+    // NYNJ -> is the course available?
+    if (PHTC.getUrlVars()['course_not_available'] == "true"){
+        jQuery('#myModal').modal('toggle');
+    }
+
 });//end doc.ready

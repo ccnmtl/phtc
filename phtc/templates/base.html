@@ -166,20 +166,21 @@ the Health Resources and Services Administration, U.S. Department of Health and 
   jQuery("span.tooltip-top").tooltip({
     placement: 'top'
   });
-//get URL params 
-(function(){
-  function getUrlVars() {
+ 
+// Create a PHTC namespace
+// and give it a getURL function
+  PHTC = {};
+  PHTC.getUrlVars = function() {
     var vars = {};
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
       vars[key] = value;
     });
     return vars;
   }//end getUrlVars
-  if (getUrlVars()['incomplete'] ){
+  if (PHTC.getUrlVars()['incomplete'] ){
     var message = "You must complete the previous part in order to continue. \n\n We redirected you back to the dashboard so you can check your status and remeber where you left off."
     alert(message);
   }
-})();//end anonymous function wrapper
 </script>
 </body>
 </html>

@@ -19,7 +19,7 @@
 }
 </style>
 
-<h1>Dashboard</h1>
+<h1 id="dashboard-header">Dashboard</h1>
 
 <div id="dashboard-toc">
     <div id="modules">
@@ -60,7 +60,6 @@
 </div><!--end .module-->
 {% endif %}
 {% endfor %}
- 
 
 {% for module in root.get_children %}
  {% if  user.is_staff and module.id >= admin_lock  %}	
@@ -99,7 +98,6 @@
 </div><!--end .module-->
 {% endif %}
 {% endfor %}
-
     
     </div>
     <div id="return"></div><!-- end #return -->

@@ -24,14 +24,14 @@
         <div id="user_log_in">            
             <h3 class="log_in">Please log in</h3>
             
-            <form method="post" action="./?next={% url dashboard %}" class="well">
+            <form method="post" action="./?next=/module-1/" class="well">
             {% csrf_token %}
             <p>If you have a project account...</p>
             
             <label for="id_username">Username: {{ form.username }}</label>
             <label for="id_password">Password: {{ form.password }}</label>
             
-            <input type="submit" value="LOG IN" class="btn btn-primary" />
+            <input id="login_form_submit_button" type="submit" value="LOG IN" class="btn btn-primary" />
             <input type="hidden" name="next" value="{{ next }}" />
             
             {% if form.errors%}

@@ -1,5 +1,6 @@
 from django import forms
 from registration.forms import RegistrationForm
+from django.contrib.auth.models import User
 
 attrs_dict = {'class': 'required'}
 
@@ -328,3 +329,29 @@ class UserRegistrationForm(RegistrationForm):
                      ('No', 'No'),
                      ('I do not know', 'I do not know')])
         )
+
+    is_nylearns = forms.BooleanField(
+        required=False,
+        widget = forms.HiddenInput(),
+        initial = False
+        )
+
+    nylearns_user_id = forms.CharField(
+        required = False,
+        widget = forms.HiddenInput(),
+        initial = "none"
+        )
+
+    nylearns_course_init = forms.CharField(
+        required = False,
+        widget = forms.HiddenInput(),
+        initial = "none"
+        )
+
+    def clean_email(self):
+      from django.utils.safestring import mark_safe
+      data = self.cleaned_data['email']
+      if User.objects.filter(email=data).exists():
+          raise forms.ValidationError(mark_safe("This email is already in use. Are you sure that you don't already have an account? Click <a href=\"/registration/password/reset/\">Here</a> to retrieve your user information."))
+      return data
+

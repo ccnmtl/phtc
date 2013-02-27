@@ -59,7 +59,6 @@ def setup_browser(variables):
 # 8) ./manage.py loaddata phtc/main/fixtures/test_data.json \
 #      --settings=phtc.settings_test
 
-
 @before.harvest
 def setup_database(_foo):
     # make sure we have a fresh test database
@@ -70,7 +69,7 @@ def setup_database(_foo):
 @after.harvest
 def teardown_database(_foo):
     os.system("rm -f lettuce.db")
-
+    #a=1
 
 @after.harvest
 def teardown_browser(total):
@@ -117,7 +116,7 @@ def i_am_not_logged_in(step):
     if world.skipping:
         return
     if world.using_selenium:
-        world.browser.get(django_url("/accounts/logout/"), follow=True)
+        world.browser.get(django_url("/accounts/logout/"))
     else:
         world.client.logout()
 
@@ -291,9 +290,17 @@ def i_am_logged_as_a_student(step):
         return
 
     if not world.using_selenium:
-        world.client.login(username='testuser', password='test')
+        world.client.login(username='test', password='test')
     else:
-        assert False, "this needs to be implemented for selenium"
+        logged_in_as_student_with_selenium(step)
+
+def logged_in_as_student_with_selenium(step):
+    world.browser.get(django_url())
+    try:
+        world.browser.find_element_by_id('dashboard-header')
+        return True
+    except:
+        login_user('test','test')
 
 
 @step(u'I am logged in as an admin')
@@ -315,3 +322,80 @@ def i_do_not_see_an_edit_link(step):
 @step(u'I see an edit link')
 def then_i_see_an_edit_link(step):
     assert len(world.dom.cssselect("a#test-edit-link")) > 0
+
+
+''' HANDOFF TESTS '''
+
+@step(u'When I access the handoff url "([^"]*)"')
+def when_i_access_the_handoff_url(step, url):
+    if world.skipping:
+        return
+    world.browser.get(django_url(url))
+    h1 = world.browser.find_element_by_id('section-header')
+    if h1.text == 'Part 1: Introduction to Qualitative Research':
+        assert True
+    else:
+        assert False
+
+
+@step(u'Then I see the handoff module "([^"]*)"')
+def then_i_see_the_handoff_module(step, courseID):
+    if world.skipping:
+        return
+    else:
+        header = world.browser.find_element_by_id('section-header')
+        assert header.text == 'Part 1: Introduction to Qualitative Research'
+
+
+@step(u'And I click on the link "([^"]*)"')
+def and_i_click_on_the_link_group1(step, link_id):
+    if world.skipping:
+        return
+    link = world.browser.find_element_by_id(link_id)
+    link.click()
+
+
+@step(u'And it fails when I try to use my NYLearns login info')
+def and_it_fails_when_i_try_to_use_my_nylearns_login_info(step):
+    login_user('nylearns_username', 'nylearns_pass')
+
+
+@step(u'And I fill out the form')
+def and_i_fill_out_the_form(step):
+    if world.skipping:
+        return
+    username = world.browser.find_element_by_id('id_username').send_keys('test123') 
+    email = world.browser.find_element_by_id('id_email').send_keys('testing@gmail.com')
+    pass1 = world.browser.find_element_by_id('id_password1').send_keys('test123')
+    pass2 = world.browser.find_element_by_id('id_password2').send_keys('test123')
+    fname = world.browser.find_element_by_id('id_fname').send_keys('test123')
+    lname = world.browser.find_element_by_id('id_lname').send_keys('test123')
+    age = world.browser.find_element_by_id('id_age').send_keys('20-29')
+    sex = world.browser.find_element_by_id('id_sex').send_keys('male')
+    origin = world.browser.find_element_by_id('id_origin').send_keys('no')
+    ethnicity = world.browser.find_element_by_id('id_ethnicity').send_keys('Other')
+    degree = world.browser.find_element_by_id('id_degree').send_keys('Masters Degree')
+    work_city = world.browser.find_element_by_id('id_work_city').send_keys('test City')
+    work_state = world.browser.find_element_by_id('id_work_state').send_keys('NY')
+    zipcode = world.browser.find_element_by_id('id_work_zip').send_keys('12345')
+    position = world.browser.find_element_by_id('id_position').send_keys('Biostatistics')
+    location = world.browser.find_element_by_id('id_employment_location').send_keys('Academia')
+    dept_health = world.browser.find_element_by_id('id_dept_health').send_keys('No')
+    geo_dept_health = world.browser.find_element_by_id('id_geo_dept_health').send_keys('New York City (NY)')
+    experience = world.browser.find_element_by_id('id_experience').send_keys('0-5')
+    umc = world.browser.find_element_by_id('id_umc').send_keys('Yes')
+    rural = world.browser.find_element_by_id('id_rural').send_keys('No')
+    register = world.browser.find_element_by_css_selector('input.btn-primary').click()
+
+
+@step (u'the previous section is available')
+def previous_section(step):
+    if world.skipping:
+        return
+    link = world.browser.find_element_by_link_text('Part 1: Introduction to Qualitative Research')
+    assert link
+    
+
+
+
+
