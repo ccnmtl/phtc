@@ -5,7 +5,7 @@ jQuery(document).ready(function(){
 
     function move_video_modules(){
         if($('span.hide.video').length > 0){
-            $('#modules').append('<h2 style="margin-top:20px">Video</h2>');
+            $('#modules').append('<h2 style="margin-top:40px">Videos, Webinars, and Lectures</h2>');
         }
         $('span.hide.video').each(function(){
             var clone = $(this).parent().clone();
