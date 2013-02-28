@@ -52,12 +52,13 @@ def setup_browser(variables):
 # 2) create a phtc/settings_test.py that uses sqlite3 and test_data/test.db
 # 3) ./manage.py dumpdata --indent=2 --format=json \
 #      --natural > phtc/main/fixtures/test_data.json
-# 4) ./manage.py syncdb --settings=phtc.settings_test
-# 5) ./manage.py migrate --settings=phtc.settings_test
-# 6) ./manage.py reset contenttypes --settings=phtc.settings_test
-# 7) ./manage.py reset auth --settings=phtc.settings_test
+# 4) ./manage.py syncdb --settings=phtc.settings_lettuce
+# 5) ./manage.py migrate --settings=phtc.settings_lettuce
+# 6) ./manage.py reset contenttypes --settings=phtc.settings_lettuce
+# 7) ./manage.py reset auth --settings=phtc.settings_lettuce
+# --> make sure to create user=test pass=test
 # 8) ./manage.py loaddata phtc/main/fixtures/test_data.json \
-#      --settings=phtc.settings_test
+#      --settings=phtc.settings_lettuce
 
 @before.harvest
 def setup_database(_foo):
@@ -290,8 +291,9 @@ def i_am_logged_as_a_student(step):
         return
 
     if not world.using_selenium:
-        world.client.login(username='test', password='test')
+        world.client.login(username='demo', password='demo')
     else:
+
         logged_in_as_student_with_selenium(step)
 
 def logged_in_as_student_with_selenium(step):
@@ -300,7 +302,7 @@ def logged_in_as_student_with_selenium(step):
         world.browser.find_element_by_id('dashboard-header')
         return True
     except:
-        login_user('test','test')
+        login_user('demo','demo')
 
 
 @step(u'I am logged in as an admin')
@@ -309,7 +311,7 @@ def i_am_logged_in_as_an_admin(step):
         return
 
     if not world.using_selenium:
-        world.client.login(username='testadmin', password='test')
+        world.client.login(username='jed2161', password='jedavis13')
     else:
         assert False, "this needs to be implemented for selenium"
 

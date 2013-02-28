@@ -8,11 +8,10 @@ stuff is all hooked up properly and running.
         Using selenium
         Given I am logged as a student
         When I access the url "/"
-        Then I see the header "Dashboard"
+        Then I see the header "Online Modules"
         Finished using selenium
 
     Scenario: Index Page Load
         Given I am logged as a student
         When I access the url "/"
-        Then I see the header "Dashboard"
-
+        Then I see the header "Online Modules"
