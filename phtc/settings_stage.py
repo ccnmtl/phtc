@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'phtc_test',
+        'NAME': 'phtc',
         'HOST': '',
         'PORT': 5432,
         'USER': 'pusher',
