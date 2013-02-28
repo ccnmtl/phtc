@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login
 from phtc.main.models import UserProfile
 from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
+from phtc.main.models import ModuleType
 from pagetree.models import UserPageVisit
 from phtc.main.models import NYLEARNS_Course_Map
 from django.core.mail import EmailMultiAlternatives
@@ -466,13 +467,26 @@ def edit_page(request, path):
         edit_page = True
         dashboard, created = DashboardInfo.objects.get_or_create(
             dashboard=section)
-        if request.method == "POST":
-            dashboard.info = request.POST['dashboard_info']
+        module_type, created = ModuleType.objects.get_or_create(
+            module_type = section)
+
+
+
+        if (request.POST.get('dashboard_info') or 
+            request.POST.get('dashboard_info')==''):
+                dashboard.info = request.POST.get('dashboard_info','')
+        
+        if (request.POST.get('module_type_form') or
+            request.POST.get('module_type_form')==''):
+                module_type.info = request.POST.get('module_type_form', '')
 
         dashboard.save()
+        module_type.save()
+
 
         return dict(section=section,
                     dashboard=dashboard,
+                    module_type=module_type,
                     module=get_module(section),
                     modules=root.get_children(),
                     root=section.hierarchy.get_root(),
@@ -643,12 +657,14 @@ def render_dashboard(request):
     root = h.get_root()
     last_session = h.get_user_section(request.user)
     dashboard_info = DashboardInfo.objects.all()
+    module_type = ModuleType.objects.all()
 
     is_visited = user_visits(request)
     empty = ""
     return dict(root=root, last_session=last_session,
                 dashboard_info=dashboard_info,empty=empty,
-                is_visited=is_visited, admin_lock=admin_lock)
+                is_visited=is_visited, admin_lock=admin_lock, 
+                module_type=module_type)
 
 @render_to('flatpages/about.html')
 def about_page(request):

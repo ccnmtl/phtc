@@ -84,7 +84,7 @@ user_registered.connect(user_created)
 
 class DashboardInfo(models.Model):
     dashboard = models.OneToOneField(Section)
-    info = models.TextField()
+    info = models.TextField(default='')
 
     def edit_form(self):
         class EditSectionForm(forms.Form):
@@ -99,3 +99,14 @@ class NYLEARNS_Course_Map(models.Model):
 
     def __unicode__(self):
         return "url path:%s" % self.phtc_url
+
+class ModuleType(models.Model):
+    module_type = models.OneToOneField(Section)
+    info = models.TextField(default='')
+
+    def edit_form(self):
+        class EditModuleForm(forms.Form):
+            module_type_form = forms.CharField(widget=forms.Textarea,
+                                             initial=self.info,
+                                             label='Module Type')
+        return EditModuleForm()

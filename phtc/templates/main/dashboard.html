@@ -24,15 +24,20 @@
 <div id="dashboard-toc">
     <div id="modules">
  {% for module in root.get_children %}
- {% if  module.id < admin_lock %}	
+ {% if  module.id < admin_lock %}	 	
 	<div class='module' id="{{ module.id }}">
-		{% comment %}{% for info in dashboard_info %}
+		{%for type in module_type%}
+	 		{% ifequal module.id type.module_type_id %}
+				<span class='hide {{ type.info }}'>&nbsp;</span>
+	 		{% endifequal %}
+		{% endfor %}
+		{% for info in dashboard_info %}
 			{% ifequal module.id info.dashboard_id %}
 				{% ifnotequal info.info "" %}
 					<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/></div>
 				{% endifnotequal %}
 			{% endifequal %}
-		{% endfor %}{% endcomment %}
+		{% endfor %}
 
 		{% get_user_section_status request.user module as status %}
 		{% ifequal status.status "complete" %}<!-- **** COMPLETED -->
@@ -60,17 +65,28 @@
 </div><!--end .module-->
 {% endif %}
 {% endfor %}
+
+{%comment%}
+## 
+## This below section is only for the admin lock feature
+##
+{%endcomment%}
 
 {% for module in root.get_children %}
- {% if  user.is_staff and module.id >= admin_lock  %}	
+ {% if  user.is_staff and module.id >= admin_lock  %}
 	<div class='module' id="{{ module.id }}">
-		{% comment %}{% for info in dashboard_info %}
+		{%for type in module_type%}
+	 		{% ifequal module.id type.module_type_id %}
+				<span class='hide {{ type.info }}'>&nbsp;</span>
+	 		{% endifequal %}
+		{% endfor %}
+		{% for info in dashboard_info %}
 			{% ifequal module.id info.dashboard_id %}
 				{% ifnotequal info.info "" %}
 					<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/></div>
 				{% endifnotequal %}
 			{% endifequal %}
-		{% endfor %}{% endcomment %}
+		{% endfor %}
 
 		{% get_user_section_status request.user module as status %}
 		{% ifequal status.status "complete" %}<!-- **** COMPLETED -->
@@ -95,11 +111,10 @@
 			<div class="divclearfix"></div>
 		{% else %}
 		{% endif %}
-</div><!--end .module-->
+	</div><!--end .module-->
 {% endif %}
 {% endfor %}
-    
-    </div>
+    </div><!--end modules-->
     <div id="return"></div><!-- end #return -->
     <div class="divclearfix"></div><!-- divclearfix -->
 </div><!-- end #dashboard-toc -->

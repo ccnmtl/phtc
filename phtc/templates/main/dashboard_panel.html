@@ -27,13 +27,13 @@
 	<div class="parts" id="part_id_{{ module.id }}">
 	{% for p in module.get_children %}
 		<div class='part'>
-		{% comment %}{% for info in dashboard_info %}
+		{% for info in dashboard_info %}
 			{% ifequal p.id info.dashboard_id %}
 				{% ifnotequal info.info "" %}
 					<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/></div>
 				{% endifnotequal %}
 			{% endifequal %}
-		{% endfor %}{% endcomment %}
+		{% endfor %}
 		{% get_user_section_status request.user p as status %}
 		<div class="parttitle">
 		{% ifequal status.status "complete" %}<!-- **** COMPLETED -->
