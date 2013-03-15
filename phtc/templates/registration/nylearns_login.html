@@ -14,8 +14,6 @@
             
             <form method="post" action="/nylearns_login/?next=/nylearns/&user_id={{ args.user_id }}&course={{ args.course }}" class="well">
             {% csrf_token %}
-	            <p>If you have a project account...</p>
-	            
 	            <label for="id_username">Username: {{ form.username }}</label>
 	            <div id="nylearns-greeting"></div>
 	            <label for="id_password">Password: {{ form.password }}</label>
@@ -26,8 +24,9 @@
 	            {% endif %}
 	            <p class="smalltxt">
 	            	<span class="tooltip-bottom" rel="tooltip" title="Create your own PHTC account">
-	            		<a id="nylearns-register-link" href="/nylearns/?user_id={{ args.user_id }}&course={{ args.course }}&has_account=0">Need a new account?</a>
-	            	</span> | 
+	            		<a id="nylearns-register-link" href="/nylearns/?user_id={{ args.user_id }}&course={{ args.course }}&has_account=0"><font style="font-size:18px;">Need a new account?</font></a>
+	            	</span>
+                    <br/>
 	            	<span class="tooltip-bottom" rel="tooltip" title="Reset your password">
 	            		<a href="/registration/password/reset/">Forgot password?</a>
 	            	</span>
@@ -38,10 +37,10 @@
         <div id="welcome" style="margin:0 0 0 25px;">
         	<p>Welcome to the New York City-Long Island-Lower Tri-County Public Health Training Center (PHTC). You are a few short clicks away from beginning the online training course you enrolled in on NYLearnsPH.com Learning Management System (LMS).</p>
         	
-        	<p>If this is your first time on our site, you will need to complete a brief one-time registration. This will allow you to maintain an account here and allow us to share course completion information with NYLearnsPH.com to ensure that your learning record is complete on both sites. When you log-in with the Username and Password you set up during this registration, you will gain access to all available programs through our training environment.
+        	<p>If this is your first time on our site, you will need to complete a <a id="nylearns-register-link" href="/nylearns/?user_id={{ args.user_id }}&course={{ args.course }}&has_account=0">brief one-time registration</a>. This will allow you to maintain an account here and allow us to share course completion information with NYLearnsPH.com to ensure that your learning record is complete on both sites. When you log-in with the Username and Password you set up during this registration, you will gain access to all available programs through our training environment.
         	</p>
         	
-        	<p>If you previously registered with the PHTC site, log-in now with the Username and Password you created when first registered. (If you've forgotten your username or password, you can retrieve them <a href="/registration/password/reset/">here</a> using your email address.</p>
+        	<p>If you previously registered with the PHTC site, log-in now with the Username and Password you created when first registered. (If you've forgotten your username or password, you can retrieve them <a href="/registration/password/reset/">here</a> using your email address.)</p>
         	
         	<p>Thank you visiting our site and we hope you enjoy our training programs,</p>
         	
