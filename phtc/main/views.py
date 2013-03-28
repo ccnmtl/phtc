@@ -15,18 +15,14 @@ from pagetree.models import UserPageVisit
 from phtc.main.models import NYLEARNS_Course_Map
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.flatpages.models import FlatPage
-from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.auth.forms import AuthenticationForm
 from django.template.loader import get_template
 from django.template import Context
 from pagetree.models import Section
-from pagetree.models import PageBlock
 from quizblock.models import Quiz
 from quizblock.models import Question
 from quizblock.models import Response
-from django.core.mail import EmailMultiAlternatives
-from django.contrib.contenttypes.models import ContentType
 import csv
 
 
@@ -35,7 +31,7 @@ def test_nylearns_username(request):
     if request.POST:
         username = request.POST.get('username')
         try:
-            User.objects.get(username = username)
+            User.objects.get(username=username)
             return HttpResponse(True)
         except User.DoesNotExist:
             return HttpResponse(False)
@@ -47,15 +43,15 @@ def nylearns(request):
     course = request.GET.get('course')
     args = dict(user_id=user_id, course=course)
     form = UserRegistrationForm(initial={
-        'is_nylearns' : 'True',
-        'nylearns_user_id' : user_id,
-        'nylearns_course_init' : course
-        })
+        'is_nylearns': 'True',
+        'nylearns_user_id': user_id,
+        'nylearns_course_init': course
+    })
 
     if not request.user.is_anonymous():
         course = request.GET.get('course')
         try:
-            course_map = NYLEARNS_Course_Map.objects.get(courseID = course)
+            course_map = NYLEARNS_Course_Map.objects.get(courseID=course)
             url = course_map.phtc_url.split('/')
             #courses must be mapped to first page in module
             course_url = url[1] + '/' + url[2]
@@ -64,16 +60,18 @@ def nylearns(request):
             process_dashboard_ajax(request.user, section, module)
             return HttpResponseRedirect(course_map.phtc_url)
         except NYLEARNS_Course_Map.DoesNotExist:
-            return HttpResponseRedirect('/dashboard/?course_not_available=true')
-    
+            return HttpResponseRedirect(
+                '/dashboard/?course_not_available=true')
+
     if request.method == "POST":
         form = UserRegistrationForm()
-        return render_to_response('registration/registration_form.html',form)
-    
+        return render_to_response('registration/registration_form.html', form)
+
     if not request.GET.get('has_account'):
         form = AuthenticationForm()
-        return render_to_response('registration/nylearns_login.html', 
-            {'form': form, 'args': args, 'request': request} )
+        return render_to_response(
+            'registration/nylearns_login.html',
+            {'form': form, 'args': args, 'request': request})
     else:
         return dict(form=form, args=args)
 
@@ -83,7 +81,7 @@ def create_nylearns_user(request):
     if request.POST and request.POST.get('nylearns_course_init'):
         course = request.POST.get('nylearns_course_init')
     else:
-        course='none'
+        course = 'none'
     if request.POST and request.POST.get('nylearns_user_id'):
         user_id = request.POST.get('nylearns_user_id')
     else:
@@ -94,9 +92,9 @@ def create_nylearns_user(request):
     password = form.data["password1"]
     args = dict(user_id=user_id, course=course)
     # check if user or email exist and make sure pass is not blank
-    if (User.objects.filter(email=email).exists() or 
-        User.objects.filter(username=username).exists() or
-        password == ""):
+    if (User.objects.filter(email=email).exists() or
+            User.objects.filter(username=username).exists() or
+            password == ""):
         return dict(form=form, args=args)
 
     else:
@@ -116,7 +114,7 @@ def create_nylearns_user(request):
     except:
         pass
 
-    request.user.email= form.data["email"]
+    request.user.email = form.data["email"]
     userprofile.is_nylearns = form.data["is_nylearns"]
     userprofile.nylearns_user_id = form.data["nylearns_user_id"]
     userprofile.nylearns_course_init = form.data["nylearns_course_init"]
@@ -143,7 +141,8 @@ def create_nylearns_user(request):
     user.save()
     authenticated_user = authenticate(username=username, password=password)
     login(request, authenticated_user)
-    return HttpResponseRedirect('/nylearns/?profile_created=true&course=' + course)
+    return HttpResponseRedirect(
+        '/nylearns/?profile_created=true&course=' + course)
 
 
 @render_to('registration/nylearns_login.html')
@@ -152,11 +151,11 @@ def nylearns_login(request):
     password = request.POST.get('password')
     course = request.GET.get('course')
     user_id = request.GET.get('user_id')
-    form = AuthenticationForm(initial={'username':username})
+    form = AuthenticationForm(initial={'username': username})
     if request.POST.get('args'):
         args = request.POST.get('args')
     else:
-        args = {'course':course, 'user_id':user_id}
+        args = {'course': course, 'user_id': user_id}
     if not request.GET.get('course') == '':
         course = request.GET.get('course')
     else:
@@ -164,7 +163,8 @@ def nylearns_login(request):
     if request.method == "POST":
         req = request.POST
         if not req.get('username') == '' and not req.get('password') == '':
-            authenticated_user = authenticate(username=username, password=password)
+            authenticated_user = authenticate(username=username,
+                                              password=password)
             try:
                 login(request, authenticated_user)
                 return HttpResponseRedirect('/nylearns/?course=' + course)
@@ -221,6 +221,7 @@ def calculate_status(prev_status, uv):
 def user_visits(request):
     return UserPageVisit.objects.filter(user=request.user)
 
+
 def send_nylearns_email(request, user, profile, module):
     send_to_email = 'edlearn@health.state.ny.us'
     (subject, from_email, to) = (
@@ -232,12 +233,13 @@ def send_nylearns_email(request, user, profile, module):
     nylearns_userid = profile.nylearns_user_id
     user_email = user.email
     html = get_template('main/nylearns_email.html')
-    html_context = Context({
-                            'username':username,
-                            'module': module,
-                            'nylearns_userid': nylearns_userid,
-                            'user_email': user_email
-                            })
+    html_context = Context(
+        {
+            'username': username,
+            'module': module,
+            'nylearns_userid': nylearns_userid,
+            'user_email': user_email
+        })
     html_content = html.render(html_context)
 
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
@@ -246,8 +248,8 @@ def send_nylearns_email(request, user, profile, module):
 
 
 def send_post_test_email(user, section, module, request):
-    profile = UserProfile.objects.get(user_id = user.id)
-    if profile.is_nylearns == True:
+    profile = UserProfile.objects.get(user_id=user.id)
+    if profile.is_nylearns:
         send_nylearns_email(request, user, profile, module)
 
     (subject, from_email, to) = (
@@ -259,11 +261,12 @@ def send_post_test_email(user, section, module, request):
     host = request.get_host()
     abs_url = module.get_absolute_url()
     html = get_template('main/completer_email.html')
-    html_context = Context({
-                            'label':label,
-                            'host': host,
-                            'abs_url': abs_url
-                            })
+    html_context = Context(
+        {
+            'label': label,
+            'host': host,
+            'abs_url': abs_url
+        })
     html_content = html.render(html_context)
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
@@ -304,7 +307,7 @@ def make_sure_module1_parts_are_allowed(module, user):
         v = part.get_uservisit(user)
         if v:
             if (v.status == "in_progress"
-                and part.get_previous().get_uservisit(user)):
+                    and part.get_previous().get_uservisit(user)):
                 part.get_previous().user_pagevisit(user, status="complete")
         else:
             part.user_pagevisit(user, status="allowed")
@@ -315,11 +318,11 @@ def make_sure_parts_are_allowed(module, user, section, is_module):
     if is_module_one(module):
         make_sure_module1_parts_are_allowed(module, user)
     else:
-        if is_module == True:
+        if is_module:
 
             if UserPageVisit.objects.get(
                 section=module,
-                user=user).status == "complete":
+                    user=user).status == "complete":
                 module.user_pagevisit(user, status="complete")
                 return
             try:
@@ -332,12 +335,12 @@ def make_sure_parts_are_allowed(module, user, section, is_module):
             if status == "exists":
                 ns = section.get_next()
                 if UserPageVisit.objects.get(
-                    section=ns, user=user).status == "in_progress":
+                        section=ns, user=user).status == "in_progress":
                     section.get_next().user_pagevisit(user,
                                                       status="complete")
                 elif UserPageVisit.objects.get(
-                    section=ns,
-                    user=user).status == "allowed":
+                        section=ns,
+                        user=user).status == "allowed":
                     section.get_next().user_pagevisit(user,
                                                       status="in_progress")
             if status == "created":
@@ -368,8 +371,9 @@ def process_dashboard_ajax(user, section, module):
     else:
         module.user_pagevisit(user, status="in_progress")
         make_sure_parts_are_allowed(module, user, section,
-            is_module(module, section))
+                                    is_module(module, section))
         return reverse("dashboard")
+
 
 def get_module_admin_lock():
     # set the variable to equal the protected module id
@@ -386,14 +390,14 @@ def page(request, path):
     module = get_module(section)
     is_visited = user_visits(request)
     page_dict = dict(section=section,
-                module=module,
-                is_visited=is_visited,
-                needs_submit=needs_submit(section),
-                is_submitted=submitted(section, request.user),
-                modules=root.get_children(),
-                root=section.hierarchy.get_root(),
-                admin_lock=admin_lock,
-                )
+                     module=module,
+                     is_visited=is_visited,
+                     needs_submit=needs_submit(section),
+                     is_submitted=submitted(section, request.user),
+                     modules=root.get_children(),
+                     root=section.hierarchy.get_root(),
+                     admin_lock=admin_lock,
+                     )
 
     # dashboard ajax
     if request.POST.get('module'):
@@ -410,7 +414,7 @@ def page(request, path):
 
     # is the page already completed? If so, do not update status
     if(section.get_uservisit(request.user) and
-        section.get_uservisit(request.user).status == "complete"):
+       section.get_uservisit(request.user).status == "complete"):
         return page_dict
     else:
         update_status(section, request.user, module)
@@ -430,13 +434,14 @@ def page(request, path):
     else:
         return HttpResponse('We are sorry, this module is not quite ready!')
 
+
 def previous_section_handle_status(section, request, module):
     if section.get_previous():
         prev_section = section.get_previous()
         prev_section_visit = prev_section.get_uservisit(request.user)
         if (prev_section_visit
-            and prev_section_visit.status == "in_progress"
-            and not is_module(module, prev_section)):
+                and prev_section_visit.status == "in_progress"
+                and not is_module(module, prev_section)):
             prev_section.user_pagevisit(request.user, status="complete")
         else:
             # Need to catch whether a part has been flagged as "allowed"
@@ -468,21 +473,18 @@ def edit_page(request, path):
         dashboard, created = DashboardInfo.objects.get_or_create(
             dashboard=section)
         module_type, created = ModuleType.objects.get_or_create(
-            module_type = section)
+            module_type=section)
 
+        if (request.POST.get('dashboard_info') or
+                request.POST.get('dashboard_info') == ''):
+            dashboard.info = request.POST.get('dashboard_info', '')
 
-
-        if (request.POST.get('dashboard_info') or 
-            request.POST.get('dashboard_info')==''):
-                dashboard.info = request.POST.get('dashboard_info','')
-        
         if (request.POST.get('module_type_form') or
-            request.POST.get('module_type_form')==''):
-                module_type.info = request.POST.get('module_type_form', '')
+                request.POST.get('module_type_form') == ''):
+            module_type.info = request.POST.get('module_type_form', '')
 
         dashboard.save()
         module_type.save()
-
 
         return dict(section=section,
                     dashboard=dashboard,
@@ -513,7 +515,8 @@ def exporter(request):
 def get_user_profile(request):
     try:
         profile = UserProfile.objects.get(user=request.user)
-        form = UserRegistrationForm(initial={
+        form = UserRegistrationForm(
+            initial={
                 'fname': profile.fname,
                 'lname': profile.lname,
                 'username': request.user.username,
@@ -535,14 +538,14 @@ def get_user_profile(request):
                 'geo_dept_health': profile.geo_dept_health,
                 'experience': profile.experience,
                 'rural': profile.rural
-
-                })
+            })
         return dict(profile=profile, form=form)
     except UserProfile.DoesNotExist:
-        form = UserRegistrationForm(initial={
+        form = UserRegistrationForm(
+            initial={
                 'username': request.user.username,
                 'email': request.user.email,
-                })
+            })
     return dict(form=form, user=request.user)
 
 
@@ -620,22 +623,22 @@ def certificate(request, path):
     root = section.hierarchy.get_root()
     module = get_module(section)
     is_visited = user_visits(request)
-    #return HttpResponse(module.get_uservisit(request.user).status )
-    #make sure this page is only viewable if the module is completed.
+    # make sure this page is only viewable if the module is completed.
     if (module.get_uservisit(request.user)
-        and module.get_uservisit(request.user).status == "complete"):
-        return dict(section=section,
-                module=module,
-                is_visited=is_visited,
-                needs_submit=needs_submit(section),
-                is_submitted=submitted(section, request.user),
-                modules=root.get_children(),
-                root=section.hierarchy.get_root(),
-                user=request.user,
-                profile=UserProfile.objects.get(user=request.user),
-                date=UserPageVisit.objects.get(user=request.user,
-                                               section=module).last_visit
-                )
+            and module.get_uservisit(request.user).status == "complete"):
+        return dict(
+            section=section,
+            module=module,
+            is_visited=is_visited,
+            needs_submit=needs_submit(section),
+            is_submitted=submitted(section, request.user),
+            modules=root.get_children(),
+            root=section.hierarchy.get_root(),
+            user=request.user,
+            profile=UserProfile.objects.get(user=request.user),
+            date=UserPageVisit.objects.get(user=request.user,
+                                           section=module).last_visit
+        )
     else:
         return HttpResponseRedirect('/dashboard/')
 
@@ -645,9 +648,9 @@ def render_dashboard(request):
         next_path = request.META['HTTP_REFERER']
         if (len(next_path.split('/nylearns/?')[1].split('&')) > 1):
             params = next_path.split('/nylearns/?')[1].split('&')
-            if (params[0].split('=')[0] == "course" 
-            or params[1].split('=')[0] == "course" ):
-                url ='/nylearns/?' + params[0] + '&' + params[1]
+            if (params[0].split('=')[0] == "course"
+                    or params[1].split('=')[0] == "course"):
+                url = '/nylearns/?' + params[0] + '&' + params[1]
                 return HttpResponseRedirect(url)
     except:
         pass
@@ -662,9 +665,10 @@ def render_dashboard(request):
     is_visited = user_visits(request)
     empty = ""
     return dict(root=root, last_session=last_session,
-                dashboard_info=dashboard_info,empty=empty,
-                is_visited=is_visited, admin_lock=admin_lock, 
+                dashboard_info=dashboard_info, empty=empty,
+                is_visited=is_visited, admin_lock=admin_lock,
                 module_type=module_type)
+
 
 @render_to('flatpages/about.html')
 def about_page(request):
@@ -687,18 +691,19 @@ def contact_page(request):
 def create_csv_report(request, report, report_name):
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="' + report_name + '.csv"'
+    response['Content-Disposition'] = (
+        'attachment; filename="' + report_name + '.csv"')
     writer = csv.writer(response)
     header = []
     header_row = report[0]
-    for k,v in header_row.iteritems():
+    for k, v in header_row.iteritems():
         header.append(k)
     writer.writerow(header)
 
     for row in report:
         data = []
-        for k,v in row.iteritems():
-                data.append(v)
+        for k, v in row.iteritems():
+            data.append(v)
         writer.writerow(data)
     return response
 
@@ -713,31 +718,34 @@ def reports(request):
     pagevisits = UserPageVisit.objects.all()
     total_number_of_users = len(UserProfile.objects.all())
     completed_modules = get_all_completed_modules(root, modules, pagevisits)
-    if request.method=="POST":
-        
+    if request.method == "POST":
         report = request.POST.get('report')
         ev_report = request.POST.get('eval_report')
-        #vars used to create reports
-        
+        # vars used to create reports
         completed_modules_counted = count_modules_completed(completed_modules)
         completers = create_completers_list(completed_modules)
         qoi = [
             'The course was of overall high quality.',
-            'I would recommend this course for employees in positions similar to mine.',
+            ('I would recommend this course for employees '
+             'in positions similar to mine.'),
             'The course content achieved the objectives.',
-            'This online training was an effective method for me to learn this material.',
+            ('This online training was an effective method for '
+             'me to learn this material.'),
             'Approximately how long did it take you to complete the course?',
-            'Please add any additional comments, including suggestions for improving the course and requests for future web-based training modules.'
+            ('Please add any additional comments, including suggestions '
+             'for improving the course and requests for future web-based '
+             'training modules.')
         ]
 
-
         if report == "training_env":
-            training_env_report = create_training_env_report(completers,
+            training_env_report = create_training_env_report(
+                completers,
                 total_number_of_users, completed_modules_counted)
             return create_csv_report(request, training_env_report, report)
 
         if report == "user_report":
-            user_report_table = create_user_report_table(completed_modules, completers)
+            user_report_table = create_user_report_table(
+                completed_modules, completers)
             return create_csv_report(request, user_report_table, report)
 
         if report == "age_gender_report":
@@ -749,22 +757,18 @@ def reports(request):
             return create_csv_report(request, course_report_table, report)
 
         if ev_report:
-            
             mod = Section.objects.get(label=ev_report)
-            
             header = []
-            response_list = ['strongly_disagree','disagree', 'neither_agree_nor_disagree',
-                            'agree', 'strongly_agree','','','']
-            response_time_list = ['30_minutes_or_less', '1_hour', '1.5_hours', '2_hours',
-                                    '2.5_hours', '3_hours', '3.5_hours', '4_hours'] 
-            evaluation_reports = create_eval_report(completed_modules, modules, qoi)
-            
-            for n in range(len(qoi) ):
-                header.append(qoi[n].strip(' \t\n\r').replace(" ", "_").lower())
+            evaluation_reports = create_eval_report(
+                completed_modules, modules, qoi)
+
+            for n in range(len(qoi)):
+                header.append(
+                    qoi[n].strip(
+                        ' \t\n\r').replace(" ", "_").lower())
 
             header.pop()
 
-            
             for ev in evaluation_reports:
                 if ev['module'] == mod:
                     evaluation_report = ev
@@ -773,51 +777,62 @@ def reports(request):
 
                 # create single report
                 module_title = evaluation_report['module'].label
-                
-
                 qr = {}
                 users = []
                 for ev in evaluation_report['question_response']:
-                    # clean question text after? that way it can be used as a key? # 
-                    question = ev['question'].text.strip(' \t\n\r').replace(" ", "_").lower()
+                    # clean question text after?
+                    # that way it can be used as a key?
+                    question = ev['question'].text.strip(
+                        ' \t\n\r').replace(" ", "_").lower()
 
-                    response_list_count = {'strongly_disagree':0,'neither_agree_nor_disagree':0,
-                                            'disagree':0, 'agree':0,'strongly_agree':0}
-                    response_time_list_count = {'30_minutes_or_less':0,'1_hour':0,'1.5_hours':0,
-                                                '2_hours':0,'2.5_hours':0,'3_hours':0,'3.5_hours':0,
-                                                '4_hours':0}
-                    
+                    response_list_count = {
+                        'strongly_disagree': 0,
+                        'neither_agree_nor_disagree': 0,
+                        'disagree': 0, 'agree': 0,
+                        'strongly_agree': 0}
+                    response_time_list_count = {
+                        '30_minutes_or_less': 0,
+                        '1_hour': 0,
+                        '1.5_hours': 0,
+                        '2_hours': 0,
+                        '2.5_hours': 0,
+                        '3_hours': 0,
+                        '3.5_hours': 0,
+                        '4_hours': 0}
                     if question.startswith('approximately_how_long_did'):
                         for res in ev['responses']:
-                            users.append({'username': res.submission.user.username})
-                            response = res.value.strip(' \t\n\r').replace(" ", "_").lower()
-                            for k,v in response_time_list_count.iteritems():
+                            users.append(
+                                {'username': res.submission.user.username})
+                            response = res.value.strip(
+                                ' \t\n\r').replace(" ", "_").lower()
+                            for k, v in response_time_list_count.iteritems():
                                 if response == k:
-                                    response_time_list_count[k]+=1
+                                    response_time_list_count[k] += 1
                             qr[question] = response_time_list_count
-
                     elif question.startswith('please_add'):
                         comments = {}
                         for i in range(len(ev['responses'])):
                             if not ev['responses'][i].value == '':
                                 comments[i] = ev['responses'][i].value
-                        qr[question]=comments
-
+                        qr[question] = comments
                     else:
-                        for k,v in response_list_count.iteritems():
+                        for k, v in response_list_count.iteritems():
                             for res in ev['responses']:
-                                response = res.value.strip(' \t\n\r').replace(" ", "_").lower()
+                                response = res.value.strip(
+                                    ' \t\n\r').replace(" ", "_").lower()
                                 if response == k:
-                                    response_list_count[k]+=1
+                                    response_list_count[k] += 1
                             qr[question] = response_list_count
 
-                return dict(qr=qr, module_title=module_title, completed_modules=completed_modules.keys())
+                return dict(
+                    qr=qr, module_title=module_title,
+                    completed_modules=completed_modules.keys())
 
             except UnboundLocalError:
-                return dict(welcome_msg = 'Report could not be found.',
-                                completed_modules=completed_modules.keys())
-        
-    return dict(welcome_msg=welcome_msg, completed_modules=completed_modules.keys())
+                return dict(welcome_msg='Report could not be found.',
+                            completed_modules=completed_modules.keys())
+    return dict(
+        welcome_msg=welcome_msg, completed_modules=completed_modules.keys())
 
 
 def create_eval_report(completed_modules, modules, qoi):
@@ -825,33 +840,31 @@ def create_eval_report(completed_modules, modules, qoi):
     post_tests = []
 
     quizes = [x for x in Quiz.objects.filter(post_test="TRUE")]
-    
+
     for q in quizes:
-        if q.pageblocks.all().count() > 0: 
+        if q.pageblocks.all().count() > 0:
             post_tests.append(q)
 
     for t in post_tests:
         # get questions
         questions = Question.objects.filter(quiz_id=t.id)
-        
         obj = {
-                'module' : t.pageblock().section.get_module(),
-                'quiz' : t
-            }
+            'module': t.pageblock().section.get_module(),
+            'quiz': t
+        }
 
         qr = []
         for q in questions:
 
             if is_question_of_interest(q, qoi):
                 question_answer = {
-                        'question': q,
-                        'responses': Response.objects.filter(question_id=q.id)
+                    'question': q,
+                    'responses': Response.objects.filter(question_id=q.id)
                 }
                 qr.append(question_answer)
         obj['question_response'] = qr
 
         module_post_test_map.append(obj)
-    
     return module_post_test_map
 
 
@@ -860,31 +873,33 @@ def is_question_of_interest(question, qoi):
         if question.text.strip(' \t\n\r') == q:
             return True
 
+
 def create_course_report_table(completed_modules):
     course_table = []
-    for k,v in completed_modules.iteritems():
+    for k, v in completed_modules.iteritems():
         for mod in v:
             course = {}
-            date = UserPageVisit.objects.get(user=mod.user, section=mod.section).last_visit
-            
+            date = UserPageVisit.objects.get(
+                user=mod.user, section=mod.section).last_visit
             try:
-                user = UserProfile.objects.get(user_id = mod.user_id)
-                course['course_name']= k
+                user = UserProfile.objects.get(user_id=mod.user_id)
+                course['course_name'] = k
                 course['requested_cues'] = ''
                 course['date_completed'] = date.strftime("%D")
                 course['username'] = user.user.username
                 course['email'] = user.user.email
-                course['first_name']= user.fname
+                course['first_name'] = user.fname
                 course['last_name'] = user.lname
-                course['age']= user.age
+                course['age'] = user.age
                 course['gender'] = user.sex
                 course['hispanic_origin'] = user.origin
                 course['race'] = user.ethnicity
                 course['heighest_degree_earned'] = user.degree
                 course['work_city'] = user.work_city
                 course['work_state'] = user.work_state
-                course['work_zip_code']= user.work_zip
-                course['primary_discipline_specialty'] = user.employment_location
+                course['work_zip_code'] = user.work_zip
+                course[
+                    'primary_discipline_specialty'] = user.employment_location
                 course['work_in_doh'] = user.dept_health
                 course['target_doh'] = user.dept_health
                 course['experience_in_pulic_health'] = user.experience
@@ -896,16 +911,19 @@ def create_course_report_table(completed_modules):
     return course_table
 
 
-def create_training_env_report(completers, 
-    total_number_of_users, completed_modules_counted):
+def create_training_env_report(completers,
+                               total_number_of_users,
+                               completed_modules_counted):
         table = []
-        report ={}
+        report = {}
         num_of_completers_duplicated = 0
         for mod in completed_modules_counted:
             num_of_completers_duplicated += mod['Number_of_completers']
         report['Total_unique_registered_users'] = total_number_of_users
         report['Total_number_completers_unduplicated'] = len(completers)
-        report['Total_number_completers_duplicated'] = num_of_completers_duplicated
+        report[
+            'Total_number_completers_duplicated'
+        ] = num_of_completers_duplicated
         table.append(report)
         return table
 
@@ -922,8 +940,9 @@ def get_all_completed_modules(root, modules, pagevisits):
 
 def count_modules_completed(completed_modules):
     mod_list = []
-    for k,v in completed_modules.iteritems():
-        mod=dict([
+    for k, v in completed_modules.iteritems():
+        mod = dict(
+            [
                 ('Section', k.label.encode("ascii")),
                 ('Number_of_completers', len(v))
             ])
@@ -933,18 +952,17 @@ def count_modules_completed(completed_modules):
 
 def create_completers_list(completed_modules):
     completers_list = {}
-    for k,v in completed_modules.iteritems():
+    for k, v in completed_modules.iteritems():
         for completer in completed_modules[k]:
-            user = UserProfile.objects.get(user_id = completer.user_id)
+            user = UserProfile.objects.get(user_id=completer.user_id)
             completers_list[user] = user
     return completers_list
 
 
 def create_user_report_table(completed_modules, completers):
-    completer_objects=[]
-    for key,val in completers.iteritems():
+    completer_objects = []
+    for key, val in completers.iteritems():
         obj = {}
-        completer_count = 0
         this_user = User.objects.get(id=val.user_id)
         obj['# of courses completed'] = 0
         obj['Username'] = this_user.username
@@ -968,64 +986,63 @@ def create_user_report_table(completed_modules, completers):
             obj['Employment Location'] = val.employment_location
         else:
             obj['Employment Location'] = val.other_employment_location
-            
         if val.other_position_category == '':
             obj['Primary Discipline/Seciality'] = val.position
         else:
             obj['Primary Discipline/Seciality'] = val.other_position_category
 
-        for k,v in completed_modules.iteritems():
+        for k, v in completed_modules.iteritems():
             for pv in v:
-                
                 if pv.user_id == val.user_id:
                     obj['# of courses completed'] += 1
         completer_objects.append(obj)
     return completer_objects
 
+
 def create_age_gender_dict(completers):
     items = [
-    {
-        'Age': 'Under 20',
-        'Male': 0,
-        'Female': 0,
-        'Total': 0
-    },
-    {
-        'Age': '20-29',
-        'Male': 0,
-        'Female': 0,
-        'Total': 0
-    },
-    {
-        'Age': '30-39',
-        'Male': 0,
-        'Female': 0,
-        'Total': 0
-    },
-    {
-        'Age': '40-49',
-        'Male': 0,
-        'Female': 0,
-        'Total': 0
-    },
-    {
-        'Age': '50-59',
-        'Male': 0,
-        'Female': 0,
-        'Total': 0
-    },
-    {
-        'Age': '60 or Older',
-        'Male': 0,
-        'Female': 0,
-        'Total': 0
-    },
-    {
-        'Age': 'Total',
-        'Male': 0,
-        'Female': 0,
-        'Total': 0
-    }]
+        {
+            'Age': 'Under 20',
+            'Male': 0,
+            'Female': 0,
+            'Total': 0
+        },
+        {
+            'Age': '20-29',
+            'Male': 0,
+            'Female': 0,
+            'Total': 0
+        },
+        {
+            'Age': '30-39',
+            'Male': 0,
+            'Female': 0,
+            'Total': 0
+        },
+        {
+            'Age': '40-49',
+            'Male': 0,
+            'Female': 0,
+            'Total': 0
+        },
+        {
+            'Age': '50-59',
+            'Male': 0,
+            'Female': 0,
+            'Total': 0
+        },
+        {
+            'Age': '60 or Older',
+            'Male': 0,
+            'Female': 0,
+            'Total': 0
+        },
+        {
+            'Age': 'Total',
+            'Male': 0,
+            'Female': 0,
+            'Total': 0
+        }]
     calculate_age_gender(completers, items)
     return items
 
@@ -1061,17 +1078,17 @@ def calculate_age_gender(completers, items):
             row = 5
             set_row_total(completer, items, row)
             items[row]['Total'] += 1
-        
-        #set Totals of male and Female
+        # set Totals of male and Female
         items[6]['Total'] += 1
     return items
+
 
 def set_row_total(completer, items, row):
     if completer.sex == "male":
         items[row]['Male'] += 1
-        items[6]['Male'] += 1 # this is the Total row
+        items[6]['Male'] += 1  # this is the Total row
 
     if completer.sex == "female":
         items[row]['Female'] += 1
-        items[6]['Female'] += 1 # this is the Total row
+        items[6]['Female'] += 1  # this is the Total row
     return items

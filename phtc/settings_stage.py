@@ -1,3 +1,4 @@
+# flake8: noqa
 # Django settings for phtc project.
 import os.path
 import sys

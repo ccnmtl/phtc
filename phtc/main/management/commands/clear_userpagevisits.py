@@ -14,7 +14,7 @@ class Command(BaseCommand):
                     type='string',
                     default=False,
                     help='Delete specific user history'),
-        )
+    )
 
     def handle(self, *args, **options):
         if options['username']:

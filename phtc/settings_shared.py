@@ -21,7 +21,7 @@ DATABASES = {
         'PORT': 5432,
         'USER': '',
         'PASSWORD': '',
-        }
+    }
 }
 
 USE_TZ = True
@@ -42,7 +42,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
-    )
+)
 
 MIDDLEWARE_CLASSES = (
     'django_statsd.middleware.GraphiteRequestTimingMiddleware',
@@ -131,8 +131,8 @@ if 'test' in sys.argv or 'jenkins' in sys.argv:
             'PORT': '',
             'USER': '',
             'PASSWORD': '',
-            }
         }
+    }
 
 NOSE_ARGS = [
     '--with-coverage',
@@ -158,8 +158,8 @@ if 'harvest' in sys.argv:
             'PORT': '',
             'USER': '',
             'PASSWORD': '',
-            }
         }
+    }
 
 
 SOUTH_TESTS_MIGRATE = False

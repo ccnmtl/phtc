@@ -9,11 +9,11 @@ class UserRegistrationForm(RegistrationForm):
     fname = forms.CharField(
         label="First Name",
         widget=forms.TextInput(attrs={'class': 'fname', 'size': '60'})
-        )
+    )
     lname = forms.CharField(
         label="Last Name",
         widget=forms.TextInput(attrs={'class': 'lname', 'size': '60'})
-        )
+    )
     age = forms.CharField(
         label="Select your age group",
         widget=forms.Select(choices=[('Please Select', 'Please Select'),
@@ -26,14 +26,14 @@ class UserRegistrationForm(RegistrationForm):
                                      ('70 or older', '70 Years or Older'),
                                      ('Prefer not to answer',
                                       'I prefer not to answer')])
-        )
+    )
     sex = forms.CharField(
         max_length=6,
         label="Select your gender.",
         widget=forms.Select(choices=[('Please Select', 'Please Select'),
                                      ('male', 'Male'),
                                      ('female', 'Female')])
-        )
+    )
 
     origin = forms.CharField(
         label="Are you of Hispanic. Latino, or Spanish origin?",
@@ -42,7 +42,7 @@ class UserRegistrationForm(RegistrationForm):
                                      ('no', 'No'),
                                      ('Prefer not to answer',
                                       'I prefer not to answer')])
-        )
+    )
     ethnicity = forms.CharField(
         label=("Select the option(s) which best represents your "
                "race (select all that apply)"),
@@ -64,7 +64,7 @@ class UserRegistrationForm(RegistrationForm):
                 ('More Than One Race', 'More Than One Race'),
                 ('Other', 'Other'),
                 ('Prefer not to answer', 'I prefer not to answer')])
-        )
+    )
     degree = forms.CharField(
         label=("Select the highest degree earned."),
         widget=forms.Select(choices=[('Please Select', 'Please Select'),
@@ -74,74 +74,74 @@ class UserRegistrationForm(RegistrationForm):
                                      ('Masters degree', 'Masters Degree'),
                                      ('Doctoral degree or equivalent',
                                       'Doctoral degree or equivalent')])
-        )
+    )
 
     work_city = forms.CharField(
         label="Work City",
         widget=forms.TextInput(attrs={'size': '60'})
-        )
+    )
 
     work_state = forms.CharField(
         label="Work State",
         widget=forms.Select(
             choices=[('Please Select', 'Please Select'),
-                    ('AL', 'Alabama'),
-                    ('AK', 'Alaska'),
-                    ('AZ', 'Arizona'),
-                    ('AR', 'Arkansas'),
-                    ('CA', 'California'),
-                    ('CO', 'Colorado'),
-                    ('CT', 'Connecticut'),
-                    ('DE', 'Delaware'),
-                    ('DC', 'District of Columbia'),
-                    ('FL', 'Florida'),
-                    ('GA', 'Georgia'),
-                    ('HI', 'Hawaii'),
-                    ('ID', 'Idaho'),
-                    ('IL', 'Illinois'),
-                    ('IN', 'Indiana'),
-                    ('IA', 'Iowa'),
-                    ('KS', 'Kansas'),
-                    ('KY', 'Kentucky'),
-                    ('LA', 'Louisiana'),
-                    ('ME', 'Maine'),
-                    ('MD', 'Maryland'),
-                    ('MA', 'Massachusetts'),
-                    ('MI', 'Michigan'),
-                    ('MN', 'Minnesota'),
-                    ('MS', 'Mississippi'),
-                    ('MO', 'Missouri'),
-                    ('MT', 'Montana'),
-                    ('NE', 'Nebraska'),
-                    ('NV', 'Nevada'),
-                    ('NH', 'New Hampshire'),
-                    ('NJ', 'New Jersey'),
-                    ('NM', 'New Mexico'),
-                    ('NY', 'New York'),
-                    ('NC', 'North Carolina'),
-                    ('ND', 'North Dakota'),
-                    ('OH', 'Ohio'),
-                    ('OK', 'Oklahoma'),
-                    ('OR', 'Oregon'),
-                    ('PA', 'Pennsylvania'),
-                    ('RI', 'Rhode Island'),
-                    ('SC', 'South Carolina'),
-                    ('SD', 'South Dakota'),
-                    ('TN', 'Tennessee'),
-                    ('TX', 'Texas'),
-                    ('UT', 'Utah'),
-                    ('VT', 'Vermont'),
-                    ('VA', 'Virginia'),
-                    ('WA', 'Washington'),
-                    ('WV', 'West Virginia'),
-                    ('WI', 'Wisconsin'),
-                    ('WY', 'Wyoming')])
-        )
+                     ('AL', 'Alabama'),
+                     ('AK', 'Alaska'),
+                     ('AZ', 'Arizona'),
+                     ('AR', 'Arkansas'),
+                     ('CA', 'California'),
+                     ('CO', 'Colorado'),
+                     ('CT', 'Connecticut'),
+                     ('DE', 'Delaware'),
+                     ('DC', 'District of Columbia'),
+                     ('FL', 'Florida'),
+                     ('GA', 'Georgia'),
+                     ('HI', 'Hawaii'),
+                     ('ID', 'Idaho'),
+                     ('IL', 'Illinois'),
+                     ('IN', 'Indiana'),
+                     ('IA', 'Iowa'),
+                     ('KS', 'Kansas'),
+                     ('KY', 'Kentucky'),
+                     ('LA', 'Louisiana'),
+                     ('ME', 'Maine'),
+                     ('MD', 'Maryland'),
+                     ('MA', 'Massachusetts'),
+                     ('MI', 'Michigan'),
+                     ('MN', 'Minnesota'),
+                     ('MS', 'Mississippi'),
+                     ('MO', 'Missouri'),
+                     ('MT', 'Montana'),
+                     ('NE', 'Nebraska'),
+                     ('NV', 'Nevada'),
+                     ('NH', 'New Hampshire'),
+                     ('NJ', 'New Jersey'),
+                     ('NM', 'New Mexico'),
+                     ('NY', 'New York'),
+                     ('NC', 'North Carolina'),
+                     ('ND', 'North Dakota'),
+                     ('OH', 'Ohio'),
+                     ('OK', 'Oklahoma'),
+                     ('OR', 'Oregon'),
+                     ('PA', 'Pennsylvania'),
+                     ('RI', 'Rhode Island'),
+                     ('SC', 'South Carolina'),
+                     ('SD', 'South Dakota'),
+                     ('TN', 'Tennessee'),
+                     ('TX', 'Texas'),
+                     ('UT', 'Utah'),
+                     ('VT', 'Vermont'),
+                     ('VA', 'Virginia'),
+                     ('WA', 'Washington'),
+                     ('WV', 'West Virginia'),
+                     ('WI', 'Wisconsin'),
+                     ('WY', 'Wyoming')])
+    )
 
     work_zip = forms.CharField(
         label="Work Zip Code",
         widget=forms.TextInput(attrs={'size': '60'})
-        )
+    )
 
     position = forms.CharField(
         label=("Which of the following categories best describes "
@@ -242,13 +242,13 @@ class UserRegistrationForm(RegistrationForm):
                 ('Support staff', 'Support staff'),
                 ('Urban Health', 'Urban Health'),
                 ('Other', 'Other')])
-        )
+    )
     other_position_category = forms.CharField(
         required=False,
         label="Please Specify",
         widget=forms.TextInput(attrs={'class': 'position-category-input',
                                       'size': '60'})
-        )
+    )
 
     employment_location = forms.CharField(
         label="Which category best describes your employment location?",
@@ -266,14 +266,14 @@ class UserRegistrationForm(RegistrationForm):
                       'Community-based Organizations/Non-profit'),
                      ('Private Industry', 'Private Industry'),
                      ('Other', 'Other')])
-        )
+    )
 
     other_employment_location = forms.CharField(
         required=False,
         label="Please Specify",
         widget=forms.TextInput(attrs={'class': 'employment-location-input',
                                       'size': '60'})
-        )
+    )
 
     dept_health = forms.CharField(
         label="Do you work in a department of public health?",
@@ -282,7 +282,7 @@ class UserRegistrationForm(RegistrationForm):
                      ('Yes', 'Yes'),
                      ('No', 'No'),
                      ('I do not know', 'I do not know')])
-        )
+    )
     geo_dept_health = forms.CharField(
         label=("Do you work in a health department within our target "
                "geographic area?"),
@@ -296,7 +296,7 @@ class UserRegistrationForm(RegistrationForm):
                      ('I do not work in any of the health departments listed',
                       'I do not work in any of the health departments listed')
                      ])
-        )
+    )
 
     experience = forms.CharField(
         label="How many years have you worked in public health?",
@@ -310,7 +310,7 @@ class UserRegistrationForm(RegistrationForm):
                      ('25+', '25+'),
                      ('I do not work in public health',
                       'I do not work in public health')])
-        )
+    )
 
     umc = forms.CharField(
         label="Do you work in a medically underserved community (MUC)?",
@@ -319,7 +319,7 @@ class UserRegistrationForm(RegistrationForm):
                      ('Yes', 'Yes'),
                      ('No', 'No'),
                      ('I do not know', 'I do not know')])
-        )
+    )
 
     rural = forms.CharField(
         label="Do you work in a rural setting?",
@@ -328,30 +328,34 @@ class UserRegistrationForm(RegistrationForm):
                      ('Yes', 'Yes'),
                      ('No', 'No'),
                      ('I do not know', 'I do not know')])
-        )
+    )
 
     is_nylearns = forms.BooleanField(
         required=False,
-        widget = forms.HiddenInput(),
-        initial = False
-        )
+        widget=forms.HiddenInput(),
+        initial=False
+    )
 
     nylearns_user_id = forms.CharField(
-        required = False,
-        widget = forms.HiddenInput(),
-        initial = "none"
-        )
+        required=False,
+        widget=forms.HiddenInput(),
+        initial="none"
+    )
 
     nylearns_course_init = forms.CharField(
-        required = False,
-        widget = forms.HiddenInput(),
-        initial = "none"
-        )
+        required=False,
+        widget=forms.HiddenInput(),
+        initial="none"
+    )
 
     def clean_email(self):
-      from django.utils.safestring import mark_safe
-      data = self.cleaned_data['email']
-      if User.objects.filter(email=data).exists():
-          raise forms.ValidationError(mark_safe("This email is already in use. Are you sure that you don't already have an account? Click <a href=\"/registration/password/reset/\">Here</a> to retrieve your user information."))
-      return data
-
+        from django.utils.safestring import mark_safe
+        data = self.cleaned_data['email']
+        if User.objects.filter(email=data).exists():
+            raise forms.ValidationError(
+                mark_safe(
+                    ("This email is already in use. Are you sure "
+                     "that you don't already have an account? "
+                     "Click <a href=\"/registration/password/"
+                     "reset/\">Here</a> to retrieve your user information.")))
+        return data

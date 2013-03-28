@@ -35,7 +35,6 @@ class UserProfile(models.Model):
     nylearns_course_init = models.TextField(default='none')
     nylearns_user_id = models.TextField(default='none')
 
-
     def __str__(self):
         return "%s's profile" % self.user
 
@@ -62,7 +61,7 @@ def user_created(sender, user, request, **kwargs):
     data.degree = form.data["degree"]
 
     # NYNJ additions
-    data.is_nylearns = form.data["is_nylearns"] 
+    data.is_nylearns = form.data["is_nylearns"]
     data.nylearns_course_init = form.data["nylearns_course_init"]
     data.nylearns_user_id = form.data["nylearns_user_id"]
 
@@ -92,6 +91,7 @@ class DashboardInfo(models.Model):
                                              initial=self.info)
         return EditSectionForm()
 
+
 class NYLEARNS_Course_Map(models.Model):
     id = models.AutoField(primary_key=True)
     courseID = models.TextField()
@@ -100,6 +100,7 @@ class NYLEARNS_Course_Map(models.Model):
     def __unicode__(self):
         return "url path:%s" % self.phtc_url
 
+
 class ModuleType(models.Model):
     module_type = models.OneToOneField(Section)
     info = models.TextField(default='')
@@ -107,6 +108,6 @@ class ModuleType(models.Model):
     def edit_form(self):
         class EditModuleForm(forms.Form):
             module_type_form = forms.CharField(widget=forms.Textarea,
-                                             initial=self.info,
-                                             label='Module Type')
+                                               initial=self.info,
+                                               label='Module Type')
         return EditModuleForm()

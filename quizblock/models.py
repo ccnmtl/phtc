@@ -46,7 +46,7 @@ class Quiz(models.Model):
                 question = Question.objects.get(id=qid)
                 # it might make more sense to just accept a QueryDict
                 # instead of a dict so we can use getlist()
-                if type(data[k]) == type([]):
+                if isinstance(data[k], list):
                     for v in data[k]:
                         Response.objects.create(
                             submission=s,
@@ -112,7 +112,7 @@ class Quiz(models.Model):
             pre_test=request.POST.get('pre_test', ''),
             post_test=request.POST.get('post_test', ''),
             post_test_credit=request.POST.get('post_test_credit', '')
-            )
+        )
 
     @classmethod
     def create_from_dict(self, d):
@@ -126,7 +126,7 @@ class Quiz(models.Model):
             post_test=d.get('post_test', ''),
             post_test_credit=d.get('post_test_credit', ''),
             allow_redo=d.get('allow_redo', True),
-            )
+        )
         q.import_from_dict(d)
         return q
 
@@ -203,7 +203,7 @@ class Question(models.Model):
              "Multiple Choice: Single answer (dropdown)"),
             ("short text", "Short Text"),
             ("long text", "Long Text"),
-            ))
+        ))
     explanation = models.TextField(blank=True)
     intro_text = models.TextField(blank=True)
 
@@ -233,7 +233,7 @@ class Question(models.Model):
 
     def correct_answer_letter(self):
         if (self.question_type != "single choice"
-            or self.answer_set.count() == 0):
+                or self.answer_set.count() == 0):
             return None
         return chr(ord('A') + self.correct_answer_number())
 
@@ -299,7 +299,7 @@ class Question(models.Model):
             explanation=self.explanation,
             intro_text=self.intro_text,
             answers=[a.as_dict() for a in self.answer_set.all()]
-            )
+        )
 
 
 class Answer(models.Model):
@@ -321,7 +321,7 @@ class Answer(models.Model):
 
     def as_dict(self):
         return dict(value=self.value, label=self.label, feedback=self.feedback,
-        correct=self.correct)
+                    correct=self.correct)
 
 
 class Submission(models.Model):
