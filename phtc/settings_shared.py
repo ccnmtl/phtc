@@ -91,6 +91,7 @@ INSTALLED_APPS = (
     'registration',
     'debug_toolbar',
     'smartif',
+    'django_jenkins',
 )
 
 LETTUCE_APPS = (
@@ -121,7 +122,7 @@ STATSD_PORT = 8125
 STATSD_PATCHES = ['django_statsd.patches.db', ]
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-if 'test' in sys.argv:
+if 'test' in sys.argv or 'jenkins' in sys.argv:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -137,6 +138,16 @@ NOSE_ARGS = [
     '--with-coverage',
     '--cover-package=phtc',
 ]
+
+JENKINS_TASKS = (
+    'django_jenkins.tasks.run_pylint',
+    'django_jenkins.tasks.with_coverage',
+    'django_jenkins.tasks.django_tests',
+    'django_jenkins.tasks.run_pep8',
+    'django_jenkins.tasks.run_pyflakes',
+)
+
+PROJECT_APPS = ['phtc.main', 'quizblock', ]
 
 if 'harvest' in sys.argv:
     DATABASES = {
