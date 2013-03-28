@@ -1,6 +1,18 @@
 # flake8: noqa
 from settings_shared import *
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'phtc',
+        'HOST': '',
+        'PORT': 6432,
+        'USER': '',
+        'PASSWORD': '',
+    }
+}
+
+
 TEMPLATE_DIRS = (
     "/var/www/phtc/phtc/phtc/templates",
 )
