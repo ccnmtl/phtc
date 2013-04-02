@@ -984,8 +984,8 @@ def create_user_report_table(completed_modules, completers):
     completer_objects = []
     for v in completers:
         obj = []
+        num_of_courses_completed = 0
         this_user = User.objects.get(id=v.user_id)
-        obj.append(('# of courses completed', 0))
         obj.append(('Username', this_user.username))
         obj.append(('Email Address', this_user.email))
         obj.append(('First Name', v.fname))
@@ -1002,7 +1002,7 @@ def create_user_report_table(completed_modules, completers):
         obj.append(('Experience in Public Health', v.experience))
         obj.append(('MUC', v.umc))
         obj.append(('Rural', v.rural))
- 
+
         if v.other_employment_location == '':
             obj.append(('Employment Location', v.employment_location))
         else:
@@ -1012,12 +1012,13 @@ def create_user_report_table(completed_modules, completers):
         else:
             obj.append(('Primary Discipline/Seciality', v.other_position_category))
 
-        for v in completed_modules:
-            #obj.append(('# of courses completed', 1))
-            a=1
+        #Gather those that have completed more than one module
+        for mod in completed_modules:
+            if v.user_id == mod.user_id:
+                num_of_courses_completed +=1
+        obj.append(('# of courses completed', num_of_courses_completed))
         completer_objects.append(obj)
-    #import pdb
-    #pdb.set_trace()
+        
     return completer_objects
 
 
