@@ -764,7 +764,7 @@ def reports(request):
             training_env_report = create_training_env_report(
                 completers,
                 total_number_of_users, completed_modules_counted)
-            return create_csv_report(request, training_env_report, report)
+            return create_csv_report2(request, training_env_report, report)
 
         if report == "user_report":
             user_report_table = create_user_report_table(
@@ -938,15 +938,13 @@ def create_training_env_report(completers,
                                total_number_of_users,
                                completed_modules_counted):
         table = []
-        report = {}
+        report = []
         num_of_completers_duplicated = 0
         for mod in completed_modules_counted:
             num_of_completers_duplicated = len(completed_modules_counted)
-        report['Total_unique_registered_users'] = total_number_of_users
-        report['Total_number_completers_unduplicated'] = len(completers)
-        report[
-            'Total_number_completers_duplicated'
-        ] = num_of_completers_duplicated
+        report.append(('Total_unique_registered_users', total_number_of_users))
+        report.append(('Total_number_completers_unduplicated', len(completers)) )
+        report.append(('Total_number_completers_duplicated', num_of_completers_duplicated))
         table.append(report)
         return table
 
@@ -1018,7 +1016,7 @@ def create_user_report_table(completed_modules, completers):
                 num_of_courses_completed +=1
         obj.append(('# of courses completed', num_of_courses_completed))
         completer_objects.append(obj)
-        
+
     return completer_objects
 
 
