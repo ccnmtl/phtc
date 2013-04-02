@@ -719,6 +719,7 @@ def reports(request):
     total_number_of_users = len(UserProfile.objects.all())
     completed_modules = get_all_completed_modules(root, modules, pagevisits)
     if request.method == "POST":
+
         report = request.POST.get('report')
         ev_report = request.POST.get('eval_report')
         # vars used to create reports
@@ -727,7 +728,7 @@ def reports(request):
         qoi = [
             'The course was of overall high quality.',
             ('I would recommend this course for employees '
-             'in positions similar to mine.'),
+             'in positions similar to mine report.'),
             'The course content achieved the objectives.',
             ('This online training was an effective method for '
              'me to learn this material.'),
@@ -736,7 +737,7 @@ def reports(request):
              'for improving the course and requests for future web-based '
              'training modules.')
         ]
-
+        
         if report == "training_env":
             training_env_report = create_training_env_report(
                 completers,
@@ -826,13 +827,13 @@ def reports(request):
 
                 return dict(
                     qr=qr, module_title=module_title,
-                    completed_modules=completed_modules.keys())
+                    completed_modules=completed_modules)
 
             except UnboundLocalError:
                 return dict(welcome_msg='Report could not be found.',
-                            completed_modules=completed_modules.keys())
+                            completed_modules=completed_modules)
     return dict(
-        welcome_msg=welcome_msg, completed_modules=completed_modules.keys())
+        welcome_msg=welcome_msg, completed_modules=completed_modules)
 
 
 def create_eval_report(completed_modules, modules, qoi):
@@ -918,7 +919,7 @@ def create_training_env_report(completers,
         report = {}
         num_of_completers_duplicated = 0
         for mod in completed_modules_counted:
-            num_of_completers_duplicated += mod['Number_of_completers']
+            num_of_completers_duplicated = len(completed_modules_counted)
         report['Total_unique_registered_users'] = total_number_of_users
         report['Total_number_completers_unduplicated'] = len(completers)
         report[
@@ -929,71 +930,69 @@ def create_training_env_report(completers,
 
 
 def get_all_completed_modules(root, modules, pagevisits):
-    completed_modules = {}
+    completed_modules = []
     for module in modules:
-        completed_modules[module] = []
         for pv in pagevisits:
             if module.id == pv.section_id and pv.status == "complete":
-                completed_modules[module].append(pv)
+                completed_modules.append(pv)
     return completed_modules
 
 
 def count_modules_completed(completed_modules):
     mod_list = []
-    for k, v in completed_modules.iteritems():
-        mod = dict(
-            [
-                ('Section', k.label.encode("ascii")),
-                ('Number_of_completers', len(v))
-            ])
-        mod_list.append(mod)
+    for v in completed_modules:
+        mod_list.append(v.section.label.encode("ascii"))
     return mod_list
 
 
 def create_completers_list(completed_modules):
-    completers_list = {}
-    for k, v in completed_modules.iteritems():
-        for completer in completed_modules[k]:
-            user = UserProfile.objects.get(user_id=completer.user_id)
-            completers_list[user] = user
+    completers_list = []
+    #create a list map so we only add unduplicated completers
+    completer_set =[]
+    for v in completed_modules:
+        completer_set.append(v.user_id)
+    completer_set = list(set(completer_set))
+    for v in completer_set:
+        user = UserProfile.objects.get(user_id=v)
+        completers_list.append(user)
     return completers_list
 
 
 def create_user_report_table(completed_modules, completers):
     completer_objects = []
-    for key, val in completers.iteritems():
+    for v in completers:
         obj = {}
-        this_user = User.objects.get(id=val.user_id)
+        this_user = User.objects.get(id=v.user_id)
         obj['# of courses completed'] = 0
         obj['Username'] = this_user.username
         obj['Email Address'] = this_user.email
-        obj['First Name'] = val.fname
-        obj['Last Name'] = val.lname
-        obj['Age'] = val.age
-        obj['Gender'] = val.sex
-        obj['Hispanic Origin'] = val.origin
-        obj['Race'] = val.ethnicity
-        obj['Highest Degree Earned'] = val.degree
-        obj['Work City'] = val.work_city
-        obj['Work State'] = val.work_state
-        obj['Work Zip Code'] = val.work_zip
-        obj['Work in DOH'] = val.dept_health
-        obj['Experience in Public Health'] = val.experience
-        obj['MUC'] = val.umc
-        obj['Rural'] = val.rural
+        obj['First Name'] = v.fname
+        obj['Last Name'] = v.lname
+        obj['Age'] = v.age
+        obj['Gender'] = v.sex
+        obj['Hispanic Origin'] = v.origin
+        obj['Race'] = v.ethnicity
+        obj['Highest Degree Earned'] = v.degree
+        obj['Work City'] = v.work_city
+        obj['Work State'] = v.work_state
+        obj['Work Zip Code'] = v.work_zip
+        obj['Work in DOH'] = v.dept_health
+        obj['Experience in Public Health'] = v.experience
+        obj['MUC'] = v.umc
+        obj['Rural'] = v.rural
 
-        if val.other_employment_location == '':
-            obj['Employment Location'] = val.employment_location
+        if v.other_employment_location == '':
+            obj['Employment Location'] = v.employment_location
         else:
-            obj['Employment Location'] = val.other_employment_location
-        if val.other_position_category == '':
-            obj['Primary Discipline/Seciality'] = val.position
+            obj['Employment Location'] = v.other_employment_location
+        if v.other_position_category == '':
+            obj['Primary Discipline/Seciality'] = v.position
         else:
-            obj['Primary Discipline/Seciality'] = val.other_position_category
+            obj['Primary Discipline/Seciality'] = v.other_position_category
 
-        for k, v in completed_modules.iteritems():
+        for v in completed_modules:
             for pv in v:
-                if pv.user_id == val.user_id:
+                if pv.user_id == v.user_id:
                     obj['# of courses completed'] += 1
         completer_objects.append(obj)
     return completer_objects
