@@ -725,8 +725,6 @@ def create_csv_report2(request, report, report_name):
         fields = []
         for field in row:
             fields.append(field[1])
-            #import pdb
-            #pdb.set_trace()
         writer.writerow(fields)
     return response
 
@@ -777,7 +775,7 @@ def reports(request):
 
         if report == "course_report":
             course_report_table = create_course_report_table(completed_modules)
-            return create_csv_report(request, course_report_table, report)
+            return create_csv_report2(request, course_report_table, report)
 
         if ev_report:
             mod = Section.objects.get(label=ev_report)
@@ -899,38 +897,36 @@ def is_question_of_interest(question, qoi):
 
 def create_course_report_table(completed_modules):
     course_table = []
-    for k, v in completed_modules.iteritems():
-        for mod in v:
-            course = {}
-            date = UserPageVisit.objects.get(
-                user=mod.user, section=mod.section).last_visit
-            try:
-                user = UserProfile.objects.get(user_id=mod.user_id)
-                course['course_name'] = k
-                course['requested_cues'] = ''
-                course['date_completed'] = date.strftime("%D")
-                course['username'] = user.user.username
-                course['email'] = user.user.email
-                course['first_name'] = user.fname
-                course['last_name'] = user.lname
-                course['age'] = user.age
-                course['gender'] = user.sex
-                course['hispanic_origin'] = user.origin
-                course['race'] = user.ethnicity
-                course['heighest_degree_earned'] = user.degree
-                course['work_city'] = user.work_city
-                course['work_state'] = user.work_state
-                course['work_zip_code'] = user.work_zip
-                course[
-                    'primary_discipline_specialty'] = user.employment_location
-                course['work_in_doh'] = user.dept_health
-                course['target_doh'] = user.dept_health
-                course['experience_in_pulic_health'] = user.experience
-                course['muc'] = user.umc
-                course['rural'] = user.rural
-                course_table.append(course)
-            except:
-                UserProfile.DoesNotExist
+    for mod in completed_modules:
+        course = []
+        date = UserPageVisit.objects.get(
+            user=mod.user, section=mod.section).last_visit
+        try:
+            user = UserProfile.objects.get(user_id=mod.user_id)
+            course.append(('course_name', mod.section.label))
+            course.append(('date_completed', date.strftime("%D")))
+            course.append(('username', user.user.username))
+            course.append(('email', user.user.email))
+            course.append(('first_name', user.fname))
+            course.append(('last_name', user.lname))
+            course.append(('age', user.age))
+            course.append(('gender', user.sex))
+            course.append(('hispanic_origin', user.origin))
+            course.append(('race', user.ethnicity))
+            course.append(('heighest_degree_earned', user.degree))
+            course.append(('work_city', user.work_city))
+            course.append(('work_state', user.work_state))
+            course.append(('work_zip_code', user.work_zip))
+            course.append((
+                'primary_discipline_specialty', user.employment_location))
+            course.append(('work_in_doh', user.dept_health))
+            course.append(('target_doh', user.geo_dept_health))
+            course.append(('experience_in_pulic_health', user.experience))
+            course.append(('muc', user.umc))
+            course.append(('rural', user.rural))
+            course_table.append(course)
+        except:
+            UserProfile.DoesNotExist
     return course_table
 
 
@@ -942,9 +938,9 @@ def create_training_env_report(completers,
         num_of_completers_duplicated = 0
         for mod in completed_modules_counted:
             num_of_completers_duplicated = len(completed_modules_counted)
-        report.append(('Total_unique_registered_users', total_number_of_users))
-        report.append(('Total_number_completers_unduplicated', len(completers)) )
-        report.append(('Total_number_completers_duplicated', num_of_completers_duplicated))
+        report.append(('Total Unique Registered Users', total_number_of_users))
+        report.append(('Total Number Completers Unduplicated', len(completers)) )
+        report.append(('Total Number Completers_duplicated', num_of_completers_duplicated))
         table.append(report)
         return table
 
