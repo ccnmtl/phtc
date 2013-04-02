@@ -728,6 +728,7 @@ def create_csv_report2(request, report, report_name):
         writer.writerow(fields)
     return response
 
+
 @login_required
 @render_to('main/reports.html')
 def reports(request):
@@ -757,7 +758,7 @@ def reports(request):
              'for improving the course and requests for future web-based '
              'training modules.')
         ]
-        
+
         if report == "training_env":
             training_env_report = create_training_env_report(
                 completers,
@@ -939,8 +940,11 @@ def create_training_env_report(completers,
         for mod in completed_modules_counted:
             num_of_completers_duplicated = len(completed_modules_counted)
         report.append(('Total Unique Registered Users', total_number_of_users))
-        report.append(('Total Number Completers Unduplicated', len(completers)) )
-        report.append(('Total Number Completers_duplicated', num_of_completers_duplicated))
+        report.append(
+            ('Total Number Completers Unduplicated', len(completers)))
+        report.append(
+            ('Total Number Completers_duplicated',
+                num_of_completers_duplicated))
         table.append(report)
         return table
 
@@ -964,7 +968,7 @@ def count_modules_completed(completed_modules):
 def create_completers_list(completed_modules):
     completers_list = []
     #create a list map so we only add unduplicated completers
-    completer_set =[]
+    completer_set = []
     for v in completed_modules:
         completer_set.append(v.user_id)
     completer_set = list(set(completer_set))
@@ -1004,12 +1008,13 @@ def create_user_report_table(completed_modules, completers):
         if v.other_position_category == '':
             obj.append(('Primary Discipline/Seciality', v.position))
         else:
-            obj.append(('Primary Discipline/Seciality', v.other_position_category))
+            obj.append(('Primary Discipline/Seciality',
+                        v.other_position_category))
 
         #Gather those that have completed more than one module
         for mod in completed_modules:
             if v.user_id == mod.user_id:
-                num_of_courses_completed +=1
+                num_of_courses_completed += 1
         obj.append(('# of courses completed', num_of_courses_completed))
         completer_objects.append(obj)
 
