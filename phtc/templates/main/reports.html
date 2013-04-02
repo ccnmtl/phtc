@@ -31,7 +31,7 @@
         <input type="submit" value="Select Module for Evaluation Report" class="btn btn-primary">
         <br/>
         <select name="eval_report">
-            {% for mod in completed_modules %}
+            {% for mod in modules %}
                     <option value="{{mod}}" >  {{ mod }}</option>
             {% endfor %}
         </select>

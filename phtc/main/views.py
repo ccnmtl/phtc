@@ -847,13 +847,13 @@ def reports(request):
 
                 return dict(
                     qr=qr, module_title=module_title,
-                    completed_modules=completed_modules)
+                    modules=modules)
 
             except UnboundLocalError:
                 return dict(welcome_msg='Report could not be found.',
-                            completed_modules=completed_modules)
+                            modules=modules)
     return dict(
-        welcome_msg=welcome_msg, completed_modules=completed_modules)
+        welcome_msg=welcome_msg, modules=modules)
 
 
 def create_eval_report(completed_modules, modules, qoi):
