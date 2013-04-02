@@ -708,6 +708,28 @@ def create_csv_report(request, report, report_name):
     return response
 
 
+def create_csv_report2(request, report, report_name):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = (
+        'attachment; filename="' + report_name + '.csv"')
+    writer = csv.writer(response)
+
+    #write a header row
+    header_fields = []
+    for row in report[0]:
+        header_fields.append(row[0])
+    writer.writerow(header_fields)
+
+    for row in report:
+        fields = []
+        for field in row:
+            fields.append(field[1])
+            #import pdb
+            #pdb.set_trace()
+        writer.writerow(fields)
+    return response
+
 @login_required
 @render_to('main/reports.html')
 def reports(request):
@@ -747,7 +769,7 @@ def reports(request):
         if report == "user_report":
             user_report_table = create_user_report_table(
                 completed_modules, completers)
-            return create_csv_report(request, user_report_table, report)
+            return create_csv_report2(request, user_report_table, report)
 
         if report == "age_gender_report":
             age_gender = create_age_gender_dict(completers)
@@ -961,40 +983,41 @@ def create_completers_list(completed_modules):
 def create_user_report_table(completed_modules, completers):
     completer_objects = []
     for v in completers:
-        obj = {}
+        obj = []
         this_user = User.objects.get(id=v.user_id)
-        obj['# of courses completed'] = 0
-        obj['Username'] = this_user.username
-        obj['Email Address'] = this_user.email
-        obj['First Name'] = v.fname
-        obj['Last Name'] = v.lname
-        obj['Age'] = v.age
-        obj['Gender'] = v.sex
-        obj['Hispanic Origin'] = v.origin
-        obj['Race'] = v.ethnicity
-        obj['Highest Degree Earned'] = v.degree
-        obj['Work City'] = v.work_city
-        obj['Work State'] = v.work_state
-        obj['Work Zip Code'] = v.work_zip
-        obj['Work in DOH'] = v.dept_health
-        obj['Experience in Public Health'] = v.experience
-        obj['MUC'] = v.umc
-        obj['Rural'] = v.rural
-
+        obj.append(('# of courses completed', 0))
+        obj.append(('Username', this_user.username))
+        obj.append(('Email Address', this_user.email))
+        obj.append(('First Name', v.fname))
+        obj.append(('Last Name', v.lname))
+        obj.append(('Age', v.age))
+        obj.append(('Gender', v.sex))
+        obj.append(('Hispanic Origin', v.origin))
+        obj.append(('Race', v.ethnicity))
+        obj.append(('Highest Degree Earned', v.degree))
+        obj.append(('Work City', v.work_city))
+        obj.append(('Work State', v.work_state))
+        obj.append(('Work Zip Code', v.work_zip))
+        obj.append(('Work in DOH', v.dept_health))
+        obj.append(('Experience in Public Health', v.experience))
+        obj.append(('MUC', v.umc))
+        obj.append(('Rural', v.rural))
+ 
         if v.other_employment_location == '':
-            obj['Employment Location'] = v.employment_location
+            obj.append(('Employment Location', v.employment_location))
         else:
-            obj['Employment Location'] = v.other_employment_location
+            obj.append(('Employment Location', v.other_employment_location))
         if v.other_position_category == '':
-            obj['Primary Discipline/Seciality'] = v.position
+            obj.append(('Primary Discipline/Seciality', v.position))
         else:
-            obj['Primary Discipline/Seciality'] = v.other_position_category
+            obj.append(('Primary Discipline/Seciality', v.other_position_category))
 
         for v in completed_modules:
-            for pv in v:
-                if pv.user_id == v.user_id:
-                    obj['# of courses completed'] += 1
+            #obj.append(('# of courses completed', 1))
+            a=1
         completer_objects.append(obj)
+    #import pdb
+    #pdb.set_trace()
     return completer_objects
 
 
