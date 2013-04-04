@@ -297,16 +297,13 @@ def i_am_logged_as_a_student(step):
     if not world.using_selenium:
         world.client.login(username='demo', password='demo')
     else:
-
-        logged_in_as_student_with_selenium(step)
-
-def logged_in_as_student_with_selenium(step):
-    world.browser.get(django_url())
-    try:
-        world.browser.find_element_by_id('dashboard-header')
-        return True
-    except:
-        login_user('demo','demo')
+        world.browser.get(django_url("/accounts/login/"))
+        username_field = world.browser.find_element_by_id("id_username")
+        password_field = world.browser.find_element_by_id("id_password")
+        form = world.browser.find_element_by_id("login-form")
+        username_field.send_keys("demo")
+        password_field.send_keys("demo")
+        form.submit()
 
 
 @step(u'I am logged in as an admin')
