@@ -12,3 +12,4 @@ local_settings.py
 cover/
 .DS_Store
 reports/
+ghostdriver.log

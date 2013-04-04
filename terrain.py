@@ -39,10 +39,14 @@ def setup_browser(variables):
         world.browser = None
         world.skipping = False
     else:
-#       ff_profile = FirefoxProfile()
-#       ff_profile.set_preference("webdriver_enable_native_events", False)
-#       world.firefox = webdriver.Firefox(ff_profile)
-        world.browser = webdriver.Chrome()
+        browser = getattr(settings, 'BROWSER', 'Chrome')
+        if browser == 'Chrome':
+            world.browser = webdriver.Chrome()
+        elif browser == 'Headless':
+            world.browser = webdriver.PhantomJS()
+        else:
+            print "unknown browser: %s" % browser
+            exit(1)
     world.client = client.Client()
 
 
