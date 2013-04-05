@@ -31,7 +31,7 @@ class UserProfile(models.Model):
     disadvantaged = models.TextField()
 
     #NYNJ additions
-    is_nylearns = models.BooleanField(default=False)
+    is_nylearns = models.BooleanField()
     nylearns_course_init = models.TextField(default='none')
     nylearns_user_id = models.TextField(default='none')
 
@@ -61,7 +61,7 @@ def user_created(sender, user, request, **kwargs):
     data.degree = form.data["degree"]
 
     # NYNJ additions
-    data.is_nylearns = form.data["is_nylearns"]
+    #data.is_nylearns = form.data["is_nylearns"]
     data.nylearns_course_init = form.data["nylearns_course_init"]
     data.nylearns_user_id = form.data["nylearns_user_id"]
 
