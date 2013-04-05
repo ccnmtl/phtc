@@ -780,7 +780,6 @@ def reports(request):
 
         if ev_report:
             mod = Section.objects.get(label=ev_report)
-            
             evaluation_reports = create_eval_report(
                 completed_modules, modules, qoi)
 
@@ -789,91 +788,95 @@ def reports(request):
                     evaluation_report = ev
 
             try:
-
-                # create single report
-                module_title = evaluation_report['module'].label
-                qr = []
-                for ev in evaluation_report['question_response']:
-                    # clean question text after?
-                    # that way it can be used as a key?
-                    question = ev['question'].text.strip(
-                        ' \t\n\r').replace(" ", "_").lower()
-
-                    response_list_count = [
-                        ('strongly_disagree', 0),
-                        ('neither_agree_nor_disagree', 0),
-                        ('disagree', 0),
-                        ('agree', 0),
-                        ('strongly_agree', 0)
-                        ]
-                    response_time_list_count = [
-                        ('30_minutes_or_less', 0),
-                        ('1_hour', 0),
-                        ('1.5_hours', 0),
-                        ('2_hours', 0),
-                        ('2.5_hours', 0),
-                        ('3_hours', 0),
-                        ('3.5_hours',0),
-                        ('4_hours', 0)
-                        ]
-                    if question.startswith('approximately_how_long_did'):
-                        counter = []
-                        for val in response_time_list_count:
-                            for res in ev['responses']:
-                                response = res.value.strip(
-                                    ' \t\n\r').replace(" ", "_").lower()
-                                if response == val[0]:
-                                    val = (val[0],val[1] + 1)
-                            counter.append((question, val[0]))
-                            counter.append((question, val[1]))
-                        qr.append(counter)
-                    elif question.startswith('please_add'):
-                        comments = []
-                        for i in range(len(ev['responses'])):
-                            if not ev['responses'][i].value == '':
-                                comments.append((question, ev['responses'][i].value))
-                            #comments.append((question,comments))
-                        qr.append(comments)
-                    else:
-                        counter = []
-                        for val in response_list_count:
-                            for res in ev['responses']:
-                                response = res.value.strip(
-                                    ' \t\n\r').replace(" ", "_").lower()
-                                if response == val[0]:
-                                    val = (val[0],val[1] + 1)
-                            counter.append((question, val[0]))
-                            counter.append((question, val[1]))                   
-                        qr.append(counter)
-
-                #set the number of rows in the report
-                qr_rows = 0
-                for qr_table in qr:
-                    if qr_rows < len(qr_table):
-                        qr_rows = len(qr_table)
-
-                flat_report = []
-                for row in range(qr_rows):
-                    report_row = []
-                    if row % 2 == 0:
-                        for report in qr:
-                            try:
-                                report_row.append(report[row])
-                                report_row.append(report[row+1])
-                            except:
-                                report_row.append(('',''))
-                                report_row.append(('',''))
-                        flat_report.append(report_row)
-                #import pdb
-                #pdb.set_trace()
-                return create_csv_report2(request,flat_report, 'evaluation_report')
-
-
+                qr = aggregate_responses(evaluation_report)
+                flat_report = flatten_response_tables(qr)
+                return create_csv_report2(
+                    request, flat_report, 'evaluation_report')
             except UnboundLocalError:
                 return dict(welcome_msg='Report could not be found.',
                             modules=modules)
     return dict(
         welcome_msg=welcome_msg, modules=modules)
+
+
+def flatten_response_tables(qr):
+    #set the number of rows in the report
+    qr_rows = 0
+    for qr_table in qr:
+        if qr_rows < len(qr_table):
+            qr_rows = len(qr_table)
+
+    flat_report = []
+    for row in range(qr_rows):
+        report_row = []
+        if row % 2 == 0:
+            for report in qr:
+                try:
+                    report_row.append(report[row])
+                    report_row.append(report[row+1])
+                except:
+                    report_row.append(('', ''))
+                    report_row.append(('', ''))
+            flat_report.append(report_row)
+    return flat_report
+
+
+def aggregate_responses(evaluation_report):
+    # create single report
+    qr = []
+    for ev in evaluation_report['question_response']:
+        question = ev['question'].text.strip(
+            ' \t\n\r').replace(" ", "_").lower()
+
+        response_list_count = [
+            ('strongly_disagree', 0),
+            ('neither_agree_nor_disagree', 0),
+            ('disagree', 0),
+            ('agree', 0),
+            ('strongly_agree', 0)
+        ]
+        response_time_list_count = [
+            ('30_minutes_or_less', 0),
+            ('1_hour', 0),
+            ('1.5_hours', 0),
+            ('2_hours', 0),
+            ('2.5_hours', 0),
+            ('3_hours', 0),
+            ('3.5_hours', 0),
+            ('4_hours', 0)
+        ]
+        if question.startswith('approximately_how_long_did'):
+            counter = []
+            for val in response_time_list_count:
+                for res in ev['responses']:
+                    response = res.value.strip(
+                        ' \t\n\r').replace(" ", "_").lower()
+                    if response == val[0]:
+                        val = (val[0], val[1] + 1)
+                counter.append((question, val[0]))
+                counter.append(('# of Responses', val[1]))
+            qr.append(counter)
+        elif question.startswith('please_add'):
+            comments = []
+            for i in range(len(ev['responses'])):
+                if not ev['responses'][i].value == '':
+                    comments.append(
+                        (question, ev['responses'][i].value))
+                    # keep report uniform
+                    comments.append(('', ''))
+            qr.append(comments)
+        else:
+            counter = []
+            for val in response_list_count:
+                for res in ev['responses']:
+                    response = res.value.strip(
+                        ' \t\n\r').replace(" ", "_").lower()
+                    if response == val[0]:
+                        val = (val[0], val[1] + 1)
+                counter.append((question, val[0]))
+                counter.append(('# of Responses', val[1]))
+            qr.append(counter)
+    return qr
 
 
 def create_eval_report(completed_modules, modules, qoi):
