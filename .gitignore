@@ -10,6 +10,6 @@ local_settings.py
 .\#*
 .coverage
 cover/
-.DS_Store
+*.DS_Store
 reports/
 ghostdriver.log
