@@ -10,3 +10,4 @@ local_settings.py
 .\#*
 .coverage
 cover/
+*.DS_Store
