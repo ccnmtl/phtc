@@ -207,6 +207,9 @@ def process_dashboard_ajax(user, section, module):
 
 def get_module_admin_lock():
     # set the variable to equal the protected module id
+    # This is problematic becasue it depends on the 
+    # section id from production. Will not be accurate
+    # from a development database.
     protected_module_id = 152
     return protected_module_id
 
