@@ -111,3 +111,15 @@ class ModuleType(models.Model):
                                                initial=self.info,
                                                label='Module Type')
         return EditModuleForm()
+
+
+class SectionCss(models.Model):
+    section_css = models.OneToOneField(Section)
+    #hide_field adds a (reaated) css class to the Section object
+    css_field = models.TextField()
+
+    def edit_form(self):
+        class EditSectionCssForm(forms.Form):
+            section_css_field = forms.CharField(widget=forms.Textarea,
+                                             initial=self.css_field)
+        return EditSectionCssForm()
