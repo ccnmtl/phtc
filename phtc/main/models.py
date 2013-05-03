@@ -80,3 +80,14 @@ class DashboardInfo(models.Model):
             dashboard_info = forms.CharField(widget=forms.Textarea,
                                              initial=self.info)
         return EditSectionForm()
+
+class SectionCss(models.Model):
+    section_css = models.OneToOneField(Section)
+    #hide_field adds a (reaated) css class to the Section object
+    css_field = models.TextField()
+
+    def edit_form(self):
+        class EditSectionCssForm(forms.Form):
+            section_css_field = forms.CharField(widget=forms.Textarea,
+                                             initial=self.css_field)
+        return EditSectionCssForm()

@@ -8,6 +8,7 @@ from django.utils.simplejson import dumps
 from phtc.main.models import UserProfile
 from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
+from phtc.main.models import SectionCss
 from pagetree.models import UserPageVisit
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.flatpages.models import FlatPage
@@ -305,12 +306,22 @@ def edit_page(request, path):
         edit_page = True
         dashboard, created = DashboardInfo.objects.get_or_create(
             dashboard=section)
+        section_css, created = SectionCss.objects.get_or_create(
+            section_css=section)
+        
         if request.method == "POST":
-            dashboard.info = request.POST['dashboard_info']
-
+            try:
+                dashboard.info = request.POST['dashboard_info']
+            except:
+                pass
+            try:
+                section_css.css_field = request.POST['section_css_field']
+            except:
+                pass
         dashboard.save()
 
         return dict(section=section,
+                    section_css=section_css,
                     dashboard=dashboard,
                     module=get_module(section),
                     modules=root.get_children(),
