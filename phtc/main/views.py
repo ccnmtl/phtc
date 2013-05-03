@@ -319,6 +319,7 @@ def edit_page(request, path):
             except:
                 pass
         dashboard.save()
+        section_css.save()
 
         return dict(section=section,
                     section_css=section_css,
@@ -478,12 +479,14 @@ def render_dashboard(request):
     root = h.get_root()
     last_session = h.get_user_section(request.user)
     dashboard_info = DashboardInfo.objects.all()
+    section_css = SectionCss.objects.all()
 
     is_visited = user_visits(request)
     empty = ""
     return dict(root=root, last_session=last_session,
                 dashboard_info=dashboard_info,
-                empty=empty, is_visited=is_visited, admin_lock=admin_lock)
+                empty=empty, is_visited=is_visited, 
+                section_css=section_css, admin_lock=admin_lock)
 
 @render_to('flatpages/about.html')
 def about_page(request):
