@@ -28,7 +28,7 @@ urlpatterns = patterns('',
                            {'backend':
                             'registration.backends.default.DefaultBackend',
                             'form_class': UserRegistrationForm},
-                        name='registration_register'),
+                            name='registration_register'),
                        (r'^registration/', include('registration.urls')),
                        (r'^profile/$', 'phtc.main.views.get_user_profile'),
                        (r'^update_profile/$',
