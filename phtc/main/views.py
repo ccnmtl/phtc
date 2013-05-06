@@ -11,6 +11,7 @@ from phtc.main.models import UserProfile
 from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
 from phtc.main.models import ModuleType
+from phtc.main.models import SectionCss
 from pagetree.models import UserPageVisit
 from phtc.main.models import NYLEARNS_Course_Map
 from django.core.mail import EmailMultiAlternatives
@@ -375,29 +376,21 @@ def process_dashboard_ajax(user, section, module):
         return reverse("dashboard")
 
 
-def get_module_admin_lock():
-    # set the variable to equal the protected module id
-    protected_module_id = 152
-    return protected_module_id
-
-
 @login_required
 @render_to('main/page.html')
 def page(request, path):
-    admin_lock = get_module_admin_lock()
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
     module = get_module(section)
     is_visited = user_visits(request)
     page_dict = dict(section=section,
-                     module=module,
-                     is_visited=is_visited,
-                     needs_submit=needs_submit(section),
-                     is_submitted=submitted(section, request.user),
-                     modules=root.get_children(),
-                     root=section.hierarchy.get_root(),
-                     admin_lock=admin_lock,
-                     )
+                module=module,
+                is_visited=is_visited,
+                needs_submit=needs_submit(section),
+                is_submitted=submitted(section, request.user),
+                modules=root.get_children(),
+                root=section.hierarchy.get_root(),
+                )
 
     # dashboard ajax
     if request.POST.get('module'):
@@ -427,12 +420,7 @@ def page(request, path):
     previous_section_handle_status(section, request, module)
 
     #return page
-    if request.user.is_staff:
-        return page_dict
-    elif module.id < admin_lock:
-        return page_dict
-    else:
-        return HttpResponse('We are sorry, this module is not quite ready!')
+    return page_dict
 
 
 def previous_section_handle_status(section, request, module):
@@ -472,21 +460,33 @@ def edit_page(request, path):
         edit_page = True
         dashboard, created = DashboardInfo.objects.get_or_create(
             dashboard=section)
+
         module_type, created = ModuleType.objects.get_or_create(
             module_type=section)
-
-        if (request.POST.get('dashboard_info') or
-                request.POST.get('dashboard_info') == ''):
-            dashboard.info = request.POST.get('dashboard_info', '')
 
         if (request.POST.get('module_type_form') or
                 request.POST.get('module_type_form') == ''):
             module_type.info = request.POST.get('module_type_form', '')
 
-        dashboard.save()
-        module_type.save()
+        section_css, created = SectionCss.objects.get_or_create(
+            section_css=section)
+        
+        if request.method == "POST":
+            try:
+                dashboard.info = request.POST['dashboard_info']
+            except:
+                pass
+            try:
+                section_css.css_field = request.POST['section_css_field']
+            except:
+                pass
 
+        dashboard.save()
+        section_css.save()
+        module_type.save()
+        
         return dict(section=section,
+                    section_css=section_css,
                     dashboard=dashboard,
                     module_type=module_type,
                     module=get_module(section),
@@ -655,20 +655,18 @@ def render_dashboard(request):
     except:
         pass
 
-    admin_lock = get_module_admin_lock()
     h = get_hierarchy("main")
     root = h.get_root()
     last_session = h.get_user_section(request.user)
     dashboard_info = DashboardInfo.objects.all()
     module_type = ModuleType.objects.all()
-
+    section_css = SectionCss.objects.all()
     is_visited = user_visits(request)
     empty = ""
     return dict(root=root, last_session=last_session,
                 dashboard_info=dashboard_info, empty=empty,
-                is_visited=is_visited, admin_lock=admin_lock,
+                is_visited=is_visited, section_css=section_css,
                 module_type=module_type)
-
 
 @render_to('flatpages/about.html')
 def about_page(request):

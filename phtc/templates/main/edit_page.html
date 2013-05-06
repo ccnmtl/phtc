@@ -311,6 +311,12 @@ method="post">
 <input type="submit" value="save" class="btn btn-primary" />
 </form>
 
+<form action="." method="post"
+      class="form-horizontal well">
+  {{ section_css.edit_form|bootstrap }}
+<input type="submit" value="save" class="btn btn-primary" />
+</form>
+
 <form action="{% url delete-section section.id %}" method="post" class="well">
 <input type="submit" value="delete this page" class="btn btn-danger"/>
 </form>

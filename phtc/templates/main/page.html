@@ -21,7 +21,7 @@
 {% block sidebar %}
         <!-- ###### Secondary Navigation ###### -->
         {% if module.get_children %}
-        <h3>Sections</h3>
+        <h3>{{module}}</h3>
         {% include "main/menu.html" %}
         {% endif %}
 {% endblock %}
