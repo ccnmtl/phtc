@@ -32,6 +32,11 @@
 		 		{% endfor %}'
 		  id="{{ module.id }}">
 
+		{%for type in module_type%}
+	 		{% ifequal module.id type.module_type_id %}
+				<span class='hide {{ type.info }}'>&nbsp;</span>
+	 		{% endifequal %}
+		{% endfor %}
 		{% get_user_section_status request.user module as status %}
 		{% ifequal status.status "complete" %}<!-- **** COMPLETED -->
 			<div class="completed-icon"></div>
@@ -56,9 +61,7 @@
 		{% else %}
 		{% endif %}
 </div><!--end .module-->
-
 {% endfor %}
-
     </div>
     <div id="return"></div><!-- end #return -->
     <div class="divclearfix"></div><!-- divclearfix -->

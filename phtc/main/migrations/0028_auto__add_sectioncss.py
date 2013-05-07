@@ -63,7 +63,19 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'DashboardInfo'},
             'dashboard': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['pagetree.Section']", 'unique': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'info': ('django.db.models.fields.TextField', [], {})
+            'info': ('django.db.models.fields.TextField', [], {'default': "''"})
+        },
+        'main.moduletype': {
+            'Meta': {'object_name': 'ModuleType'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'info': ('django.db.models.fields.TextField', [], {'default': "''"}),
+            'module_type': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['pagetree.Section']", 'unique': 'True'})
+        },
+        'main.nylearns_course_map': {
+            'Meta': {'object_name': 'NYLEARNS_Course_Map'},
+            'courseID': ('django.db.models.fields.TextField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'phtc_url': ('django.db.models.fields.TextField', [], {})
         },
         'main.sectioncss': {
             'Meta': {'object_name': 'SectionCss'},
@@ -83,7 +95,10 @@ class Migration(SchemaMigration):
             'fname': ('django.db.models.fields.TextField', [], {}),
             'geo_dept_health': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_nylearns': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'lname': ('django.db.models.fields.TextField', [], {}),
+            'nylearns_course_init': ('django.db.models.fields.TextField', [], {'default': "'none'"}),
+            'nylearns_user_id': ('django.db.models.fields.TextField', [], {'default': "'none'"}),
             'origin': ('django.db.models.fields.TextField', [], {}),
             'other_employment_location': ('django.db.models.fields.TextField', [], {}),
             'other_position_category': ('django.db.models.fields.TextField', [], {}),

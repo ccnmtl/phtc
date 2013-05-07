@@ -391,6 +391,7 @@ def page(request, path):
                 modules=root.get_children(),
                 root=section.hierarchy.get_root(),
                 )
+
     # dashboard ajax
     if request.POST.get('module'):
         return HttpResponse(
@@ -459,8 +460,14 @@ def edit_page(request, path):
         edit_page = True
         dashboard, created = DashboardInfo.objects.get_or_create(
             dashboard=section)
+
         module_type, created = ModuleType.objects.get_or_create(
             module_type=section)
+
+        if (request.POST.get('module_type_form') or
+                request.POST.get('module_type_form') == ''):
+            module_type.info = request.POST.get('module_type_form', '')
+
         section_css, created = SectionCss.objects.get_or_create(
             section_css=section)
         
@@ -473,9 +480,11 @@ def edit_page(request, path):
                 section_css.css_field = request.POST['section_css_field']
             except:
                 pass
+
         dashboard.save()
         section_css.save()
-
+        module_type.save()
+        
         return dict(section=section,
                     section_css=section_css,
                     dashboard=dashboard,
@@ -645,6 +654,7 @@ def render_dashboard(request):
                 return HttpResponseRedirect(url)
     except:
         pass
+
     h = get_hierarchy("main")
     root = h.get_root()
     last_session = h.get_user_section(request.user)
@@ -654,10 +664,10 @@ def render_dashboard(request):
     is_visited = user_visits(request)
     empty = ""
     return dict(root=root, last_session=last_session,
-                dashboard_info=dashboard_info,
-                empty=empty, is_visited=is_visited, 
-                section_css=section_css,module_type=module_type)
-
+                dashboard_info=dashboard_info, empty=empty,
+                is_visited=is_visited, section_css=section_css,
+                module_type=module_type)
+    
 
 @render_to('flatpages/about.html')
 def about_page(request):

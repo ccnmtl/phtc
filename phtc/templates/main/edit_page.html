@@ -307,6 +307,12 @@ method="post">
 
 <form action="." method="post"
       class="form-horizontal well">
+  {{ module_type.edit_form|bootstrap }}
+<input type="submit" value="save" class="btn btn-primary" />
+</form>
+
+<form action="." method="post"
+      class="form-horizontal well">
   {{ section_css.edit_form|bootstrap }}
 <input type="submit" value="save" class="btn btn-primary" />
 </form>

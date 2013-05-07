@@ -59,7 +59,6 @@ def user_created(sender, user, request, **kwargs):
     data.experience = form.data["experience"]
     data.rural = form.data["rural"]
     data.degree = form.data["degree"]
-
     # NYNJ additions
     #data.is_nylearns = form.data["is_nylearns"]
     data.nylearns_course_init = form.data["nylearns_course_init"]

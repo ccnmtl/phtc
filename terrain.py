@@ -60,9 +60,10 @@ def setup_browser(variables):
 # 5) ./manage.py migrate --settings=phtc.settings_lettuce
 # 6) ./manage.py reset contenttypes --settings=phtc.settings_lettuce
 # 7) ./manage.py reset auth --settings=phtc.settings_lettuce
-# --> make sure to create user=test pass=test
 # 8) ./manage.py loaddata phtc/main/fixtures/test_data.json \
 #      --settings=phtc.settings_lettuce
+# be sure to replace test_data/test.db with the newly generated lettuce.db file
+# and rename it test.db
 
 @before.harvest
 def setup_database(_foo):
@@ -292,17 +293,18 @@ def there_is_a_submit_button(step, label):
 @step(u'I am logged as a student')
 def i_am_logged_as_a_student(step):
     if world.skipping:
-        return
+        world.client.login(username='demo', password='demo')
 
     if not world.using_selenium:
-        world.client.login(username='demo', password='demo')
+        world.client.login(username='test123', password='test123')
+
     else:
         world.browser.get(django_url("/accounts/login/"))
         username_field = world.browser.find_element_by_id("id_username")
         password_field = world.browser.find_element_by_id("id_password")
         form = world.browser.find_element_by_id("login-form")
-        username_field.send_keys("demo")
-        password_field.send_keys("demo")
+        username_field.send_keys("test123")
+        password_field.send_keys("test123")
         form.submit()
 
 
