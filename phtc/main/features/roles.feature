@@ -11,7 +11,7 @@ that they are supposed to see
     Scenario: Admin Does See Edit Link
         Given I am logged in as an admin
         When I access the url "/module-1/"
-#        Then I see an edit link
+        Then I see an edit link
     
     Scenario: Logged out user does not see edit link
         Given I am not logged in

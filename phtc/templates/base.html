@@ -106,7 +106,7 @@ shieldbrowser({"Chrome":13,"Firefox":6,"MSIE":9,"Safari":5});
             <ul class="nav nav-pills">
                 <li><a style="color: #000;"><b>Page mode:</b></a></li>
                 <li{% block mode-view %} class="active"{% endblock %}> <a href="{{section.get_absolute_url}}" >View</a></li>
-                <li{% block mode-edit %}{% endblock %}><a href="/edit{{section.get_absolute_url}}">Edit</a></li>
+                <li{% block mode-edit %}{% endblock %}><a id="test-edit-link" href="/edit{{section.get_absolute_url}}">Edit</a></li>
              </ul>
              <hr />
             {% endifequal %}
