@@ -112,6 +112,8 @@ def access_url(step, url):
         return
     if world.using_selenium:
         world.browser.get(django_url(url))
+        import pdb
+        pdb.set_trace()
     else:
         response = world.client.get(django_url(url), follow=True)
         world.dom = html.fromstring(response.content)
