@@ -395,7 +395,9 @@ def previous_section(step):
         return
     link = world.browser.find_element_by_link_text('Part 1: Introduction to Qualitative Research')
     assert link
-    
+
+
+''' Feature: Hide Section  '''
 
 @step (u'I am logged out')
 def i_am_logged_out(step):
@@ -455,5 +457,37 @@ def verify_mod_1_class(step):
         assert False
     
 
+''' Feature: Video Module '''
 
+@step (u'And go to module two edit screen')
+def mod_one_edit(step):
+    if world.skipping:
+        return
+    world.browser.get(django_url('/edit/module-2/'))
+
+
+@step (u'And submit video in the module type')
+def click_edit(step):
+    if world.skipping:
+        return
+    type_field = world.browser.find_element_by_id('id_module_type_form')
+    type_field.send_keys('video')
+    form = world.browser.find_element_by_id('module-type')
+    form.submit()
+
+
+@step(u'Then module 2 is now under video section')
+def then_module_2_is_now_under_video_section(step):
+    if world.skipping:
+        return
+    world.browser.get(django_url('/dashboard/'))
+    modules = world.browser.execute_script('return jQuery(".video").next().next()')
+    for mod in modules:
+        if mod.get_attribute('rel') =='/module-2/':
+            return True
+    
+    if not mod1_link.is_displayed():
+        assert True
+    else:
+        assert False
 
