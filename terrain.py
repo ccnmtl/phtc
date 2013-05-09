@@ -403,8 +403,9 @@ def previous_section(step):
 def i_am_logged_out(step):
     if world.skipping:
         return
-    link = world.browser.find_element_by_link_text('Log out')
-    link.click()
+    btn = world.browser.find_element_by_id('login-logout')
+    if btn.text == "Log out":
+        btn.click()
 
 
 @step (u'Then I re-login as an admin')
