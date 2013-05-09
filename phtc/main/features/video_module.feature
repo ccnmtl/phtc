@@ -6,6 +6,7 @@ from the sequential learning modules
 
     Scenario: Admin can move module to the Video Section
         Using selenium
+        When I access the url "/"
         Given I am logged out
         Then I re-login as an admin
         When I access the url "/edit/module-2/"
