@@ -112,8 +112,6 @@ def access_url(step, url):
         return
     if world.using_selenium:
         world.browser.get(django_url(url))
-        import pdb
-        pdb.set_trace()
     else:
         response = world.client.get(django_url(url), follow=True)
         world.dom = html.fromstring(response.content)
@@ -314,11 +312,7 @@ def i_am_logged_as_a_student(step):
 def i_am_logged_in_as_an_admin(step):
     if world.skipping:
         return
-
-    if not world.using_selenium:
-        world.client.login(username='jed2161', password='jedavis13')
-    else:
-        assert False, "this needs to be implemented for selenium"
+    world.client.login(username='jed2161', password='jedavis13')
 
 
 @step(u'I do not see an edit link')
@@ -403,6 +397,63 @@ def previous_section(step):
     assert link
     
 
+@step (u'I am logged out')
+def i_am_logged_out(step):
+    if world.skipping:
+        return
+    link = world.browser.find_element_by_link_text('Log out')
+    link.click()
+
+
+@step (u'Then I re-login as an admin')
+def relogin_as_admin(step):
+    if world.skipping:
+        return
+    world.browser.get(django_url("/accounts/login/"))
+    username_field = world.browser.find_element_by_id("id_username")
+    password_field = world.browser.find_element_by_id("id_password")
+    form = world.browser.find_element_by_id("login-form")
+    username_field.send_keys("jed2161")
+    password_field.send_keys("jedavis13")
+    form.submit()
+
+
+@step (u'And go to module one edit screen')
+def mod_one_edit(step):
+    if world.skipping:
+        return
+    world.browser.get(django_url('/edit/module-1/'))
+
+@step (u'Then I click the edit button')
+def click_edit(step):
+    if world.skipping:
+        return
+    link = world.browser.find_element_by_link_text('Edit Section')
+    link.click()
+
+
+@step (u'And submit hide in the section css')
+def click_edit(step):
+    if world.skipping:
+        return
+    css_field = world.browser.find_element_by_id('id_section_css_field')
+    css_field.send_keys('hide')
+    form = world.browser.find_element_by_id('section_css')
+    form.submit()
+
+
+@step (u'Then module 1 has css class of hide')
+def verify_mod_1_class(step):
+    if world.skipping:
+        return
+    world.browser.get(django_url('/dashboard/'))
+    links = world.browser.find_elements_by_class_name('module')
+    mod1_link = links[0]
+    if not mod1_link.is_displayed():
+        assert True
+    else:
+        assert False
+    
 
 
 
