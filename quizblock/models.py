@@ -17,7 +17,7 @@ class Quiz(models.Model):
     allow_redo = models.BooleanField(default=True)
     pre_test = models.BooleanField(default=False)
     post_test = models.BooleanField(default=False)
-    post_test_credit = models.FloatField(default=False, null=True)
+    post_test_credit = models.FloatField(default=0.0, null=True)
 
     template_file = "quizblock/quizblock.html"
 
@@ -97,7 +97,7 @@ class Quiz(models.Model):
             allow_redo = forms.BooleanField()
             pre_test = forms.BooleanField()
             post_test = forms.BooleanField()
-            post_test_credit = forms.FloatField()
+            post_test_credit = forms.FloatField(initial=0.0)
         return AddForm()
 
     @classmethod
@@ -111,7 +111,7 @@ class Quiz(models.Model):
             allow_redo=request.POST.get('allow_redo', ''),
             pre_test=request.POST.get('pre_test', ''),
             post_test=request.POST.get('post_test', ''),
-            post_test_credit=request.POST.get('post_test_credit', '')
+            post_test_credit=request.POST.get('post_test_credit', 0.0)
         )
 
     @classmethod
@@ -124,7 +124,7 @@ class Quiz(models.Model):
             matching=d.get('matching', ''),
             pre_test=d.get('pre_test', ''),
             post_test=d.get('post_test', ''),
-            post_test_credit=d.get('post_test_credit', ''),
+            post_test_credit=d.get('post_test_credit', 0.0),
             allow_redo=d.get('allow_redo', True),
         )
         q.import_from_dict(d)
