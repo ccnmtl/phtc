@@ -100,10 +100,12 @@ jQuery(function() {
 //make sure the add answer form
 // posts to the correct page.   
 
-jQuery(document).ready(function($){
-  if($('.alert-error').length){
-    $('#add-answer').attr('action','.');
-  }
+jQuery(document).ready(function(){
+  jQuery('.alert-error').each(function(){
+    if (window.location.href.split('/add_answer/').length>1){
+      jQuery('#add-answer').attr('action','.');
+    }
+  })
 })
 </script>
 
