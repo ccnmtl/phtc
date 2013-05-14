@@ -76,7 +76,7 @@ Answer {{ answer.display_number }}:
 
 {% if question.answerable %}
 <h3>Add Answer</h3>
-<form action=".{{request.get_full_path}}add_answer/" method="post" class="well form-horizontal/">
+<form id="add-answer" action="add_answer/" method="post" class="well form-horizontal/">
 <table width="100%">
 {{ answer_form|bootstrap}}
 </table>
@@ -96,6 +96,15 @@ jQuery(function() {
   });
   jQuery("#answers").disableSelection();
 });
+
+//make sure the add answer form
+// posts to the correct page.   
+
+jQuery(document).ready(function($){
+  if($('.alert-error').length){
+    $('#add-answer').attr('action','.');
+  }
+})
 </script>
 
 {% endblock %}
