@@ -67,7 +67,7 @@ Answer {{ answer.display_number }}:
   {% if answer.label == "" %}
     Edit
   {% endif %}
-  {{answer.label}}</a>
+  {{answer.label|safe}}</a>
 {% if answer.correct %}<i class="icon-ok"></i>{% endif %}
 </li>
 {% endfor %}

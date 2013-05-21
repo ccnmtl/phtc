@@ -56,7 +56,7 @@ td.td-ui{
       {% for answer in question.answer_set.all %}
       <table class="table-matching" type="A">
         <tr>
-          <td class="answer-label">{{answer.label}}</td>
+          <td class="answer-label">{{answer.label|safe}}</td>
           {% for answer in question.answer_set.all %}
           <td class="td-ui user-selection">
               <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}-{{ forloop.parentloop.counter0 }}" value="{{answer.value}}" type="radio" />
