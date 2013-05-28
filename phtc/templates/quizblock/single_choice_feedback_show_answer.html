@@ -11,9 +11,9 @@
         {% for answer in question.answer_set.all %}
           <div class ="item-feedback well">
             {% if answer.correct %}
-              <p><span class="correct">Correct: </span>{{ answer.feedback }} </p>
+              <p><span class="correct">Correct: </span>{{ answer.feedback|safe }} </p>
             {% else %}    
-              <p><span class="incorrect">Incorrect: </span>{{ answer.feedback }}</p>
+              <p><span class="incorrect">Incorrect: </span>{{ answer.feedback|safe }}</p>
             {% endif %}
         </div>
         {% endfor %}
