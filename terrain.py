@@ -492,3 +492,23 @@ def then_module_2_is_now_under_video_section(step):
     else:
         assert False
 
+''' Question Label Feature '''
+@step (u'And I insert an image in the label field of a question')
+def insert_image_in_question(step):
+    if world.skipping:
+        return
+    link = world.browser.find_element_by_link_text("Quiz")
+    link.click()
+    link_manage=world.browser.find_element_by_link_text("manage questions/answers")
+    link_manage.click()
+    linkb = world.browser.find_element_by_css_selector("#questions li:nth-child(1) a:nth-child(3)")
+    linkb.click()
+    linkc = world.browser.find_element_by_css_selector("#answers li:nth-child(1) a:nth-child(3)")
+    linkc.click()
+    label = world.browser.find_element_by_id('id_label')
+    label.send_keys('<img id="selenium-img" src="'+django_url("/site_media/img/banner.jpg") + '"/>' )
+    form = world.browser.find_element_by_css_selector('form')
+    form.submit()
+    world.browser.get(django_url('/module-1/three/evaluation/'))    
+    assert(world.browser.find_element_by_id('selenium-img'))
+
