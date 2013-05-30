@@ -773,3 +773,17 @@ p.your-answer{
 .pull-right {
     padding-left: 20px !important;
 }
+
+
+.casequestion ol{
+  display: inline;
+}
+
+
+.answer-value{
+  display: inline;
+}
+.answer-value input[type="radio"]{
+float: none !important;
+margin: 0 7px 0 -2px !important; 
+}
