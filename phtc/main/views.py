@@ -774,7 +774,11 @@ def reports(request):
             return create_csv_report(request, age_gender, report)
 
         if report == "course_report":
-            course_report_table = create_course_report_table(completed_modules)
+            pre_test_data = get_pre_test_data(completed_modules, modules)
+            post_test_data = get_post_test_data(completed_modules, modules)
+            course_report_table = create_course_report_table(completed_modules, 
+                                                                pre_test_data,
+                                                                post_test_data)
             return create_csv_report2(request, course_report_table, report)
 
         if ev_report:
@@ -877,6 +881,61 @@ def aggregate_responses(evaluation_report):
             qr.append(counter)
     return qr
 
+def get_pre_test_data(completed_modules, modules):
+    module_pre_test_map = []
+    quizes = [x for x in Quiz.objects.filter(pre_test="TRUE")]
+    pre_tests = [q for q in quizes if q.pageblocks.all().count() > 0]
+
+    for t in pre_tests:
+        # get questions
+        questions = Question.objects.filter(quiz_id=t.id)
+        obj = {
+            'module': t.pageblock().section.get_module(),
+            'quiz': t
+        }
+        qr = []
+        question_counter = 0
+        for ques in questions:
+            if question_counter < 9:
+                question_answer = {
+                    'question': ques,
+                    'responses': Response.objects.filter(question_id=ques.id)
+                }
+                qr.append(question_answer)
+                question_counter += 1
+        obj['question_response'] = qr
+
+        module_pre_test_map.append(obj)
+    return module_pre_test_map
+
+
+def get_post_test_data(completed_modules, modules):
+    module_post_test_map = []
+    quizes = [x for x in Quiz.objects.filter(post_test="TRUE")]
+    post_tests = [q for q in quizes if q.pageblocks.all().count() > 0]
+
+    for t in post_tests:
+        # get questions
+        questions = Question.objects.filter(quiz_id=t.id)
+        obj = {
+            'module': t.pageblock().section.get_module(),
+            'quiz': t
+        }
+        qr = []
+        question_counter = 0
+        for ques in questions:
+            if question_counter < 9:
+                question_answer = {
+                    'question': ques,
+                    'responses': Response.objects.filter(question_id=ques.id)
+                }
+                qr.append(question_answer)
+                question_counter += 1
+        obj['question_response'] = qr
+
+        module_post_test_map.append(obj)
+    return module_post_test_map
+
 
 def create_eval_report(completed_modules, modules, qoi):
     module_post_test_map = []
@@ -911,12 +970,16 @@ def is_question_of_interest(question, qoi):
             return True
 
 
-def create_course_report_table(completed_modules):
+def create_course_report_table(completed_modules, pre_test_data, post_test_data):
     course_table = []
     for mod in completed_modules:
         course = []
         date = UserPageVisit.objects.get(
             user=mod.user, section=mod.section).last_visit
+
+        import pdb
+        pdb.set_trace()
+
         try:
             user = UserProfile.objects.get(user_id=mod.user_id)
             course.append(('course_name', mod.section.label))
@@ -940,6 +1003,22 @@ def create_course_report_table(completed_modules):
             course.append(('experience_in_pulic_health', user.experience))
             course.append(('muc', user.umc))
             course.append(('rural', user.rural))
+            course.append(('PreQ1', '1'))
+            course.append(('PreQ2', '1'))
+            course.append(('PreQ3', '1'))
+            course.append(('PreQ4', '1'))
+            course.append(('PreQ5', '1'))
+            course.append(('PreQ6', '1'))
+            course.append(('PreQ7', '1'))
+            course.append(('PreQ8', '1'))
+            course.append(('PostQ1', '1'))
+            course.append(('PostQ2', '1'))
+            course.append(('PostQ3', '1'))
+            course.append(('PostQ4', '1'))
+            course.append(('PostQ5', '1'))
+            course.append(('PostQ6', '1'))
+            course.append(('PostQ7', '1'))
+            course.append(('PostQ8', '1'))
             course_table.append(course)
         except:
             UserProfile.DoesNotExist
