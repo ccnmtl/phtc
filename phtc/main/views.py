@@ -391,6 +391,11 @@ def page(request, path):
                 modules=root.get_children(),
                 root=section.hierarchy.get_root(),
                 )
+    if (not module == None and 
+        module == module.hierarchy.get_root().get_children()[0]):
+        page_dict['is_mod_one'] = True
+    else:
+        page_dict['is_mod_one'] = False
 
     # dashboard ajax
     if request.POST.get('module'):
