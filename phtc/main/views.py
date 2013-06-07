@@ -904,7 +904,6 @@ def get_pre_test_data(completed_modules, modules):
                 qr.append(question_answer)
                 question_counter += 1
         obj['question_response'] = qr
-
         module_pre_test_map.append(obj)
     return module_pre_test_map
 
@@ -972,13 +971,24 @@ def is_question_of_interest(question, qoi):
 
 def create_course_report_table(completed_modules, pre_test_data, post_test_data):
     course_table = []
-    for mod in completed_modules:
+    for mod in completed_modules: 
         course = []
+        pre_q = []
+        post_q = []
+        for data in pre_test_data:
+            #import pdb
+            #pdb.set_trace()
+            if data['module'].label==mod.section.label:
+                for qrep in data['question_response']:
+                    string = ''
+                    string += qrep['question'].text
+                    for resp in qrep['responses']:
+                        if resp.submission.user_id == mod.user_id:
+                            string += resp.submission.value
+                    pre_q.append(string)        
+
         date = UserPageVisit.objects.get(
             user=mod.user, section=mod.section).last_visit
-
-        import pdb
-        pdb.set_trace()
 
         try:
             user = UserProfile.objects.get(user_id=mod.user_id)
