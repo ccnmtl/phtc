@@ -24,6 +24,7 @@ from pagetree.models import Section
 from quizblock.models import Quiz
 from quizblock.models import Question
 from quizblock.models import Response
+from quizblock.models import Submission
 import csv
 
 
@@ -885,54 +886,19 @@ def get_pre_test_data(completed_modules, modules):
     module_pre_test_map = []
     quizes = [x for x in Quiz.objects.filter(pre_test="TRUE")]
     pre_tests = [q for q in quizes if q.pageblocks.all().count() > 0]
-
-    for t in pre_tests:
-        # get questions
-        questions = Question.objects.filter(quiz_id=t.id)
-        obj = {
-            'module': t.pageblock().section.get_module(),
-            'quiz': t
-        }
-        qr = []
-        question_counter = 0
-        for ques in questions:
-            if question_counter < 9:
-                question_answer = {
-                    'question': ques,
-                    'responses': Response.objects.filter(question_id=ques.id)
-                }
-                qr.append(question_answer)
-                question_counter += 1
-        obj['question_response'] = qr
+    
+    for test in pre_tests:
+        obj = {}
+        qrep_module = get_module(test.pageblock().section)
+        obj['quiz_label'] = get_module(test.pageblock().section).label
+        obj['submission_set'] = test.submission_set
         module_pre_test_map.append(obj)
     return module_pre_test_map
 
 
 def get_post_test_data(completed_modules, modules):
     module_post_test_map = []
-    quizes = [x for x in Quiz.objects.filter(post_test="TRUE")]
-    post_tests = [q for q in quizes if q.pageblocks.all().count() > 0]
-
-    for t in post_tests:
-        # get questions
-        questions = Question.objects.filter(quiz_id=t.id)
-        obj = {
-            'module': t.pageblock().section.get_module(),
-            'quiz': t
-        }
-        qr = []
-        question_counter = 0
-        for ques in questions:
-            if question_counter < 9:
-                question_answer = {
-                    'question': ques,
-                    'responses': Response.objects.filter(question_id=ques.id)
-                }
-                qr.append(question_answer)
-                question_counter += 1
-        obj['question_response'] = qr
-
-        module_post_test_map.append(obj)
+    #
     return module_post_test_map
 
 
@@ -975,17 +941,23 @@ def create_course_report_table(completed_modules, pre_test_data, post_test_data)
         course = []
         pre_q = []
         post_q = []
+        qreps = []
         for data in pre_test_data:
-            #import pdb
-            #pdb.set_trace()
-            if data['module'].label==mod.section.label:
-                for qrep in data['question_response']:
-                    string = ''
-                    string += qrep['question'].text
-                    for resp in qrep['responses']:
-                        if resp.submission.user_id == mod.user_id:
-                            string += resp.submission.value
-                    pre_q.append(string)        
+            if  data['quiz_label'] == mod.section.label:
+                for val in data['submission_set'].values():
+                    if mod.user_id == val['user_id']:
+                        uid = val['user_id']
+                        qid = val['quiz_id']
+                        sub = Submission.objects.extra(where=["user_id="+str(uid),"quiz_id="+str(qid)])
+                        subid = sub.values()[0]['id']
+                        questions = Question.objects.extra(where=["quiz_id="+str(qid)])
+                        for ques in questions:
+                            query = Response.objects.extra(where=["question_id="+str(ques.id),"submission_id="+str(subid)])
+                            qreps.append(query)
+                        #resp = Responses.objects.extra(where=["user_id="+str(uid),"quiz_id="+str(qid)])
+                        import pdb
+                        pdb.set_trace()
+           
 
         date = UserPageVisit.objects.get(
             user=mod.user, section=mod.section).last_visit
