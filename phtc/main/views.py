@@ -942,21 +942,27 @@ def create_course_report_table(completed_modules, pre_test_data, post_test_data)
         pre_q = []
         post_q = []
         qreps = []
+        user_response = []
         for data in pre_test_data:
             if  data['quiz_label'] == mod.section.label:
                 for val in data['submission_set'].values():
                     if mod.user_id == val['user_id']:
-                        uid = val['user_id']
-                        qid = val['quiz_id']
-                        sub = Submission.objects.extra(where=["user_id="+str(uid),"quiz_id="+str(qid)])
-                        subid = sub.values()[0]['id']
-                        questions = Question.objects.extra(where=["quiz_id="+str(qid)])
+                        uid = str(val['user_id'])
+                        qid = str(val['quiz_id'])
+                        sub = Submission.objects.extra(where=["user_id="+uid,"quiz_id="+qid])
+                        subid = str(sub.values()[0]['id'])
+                        questions = Question.objects.extra(where=["quiz_id="+qid])
                         for ques in questions:
-                            query = Response.objects.extra(where=["question_id="+str(ques.id),"submission_id="+str(subid)])
+                            query = Response.objects.extra(where=["question_id="+str(ques.id),"submission_id="+subid])
                             qreps.append(query)
-                        #resp = Responses.objects.extra(where=["user_id="+str(uid),"quiz_id="+str(qid)])
-                        import pdb
-                        pdb.set_trace()
+                        
+                            if len(query) > 0:
+                                cln_qry_vals = query.values()[0]['value']
+                                cln_qry_vals = cln_qry_vals.encode('utf-8','ignore')
+                                user_response.append(cln_qry_vals)
+                            else:
+                                user_response.append('none')
+                        
            
 
         date = UserPageVisit.objects.get(
@@ -985,14 +991,14 @@ def create_course_report_table(completed_modules, pre_test_data, post_test_data)
             course.append(('experience_in_pulic_health', user.experience))
             course.append(('muc', user.umc))
             course.append(('rural', user.rural))
-            course.append(('PreQ1', '1'))
-            course.append(('PreQ2', '1'))
-            course.append(('PreQ3', '1'))
-            course.append(('PreQ4', '1'))
-            course.append(('PreQ5', '1'))
-            course.append(('PreQ6', '1'))
-            course.append(('PreQ7', '1'))
-            course.append(('PreQ8', '1'))
+            course.append(('PreQ1', user_response[0]))
+            course.append(('PreQ2', user_response[1]))
+            course.append(('PreQ3', user_response[2]))
+            course.append(('PreQ4', user_response[3]))
+            course.append(('PreQ5', user_response[4]))
+            course.append(('PreQ6', user_response[5]))
+            course.append(('PreQ7', user_response[6]))
+            course.append(('PreQ8', user_response[7]))
             course.append(('PostQ1', '1'))
             course.append(('PostQ2', '1'))
             course.append(('PostQ3', '1'))
@@ -1004,6 +1010,9 @@ def create_course_report_table(completed_modules, pre_test_data, post_test_data)
             course_table.append(course)
         except:
             UserProfile.DoesNotExist
+    
+    #import pdb
+    #pdb.set_trace()
     return course_table
 
 
