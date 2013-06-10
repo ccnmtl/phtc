@@ -24,6 +24,7 @@ from pagetree.models import Section
 from quizblock.models import Quiz
 from quizblock.models import Question
 from quizblock.models import Response
+from quizblock.models import Submission
 import csv
 
 
@@ -779,7 +780,11 @@ def reports(request):
             return create_csv_report(request, age_gender, report)
 
         if report == "course_report":
-            course_report_table = create_course_report_table(completed_modules)
+            pre_test_data = get_pre_test_data(completed_modules, modules)
+            post_test_data = get_post_test_data(completed_modules, modules)
+            course_report_table = create_course_report_table(completed_modules, 
+                                                                pre_test_data,
+                                                                post_test_data)
             return create_csv_report2(request, course_report_table, report)
 
         if ev_report:
@@ -882,6 +887,33 @@ def aggregate_responses(evaluation_report):
             qr.append(counter)
     return qr
 
+def get_pre_test_data(completed_modules, modules):
+    module_pre_test_map = []
+    quizes = [x for x in Quiz.objects.filter(pre_test="TRUE")]
+    pre_tests = [q for q in quizes if q.pageblocks.all().count() > 0]
+    
+    for test in pre_tests:
+        obj = {}
+        qrep_module = get_module(test.pageblock().section)
+        obj['quiz_label'] = get_module(test.pageblock().section).label
+        obj['submission_set'] = test.submission_set
+        module_pre_test_map.append(obj)
+    return module_pre_test_map
+
+
+def get_post_test_data(completed_modules, modules):
+    module_post_test_map = []
+    quizes = [x for x in Quiz.objects.filter(post_test="TRUE")]
+    post_tests = [q for q in quizes if q.pageblocks.all().count() > 0]
+    
+    for test in post_tests:
+        obj = {}
+        qrep_module = get_module(test.pageblock().section)
+        obj['quiz_label'] = get_module(test.pageblock().section).label
+        obj['submission_set'] = test.submission_set
+        module_post_test_map.append(obj)
+    return module_post_test_map
+
 
 def create_eval_report(completed_modules, modules, qoi):
     module_post_test_map = []
@@ -915,13 +947,40 @@ def is_question_of_interest(question, qoi):
         if question.text.strip(' \t\n\r') == q:
             return True
 
+def sort_test_data(test_data, mod):
+    qreps = []
+    for data in test_data:
+        if  data['quiz_label'] == mod.section.label:
+            for val in data['submission_set'].values():
+                if mod.user_id == val['user_id']:
+                    uid = str(val['user_id'])
+                    qid = str(val['quiz_id'])
+                    sub = Submission.objects.extra(
+                        where=["user_id="+uid,"quiz_id="+qid])
+                    subid = str(sub.values()[0]['id'])
+                    questions = Question.objects.extra(
+                        where=["quiz_id="+qid])
+                    for ques in questions:
+                        query = Response.objects.extra(
+                            where=["question_id="+str(ques.id),"submission_id="+subid])
 
-def create_course_report_table(completed_modules):
+                        if len(query) > 0:
+                            cln_qry_vals = query.values()[0]['value']
+                            cln_qry_vals = cln_qry_vals.encode('utf-8','ignore')
+                            qreps.append(cln_qry_vals)
+                        else:
+                            qreps.append('none')
+    return qreps
+
+def create_course_report_table(completed_modules, pre_test_data, post_test_data):
     course_table = []
-    for mod in completed_modules:
+    for mod in completed_modules: 
         course = []
+        pre_qreps = sort_test_data(pre_test_data, mod)
+        post_qreps = sort_test_data(post_test_data, mod)
         date = UserPageVisit.objects.get(
             user=mod.user, section=mod.section).last_visit
+
         try:
             user = UserProfile.objects.get(user_id=mod.user_id)
             course.append(('course_name', mod.section.label))
@@ -945,9 +1004,26 @@ def create_course_report_table(completed_modules):
             course.append(('experience_in_pulic_health', user.experience))
             course.append(('muc', user.umc))
             course.append(('rural', user.rural))
+            course.append(('PreQ1', pre_qreps[0]))
+            course.append(('PreQ2', pre_qreps[1]))
+            course.append(('PreQ3', pre_qreps[2]))
+            course.append(('PreQ4', pre_qreps[3]))
+            course.append(('PreQ5', pre_qreps[4]))
+            course.append(('PreQ6', pre_qreps[5]))
+            course.append(('PreQ7', pre_qreps[6]))
+            course.append(('PreQ8', pre_qreps[7]))
+            course.append(('PostQ1', post_qreps[0]))
+            course.append(('PostQ2', post_qreps[1]))
+            course.append(('PostQ3', post_qreps[2]))
+            course.append(('PostQ4', post_qreps[3]))
+            course.append(('PostQ5', post_qreps[4]))
+            course.append(('PostQ6', post_qreps[5]))
+            course.append(('PostQ7', post_qreps[6]))
+            course.append(('PostQ8', post_qreps[7]))
             course_table.append(course)
         except:
             UserProfile.DoesNotExist
+    
     return course_table
 
 
