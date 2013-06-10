@@ -942,55 +942,34 @@ def is_question_of_interest(question, qoi):
         if question.text.strip(' \t\n\r') == q:
             return True
 
+def sort_test_data(test_data, mod):
+    qreps = []
+    for data in test_data:
+        if  data['quiz_label'] == mod.section.label:
+            for val in data['submission_set'].values():
+                if mod.user_id == val['user_id']:
+                    uid = str(val['user_id'])
+                    qid = str(val['quiz_id'])
+                    sub = Submission.objects.extra(where=["user_id="+uid,"quiz_id="+qid])
+                    subid = str(sub.values()[0]['id'])
+                    questions = Question.objects.extra(where=["quiz_id="+qid])
+                    for ques in questions:
+                        query = Response.objects.extra(where=["question_id="+str(ques.id),"submission_id="+subid])
+
+                        if len(query) > 0:
+                            cln_qry_vals = query.values()[0]['value']
+                            cln_qry_vals = cln_qry_vals.encode('utf-8','ignore')
+                            qreps.append(cln_qry_vals)
+                        else:
+                            qreps.append('none')
+    return qreps
 
 def create_course_report_table(completed_modules, pre_test_data, post_test_data):
     course_table = []
     for mod in completed_modules: 
         course = []
-        pre_qreps = []
-        post_qreps = []
-        qreps = []
-        user_response = []
-        for data in pre_test_data:
-            if  data['quiz_label'] == mod.section.label:
-                for val in data['submission_set'].values():
-                    if mod.user_id == val['user_id']:
-                        pre_uid = str(val['user_id'])
-                        pre_qid = str(val['quiz_id'])
-                        pre_sub = Submission.objects.extra(where=["user_id="+pre_uid,"quiz_id="+pre_qid])
-                        pre_subid = str(pre_sub.values()[0]['id'])
-                        pre_questions = Question.objects.extra(where=["quiz_id="+pre_qid])
-                        for pre_ques in pre_questions:
-                            query = Response.objects.extra(where=["question_id="+str(pre_ques.id),"submission_id="+pre_subid])
-    
-                            if len(query) > 0:
-                                cln_qry_vals = query.values()[0]['value']
-                                cln_qry_vals = cln_qry_vals.encode('utf-8','ignore')
-                                pre_qreps.append(cln_qry_vals)
-                            else:
-                                pre_qreps.append('none')
-
-        for data in post_test_data:
-            if  data['quiz_label'] == mod.section.label:
-                for val in data['submission_set'].values():
-                    if mod.user_id == val['user_id']:
-                        post_uid = str(val['user_id'])
-                        post_qid = str(val['quiz_id'])
-                        post_sub = Submission.objects.extra(where=["user_id="+post_uid,"quiz_id="+post_qid])
-                        post_subid = str(post_sub.values()[0]['id'])
-                        post_questions = Question.objects.extra(where=["quiz_id="+post_qid])
-                        for post_ques in post_questions:
-                            query = Response.objects.extra(where=["question_id="+str(post_ques.id),"submission_id="+post_subid])
-    
-                            if len(query) > 0:
-                                cln_qry_vals = query.values()[0]['value']
-                                cln_qry_vals = cln_qry_vals.encode('utf-8','ignore')
-                                post_qreps.append(cln_qry_vals)
-                            else:
-                                post_qreps.append('none')
-                        
-           
-
+        pre_qreps = sort_test_data(pre_test_data, mod)
+        post_qreps = sort_test_data(post_test_data, mod)
         date = UserPageVisit.objects.get(
             user=mod.user, section=mod.section).last_visit
 
