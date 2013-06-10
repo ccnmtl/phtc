@@ -898,7 +898,15 @@ def get_pre_test_data(completed_modules, modules):
 
 def get_post_test_data(completed_modules, modules):
     module_post_test_map = []
-    #
+    quizes = [x for x in Quiz.objects.filter(post_test="TRUE")]
+    post_tests = [q for q in quizes if q.pageblocks.all().count() > 0]
+    
+    for test in post_tests:
+        obj = {}
+        qrep_module = get_module(test.pageblock().section)
+        obj['quiz_label'] = get_module(test.pageblock().section).label
+        obj['submission_set'] = test.submission_set
+        module_post_test_map.append(obj)
     return module_post_test_map
 
 
@@ -939,29 +947,47 @@ def create_course_report_table(completed_modules, pre_test_data, post_test_data)
     course_table = []
     for mod in completed_modules: 
         course = []
-        pre_q = []
-        post_q = []
+        pre_qreps = []
+        post_qreps = []
         qreps = []
         user_response = []
         for data in pre_test_data:
             if  data['quiz_label'] == mod.section.label:
                 for val in data['submission_set'].values():
                     if mod.user_id == val['user_id']:
-                        uid = str(val['user_id'])
-                        qid = str(val['quiz_id'])
-                        sub = Submission.objects.extra(where=["user_id="+uid,"quiz_id="+qid])
-                        subid = str(sub.values()[0]['id'])
-                        questions = Question.objects.extra(where=["quiz_id="+qid])
-                        for ques in questions:
-                            query = Response.objects.extra(where=["question_id="+str(ques.id),"submission_id="+subid])
-                            qreps.append(query)
-                        
+                        pre_uid = str(val['user_id'])
+                        pre_qid = str(val['quiz_id'])
+                        pre_sub = Submission.objects.extra(where=["user_id="+pre_uid,"quiz_id="+pre_qid])
+                        pre_subid = str(pre_sub.values()[0]['id'])
+                        pre_questions = Question.objects.extra(where=["quiz_id="+pre_qid])
+                        for pre_ques in pre_questions:
+                            query = Response.objects.extra(where=["question_id="+str(pre_ques.id),"submission_id="+pre_subid])
+    
                             if len(query) > 0:
                                 cln_qry_vals = query.values()[0]['value']
                                 cln_qry_vals = cln_qry_vals.encode('utf-8','ignore')
-                                user_response.append(cln_qry_vals)
+                                pre_qreps.append(cln_qry_vals)
                             else:
-                                user_response.append('none')
+                                pre_qreps.append('none')
+
+        for data in post_test_data:
+            if  data['quiz_label'] == mod.section.label:
+                for val in data['submission_set'].values():
+                    if mod.user_id == val['user_id']:
+                        post_uid = str(val['user_id'])
+                        post_qid = str(val['quiz_id'])
+                        post_sub = Submission.objects.extra(where=["user_id="+post_uid,"quiz_id="+post_qid])
+                        post_subid = str(post_sub.values()[0]['id'])
+                        post_questions = Question.objects.extra(where=["quiz_id="+post_qid])
+                        for post_ques in post_questions:
+                            query = Response.objects.extra(where=["question_id="+str(post_ques.id),"submission_id="+post_subid])
+    
+                            if len(query) > 0:
+                                cln_qry_vals = query.values()[0]['value']
+                                cln_qry_vals = cln_qry_vals.encode('utf-8','ignore')
+                                post_qreps.append(cln_qry_vals)
+                            else:
+                                post_qreps.append('none')
                         
            
 
@@ -991,28 +1017,26 @@ def create_course_report_table(completed_modules, pre_test_data, post_test_data)
             course.append(('experience_in_pulic_health', user.experience))
             course.append(('muc', user.umc))
             course.append(('rural', user.rural))
-            course.append(('PreQ1', user_response[0]))
-            course.append(('PreQ2', user_response[1]))
-            course.append(('PreQ3', user_response[2]))
-            course.append(('PreQ4', user_response[3]))
-            course.append(('PreQ5', user_response[4]))
-            course.append(('PreQ6', user_response[5]))
-            course.append(('PreQ7', user_response[6]))
-            course.append(('PreQ8', user_response[7]))
-            course.append(('PostQ1', '1'))
-            course.append(('PostQ2', '1'))
-            course.append(('PostQ3', '1'))
-            course.append(('PostQ4', '1'))
-            course.append(('PostQ5', '1'))
-            course.append(('PostQ6', '1'))
-            course.append(('PostQ7', '1'))
-            course.append(('PostQ8', '1'))
+            course.append(('PreQ1', pre_qreps[0]))
+            course.append(('PreQ2', pre_qreps[1]))
+            course.append(('PreQ3', pre_qreps[2]))
+            course.append(('PreQ4', pre_qreps[3]))
+            course.append(('PreQ5', pre_qreps[4]))
+            course.append(('PreQ6', pre_qreps[5]))
+            course.append(('PreQ7', pre_qreps[6]))
+            course.append(('PreQ8', pre_qreps[7]))
+            course.append(('PostQ1', post_qreps[0]))
+            course.append(('PostQ2', post_qreps[1]))
+            course.append(('PostQ3', post_qreps[2]))
+            course.append(('PostQ4', post_qreps[3]))
+            course.append(('PostQ5', post_qreps[4]))
+            course.append(('PostQ6', post_qreps[5]))
+            course.append(('PostQ7', post_qreps[6]))
+            course.append(('PostQ8', post_qreps[7]))
             course_table.append(course)
         except:
             UserProfile.DoesNotExist
     
-    #import pdb
-    #pdb.set_trace()
     return course_table
 
 
