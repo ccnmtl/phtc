@@ -950,11 +950,14 @@ def sort_test_data(test_data, mod):
                 if mod.user_id == val['user_id']:
                     uid = str(val['user_id'])
                     qid = str(val['quiz_id'])
-                    sub = Submission.objects.extra(where=["user_id="+uid,"quiz_id="+qid])
+                    sub = Submission.objects.extra(
+                        where=["user_id="+uid,"quiz_id="+qid])
                     subid = str(sub.values()[0]['id'])
-                    questions = Question.objects.extra(where=["quiz_id="+qid])
+                    questions = Question.objects.extra(
+                        where=["quiz_id="+qid])
                     for ques in questions:
-                        query = Response.objects.extra(where=["question_id="+str(ques.id),"submission_id="+subid])
+                        query = Response.objects.extra(
+                            where=["question_id="+str(ques.id),"submission_id="+subid])
 
                         if len(query) > 0:
                             cln_qry_vals = query.values()[0]['value']
