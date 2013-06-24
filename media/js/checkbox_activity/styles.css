@@ -1,0 +1,59 @@
+
+.checkbox-wrapper table{
+  border: none !important;
+}
+.checkbox-wrapper table td{
+	border: 1px solid #333;
+	background: #e2e2e2;
+	min-width: 65px;
+	max-width: 101px;
+	height: 60px;
+	padding: 0 10px;
+}
+.column-header{
+	height: 25px;
+}
+.column-spacer{
+  border: none !important;
+  background: none !important;
+}
+.interactive{
+	cursor: pointer;
+  background:#F1F1F1 !important;
+}
+.user-x{
+  color:#7575FF !important;
+  font-weight: bold;
+  padding: 0  0 0 15px !important;
+}
+.answr-x{
+  color:#000 !important;
+  font-weight: bold;
+  padding: 0 0 0 15px;
+}
+#row-title{
+  float: left;
+  margin: 170px 0 0 0;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 0 10px;
+}
+#column-title{
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+}
+.answer-key-wrapper{
+    position: absolute;
+    margin: -5px 0 0 239px;
+    clear: both;
+    padding: 4px;
+    border: 1px solid #999;
+}
+.user-answers{
+  float: left;
+}
+.activity-answers{
+  float: right;
+  padding: 0 0 0 50px
+}
