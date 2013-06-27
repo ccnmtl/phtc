@@ -61,7 +61,7 @@ function CheckboxActivity($, context){
 		var table = $("<table/>");
 		var objs = $(activity.objects);
 		var attrs = $(activity.attrs);
-		var wrapper = $('<div class="checkbox-wrapper"/>');
+		var wrapper = $('<div class="checkbox-wrapper cases"/>');
 		attrs.each(function(i){
 			var tr = $('<tr class="activity-row"></tr>');
 			if (i>0){//account for added "blank" attribute	

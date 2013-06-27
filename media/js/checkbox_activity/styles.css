@@ -1,6 +1,7 @@
 
 .checkbox-wrapper table{
   border: none !important;
+  margin: 14px 0 50px 0;
 }
 .checkbox-wrapper table td{
 	border: 1px solid #333;
@@ -9,6 +10,7 @@
 	max-width: 101px;
 	height: 60px;
 	padding: 0 10px;
+  color: #C63 !important;
 }
 .column-header{
 	height: 25px;
@@ -37,15 +39,17 @@
   font-weight: bold;
   text-transform: uppercase;
   padding: 0 10px;
+  color:#C63;
 }
 #column-title{
+  color:#C63;
   font-weight: bold;
   text-transform: uppercase;
   text-align: center;
 }
 .answer-key-wrapper{
     position: absolute;
-    margin: -5px 0 0 239px;
+    margin: -35px 0 0 239px;
     clear: both;
     padding: 4px;
     border: 1px solid #999;
