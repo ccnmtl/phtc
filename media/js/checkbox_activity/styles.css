@@ -10,7 +10,7 @@
 	max-width: 101px;
 	height: 60px;
 	padding: 0 10px;
-  color: #C63 !important;
+  color: #333;
 }
 .column-header{
 	height: 25px;
@@ -24,14 +24,17 @@
   background:#F1F1F1 !important;
 }
 .user-x{
-  color:#7575FF !important;
+  color: #08C !important;
   font-weight: bold;
-  padding: 0  0 0 15px !important;
+  padding: 0 0 0 0px !important;
+  font-size: 24px;
 }
 .answr-x{
-  color:#000 !important;
+  color: #333 !important;
   font-weight: bold;
-  padding: 0 0 0 15px;
+  padding: 0 0 0 15px !important;
+  font-size: 24px;
+  float: right;
 }
 #row-title{
   float: left;
@@ -56,10 +59,13 @@
 }
 .user-answers{
   float: left;
+  line-height: 20px;
 }
 .activity-answers{
   float: right;
-  padding: 0 0 0 50px
+  padding: 0 0 0 40px;
+  line-height: 20px;
+  margin: 3px 0 0 0
 }
 .clear-button{
   margin: 0 30px;

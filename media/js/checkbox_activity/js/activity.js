@@ -37,9 +37,9 @@ function CheckboxActivity($, context){
 	this.rowTitle = 'Challenges';
 
 	this.submitButton = $('<button type="button"\
-						   class="submit-button">Submit</button>');
+						   class="submit-button btn btn-secondary">Submit</button>');
 	this.clearButton = $('<button type="button"\
-						   class="clear-button">Clear Answers</button>')
+						   class="clear-button btn btn-secondary">Clear Answers</button>')
 	this.createMatches = function(attrs, objects){
 		window.objs= objects;
 		//this function will create the objects();
