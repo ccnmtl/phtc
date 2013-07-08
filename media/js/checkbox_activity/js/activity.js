@@ -28,7 +28,7 @@ function CheckboxActivity($, context){
 					{"Participant Observation": [1,2,0,4,5,6]}, 
 					{"Observation" : [1,2,0,0,5,6]}, 
 					{"In-depth Interviews": [0,2,0,4,5,6]},
-					{"Focus Groups": [0,2,0,0,0,6]},
+					{"Focus Groups": [0,2,3,0,0,6]},
 					{"Document & AV Analysis": [1,2,0,4,5,6]}
 					];
 

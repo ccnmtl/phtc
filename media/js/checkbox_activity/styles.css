@@ -5,7 +5,7 @@
 }
 .checkbox-wrapper table td{
 	border: 1px solid #333;
-	background: #e2e2e2;
+	/*background: #e2e2e2;*/
 	min-width: 65px;
 	max-width: 101px;
 	height: 60px;
@@ -21,7 +21,7 @@
 }
 .interactive{
 	cursor: pointer;
-  background:#F1F1F1 !important;
+  background:#FFF!important;
 }
 .user-x{
   color: #08C !important;
