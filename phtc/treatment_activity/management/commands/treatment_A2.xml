@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TreatmentNodes>
+    <TreatmentNode Type="Root" Label="A2. Boceprevir for prior relapsers and partial responders without known cirrhosis">
+        <TreatmentNode Type="TreatmentStep" Label="PEG-IFN/RBV Lead-In" Duration="4" Help="As part of boceprevir-based therapy, the patient begins a 4 week &quot;lead-in&quot; with peginterferon and ribavirin dual therapy."></TreatmentNode>
+        <TreatmentNode Type="DecisionPoint" Label="Week 4: &gt;=1 log drop viral load" Help="HCV RNA is measured at the end of Week 4 (the end of the peginterferon and ribavirin lead-in) to determine projected treatment duration. If there has been a less than 1 log drop from the baseline HCV RNA level, it is recommended to give a longer treatment course. If there has been greater than or equal to 1 log drop, then the patient may still be able to receive a shorter course as part of response-guided therapy.">
+            <TreatmentNode Type="Parent" Value="0" Label="No" Text="&lt; 1 log drop viral load">
+                <TreatmentNode Type="TreatmentStep"
+                    Label="PEG-IFN/RBV + Boceprevir" Duration="8" Help="After the 4 week lead-in, boceprevir is added to the peginterferon and ribavirin. HCV RNA levels are measured at week 8, but they do not change the management of the patient. At the end of Week 12, the HCV RNA is measured again. The Week 12 response determines whether or not to continue treatment.">
+                </TreatmentNode>
+                <TreatmentNode Type="DecisionPoint" Label="Week 12: HCV RNA &gt;= 100 IU/ml" Help="At the end of Week 12, the HCV RNA is measured again. At this testing point you are checking to make sure the patient is not experiencing virologic breakthrough, which at this point in the treatment (12 weeks in) means HCV RNA above 100 IU/ml">
+                    <TreatmentNode Type="Parent" Value="0" Label="No" Text="HCV RNA &lt; 100 IU/ml">
+                        <TreatmentNode Type="TreatmentStep"
+                            Label="PEG-IFN/RBV + Boceprevir"
+                            Duration="12" Help="Since the HCV RNA is detected but &lt;100 IU/ml, the patient continues treatment with peginterferon, ribavirin and boceprevir. At the end of Week 24, the HCV RNA is measured again.">
+                        </TreatmentNode>
+                        <TreatmentNode Type="DecisionPoint" Label="Week 24: HCV RNA detected" Help="At the end of Week 24, the HCV RNA is measured again. At this testing point you are checking to make sure the patient is not experiencing virologic failure, which at this point in the treatment (24 weeks in) means HCV RNA should be not detected.">
+                            <TreatmentNode Type="Parent" Value="0" Label="No" Text="HCV RNA not detected">
+                                <TreatmentNode Type="TreatmentStep"
+                                    Label="PEG-IFN/RBV + Boceprevir"
+                                    Duration="24" Help="Since the HCV RNA is not detected, the patient continues treatment with peginterferon, ribavirin and boceprevir to complete a total treatment duration of 48 weeks. The patient then stops all treatment.">
+                                </TreatmentNode>
+                                <TreatmentNode Type="Stop"
+                                    Label="Treatment Complete" Help="HCV RNA is measured after treatment is complete and again 24 weeks later. If the patient's HCV RNA remains not detected at the 24-week SVR assessment, he has a sustained virologic response. If it becomes detectable again, the patient has experienced relapse.">
+                                </TreatmentNode>
+                            </TreatmentNode>
+                            <TreatmentNode Type="Parent" Value="1" Label="Yes" Text="HCV RNA detected">
+                                <TreatmentNode Type="Stop"
+                                    Label="Treatment Stopped" Help="The patient has experienced virologic failure. By the end of Week 24, HCV RNA should not be detected. All treatment should be stopped.">
+                                </TreatmentNode>
+                            </TreatmentNode>
+                        </TreatmentNode>
+                    </TreatmentNode>
+                    <TreatmentNode Type="Parent" Value="1" Label="Yes" Text="HCV RNA &gt;= 100 IU/ml">
+                        <TreatmentNode Type="Stop"
+                            Label="Treatment Stopped" Help="The patient has experienced virologic failure. By the end of Week 12, HCV RNA should be suppressed to less than 100 IU/ml. All treatment should be stopped.">
+                        </TreatmentNode>
+                    </TreatmentNode>
+                </TreatmentNode>
+            </TreatmentNode>            
+            <TreatmentNode Type="Parent" Value="1" Label="Yes" Text="&gt;= 1 log drop viral load">
+                <TreatmentNode Type="TreatmentStep"
+                    Label="PEG-IFN/RBV + Boceprevir" Duration="4" Help="After the 4 week lead-in, boceprevir is added to the peginterferon and ribavirin.">
+                </TreatmentNode>
+                <TreatmentNode Type="DecisionPoint"
+                    Label="Week 8: HCV RNA detected" Help="At the end of Week 8, the HCV RNA is measured. The Week 8 response determines the patient's eligibility for shortening treatment as part of response-guided therapy.">
+                    <TreatmentNode Type="Parent" Value="0" Label="No"
+                        Text="HCV RNA not detected">
+                        <TreatmentNode Type="TreatmentStep"
+                            Label="PEG-IFN/RBV + Boceprevir"
+                            Duration="4" Help="The patient continues treatment with peginterferon, ribavirin and boceprevir. Since HCV RNA was not detected, the patient meets the criteria for shortening total treatment duration to 36 weeks (assuming HCV RNA stays below detection for the rest of the treatment).">
+                        </TreatmentNode>
+                        <TreatmentNode Type="DecisionPoint"
+                            Label="Week 12: HCV RNA &gt;= 100 IU/ml" Help="At the end of Week 12, the HCV RNA is measured again. At this testing point you are checking to make sure the patient is not experiencing virologic breakthrough, which at this point in the treatment (12 weeks in) means HCV RNA above 100 IU/ml.">
+                            <TreatmentNode Type="Parent" Value="0"
+                                Label="No"
+                                Text="HCV RNA &lt; 100 IU/ml">
+                                <TreatmentNode Type="TreatmentStep"
+                                    Label="PEG-IFN/RBV + Boceprevir"
+                                    Duration="12" Help="We expect the HCV RNA to remain below detection in most cases, since it was not detected at week 8. If the unusual circumstance occurs where HCV RNA is detected but &lt;100 IU/ml, this test should be repeated. If HCV RNA is not detected, the patient continues treatment with peginterferon, ribavirin and boceprevir.">
+                                </TreatmentNode>
+                                <TreatmentNode Type="DecisionPoint"
+                                    Label="Week 24: HCV RNA Detected" Help="At the end of Week 24, the HCV RNA is measured again. At this testing point, you are checking to make sure the patient is not experiencing virologic breakthrough, which at this point in the treatment (24 weeks in) means HCV RNA should not be detected.">
+                                    <TreatmentNode Type="Parent"
+                                        Value="0" Label="No"
+                                        Text="HCV RNA not detected">
+                                        <TreatmentNode
+                                            Type="TreatmentStep"
+                                            Label="PEG-IFN/RBV + Boceprevir"
+                                            Duration="12" Help="Since the HCV RNA is not detected, the patient continues treatment with peginterferon, ribavirin and boceprevir to complete a total treatment duration of 36 weeks (this includes the lead-in of 4 weeks dual therapy + 32 weeks triple therapy). The patient then stops all treatment.">
+                                        </TreatmentNode>
+                                        <TreatmentNode Type="Stop"
+                                            Label="Treatment Complete" Help="HCV RNA is measured after treatment is complete and again 24 weeks later. If the patient's HCV RNA remains not detected at the 24-week SVR assessment, he has a sustained virologic response. If it becomes detectable again, the patient has experienced relapse.">
+                                        </TreatmentNode>
+                                    </TreatmentNode>
+                                    <TreatmentNode Type="Parent"
+                                        Label="Yes" Value="1"
+                                        Text="HCV RNA detected">
+                                        <TreatmentNode Type="Stop"
+                                            Label="Treatment Stopped" Help="The patient has experienced virologic breakthrough. All treatment should be stopped.">
+                                        </TreatmentNode>
+                                    </TreatmentNode>
+                                </TreatmentNode>
+                            </TreatmentNode>
+                            <TreatmentNode Type="Parent" Value="1"
+                                Label="Yes"
+                                Text="HCV RNA &gt;= 100 IU/ml">
+                                <TreatmentNode Type="Stop"
+                                    Label="Treatment Stopped" Help="The patient has experienced virologic breakthrough. All treatment should be stopped. Since HCV RNA was not detected previously, some providers would first confirm the breakthrough with a repeat HCV RNA measurement prior to stopping to rule out laboratory error.">
+                                </TreatmentNode>
+                            </TreatmentNode>
+                        </TreatmentNode>
+                    </TreatmentNode>
+                    <TreatmentNode Type="Parent" Value="1" Label="Yes"
+                        Text="HCV RNA detected">
+                        <TreatmentNode Type="TreatmentStep"
+                            Label="PEG-IFN/RBV + Boceprevir"
+                            Duration="4" Help="The patient continues treatment with peginterferon, ribavirin and boceprevir. Since the HCV RNA was detected at 8 weeks, the patient does not meet criteria for shortening total treatment duration to 36 weeks as part of response-guided therapy.">
+                        </TreatmentNode>
+                        <TreatmentNode Type="DecisionPoint"
+                            Label="Week 12: HCV RNA &gt;= 100 IU/ml" Help="At the end of Week 12, the HCV RNA is measured again. At this testing point you are checking to make sure the patient is not experiencing virologic failure, which at this point in the treatment (12 weeks in) means HCV RNA should be less than 100 IU/ml.">
+                            <TreatmentNode Type="Parent" Label="No"
+                                Value="0"
+                                Text="HCV RNA &lt; 100 IU/ml">
+                                <TreatmentNode Type="TreatmentStep"
+                                    Label="PEG-IFN/RBV + Boceprevir"
+                                    Duration="12" Help="Since the HCV RNA is &lt;100 IU/ml, the patient continues treatment with peginterferon, ribavirin and boceprevir.">
+                                </TreatmentNode>
+                                <TreatmentNode Type="DecisionPoint"
+                                    Label="Week 24: HCV RNA Detected" Help="At the end of Week 24, the HCV RNA is measured again. At this testing point you are checking to make sure the patient is not experiencing virologic failure, which at this point in the treatment (24 weeks in) means HCV RNA should be not detected.">
+                                    <TreatmentNode Type="Parent"
+                                        Value="0" Label="No"
+                                        Text="HCV RNA not detected">
+                                        <TreatmentNode
+                                            Type="TreatmentStep"
+                                            Duration="12"
+                                            Label="PEG-IFN/RBV + Boceprevir" Help="Since the HCV RNA is not detected at 24 weeks, the patient continues treatment with peginterferon, ribavirin and boceprevir. The patient completes their course of boceprevir at the end of Week 36 (but will continue with peginterferon and ribavirin to complete a total treatment duration of 48 weeks).">
+                                        </TreatmentNode>
+                                        <TreatmentNode
+                                            Type="TreatmentStep"
+                                            Label="PEG-IFN/RBV"
+                                            Duration="12" Help="The patient continues with peginterferon and ribavirin to complete a total treatment duration of 48 weeks. The patient then stops all treatment.">
+                                        </TreatmentNode>
+                                        <TreatmentNode Type="Stop"
+                                            Label="Treatment Complete" Help="HCV RNA is measured after treatment is complete and again 24 weeks later. If the patient's HCV RNA remains not detected at the 24-week SVR assessment, he has a sustained virologic response. If it becomes detectable again, the patient has experienced relapse.">
+                                        </TreatmentNode>
+                                    </TreatmentNode>
+                                    <TreatmentNode Type="Parent"
+                                        Value="1" Label="Yes"
+                                        Text="HCV RNA detected">
+                                        <TreatmentNode Type="Stop"
+                                            Label="Treatment Stopped" Help="The patient has experienced virologic failure. By the end of Week 24, HCV RNA should not be detected. All treatment should be stopped.">
+                                        </TreatmentNode>
+                                    </TreatmentNode>
+                                </TreatmentNode>
+                            </TreatmentNode>
+                            <TreatmentNode Type="Parent" Label="Yes"
+                                Value="1"
+                                Text="HCV RNA &gt;= 100 IU/ml">
+                                <TreatmentNode Type="Stop"
+                                    Label="Treatment Stopped" Help="The patient has experienced virologic failure. By the end of Week 12, HCV RNA should be suppressed to &lt;100 IU/ml. All treatment should be stopped.">
+                                </TreatmentNode>
+                            </TreatmentNode>
+                        </TreatmentNode>
+                    </TreatmentNode>
+                </TreatmentNode>
+            </TreatmentNode>
+        </TreatmentNode>
+    </TreatmentNode>
+</TreatmentNodes>

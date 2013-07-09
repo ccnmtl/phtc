@@ -93,6 +93,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'smartif',
     'django_jenkins',
+    'phtc.treatment_activity',
 )
 
 LETTUCE_APPS = (
@@ -113,6 +114,7 @@ PAGEBLOCKS = ['pageblocks.TextBlock',
               'pageblocks.ImageBlock',
               'pageblocks.ImagePullQuoteBlock',
               'quizblock.Quiz',
+              'treatment_activity.TreatmentActivityBlock'
               ]
 
 
