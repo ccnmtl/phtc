@@ -63,7 +63,11 @@ TEMPLATE_DIRS = (
     # Put application templates before these fallback ones:
     "/var/www/phtc/templates/",
     os.path.join(os.path.dirname(__file__), "templates"),
+    os.path.join(os.path.dirname(__file__),
+                 "../ve/lib/python2.7/site-packages/treebeard/templates")
 )
+
+
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -93,6 +97,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'smartif',
     'django_jenkins',
+    'treebeard',
     'phtc.treatment_activity',
 )
 
