@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseForbidden
-from nynjaetc.treatment_activity.models import TreatmentPath, TreatmentNode
+from phtc.treatment_activity.models import TreatmentPath, TreatmentNode
 import simplejson
 
 

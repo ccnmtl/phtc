@@ -65,6 +65,7 @@ urlpatterns = patterns(
      {'document_root': settings.MEDIA_ROOT}),
     (r'^_pagetree/', include('pagetree.urls')),
     (r'^_quiz/', include('quizblock.urls')),
+    (r'^_rgt/', include('phtc.treatment_activity.urls')),
     # these need to be last
     (r'^edit/(?P<path>.*)$', 'phtc.main.views.edit_page',
      {}, 'edit-page'),

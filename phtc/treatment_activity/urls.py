@@ -8,11 +8,13 @@ urlpatterns = patterns(
     (r'^media/(?P<path>.*)$', 'django.views.static.serve',
      {'document_root': media_root}),
 
-    url(r'^$',
-        'nynjaetc.treatment_activity.views.choose_treatment_path',
-        name='choose-treatment-path'),
 
+    url(r'^$',
+        'phtc.treatment_activity.views.choose_treatment_path',
+        name='choose-treatment-path'),
+	
     url(r'^(?P<path_id>\d+)/(?P<node_id>\d+)/$',
-        'nynjaetc.treatment_activity.views.get_next_steps',
-        name="get-next-steps")
+        'phtc.treatment_activity.views.get_next_steps',
+        name="get-next-steps"),
+
 )
