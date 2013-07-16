@@ -1,5 +1,6 @@
+/*
 (function (jQuery) {
-    
+*/  
     Backbone.sync = function (method, model, success, error) {
     };
     
@@ -23,6 +24,7 @@
         events: {
         },
         initialize: function (options, render) {
+            console.log ("Initialize TreatmentStepView.");
             var self = this;
             
             _.bindAll(this, "render", "unrender");            
@@ -43,11 +45,13 @@
             }
         },
         render: function () {
+            console.log ("render TreatmentStepView.");
             var eltStep = jQuery(this.el).find("div.treatment-step");            
             var ctx = this.model.toJSON();
             this.el.innerHTML = this.template(ctx);
         },
         unrender: function () {
+            console.log ("unrender TreatmentStepView.");
             jQuery(this.el).fadeOut('fast', function() {
                 jQuery(this.el).remove();
             });            
@@ -63,6 +67,7 @@
             drug: undefined
         },
         statusDescription: function() {
+            console.log ("statusDescription  ActivityState.");
             switch(this.get('status')) {
                 case '0': return 'Treatment-naive patient';
                 case '1': return 'Prior null responder';
@@ -72,6 +77,7 @@
             }
         },
         toTemplate: function() {
+            console.log ("toTemplate  ActivityState.");
             var ctx = _(this.attributes).clone();
             ctx.patient_factors_complete =
                 this.get('cirrhosis') !== undefined &&
@@ -81,6 +87,8 @@
             return ctx;
         },
         getNextUrl: function() {
+
+            console.log ("getNextUrl  ActivityState.");
             var url = '/_rgt/';
             if (this.get('path')) {
                 url += this.get('path') + '/' + this.get('node') + '/';
@@ -88,11 +96,13 @@
             return url;  
         },        
         reset: function() {
+            console.log ("reset  ActivityState.");
             this.set('cirrhosis', undefined);
             this.set('status', undefined);
             this.set('drug', undefined);
             this.set('path', '');
             this.set('node', '');
+            console.log ("*****");
         }
     });
 
@@ -110,6 +120,8 @@
             "click .choose-drug-again": "onChooseDrugAgain"            
         },
         initialize: function(options) {
+            console.log ('initialize TreatmentActivityView')
+
             _.bindAll(this,
                 "render",
                 "onSelectCirrhosis",
@@ -139,6 +151,8 @@
             this.render();
         },
         render: function() {
+
+            console.log ('render TreatmentActivityView')
             var self = this;
             var templateIdx = this.activityState.get('template');
             var context = this.activityState.toTemplate();
@@ -147,6 +161,7 @@
             jQuery("div.treatment-activity-view, div.treatment-steps, div.factors-choice").fadeIn("fast");
         },
         next: function() {
+            console.log ('next TreatmentActivityView')
             var self = this;
             
             jQuery.ajax({
@@ -188,6 +203,8 @@
             });
         },
         onAddStep: function(step) {
+
+            console.log ('onAddStep TreatmentActivityView')
             var view = new TreatmentStepView({
                 model: step,
                 parentView: this
@@ -195,9 +212,12 @@
             jQuery("div.treatment-steps").append(view.el);
         },
         onRemoveStep: function(step) {
+            
+            console.log ('onRemoveStep TreatmentActivityView')
             step.destroy();
         },
         onSelectCirrhosis: function(evt) {
+            console.log ('onSelectCirrhosis TreatmentActivityView')
             var self = this;
             var elt = evt.srcElement || evt.target || evt.originalTarget;
             jQuery(elt).button("loading");
@@ -207,6 +227,7 @@
             });
         },
         onSelectTreatmentStatus: function(evt) {
+            console.log ('onSelectTreatmentStatus TreatmentActivityView')
             var self = this;
             var elt = evt.srcElement || evt.target || evt.originalTarget;
             
@@ -215,6 +236,7 @@
             });
         },
         onSelectDrug: function(evt) {
+            console.log ('onSelectDrug TreatmentActivityView')
             var self = this;
             var elt = evt.srcElement || evt.target || evt.originalTarget;
             jQuery(elt).button("loading");
@@ -226,6 +248,7 @@
             self.next();
         },
         onResetState: function(evt) {
+            console.log ('onResetState TreatmentActivityView')
             var self = this;
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
             jQuery(srcElement).button("loading");
@@ -239,6 +262,7 @@
             });
         },
         onDecisionPoint: function(evt) {
+            console.log ('onDecisionPoint TreatmentActivityView')
             var self = this;
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
             jQuery(srcElement).button("loading");
@@ -250,6 +274,7 @@
             self.next();            
         },
         onChooseAgain: function(evt) {
+            console.log ('onChooseAgain TreatmentActivityView')
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
             var rollbackId = jQuery(srcElement).data('id');
             
@@ -272,6 +297,7 @@
             this.activityState.set('node', chosen);
         },
         onChooseStatusAgain: function(evt) {
+            console.log ('onChooseStatusAgain TreatmentActivityView')
             var self = this;
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
             jQuery(srcElement).button("loading");
@@ -288,6 +314,7 @@
             });
         },
         onChooseDrugAgain: function(evt) {
+            console.log ('onChooseDrugAgain TreatmentActivityView')
             var self = this;
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
             jQuery(srcElement).button("loading");
@@ -303,7 +330,7 @@
             });
         },
         onHelp: function(evt) {
-            
+            console.log ('onHelp TreatmentActivityView')
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
             var parent = jQuery(srcElement).parents('div.treatment-step')[0];
             var helpText = jQuery(parent).find('div.treatment-step-help');
@@ -312,4 +339,6 @@
             jQuery(helpText).toggle();
         }
     });
+/*
 }(jQuery));    
+*/

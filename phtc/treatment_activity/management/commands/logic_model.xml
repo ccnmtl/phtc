@@ -2,7 +2,7 @@
 <Goat>
 	<TreatmentNodes>
 	    <TreatmentNode Type="Root" Label="Logic Model">
-	        <TreatmentNode Type="DecisionPoint" Label="P***rinicipals and teachers report high levels of smokeless tobacco use among students in local public schools.  What do you do first">
+	        <TreatmentNode Type="DecisionPoint" Label="Prinicipals and teachers report high levels of smokeless tobacco use among students in local public schools.  What do you do first">
 
 	            <TreatmentNode Type="Parent" Value="1" Label="Conduct a survey of area high school students about tobacco use.">
 	            </TreatmentNode>                        
