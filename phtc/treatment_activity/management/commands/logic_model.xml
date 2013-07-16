@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Goat>
+	<TreatmentNodes>
+	    <TreatmentNode Type="Root" Label="Logic Model">
+	        <TreatmentNode Type="DecisionPoint" Label="P***rinicipals and teachers report high levels of smokeless tobacco use among students in local public schools.  What do you do first">
+
+	            <TreatmentNode Type="Parent" Value="1" Label="Conduct a survey of area high school students about tobacco use.">
+	            </TreatmentNode>                        
+	            
+	            <TreatmentNode Type="Parent" Value="2" Label="Conduct focus groups with students who report smokeless tobacco use.">
+	            </TreatmentNode>
+
+				<TreatmentNode Type="Parent" Value="3" Label="Design and implement a health education program in the schools to warn of the dangers of smokeless tobacco">
+	            </TreatmentNode>                        
+
+	        </TreatmentNode>
+	    </TreatmentNode>
+	</TreatmentNodes>
+
+	<TreatmentPaths>
+	    <TreatmentPath>
+	        <field type="CharField" name="name">Logic Model</field>
+	        <field type="TreatmentNode" name="tree">Logic Model</field>
+        	<field type="BooleanField" name="cirrhosis">False</field>
+        	<field type="IntegerField" name="treatment_status">0</field>
+	        <field type="CharField" name="drug_choice">boceprevir</field>
+	    </TreatmentPath>
+	</TreatmentPaths>
+</Goat>

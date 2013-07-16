@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand
 from xml.dom import minidom
 from optparse import make_option
-from nynjaetc.treatment_activity.models import TreatmentNode, NODE_CHOICES
-from nynjaetc.treatment_activity.models import TreatmentPath
+from phtc.treatment_activity.models import TreatmentNode, NODE_CHOICES
+from phtc.treatment_activity.models import TreatmentPath
 
 
 class Command(BaseCommand):
@@ -66,6 +66,7 @@ class Command(BaseCommand):
             print args
             return
 
+        TreatmentNode.objects.all().delete()
         xmldoc = minidom.parse(options.get('file'))
 
         root_nodes = xmldoc.getElementsByTagName('TreatmentNodes')
