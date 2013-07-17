@@ -13,7 +13,10 @@
 </script>
 
 <script type="text/template" id="patient-factors">
+    <button type="button" class="btn btn-large btn-success btn-primary run_test" >test</button>
+
     <div id="patient-factor-cirrhosis" class="factors-choice <% if (cirrhosis !== undefined) { %> minimized<% } %>">
+    
         <p class="step-content">Does the patient have cirrhosis?</p>
         <% if (cirrhosis === undefined) { %>
             <div class="decision_buttons">
@@ -87,14 +90,18 @@
         class="treatment-step <%=type%>
             <% if (minimized) { %>minimized<% } %>">
             
+
+
+
+
+
+
+
+
+
         <% if (type === 'IF') { /* Generic Treatment Step */ %>                    
             <div class="timeline">
-                <div class="week">WEEK <%=week%></div>
                 
-                <div class="duration height-<%=duration %>"></div>
-                <% if (duration > 0) { %>
-                    <div class="week">WEEK <%=week + duration%></div>
-                <% } %>
             </div>
             <div class="medication <% if (!minimized && duration > 0) { %>height-<%=duration%><% } %>">
                 <% if (help) { %><i class="icon-question-sign"></i><% } %>
@@ -106,8 +113,14 @@
                     </a>
                 <% } %>
                 <p class="step-content"><%= name %></p><br />
-                <p class="time"><%= duration %> weeks</p>
             </div>
+
+
+
+
+
+
+
         <% } else if (type === 'DP') { /* Decision Point */ %>
             <div class="timeline">
                 <div class="duration"></div>
@@ -123,17 +136,41 @@
                 <% } %>
                 
                 <p class="step-content">
-                    <%= name %>?
+                    <%= name %>? 
+
+                           <% for (var i = 0; i < children_list.length; i++) { %>
+                              <% var answer = children_list[i]; %>
+                              <div>
+                                    <button type="button" class="btn btn-small btn-success btn-primary decision-point-button">
+                                        <%= answer %>
+                                    </button>
+                              </div>
+                            <% } %>
+
+
+
                     <% if (decision === undefined) { %>
+<!--
                         <div class="decision_buttons">
                             <button type="button" class="btn btn-small btn-success btn-primary decision-point-button"
-                                data-id="<%=id%>" data-loading-text="Loading..." value="1">Yes</button>
+                                data-id="<%=id%>" data-loading-text="Loading..." value="1">Yes </button>
                             <button type="button" class="btn btn-small btn-danger btn-primary decision-point-button"
-                                data-id="<%=id%>" data-loading-text="Loading..." value="0">No</button>
+                                data-id="<%=id%>" data-loading-text="Loading..." value="0">No <%=id%> <%=text%> </button>
                         </div>
+                        -->
                     <% } %>
                 </p>
             </div>
+
+
+
+
+
+
+
+
+
+
         <% } else if (type === 'PR') { /* Decision Point Branch -- Yes/No */ %>
             <div class="timeline"></div>
             <div class="medication">
@@ -146,14 +183,22 @@
                 <% } %>            
                 <p class="step-content">
                     <% if (name === "Yes") { %>
-                        <span><%= name %></span>                        
+                        <span><%= name %>PR</span>                        
                     <% } else if (name === "No") { %>
-                        <span><%= name %></span>
-                    <% } %>
+                        <span><%= name %>PR</span>
+                    <% } %><%= name %>
                 </p>
                 <button type="button" class="btn btn-small choose-again"
                     data-id="<%=id%>" data-loading-text="Loading..."><i class="icon-refresh"></i> Choose again</button>
             </div>
+
+
+
+
+
+
+
+
         <% } else if (type === 'ST') { /* Stop */ %>
             <div class="timeline">
                 <div class="duration"></div>
@@ -168,7 +213,7 @@
                     </a>
                 <% } %>                
                 <p>
-                    <p class="step-content"><%= name %></p>
+                    <p class="step-content"><%= name %>NAME</p>
                     <div>
                         To view other treatment paths, reset patient factors.
                         <div>
@@ -179,6 +224,12 @@
                 </p>
             </div>
         <% } %>
+
+
+
+
+
+
         
         <% if (help) { %>
             <div class="treatment-step-help" style="display: none">

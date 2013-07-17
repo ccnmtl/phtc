@@ -1,0 +1,25 @@
+	    	<!--
+			    ('RT', 'Root'), # trivial -- at the very top.
+			    ('PR', 'Parent'), #Decision Point Branch -- similar to Decision Point, but different and appears more friendly to non-binary
+			    ('IF', 'TreatmentStep'), #trivial -- describes what happens .
+			    ('DP', 'DecisionPoint'), # shows a yes  or no question, returns 1 or 0.
+			    ('ST', 'Stop') # trivial -- a leaf node.
+			-->
+
+
+
+			So what Susan is doing is basically choosing among the first 2 children of a node. 0 is no and 1 is yes.
+
+			I just need a way to access the labels of the children of the node from the template, as an ordered list.
+
+
+			OK -- now the values are too short for the database...
+
+
+			SO change that.
+
+			Also we need to go into the view and figure out wtf is going on.
+				apparently there is a next steps structure that is coming from each decision point
+
+
+			Also I have to comment out / hide / remove from the model and view all the prelimianry crap.

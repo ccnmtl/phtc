@@ -6,11 +6,11 @@ from treebeard.mp_tree import MP_Node
 
 
 NODE_CHOICES = (
-    ('RT', 'Root'),
-    ('PR', 'Parent'),
-    ('IF', 'TreatmentStep'),
-    ('DP', 'DecisionPoint'),
-    ('ST', 'Stop')
+    ('RT', 'Root'), # trivial -- at the very top.
+    ('PR', 'Parent'), #Decision Point Branch -- similar to Decision Point, but different and appears more friendly to non-binary
+    ('IF', 'TreatmentStep'), #  Generic Treatment Step  -- trivial -- describes what happens .
+    ('DP', 'DecisionPoint'), # shows a yes  or no question, returns 1 or 0.
+    ('ST', 'Stop') # trivial -- a leaf node.
 )
 
 STATUS_CHOICES = (
@@ -27,7 +27,7 @@ DRUG_CHOICES = (
 
 
 class TreatmentNode(MP_Node):
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=2058)
     type = models.CharField(max_length=2, choices=NODE_CHOICES)
     text = models.TextField(null=True, blank=True)
     help = models.TextField(null=True, blank=True)
@@ -43,6 +43,8 @@ class TreatmentNode(MP_Node):
             return "  %s" % self.name
 
     def to_json(self):
+        #import pdb
+        #pdb.set_trace()
         return {
             'id': self.id,
             'name': self.name,
@@ -50,7 +52,9 @@ class TreatmentNode(MP_Node):
             'text': self.text,
             'help': self.help,
             'duration': self.duration,
-            'value': self.value
+            'value': self.value, 
+            'children_list': [c.name for c in self.get_children()]
+            #'children_obj': dict((c.value, c.name) for c in self.get_children())
         }
 
 

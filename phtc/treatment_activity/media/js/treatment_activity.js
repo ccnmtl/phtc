@@ -1,6 +1,13 @@
 /*
 (function (jQuery) {
 */  
+    function trickit() {
+       $($('.cirrhosis')[1]).click();
+       $($('.treatment-status')[0]).val('0');
+       $($('.treatment-status')[0]).trigger('change');
+       $($('.drug')[0]).click();
+    }
+
     Backbone.sync = function (method, model, success, error) {
     };
     
@@ -85,6 +92,7 @@
                 this.get('drug') !== undefined;
             ctx.statusDescription = this.statusDescription();
             return ctx;
+
         },
         getNextUrl: function() {
 
@@ -117,7 +125,8 @@
             "click button.drug": "onSelectDrug",
             "click .choose-cirrhosis-again": "onResetState",
             "click .choose-status-again": "onChooseStatusAgain",
-            "click .choose-drug-again": "onChooseDrugAgain"            
+            "click .choose-drug-again": "onChooseDrugAgain",            
+            "click .run_test": "onRunTest"            
         },
         initialize: function(options) {
             console.log ('initialize TreatmentActivityView')
@@ -134,7 +143,8 @@
                 "onChooseDrugAgain",
                 "onAddStep",
                 "onRemoveStep",
-                "onHelp"
+                "onHelp",
+                "onRunTest"
             );
             
             this.activityState = new ActivityState();
@@ -159,6 +169,9 @@
             var markup = this.patientFactorsTemplate(context);            
             jQuery("div.treatment-activity-view").html(markup);       
             jQuery("div.treatment-activity-view, div.treatment-steps, div.factors-choice").fadeIn("fast");
+            console.log ("done rendering...")
+            // Eddie: adding this little hack...
+            trickit();
         },
         next: function() {
             console.log ('next TreatmentActivityView')
@@ -337,7 +350,23 @@
             
             jQuery("div.treatment-step-help:visible").not(helpText).hide();
             jQuery(helpText).toggle();
+        },
+        onRunTest: function(evt) {
+            console.log ('onHelp TreatmentActivityView')
+            var srcElement = evt.srcElement || evt.target || evt.originalTarget;
+            /*
+            var parent = jQuery(srcElement).parents('div.treatment-step')[0];
+            var helpText = jQuery(parent).find('div.treatment-step-help');
+            
+            jQuery("div.treatment-step-help:visible").not(helpText).hide();
+            jQuery(helpText).toggle();
+            */
+               $($('.cirrhosis')[1]).click();
+               $($('.treatment-status')[0]).val('0');
+               $($('.treatment-status')[0]).trigger('change');
+               $($('.drug')[0]).click();
         }
+
     });
 /*
 }(jQuery));    
