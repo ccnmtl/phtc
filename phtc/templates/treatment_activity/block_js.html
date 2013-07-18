@@ -137,17 +137,23 @@
                 
                 <p class="step-content">
                     <%= name %>? 
-
-
                     <% if (decision === undefined) { %>
-
                         <div class="decision_buttons">
-                            <button type="button" class="btn btn-small btn-success btn-primary decision-point-button"
-                                data-id="<%=id%>" data-loading-text="Loading..." value="1">Yes </button>
-                            <button type="button" class="btn btn-small btn-danger btn-primary decision-point-button"
-                                data-id="<%=id%>" data-loading-text="Loading..." value="0">No <%=id%> <%=text%> </button>
+                            <% for (var i = 0; i < children_list.length; i++) { %>
+                                  <% var answer = children_list[i]; %>
+                                  <div>
+                                        <button type="button" value = "<%= answer['value'] %>"class="btn btn-small btn-info btn-primary decision-point-button">
+                                            <%= answer['name'] %> ( value <%= answer['value'] %>)
+                                        </button>
+                                  </div>
+                            <% } %>
                         </div>
-                        
+                    <% } else { %>
+                        <p class="step-content">
+                            <span> <% statusDescription%>bbbb</span>
+                            <button type="button" class="btn btn-small choose-status-again"
+                                data-loading-text="Loading..."><i class="icon-refresh"></i>aaaaa Choose again </button>                        
+                        </p>
                     <% } %>
                 </p>
             </div>
@@ -174,7 +180,7 @@
                     </a>
                 <% } %>                
                 <p>
-                    <p class="step-content"><%= name %>NAME</p>
+                    <p class="step-content"><%= name %></p>
                     <div>
                         To view other treatment paths, reset patient factors.
                         <div>

@@ -10,52 +10,65 @@
 		            <TreatmentNode Type="TreatmentStep" Value="1" Label="Based on the survey, you find that indeed smokeless tobacco use is common among students.">
 	            		<TreatmentNode Type="DecisionPoint" Label="  What do you do next">
             				<TreatmentNode Type="Parent" Value="1" Label="Conduct another survey of area high school students that examines additional factors that were not examined in the first survey.">
-								<TreatmentNode Type="TreatmentStep" Value="1" Label="Your second survey does indeed find some additional factors that were associated with smokeless tobacco use.">
+    							<TreatmentNode Type="TreatmentStep" Label="***"  Duration="24" Help="..."></TreatmentNode>
+								<TreatmentNode Type="Stop" Value="1" Label="Your second survey does indeed find some additional factors that were associated with smokeless tobacco use.">
 	            				</TreatmentNode>
             				</TreatmentNode>
         					<TreatmentNode Type="Parent" Value="2" Label="Conduct focus groups with students who report smokeless tobacco use.  ">
-								<TreatmentNode Type="TreatmentStep" Value="1" Label="Excellent!  This Quantitative followed by Qualitative design is an example of an Explanatory Mixed Methods Design.">
+    							<TreatmentNode Type="TreatmentStep" Label="***"  Duration="24" Help="..."></TreatmentNode>
+								<TreatmentNode Type="Stop" Value="1" Label="Excellent!  This Quantitative followed by Qualitative design is an example of an Explanatory Mixed Methods Design.">
 	            				</TreatmentNode>
             				</TreatmentNode>
     						<TreatmentNode Type="Parent" Value="3" Label="Design and implement a health education program in the schools to warn of the dangers of smokeless tobacco.">
-								<TreatmentNode Type="TreatmentStep" Value="1" Label="Evaluation of the program revealed that it increased awareness of the dangers of smokeless tobacco use, but did not create behavior change.">
+    							<TreatmentNode Type="TreatmentStep" Label="***"  Duration="24" Help="..."></TreatmentNode>
+								<TreatmentNode Type="Stop" Value="1" Label="Evaluation of the program revealed that it increased awareness of the dangers of smokeless tobacco use, but did not create behavior change.">
 	            				</TreatmentNode>
             				</TreatmentNode>
             			</TreatmentNode>
 					</TreatmentNode>
-		            <TreatmentNode Type="TreatmentStep" Value="2" Label="Based on the focus groups, students reported that smokeless tobacco was viewed as a masculine, adult thing to do.">
+		        </TreatmentNode>
+				<TreatmentNode Type="Parent" Value="2" Label="Conduct focus groups with students who report smokeless tobacco use.">
+					<TreatmentNode Type="TreatmentStep" Value="2" Label="Based on the focus groups, students reported that smokeless tobacco was viewed as a masculine, adult thing to do.">
 		            	<TreatmentNode Type="DecisionPoint" Label="  What do you do next">
 				        	<TreatmentNode Type="Parent" Value="1" Label="Conduct a survey of area high school students that assesses both prevalence of tobacco use, but also assesses the insights learned as important to tobacco use in the focus groups.">
-								<TreatmentNode Type="TreatmentStep"
+    							<TreatmentNode Type="TreatmentStep" Label="***"  Duration="24" Help="..."></TreatmentNode>
+								<TreatmentNode Type="Stop"
 								Label="Excellent!  This Qualitative followed by Quantitative design is an example of an Exploratory Mixed Methods Design." Duration="8" Help="">
 								</TreatmentNode>
 				        	</TreatmentNode>
 				        	<TreatmentNode Type="Parent" Value="2" Label="Conduct more focus groups with students who do not report smokeless tobacco use.  Maybe they have different experiences than those who do use?">
-								<TreatmentNode Type="TreatmentStep"
+    							<TreatmentNode Type="TreatmentStep" Label="***"  Duration="24" Help="..."></TreatmentNode>
+								<TreatmentNode Type="Stop"
 								Label="Students who do not use smokeless tobacco had little to report about it.  They too reported that they saw this mostly as an behavior engaged in by some athletes." Duration="8" Help="">
 								</TreatmentNode>
 							</TreatmentNode>
 				        	<TreatmentNode Type="Parent" Value="3" Label="Design and implement a health education program in the schools that (based on the qualitative data) targets athletes and makes clear to them that even short term use of smokeless tobacco can lead to increased health risks.">
-				        		<TreatmentNode Type="TreatmentStep"
+    							<TreatmentNode Type="TreatmentStep" Label="***"  Duration="24" Help="..."></TreatmentNode>
+				        		<TreatmentNode Type="Stop"
 								Label="Evaluation of the program reveals that it did increase the awareness of the health consequences of even short-term smokeless tobacco use." Duration="8" Help="">
 								</TreatmentNode>
 				        	</TreatmentNode>
 			            </TreatmentNode>
 					</TreatmentNode>
+	            </TreatmentNode>
+				<TreatmentNode Type="Parent" Value="3" Label="Design and implement a health education program in the schools to warn of the dangers of smokeless tobacco.">
 		            <TreatmentNode Type="TreatmentStep" Value="3" Label="Evaluation of the program reveals that it increased awareness of the dangers of smokeless tobacco use but did not create behavior change.">
 		            	<TreatmentNode Type="DecisionPoint" Label="  What do you do next">
 				        	<TreatmentNode Type="Parent" Value="1" Label="Conduct a survey of area high school students about tobacco use.">
-								<TreatmentNode Type="TreatmentStep"
+    							<TreatmentNode Type="TreatmentStep" Label="***"  Duration="24" Help="..."></TreatmentNode>
+								<TreatmentNode Type="Stop"
 								Label="Based on the survey, you find that indeed smokeless tobacco use is common among students. However, many of the factors that were anticipated to contribute to smokeless tobacco use were not significantly associated,..." Duration="8" Help="">
 								</TreatmentNode>
 				        	</TreatmentNode>
 				        	<TreatmentNode Type="Parent" Value="2" Label="Conduct focus groups with students who report smokeless tobacco use.">
-								<TreatmentNode Type="TreatmentStep"
+    							<TreatmentNode Type="TreatmentStep" Label="***"  Duration="24" Help="..."></TreatmentNode>
+								<TreatmentNode Type="Stop"
 								Label="Based on the focus groups, students reported that smokeless tobacco was viewed as a masculine, adult thing to do and that it was particularly popular among students ..." Duration="8" Help="">
 								</TreatmentNode>
 				        	</TreatmentNode>
-				        	<TreatmentNode Type="Parent" Value="3" Label="Design and implement a revised health education program ...  ">
-				        		<TreatmentNode Type="TreatmentStep"
+				        	<TreatmentNode Type="Parent" Value="3" Label="Design and implement a revised health education program ...">
+    							<TreatmentNode Type="TreatmentStep" Label="***"  Duration="24" Help="..."></TreatmentNode>
+				        		<TreatmentNode Type="Stop"
 								Label="Evaluation of the program reveals that it increased awareness of the dangers of smokeless tobacco use but did not create behavior change...." Duration="8" Help="">
 								</TreatmentNode>
 				        	</TreatmentNode>  			

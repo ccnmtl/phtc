@@ -19,7 +19,8 @@
         defaults: {
             'minimized': false,
             'decision': undefined,
-            'initial': true
+            'initial': true,
+            'statusDescription': ''
         }
     });
     
@@ -55,6 +56,10 @@
             console.log ("render TreatmentStepView.");
             var eltStep = jQuery(this.el).find("div.treatment-step");            
             var ctx = this.model.toJSON();
+
+            ctx['statusDescription'] = "goat"
+
+            console.log (ctx);
             this.el.innerHTML = this.template(ctx);
         },
         unrender: function () {
@@ -131,6 +136,7 @@
         initialize: function(options) {
             console.log ('initialize TreatmentActivityView')
 
+            /* a lot of this is what will be removed soon */
             _.bindAll(this,
                 "render",
                 "onSelectCirrhosis",
@@ -170,8 +176,6 @@
             jQuery("div.treatment-activity-view").html(markup);       
             jQuery("div.treatment-activity-view, div.treatment-steps, div.factors-choice").fadeIn("fast");
             console.log ("done rendering...")
-            // Eddie: adding this little hack...
-            trickit();
         },
         next: function() {
             console.log ('next TreatmentActivityView')
@@ -195,9 +199,10 @@
                     
                     // Minimize steps 0 - n-1
                     var week = 0;
+                    
                     self.treatmentSteps.forEach(function(step, idx) {
-                        week += step.get('duration');
-                        step.set('minimized', true);                
+                         week += step.get('duration');
+                         step.set('minimized', true);                
                     });
                     
                     // Appear the new treatment steps
@@ -281,6 +286,11 @@
             jQuery(srcElement).button("loading");
             
             var last = this.treatmentSteps.last();
+
+            console.log (jQuery(srcElement));
+            console.log ('decision is' + parseInt(jQuery(srcElement).attr('value'), 10));
+
+
             last.set({'decision': parseInt(jQuery(srcElement).attr('value'), 10)});
             this.activityState.set('node', last.get('id'));
             
@@ -352,15 +362,8 @@
             jQuery(helpText).toggle();
         },
         onRunTest: function(evt) {
-            console.log ('onHelp TreatmentActivityView')
+            console.log ('onRunTest TreatmentActivityView')
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
-            /*
-            var parent = jQuery(srcElement).parents('div.treatment-step')[0];
-            var helpText = jQuery(parent).find('div.treatment-step-help');
-            
-            jQuery("div.treatment-step-help:visible").not(helpText).hide();
-            jQuery(helpText).toggle();
-            */
                $($('.cirrhosis')[1]).click();
                $($('.treatment-status')[0]).val('0');
                $($('.treatment-status')[0]).trigger('change');

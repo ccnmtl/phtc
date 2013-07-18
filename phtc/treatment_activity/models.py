@@ -43,8 +43,6 @@ class TreatmentNode(MP_Node):
             return "  %s" % self.name
 
     def to_json(self):
-        #import pdb
-        #pdb.set_trace()
         return {
             'id': self.id,
             'name': self.name,
@@ -52,9 +50,8 @@ class TreatmentNode(MP_Node):
             'text': self.text,
             'help': self.help,
             'duration': self.duration,
-            'value': self.value#, 
-            #'children_list': [c.name for c in self.get_children()]
-            #'children_obj': dict((c.value, c.name) for c in self.get_children())
+            'value': self.value, 
+            'children_list': [{'name': c.name, 'id': c.id, 'value': c.value} for c in self.get_children()]
         }
 
 
