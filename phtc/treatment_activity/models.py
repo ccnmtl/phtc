@@ -52,8 +52,8 @@ class TreatmentNode(MP_Node):
             'text': self.text,
             'help': self.help,
             'duration': self.duration,
-            'value': self.value, 
-            'children_list': [c.name for c in self.get_children()]
+            'value': self.value#, 
+            #'children_list': [c.name for c in self.get_children()]
             #'children_obj': dict((c.value, c.name) for c in self.get_children())
         }
 

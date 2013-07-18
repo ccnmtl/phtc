@@ -138,59 +138,20 @@
                 <p class="step-content">
                     <%= name %>? 
 
-                           <% for (var i = 0; i < children_list.length; i++) { %>
-                              <% var answer = children_list[i]; %>
-                              <div>
-                                    <button type="button" class="btn btn-small btn-success btn-primary decision-point-button">
-                                        <%= answer %>
-                                    </button>
-                              </div>
-                            <% } %>
-
-
 
                     <% if (decision === undefined) { %>
-<!--
+
                         <div class="decision_buttons">
                             <button type="button" class="btn btn-small btn-success btn-primary decision-point-button"
                                 data-id="<%=id%>" data-loading-text="Loading..." value="1">Yes </button>
                             <button type="button" class="btn btn-small btn-danger btn-primary decision-point-button"
                                 data-id="<%=id%>" data-loading-text="Loading..." value="0">No <%=id%> <%=text%> </button>
                         </div>
-                        -->
+                        
                     <% } %>
                 </p>
             </div>
 
-
-
-
-
-
-
-
-
-
-        <% } else if (type === 'PR') { /* Decision Point Branch -- Yes/No */ %>
-            <div class="timeline"></div>
-            <div class="medication">
-                <% if (can_edit) { %>
-                    <a href="/admin/treatment_activity/treatmentnode/<%=id%>/"
-                       target="_blank"
-                       title="edit this step">
-                        <i class="icon-edit"></i>
-                    </a>
-                <% } %>            
-                <p class="step-content">
-                    <% if (name === "Yes") { %>
-                        <span><%= name %>PR</span>                        
-                    <% } else if (name === "No") { %>
-                        <span><%= name %>PR</span>
-                    <% } %><%= name %>
-                </p>
-                <button type="button" class="btn btn-small choose-again"
-                    data-id="<%=id%>" data-loading-text="Loading..."><i class="icon-refresh"></i> Choose again</button>
-            </div>
 
 
 

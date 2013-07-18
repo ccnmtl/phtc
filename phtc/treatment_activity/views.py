@@ -8,6 +8,7 @@ import simplejson
 def get_next_steps(request, path_id, node_id):
     if not request.is_ajax():
         return HttpResponseForbidden()
+    print "get_next_steps"
 
     node = TreatmentNode.objects.get(id=node_id)
 
@@ -16,7 +17,6 @@ def get_next_steps(request, path_id, node_id):
     if node.type == 'DP':
         steps = simplejson.loads(request.POST.get('steps'))
         decision = steps[len(steps) - 1]['decision']
-
         if decision == 0:
             node = node.get_first_child()
         elif decision == 1:
@@ -32,17 +32,20 @@ def get_next_steps(request, path_id, node_id):
             next_steps.append(node.to_json())
             prev = node
 
+
     data = {'steps': next_steps,
             'node': prev.id,
             'path': path_id,
             'can_edit': request.user.is_superuser}
 
+    print simplejson.dumps(data, indent=2)
     return HttpResponse(simplejson.dumps(data, indent=2),
                         mimetype="application/json")
 
 
 @login_required
 def choose_treatment_path(request):
+    """ This will soon be obsolete."""
     if not request.is_ajax() or request.method != "POST":
         return HttpResponseForbidden()
 
