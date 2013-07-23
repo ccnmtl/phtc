@@ -33,6 +33,13 @@
             console.log ("and... decision is:  " + this.get ('decision'));
         },
 
+        aboutMe: function() {
+            return ( "#" + this.get ('id') + " " + this.get ('name') + " " + this.get ('type') + this.get ('decision') );
+
+        },
+
+
+
     });
     
     var TreatmentStepCollection = Backbone.Collection.extend({
@@ -133,28 +140,17 @@
             "click .decision-point-button": "onDecisionPoint",
             "click .choose-again": "onChooseAgain",
             "click i.icon-question-sign": "onHelp",
-            "click button.cirrhosis": "onSelectCirrhosis",
-            "change select.treatment-status": "onSelectTreatmentStatus",
-            "click button.drug": "onSelectDrug",
             "click .choose-cirrhosis-again": "onResetState",
-            "click .choose-status-again": "onChooseStatusAgain",
-            "click .choose-drug-again": "onChooseDrugAgain",            
             "click .run_test": "onRunTest"            
         },
         initialize: function(options) {
             console.log ('initialize TreatmentActivityView')
 
-            /* a lot of this is what will be removed soon */
             _.bindAll(this,
                 "render",
-                "onSelectCirrhosis",
-                "onSelectTreatmentStatus",
-                "onSelectDrug",
                 "onResetState",
                 "onDecisionPoint",
                 "onChooseAgain",
-                "onChooseStatusAgain",
-                "onChooseDrugAgain",
                 "onAddStep",
                 "onRemoveStep",
                 "onHelp",
@@ -236,44 +232,12 @@
                 model: step,
                 parentView: this
             });
-            step.testMethod();
             jQuery("div.treatment-steps").append(view.el);
         },
         onRemoveStep: function(step) {
             
             console.log ('onRemoveStep TreatmentActivityView')
             step.destroy();
-        },
-        onSelectCirrhosis: function(evt) {
-            console.log ('onSelectCirrhosis TreatmentActivityView')
-            var self = this;
-            var elt = evt.srcElement || evt.target || evt.originalTarget;
-            jQuery(elt).button("loading");
-            
-            this.activityState.set({
-                'cirrhosis': jQuery(elt).attr("value")
-            });
-        },
-        onSelectTreatmentStatus: function(evt) {
-            console.log ('onSelectTreatmentStatus TreatmentActivityView')
-            var self = this;
-            var elt = evt.srcElement || evt.target || evt.originalTarget;
-            
-            this.activityState.set({
-                'status': jQuery(elt).attr("value")
-            });
-        },
-        onSelectDrug: function(evt) {
-            console.log ('onSelectDrug TreatmentActivityView')
-            var self = this;
-            var elt = evt.srcElement || evt.target || evt.originalTarget;
-            jQuery(elt).button("loading");
-            
-            this.activityState.set({
-                'drug': jQuery(elt).attr("value")
-            });
-            
-            self.next();
         },
         onResetState: function(evt) {
             console.log ('onResetState TreatmentActivityView')
@@ -307,84 +271,26 @@
             
             self.next();
         },
+
+
         onChooseAgain: function(evt) {
-            // note: this doesn't actually call the back end at all, or at least explicitly.
             console.log ('onChooseAgain TreatmentActivityView')
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
             var rollbackId = jQuery(srcElement).data('id');
-            console.log ("rollbackId is " + rollbackId)
-            var prevId;
-            var chosen; // undefined...
             while ((step = this.treatmentSteps.last()) !== undefined) {
-                console.log ("***")
-                console.log (prevId);
-                console.log (step.get('type'));
-                console.log (step.get('name'));
-                console.log (step.get('text'));
-                console.log (step.get('value'));
-                if (prevId === rollbackId) {
-                    console.log ("BINGO")
+                if (step.get('id') === rollbackId) {
                     step.set({
                         "minimized": false,
                         "decision": undefined
                     });
-
+                    this.activityState.set('node', step);
                     return;
-                    
-                    if (step.get('type') === "DP") {
-                        console.log ('DP BREAK')
-                        break;
-                    }
-                    else {
-                        console.log (step.get('type')  + " is not " + "DP");
-                    }
                 }
-                else {
-
-                    console.log (prevId + " is not target of " +  rollbackId)
-                }
-                prevId = step.get('id');
                 step.destroy();
-                console.log ("Done with this step.");
             }
-            this.activityState.set('node', chosen);
-            console.log ("OK DONE");
         },
-        onChooseStatusAgain: function(evt) {
-            /* no longer needed */
-            console.log ('onChooseStatusAgain TreatmentActivityView')
-            var self = this;
-            var srcElement = evt.srcElement || evt.target || evt.originalTarget;
-            jQuery(srcElement).button("loading");
 
-            while ((model = self.treatmentSteps.first()) !== undefined) {
-                model.destroy();
-            }
-            self.treatmentSteps.reset();            
-            jQuery("div.treatment-steps").fadeOut("slow", function() {
-                self.activityState.set('status', undefined);
-                self.activityState.set('drug', undefined);
-                self.activityState.set('path', '');
-                self.activityState.set('node', '');                
-            });
-        },
-        onChooseDrugAgain: function(evt) {
-            /* no longer needed */
-            console.log ('onChooseDrugAgain TreatmentActivityView')
-            var self = this;
-            var srcElement = evt.srcElement || evt.target || evt.originalTarget;
-            jQuery(srcElement).button("loading");
 
-            while ((model = self.treatmentSteps.first()) !== undefined) {
-                model.destroy();
-            }
-            self.treatmentSteps.reset();            
-            jQuery("div.treatment-steps").fadeOut("slow", function() {
-                self.activityState.set('drug', undefined);
-                self.activityState.set('path', '');
-                self.activityState.set('node', '');             
-            });
-        },
         onHelp: function(evt) {
             console.log ('onHelp TreatmentActivityView')
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
@@ -396,11 +302,15 @@
         },
         onRunTest: function(evt) {
             console.log ('onRunTest TreatmentActivityView')
+            var self = this;
+            self.next();
+            /*
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
                $($('.cirrhosis')[1]).click();
                $($('.treatment-status')[0]).val('0');
                $($('.treatment-status')[0]).trigger('change');
                $($('.drug')[0]).click();
+            */
         }
 
     });

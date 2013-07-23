@@ -41,31 +41,6 @@ def choose_treatment_path(request):
     """ This will soon be obsolete."""
     if not request.is_ajax() or request.method != "POST":
         return HttpResponseForbidden()
+    path = TreatmentPath.objects.all()[0]
+    return get_next_steps(request, path.id, path.tree.id)
 
-    params = simplejson.loads(request.POST.get('state'))
-    cirrhosis = params['cirrhosis'] if 'cirrhosis' in params else None
-    status = params['status'] if 'status' in params else None
-    drug = params['drug'] if 'drug' in params else None
-
-    data = {}
-
-    if cirrhosis is None or status is None or drug is None:
-        data = {"error": "Missing required parameters"}
-
-        return HttpResponse(simplejson.dumps(data, indent=2),
-                            mimetype="application/json")
-    else:
-        try:
-            path = TreatmentPath.objects.get(cirrhosis=cirrhosis,
-                                             treatment_status=status,
-                                             drug_choice=drug)
-
-            return get_next_steps(request, path.id, path.tree.id)
-
-        except TreatmentPath.DoesNotExist:
-            msg = "Can't find a path. [cirrhosis: %s, status: %s, drug: %s]" \
-                % (cirrhosis, status, drug)
-            data = {"error": msg}
-
-            return HttpResponse(simplejson.dumps(data, indent=2),
-                                mimetype="application/json")
