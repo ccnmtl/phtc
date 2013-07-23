@@ -22,23 +22,9 @@
             'initial': true,
             'statusDescription': ''
         },
-        testMethod: function() {
-            console.log ("HELLO TESTING...  step.");
-
-            console.log (this);
-            console.log (this.get('duration'));
-            console.log (this.get('id'));
-            console.log (this.get('name'));
-            console.log (this.get('type'));
-            console.log ("and... decision is:  " + this.get ('decision'));
-        },
-
         aboutMe: function() {
             return ( "#" + this.get ('id') + " " + this.get ('name') + " " + this.get ('type') + this.get ('decision') );
-
         },
-
-
 
     });
     
@@ -74,7 +60,6 @@
             console.log ("render TreatmentStepView.");
             var eltStep = jQuery(this.el).find("div.treatment-step");            
             var ctx = this.model.toJSON();
-            console.log (ctx);
             this.el.innerHTML = this.template(ctx);
         },
         unrender: function () {
@@ -119,7 +104,6 @@
             console.log ("reset  ActivityState.");
             this.set('path', '');
             this.set('node', '');
-            console.log ("*****");
         }
     });
 
@@ -169,9 +153,6 @@
             jQuery("div.treatment-activity-view").html(markup);       
             jQuery("div.treatment-activity-view, div.treatment-steps, div.factors-choice").fadeIn("fast");
             console.log ("done rendering...")
-
-            //self.next();
-
             //self.next();
         },
         next: function() {
@@ -218,9 +199,7 @@
             });
         },
         onAddStep: function(step) {
-
             console.log ('onAddStep TreatmentActivityView')
-            //console.log ("Parent view is " + step);
             var view = new TreatmentStepView({
                 model: step,
                 parentView: this
@@ -251,14 +230,7 @@
             var self = this;
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
             jQuery(srcElement).button("loading");
-            
             var last = this.treatmentSteps.last();
-
-            console.log (jQuery(srcElement));
-            console.log ('decision is ' + parseInt(jQuery(srcElement).attr('value'), 10));
-
-            //console.log (this.get('name'));
-            // last is a: treatment step.
             last.set({'decision': parseInt(jQuery(srcElement).attr('value'), 10)});
             this.activityState.set('node', last.get('id'));
             
@@ -298,13 +270,6 @@
             var self = this;
             self.next();
             console.log ("OK DONE WITH THE TEST")
-            /*
-            var srcElement = evt.srcElement || evt.target || evt.originalTarget;
-               $($('.cirrhosis')[1]).click();
-               $($('.treatment-status')[0]).val('0');
-               $($('.treatment-status')[0]).trigger('change');
-               $($('.drug')[0]).click();
-            */
         }
 
     });

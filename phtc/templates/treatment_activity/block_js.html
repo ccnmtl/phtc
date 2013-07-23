@@ -36,7 +36,7 @@
                         <i class="icon-edit"></i>
                     </a>
                 <% } %>
-                <p class="step-content">IF: <%= name %> (# <%= id %>  ) </p><br />
+                <p class="step-content"><%= name %> </p><br />
             </div>
 
 
@@ -60,7 +60,7 @@
                 <% } %>
                 
                 <p class="step-content">
-                    DP: <%= name %> (# <%= id %>)? 
+                    <%= name %>? 
                     <% if (decision === undefined) { %>
                         <div class="decision_buttons">
                             <% for (var i = 0; i < children_list.length; i++) { %>
