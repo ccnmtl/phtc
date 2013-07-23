@@ -1,1 +1,1 @@
-./manage.py  import_treatment_paths --file phtc/treatment_activity/management/commands/logic_model.xml
+./manage.py  import_treatment_paths --file phtc/treatment_activity/management/commands/branching_activity.xml
