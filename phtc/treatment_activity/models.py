@@ -27,7 +27,7 @@ DRUG_CHOICES = (
 
 
 class TreatmentNode(MP_Node):
-    name = models.CharField(max_length=2058)
+    name = models.CharField(max_length=256)
     type = models.CharField(max_length=2, choices=NODE_CHOICES)
     text = models.TextField(null=True, blank=True)
     help = models.TextField(null=True, blank=True)
