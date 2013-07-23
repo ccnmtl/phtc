@@ -138,8 +138,8 @@
             this.treatmentSteps.bind("add", this.onAddStep);
             this.treatmentSteps.bind("remove", this.onRemoveStep);
             
-            this.patientFactorsTemplate =
-                _.template(jQuery("#patient-factors").html()); 
+            //this.patientFactorsTemplate =
+            //   _.template(jQuery("#patient-factors").html()); 
             this.next();
             this.render();
         },
@@ -149,11 +149,8 @@
             var self = this;
             var templateIdx = this.activityState.get('template');
             var context = this.activityState.toTemplate();
-            var markup = this.patientFactorsTemplate(context);            
-            jQuery("div.treatment-activity-view").html(markup);       
             jQuery("div.treatment-activity-view, div.treatment-steps, div.factors-choice").fadeIn("fast");
-            console.log ("done rendering...")
-            //self.next();
+            console.log ("done rendering...");
         },
         next: function() {
             console.log ('next TreatmentActivityView')
@@ -207,23 +204,64 @@
             jQuery("div.treatment-steps").append(view.el);
         },
         onRemoveStep: function(step) {
-            
             console.log ('onRemoveStep TreatmentActivityView')
             step.destroy();
         },
         onResetState: function(evt) {
-            console.log ('onResetState TreatmentActivityView')
+            console.log ('STARTING onResetState TreatmentActivityView')
             var self = this;
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
             jQuery(srcElement).button("loading");
 
+            /*
             while ((model = self.treatmentSteps.first()) !== undefined) {
+                console.log (self.treatmentSteps.length)
                 model.destroy();
             }
+            */
+            
+            console.log ("testing")
+            decision_points = []
+            self.treatmentSteps.forEach(function(step, idx) {
+                 console.log (step.aboutMe());
+                 console.log (step.get('type'));
+                 if (step.get('type') == 'DP') {
+                    decision_points.push (step.get ('id'));
+                 }
+                 
+            });
+            console.log (decision_points);
+            console.log ("done testing")
+            while (self.treatmentSteps.last().get('id')!= decision_points[0]) {
+                //console.log (self.treatmentSteps.length)
+                self.treatmentSteps.last().destroy();
+            }
+            var new_last_step = self.treatmentSteps.last();
+            //self.next();
+            self.activityState.set('node', new_last_step.get('id'));
+
+            new_last_step.set({
+                "minimized": false,
+                "decision": undefined
+            });
+            this.activityState.set('node', new_last_step);
+
+            //self.next();
+
+
+
+            //self.next();
+            /*
             self.treatmentSteps.reset();            
             jQuery("div.treatment-steps,div.treatment-activity-view").fadeOut("slow", function() {
-                self.activityState.reset();                
+                self.activityState.reset();
+                //self.treatmentSteps.next();
+                //self.next();
             });
+            */
+            console.log ('DONE WITH onResetState TreatmentActivityView');
+            //console.log ("next...");
+            //
         },
         onDecisionPoint: function(evt) {
             console.log ('onDecisionPoint TreatmentActivityView')
