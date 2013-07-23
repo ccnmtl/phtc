@@ -1,12 +1,5 @@
-/*
 (function (jQuery) {
-*/  
-    function trickit() {
-       $($('.cirrhosis')[1]).click();
-       $($('.treatment-status')[0]).val('0');
-       $($('.treatment-status')[0]).trigger('change');
-       $($('.drug')[0]).click();
-    }
+
 
     Backbone.sync = function (method, model, success, error) {
     };
@@ -36,7 +29,6 @@
         events: {
         },
         initialize: function (options, render) {
-            console.log ("Initialize TreatmentStepView.");
             var self = this;
             
             _.bindAll(this, "render", "unrender");            
@@ -57,13 +49,11 @@
             }
         },
         render: function () {
-            console.log ("render TreatmentStepView.");
             var eltStep = jQuery(this.el).find("div.treatment-step");            
             var ctx = this.model.toJSON();
             this.el.innerHTML = this.template(ctx);
         },
         unrender: function () {
-            console.log ("unrender TreatmentStepView.");
             jQuery(this.el).fadeOut('fast', function() {
                 jQuery(this.el).remove();
             });            
@@ -82,7 +72,6 @@
             return '';
         },
         toTemplate: function() {
-            console.log ("toTemplate  ActivityState.");
             var ctx = _(this.attributes).clone();
             ctx.patient_factors_complete =
                 this.get('cirrhosis') !== undefined &&
@@ -93,7 +82,6 @@
 
         },
         getNextUrl: function() {
-            console.log ("getNextUrl  ActivityState.");
             var url = '/_rgt/';
             if (this.get('path')) {
                 url += this.get('path') + '/' + this.get('node') + '/';
@@ -101,7 +89,6 @@
             return url;  
         },        
         reset: function() {
-            console.log ("reset  ActivityState.");
             this.set('path', '');
             this.set('node', '');
         }
@@ -114,10 +101,8 @@
             "click .choose-again": "onChooseAgain",
             "click i.icon-question-sign": "onHelp",
             "click .choose-cirrhosis-again": "onResetState",
-            "click .run_test": "onRunTest"            
         },
         initialize: function(options) {
-            console.log ('initialize TreatmentActivityView')
 
             _.bindAll(this,
                 "render",
@@ -127,7 +112,6 @@
                 "onAddStep",
                 "onRemoveStep",
                 "onHelp",
-                "onRunTest"
             );
             
             this.activityState = new ActivityState();
@@ -138,22 +122,17 @@
             this.treatmentSteps.bind("add", this.onAddStep);
             this.treatmentSteps.bind("remove", this.onRemoveStep);
             
-            //this.patientFactorsTemplate =
-            //   _.template(jQuery("#patient-factors").html()); 
+
             this.next();
             this.render();
         },
         render: function() {
-
-            console.log ('render TreatmentActivityView')
             var self = this;
             var templateIdx = this.activityState.get('template');
             var context = this.activityState.toTemplate();
             jQuery("div.treatment-activity-view, div.treatment-steps, div.factors-choice").fadeIn("fast");
-            console.log ("done rendering...");
         },
         next: function() {
-            console.log ('next TreatmentActivityView')
             var self = this;
             
             jQuery.ajax({
@@ -196,7 +175,6 @@
             });
         },
         onAddStep: function(step) {
-            console.log ('onAddStep TreatmentActivityView')
             var view = new TreatmentStepView({
                 model: step,
                 parentView: this
@@ -204,40 +182,23 @@
             jQuery("div.treatment-steps").append(view.el);
         },
         onRemoveStep: function(step) {
-            console.log ('onRemoveStep TreatmentActivityView')
             step.destroy();
         },
         onResetState: function(evt) {
-            console.log ('STARTING onResetState TreatmentActivityView')
             var self = this;
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
             jQuery(srcElement).button("loading");
-
-            /*
-            while ((model = self.treatmentSteps.first()) !== undefined) {
-                console.log (self.treatmentSteps.length)
-                model.destroy();
-            }
-            */
-            
-            console.log ("testing")
             decision_points = []
             self.treatmentSteps.forEach(function(step, idx) {
-                 console.log (step.aboutMe());
-                 console.log (step.get('type'));
                  if (step.get('type') == 'DP') {
                     decision_points.push (step.get ('id'));
                  }
                  
             });
-            console.log (decision_points);
-            console.log ("done testing")
             while (self.treatmentSteps.last().get('id')!= decision_points[0]) {
-                //console.log (self.treatmentSteps.length)
                 self.treatmentSteps.last().destroy();
             }
             var new_last_step = self.treatmentSteps.last();
-            //self.next();
             self.activityState.set('node', new_last_step.get('id'));
 
             new_last_step.set({
@@ -245,39 +206,20 @@
                 "decision": undefined
             });
             this.activityState.set('node', new_last_step);
-
-            //self.next();
-
-
-
-            //self.next();
-            /*
-            self.treatmentSteps.reset();            
-            jQuery("div.treatment-steps,div.treatment-activity-view").fadeOut("slow", function() {
-                self.activityState.reset();
-                //self.treatmentSteps.next();
-                //self.next();
-            });
-            */
-            console.log ('DONE WITH onResetState TreatmentActivityView');
-            //console.log ("next...");
-            //
         },
+
         onDecisionPoint: function(evt) {
-            console.log ('onDecisionPoint TreatmentActivityView')
             var self = this;
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
             jQuery(srcElement).button("loading");
             var last = this.treatmentSteps.last();
             last.set({'decision': parseInt(jQuery(srcElement).attr('value'), 10)});
             this.activityState.set('node', last.get('id'));
-            
             self.next();
         },
 
 
         onChooseAgain: function(evt) {
-            console.log ('onChooseAgain TreatmentActivityView')
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
             var rollbackId = jQuery(srcElement).data('id');
             while ((step = this.treatmentSteps.last()) !== undefined) {
@@ -295,22 +237,13 @@
 
 
         onHelp: function(evt) {
-            console.log ('onHelp TreatmentActivityView')
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
             var parent = jQuery(srcElement).parents('div.treatment-step')[0];
             var helpText = jQuery(parent).find('div.treatment-step-help');
-            
             jQuery("div.treatment-step-help:visible").not(helpText).hide();
             jQuery(helpText).toggle();
         },
-        onRunTest: function(evt) {
-            console.log ('onRunTest TreatmentActivityView')
-            var self = this;
-            self.next();
-            console.log ("OK DONE WITH THE TEST")
-        }
 
     });
-/*
+
 }(jQuery));    
-*/
