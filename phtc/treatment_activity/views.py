@@ -8,7 +8,6 @@ import simplejson
 def get_next_steps(request, path_id, node_id):
     if not request.is_ajax():
         return HttpResponseForbidden()
-
     node = TreatmentNode.objects.get(id=node_id)
 
     next_steps = []

@@ -94,14 +94,7 @@
             drug: undefined
         },
         statusDescription: function() {
-            console.log ("statusDescription  ActivityState.");
-            switch(this.get('status')) {
-                case '0': return 'Treatment-naive patient';
-                case '1': return 'Prior null responder';
-                case '2': return 'Prior relapser';
-                case '3': return 'Prior partial responder';
-                default: return '';
-            }
+            return '';
         },
         toTemplate: function() {
             console.log ("toTemplate  ActivityState.");
@@ -115,7 +108,6 @@
 
         },
         getNextUrl: function() {
-
             console.log ("getNextUrl  ActivityState.");
             var url = '/_rgt/';
             if (this.get('path')) {
@@ -125,9 +117,6 @@
         },        
         reset: function() {
             console.log ("reset  ActivityState.");
-            this.set('cirrhosis', undefined);
-            this.set('status', undefined);
-            this.set('drug', undefined);
             this.set('path', '');
             this.set('node', '');
             console.log ("*****");
@@ -167,7 +156,7 @@
             
             this.patientFactorsTemplate =
                 _.template(jQuery("#patient-factors").html()); 
-            
+            this.next();
             this.render();
         },
         render: function() {
@@ -180,6 +169,10 @@
             jQuery("div.treatment-activity-view").html(markup);       
             jQuery("div.treatment-activity-view, div.treatment-steps, div.factors-choice").fadeIn("fast");
             console.log ("done rendering...")
+
+            //self.next();
+
+            //self.next();
         },
         next: function() {
             console.log ('next TreatmentActivityView')
@@ -304,6 +297,7 @@
             console.log ('onRunTest TreatmentActivityView')
             var self = this;
             self.next();
+            console.log ("OK DONE WITH THE TEST")
             /*
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
                $($('.cirrhosis')[1]).click();
