@@ -1,5 +1,11 @@
 (function (jQuery) {
 
+    function trickit() {
+       $($('.cirrhosis')[1]).click();
+       $($('.treatment-status')[0]).val('0');
+       $($('.treatment-status')[0]).trigger('change');
+       $($('.drug')[0]).click();
+    }
 
     Backbone.sync = function (method, model, success, error) {
     };
@@ -101,6 +107,7 @@
             "click .choose-again": "onChooseAgain",
             "click i.icon-question-sign": "onHelp",
             "click .choose-cirrhosis-again": "onResetState",
+            "click .run_test": "onRunTest"            
         },
         initialize: function(options) {
 
@@ -112,6 +119,7 @@
                 "onAddStep",
                 "onRemoveStep",
                 "onHelp",
+                "onRunTest"
             );
             
             this.activityState = new ActivityState();
@@ -122,7 +130,8 @@
             this.treatmentSteps.bind("add", this.onAddStep);
             this.treatmentSteps.bind("remove", this.onRemoveStep);
             
-
+            //this.patientFactorsTemplate =
+            //   _.template(jQuery("#patient-factors").html()); 
             this.next();
             this.render();
         },
@@ -206,8 +215,8 @@
                 "decision": undefined
             });
             this.activityState.set('node', new_last_step);
-        },
 
+        },
         onDecisionPoint: function(evt) {
             var self = this;
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
@@ -240,9 +249,14 @@
             var srcElement = evt.srcElement || evt.target || evt.originalTarget;
             var parent = jQuery(srcElement).parents('div.treatment-step')[0];
             var helpText = jQuery(parent).find('div.treatment-step-help');
+            
             jQuery("div.treatment-step-help:visible").not(helpText).hide();
             jQuery(helpText).toggle();
         },
+        onRunTest: function(evt) {
+            var self = this;
+            self.next();
+        }
 
     });
 
