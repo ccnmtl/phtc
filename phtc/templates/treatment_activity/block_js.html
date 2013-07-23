@@ -143,16 +143,16 @@
                                   <% var answer = children_list[i]; %>
                                   <div>
                                         <button type="button" value = "<%= answer['value'] %>"class="btn btn-small btn-info btn-primary decision-point-button">
-                                            <%= answer['name'] %> ( value <%= answer['value'] %>)
+                                            <%= answer['name'] %>
                                         </button>
                                   </div>
                             <% } %>
                         </div>
                     <% } else { %>
                         <p class="step-content">
-                            <span> <% statusDescription%>bbbb</span>
-                            <button type="button" class="btn btn-small choose-status-again"
-                                data-loading-text="Loading..."><i class="icon-refresh"></i>aaaaa Choose again </button>                        
+                            <span><%=children_list[decision - 1]['name']%></span>
+                            <button type="button" class="btn btn-small choose-again"
+                                data-id="<%=id%>" data-loading-text="Loading..."><i class="icon-refresh"></i> Choose again</button>                        
                         </p>
                     <% } %>
                 </p>
