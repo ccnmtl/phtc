@@ -66,6 +66,7 @@ urlpatterns = patterns(
     (r'^_pagetree/', include('pagetree.urls')),
     (r'^_quiz/', include('quizblock.urls')),
     (r'^_rgt/', include('phtc.treatment_activity.urls')),
+    (r'^_logic_model/', include('phtc.logic_model.urls')),
     # these need to be last
     (r'^edit/(?P<path>.*)$', 'phtc.main.views.edit_page',
      {}, 'edit-page'),
