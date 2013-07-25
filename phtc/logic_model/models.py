@@ -2,122 +2,46 @@ from django.db import models
 from django.contrib.contenttypes import generic
 from pagetree.models import PageBlock
 from django import forms
-from treebeard.mp_tree import MP_Node
+
+class Scenario  (models.Model):
+    title = models.CharField(max_length=256, default = '')
+    difficulty = models.CharField(max_length=256, default = '')
+    order_rank = models.IntegerField(default=0, null=True, blank=True, )
+    instructions = models.TextField(null=True, blank=True, default = '')
+
+    class Meta:
+        ordering = ['order_rank']
+
+    def __unicode__(self):
+        return self.title
+
+    def to_json(self):
+        return {
+            'title': self.title,
+            'instructions': self.instructions
+        }
+
+class Column (models.Model):
+    name = models.CharField(max_length=256, default = '')
+    order_rank = models.IntegerField(default=0, null=True, blank=True, )
+    css_classes = models.CharField(max_length=256, null=True, blank=True, default = '')
+    help_definition  = models.TextField(null=True, blank=True, default = '')
+    help_examples  = models.TextField(null=True, blank=True, default = '')
+    flavor = models.CharField(max_length=256, default = '')
+    class Meta:
+        ordering = ['order_rank']
 
 
-NODE_CHOICES = (
-    ('RT', 'Root'), # trivial -- at the very top.
-    ('PR', 'Parent'), #Decision Point Branch -- similar to Decision Point, but different and appears more friendly to non-binary
-    ('IF', 'TreatmentStep'), #  Generic Treatment Step  -- trivial -- describes what happens .
-    ('DP', 'DecisionPoint'), # shows a yes  or no question, returns 1 or 0.
-    ('ST', 'Stop') # trivial -- a leaf node.
-)
+    def __unicode__(self):
+        return self.name
 
-STATUS_CHOICES = (
-    (0, 'Treatment Naive'),
-    (1, 'Prior Null Responder'),
-    (2, 'Prior Relapser'),
-    (3, 'Prior Partial Responder')
-)
-
-DRUG_CHOICES = (
-    ('boceprevir', 'Boceprevir'),
-    ('telaprevir', 'Telaprevir')
-)
-
-"""
-
-TODO wireframes
-
-    Are we adding steps before/after step 4 for reflection?
-
-    Are we allowing users to submit more than one logic_model per scenario?
-        I assume not, but if so we need wireframes about how to navigate between the different
-        responses to the same scenario.
-
-    How does the user get back to the list of logic models once they're done submitting a response?
-        Hint -- maybe a conclusion page.
-
-    The wireframes don't show the regular Forest back and next buttons.
-
-
-        How is a user supposed to leave the activity?
-
-        If the user does leave the activity, are they prompted about unfinished scenarios or logic models?
-
-    Wireframes re: user-created scenario -- how does that work?
-    The wireframes don't describe what happens when a user clicks "Your Own Scenario", then Begin.
-        How many scenarios are allowed per user per pageblock? (Is there a max of 1?
-            Or does a user build up a portfolio of logic models?)
-
-
-    You can both click and drag boxes. I'm assuming the following common rules:
-        When you click a box it becomes editable and a cursor appears.
-        When you click *outside* a box you were editing, it loses focus and the new contents are saved.
-        When you *drag* a box it starts to move.
-
-
-
-Here is the model:
-    column
-        ""A column in the activity. Everything in this table is shared by all possible scenarios.""
-        title            (text)
-        ordering         (int)
-        css_classes      (text)
-        help_definition  (free HTML)
-        help_examples    (free HTML)
-        flavor           (first / last / middle_step)
-
-    LogicModelBlock
-        ""A pageblock that displays a collection of scenarios and links to CRUD them.""
-        pageblock              (GenericRelation)
-        allow_user_contributed (boolean)
-
-    scenario
-        ""A case study describing a problem. The participants are challenged to propose a way to solve it. Their response
-        takes the form of a logic_model.""
-        LogicModelBlock (FK)
-        user            (FK) (in case of user-contributed scenarios.)
-        instructions    (text) (this is editable to users in the case of a user_contributed scenario.)
-        special_flags   (text) (a way to describe anything funky about this scenario)
-        css_classes     (text)
-        notes_1         (text)
-        notes_2         (text)
-        notes_3         (text)
-        row_count       (int)
-        difficulty      (simple/moderate/complex)
-
-    logic_model
-        ""A logic model describes a particular user's response to the case study provided by the scenario.""
-        expert          (boolean)
-        user            (FK)
-        scenario        (FK)
-        pre_reflection  (text)
-        post_reflection (text)
-        other_notes     (text)
-        created         (timestamp)
-        modified        (timestamp)
-        finished        (boolean)
-        public          (boolean)
-
-    content_box
-        "" What one user typed in one box in response to a particular scenario.""
-        logic_model     (FK)
-        column          (FK)
-        row             (int)
-        html            (text)
-
-******
-    NOTES:
-        We are deliberately not making up our mind about whether a user can submit more than one
-        logic_model per scenario. I would assume this would be on a per-application basis.
-
-
-
-
-
-
-"""
+    def to_json(self):
+        return {
+            'css_classes': self.css_classes,
+            'help_definition': self.help_definition,
+            'help_examples': self.help_examples,
+            'flavor': self.flavor
+        }
 
 class LogicModelBlock(models.Model):
     pageblocks = generic.GenericRelation(PageBlock)

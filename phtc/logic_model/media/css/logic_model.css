@@ -1,3 +1,12 @@
+
+header#masthead {
+  height:60px !important;
+}
+
+.row {
+  padding-top: 0px;
+}
+
 /*
 
 .module-rgt-activity {

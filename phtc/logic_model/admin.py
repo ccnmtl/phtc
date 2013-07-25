@@ -1,16 +1,19 @@
 from django.contrib import admin
-#from phtc.logic_model.models import TreatmentNode, TreatmentPath
-#from treebeard.admin import TreeAdmin
+from phtc.logic_model.models import Column, Scenario
 
-if 1 == 0:
-	admin.site.register(TreatmentNode, TreeAdmin)
+class ColumnAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__',
+    				'order_rank',
+                    'flavor')
 
 
-	class TreatmentPathAdmin(admin.ModelAdmin):
-	    list_display = ('__unicode__',
-	                    'drug_choice',
-	                    'treatment_status',
-	                    'cirrhosis',
-	                    'tree')
 
-	admin.site.register(TreatmentPath, TreatmentPathAdmin)
+admin.site.register(Column, ColumnAdmin)
+
+class ScenarioAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__',
+    				'order_rank')
+
+
+
+admin.site.register(Scenario, ScenarioAdmin)

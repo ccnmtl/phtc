@@ -1,4 +1,32 @@
 (function (jQuery) {
+
+    if (1 == 0){
+        function GamePhase(the_name) {
+            this.name = the_name;
+            console.log ('a');
+        }
+         
+        GamePhase.prototype.do_something = function(x)      {
+        }
+         
+        var phase = new GamePhase('goat');
+         
+        console.log (phase);
+    }
+
+    
+/*
+
+
+        css_classes      (text)
+        help_definition  (free HTML)
+        help_examples    (free HTML)
+        flavor           (first / last / middle_step)
+
+        */
+/*
+    
+
 /*
     function trickit() {
        $($('.cirrhosis')[1]).click();
@@ -6,14 +34,13 @@
        $($('.treatment-status')[0]).trigger('change');
        $($('.drug')[0]).click();
     }
-
+*/
     Backbone.sync = function (method, model, success, error) {
     };
-    
+  /*  
     String.prototype.capitalize = function() {
         return this.charAt(0).toUpperCase() + this.slice(1);
     };
-    
     var TreatmentStep = Backbone.Model.extend({
         defaults: {
             'minimized': false,
@@ -65,28 +92,36 @@
             });            
         }
     });
-        
+*/
     var ActivityState = Backbone.Model.extend({
         defaults: {
+        /*
             path: '',
             node: '',
             cirrhosis: undefined,
             status: undefined,
             drug: undefined
+            */
         },
+        /*
         statusDescription: function() {
             return '';
         },
+        */
         toTemplate: function() {
+        
             var ctx = _(this.attributes).clone();
+            /*
             ctx.patient_factors_complete =
                 this.get('cirrhosis') !== undefined &&
                 this.get('status') !== undefined &&
                 this.get('drug') !== undefined;
             ctx.statusDescription = this.statusDescription();
+            */
             return ctx;
-
+        
         },
+        /*
         getNextUrl: function() {
             var url = '/_rgt/';
             if (this.get('path')) {
@@ -94,12 +129,15 @@
             }
             return url;  
         },        
+        */
         reset: function() {
+            /*
             this.set('path', '');
             this.set('node', '');
+            */
         }
     });
-*/
+
     window.LogicModelView = Backbone.View.extend({
         events: {
   /*
@@ -113,9 +151,10 @@
         },
         initialize: function(options) {
 
-            _.bindAll(this //,
+            _.bindAll(this ,
+
+                "render" //,
 /*
-                "render",
                 "onResetState",
                 "onDecisionPoint",
                 "onChooseAgain",
@@ -125,11 +164,11 @@
                 "onRunTest"
  */
             );
-        /*           
             this.activityState = new ActivityState();
             this.activityState.reset();
             this.activityState.bind("change", this.render);
             
+        /*           
             this.treatmentSteps = new TreatmentStepCollection();
             this.treatmentSteps.bind("add", this.onAddStep);
             this.treatmentSteps.bind("remove", this.onRemoveStep);
@@ -137,17 +176,62 @@
             //this.patientFactorsTemplate =
             //   _.template(jQuery("#patient-factors").html()); 
             this.next();
-            this.render();
             */
+            this.render();
         },
         render: function() {
-            /*
             var self = this;
             var templateIdx = this.activityState.get('template');
             var context = this.activityState.toTemplate();
-            jQuery("div.treatment-activity-view, div.treatment-steps, div.factors-choice").fadeIn("fast");
-            */
+            jQuery("div.logic-model-view, div.logic-model-stuff").fadeIn("fast");
+            jQuery("li.next, h1.section-label-header, li.previous").hide();
+            self.getSettings();
         },
+
+        getSettings: function() {
+            // Fetch the list of columns and scenarios from the back end.
+            jQuery.ajax({
+                type: 'POST',
+                url: '/_logic_model/settings/',
+                data: {
+                },
+                dataType: 'json',
+                error: function () {
+                    alert('There was an error.');
+                },
+                success: function (json, textStatus, xhr) {
+                    console.log(json);
+                    /*
+                    self.activityState.set({'template': 1,
+                                            'path': json.path,
+                                            'node': json.node});
+                    
+                    // Minimize steps 0 - n-1
+                    var week = 0;
+                    
+                    self.treatmentSteps.forEach(function(step, idx) {
+                         week += step.get('duration');
+                         step.set('minimized', true);                
+                    });
+                    
+                    // Appear the new treatment steps
+                    var ts;
+                    for (var i = 0; i < json.steps.length; i++) {
+                        var opts = json.steps[i];
+                        opts.can_edit = json.can_edit;
+                        
+                        ts = new TreatmentStep(opts);
+                        ts.set('week', week);
+                        ts.set('last', i === (json.steps.length - 1));
+                        self.treatmentSteps.add(ts);
+                        week += ts.get('duration');
+                    }
+                    */
+                }
+            });
+
+
+        }
         /*
         next: function() {
             var self = this;
@@ -268,6 +352,6 @@
 */
     });
 
-alert ('goat');
+    //alert ('goat');
 
 }(jQuery));    

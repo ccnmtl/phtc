@@ -8,6 +8,9 @@ urlpatterns = patterns(
     (r'^media/(?P<path>.*)$', 'django.views.static.serve',
      {'document_root': media_root}),
 
+    url(r'^settings/$',
+        'phtc.logic_model.views.settings',
+        name='settings'),
 
 #    url(r'^$',
 #        'phtc.logic_model.views.choose_treatment_path',
