@@ -37,6 +37,56 @@
 */
     Backbone.sync = function (method, model, success, error) {
     };
+
+
+    var Column = Backbone.Model.extend({
+        defaults: {
+        },
+        aboutMe: function() {
+        },
+    });
+
+    var ColumnCollection = Backbone.Collection.extend({
+        model: Column
+
+
+
+    });
+
+    var ColumnView = Backbone.View.extend({
+
+        tagName: "span",
+        className: "column_span",
+
+        events: {
+        },
+        initialize: function (options, render) {
+            var self = this;
+            _.bindAll(this, "render", "unrender");       
+            //this.el.tagName = 'span';
+            this.model.bind("destroy", this.unrender);
+            this.model.bind("change:minimized", this.render);
+            this.template = _.template(jQuery("#logic-model-column").html());
+            this.render();
+
+        },
+        render: function () {
+            //var eltStep = jQuery(this.el).find("div.treatment-step");            
+            // not sure what this last thing does.
+            var ctx = this.model.toJSON();
+            console.log (this.el);
+            this.el.innerHTML = this.template(ctx);
+        },
+        unrender: function () {
+            jQuery(this.el).fadeOut('fast', function() {
+                jQuery(this.el).remove();
+            });            
+        }
+    });
+
+    
+
+
   /*  
     String.prototype.capitalize = function() {
         return this.charAt(0).toUpperCase() + this.slice(1);
@@ -150,16 +200,18 @@
  */
         },
         initialize: function(options) {
-
+            
             _.bindAll(this ,
 
-                "render" //,
+                "render" ,
 /*
                 "onResetState",
                 "onDecisionPoint",
                 "onChooseAgain",
-                "onAddStep",
-                "onRemoveStep",
+                */
+                "onAddColumn",
+                "onRemoveColumn"
+                /*
                 "onHelp",
                 "onRunTest"
  */
@@ -168,8 +220,15 @@
             this.activityState.reset();
             this.activityState.bind("change", this.render);
             
-        /*           
-            this.treatmentSteps = new TreatmentStepCollection();
+  
+            this.columns = new ColumnCollection();
+
+            this.columns.bind("add", this.onAddColumn);
+            this.columns.bind("remove", this.onRemoveColumn);
+
+                    /*         
+
+
             this.treatmentSteps.bind("add", this.onAddStep);
             this.treatmentSteps.bind("remove", this.onRemoveStep);
             
@@ -179,6 +238,9 @@
             */
             this.render();
         },
+
+
+
         render: function() {
             var self = this;
             var templateIdx = this.activityState.get('template');
@@ -188,8 +250,13 @@
             self.getSettings();
         },
 
+
+
         getSettings: function() {
             // Fetch the list of columns and scenarios from the back end.
+            var self = this;
+
+
             jQuery.ajax({
                 type: 'POST',
                 url: '/_logic_model/settings/',
@@ -199,8 +266,19 @@
                 error: function () {
                     alert('There was an error.');
                 },
+                
+                //success: this.populateColumns,
+
                 success: function (json, textStatus, xhr) {
-                    console.log(json);
+                    console.log(json.columns);
+
+                    /*
+                    for (var i = 0; i < json.columns.length; i++) {
+                        var col = json.columns[i];
+                        console.log (col['name']);
+                    }
+                    */
+                    self.columns.add(json.columns);
                     /*
                     self.activityState.set({'template': 1,
                                             'path': json.path,
@@ -232,6 +310,23 @@
 
 
         }
+        ,onAddColumn: function(column) {
+            
+            var view = new ColumnView({
+                model: column,
+                parentView: this
+            });
+
+            console.log (view.el);
+            jQuery("div.logic-model-columns").append(view.el);
+            console.log ("addingcolumn");
+        },
+        onRemoveColumn: function(column) {
+            /*
+            step.destroy();
+            */
+            console.log ("removingcolumn");
+        },
         /*
         next: function() {
             var self = this;

@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseForbidden
-from phtc.logic_model.models import Column, Scenario
+from phtc.logic_model.models import Column, Scenario, GamePhase
 import simplejson
 
 @login_required
@@ -9,17 +9,19 @@ def settings(request):
     #if not request.is_ajax() or request.method != "POST":
     #    return HttpResponseForbidden()
 
-    columns =   [c.to_json() for c in Column.objects.all()]
-    scenarios = [s.to_json() for s in Scenario.objects.all()]
+    columns =     [c.to_json() for c in Column.objects.all()]
+    scenarios =   [s.to_json() for s in Scenario.objects.all()]
+    game_phases = [g.to_json() for g in GamePhase.objects.all()]
 
     the_settings = {
         'columns': columns,
-        'scenarios': scenarios
+        'scenarios': scenarios,
+        'game_phases': game_phases
     }
 
     return HttpResponse(simplejson.dumps(the_settings, indent=2),  mimetype="application/json")
 
-# i don't think we actually need any views here...
+# i don't think we actually need any other views here...
 if 1 == 0:
     @login_required
     def get_next_steps(request, path_id, node_id):

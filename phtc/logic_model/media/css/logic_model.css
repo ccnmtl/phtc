@@ -1,4 +1,3 @@
-
 header#masthead {
   height:60px !important;
 }
@@ -7,6 +6,30 @@ header#masthead {
   padding-top: 0px;
 }
 
+span.column_span {
+    width:  90px;
+    margin-left:0px;
+    font-size: .8em;
+}
+
+span.logic_model_box {
+    height: 100px;
+    margin-left:0px;
+}
+
+div.logic-model-columns {
+   clear:both; 
+}
+
+div.reflections_box {
+   clear:both; 
+}
+
+
+div.reflections_box  textarea { 
+   clear:both; 
+    font-size: .8em;
+}
 /*
 
 .module-rgt-activity {

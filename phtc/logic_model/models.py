@@ -3,6 +3,25 @@ from django.contrib.contenttypes import generic
 from pagetree.models import PageBlock
 from django import forms
 
+class GamePhase (models.Model):
+    name = models.CharField(max_length=256, default = '')
+    instructions = models.TextField(null=True, blank=True, default = '')
+    order_rank = models.IntegerField(default=0, null=True, blank=True, )
+    css_classes = models.CharField(max_length=256, null=True, blank=True, default = '')
+
+    class Meta:
+        ordering = ['order_rank']
+
+    def __unicode__(self):
+        return self.name
+
+    def to_json(self):
+        return {
+            'name': self.name,
+            'instructions': self.instructions,
+            'css_classes': self.css_classes
+        }
+
 class Scenario  (models.Model):
     title = models.CharField(max_length=256, default = '')
     difficulty = models.CharField(max_length=256, default = '')
@@ -18,7 +37,8 @@ class Scenario  (models.Model):
     def to_json(self):
         return {
             'title': self.title,
-            'instructions': self.instructions
+            'instructions': self.instructions,
+            'difficulty': self.difficulty
         }
 
 class Column (models.Model):
@@ -37,6 +57,7 @@ class Column (models.Model):
 
     def to_json(self):
         return {
+            'name': self.name,
             'css_classes': self.css_classes,
             'help_definition': self.help_definition,
             'help_examples': self.help_examples,
