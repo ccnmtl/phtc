@@ -14,7 +14,7 @@
 
     var ColumnView = Backbone.View.extend({
         tagName: "span",
-        className: "column_span",
+        className: "backbone_column_span",
         events: {
         },
         initialize: function (options, render) {
@@ -41,9 +41,10 @@
 
     window.LogicModelView = Backbone.View.extend({
         events: {
+            
+            "click .next_phase": "goToNextPhase",
+            "click .previous_phase": "goToPreviousPhase"
             /*
-            "click .reset-state": "onResetState",
-            "click .decision-point-button": "onDecisionPoint",
             "click .choose-again": "onChooseAgain",
             "click i.icon-question-sign": "onHelp",
             "click .choose-cirrhosis-again": "onResetState",
@@ -54,25 +55,28 @@
             // new ones for changing the scenario:
 
         },
+        phases: null,
+        current_phase : null,
+
         initialize: function(options) {
+            var self = this;
             _.bindAll(this ,
                 "render" ,
                 "onAddColumn",
-                "onRemoveColumn"
+                "onRemoveColumn",
+                "goToNextPhase",
+                "goToPreviousPhase"
+
             );
-            this.getSettings();
+            self.getSettings();
             // Paint the columns:
-            this.columns = new ColumnCollection();
+            self.columns = new ColumnCollection();
             //this.activityState.bind("change", this.render);
-            this.columns.bind("add", this.onAddColumn);
-            this.columns.bind("remove", this.onRemoveColumn);
-            this.render();
+            self.columns.bind("add", this.onAddColumn);
+            self.columns.bind("remove", this.onRemoveColumn);
+
         },
 
-        render: function() {
-            var self = this;
-            jQuery("li.next, h1.section-label-header, li.previous").hide();
-        },
 
         getSettings: function() {
             // Fetch the list of columns and scenarios from the back end.
@@ -88,10 +92,63 @@
                 },
                 success: function (json, textStatus, xhr) {
                     self.columns.add(json.columns);
+                    self.phases = json.game_phases;
+                    self.setUpPhases();
+                    self.render();
                 }
             });
-        }
-        ,onAddColumn: function(column) {
+        },
+        setUpPhases : function() {
+            var self = this;
+            self.current_phase = 0;
+        },
+
+        paintPhase: function() {
+            var self = this;
+            var phase_info = self.phases[self.current_phase];
+            
+
+            jQuery("#phase_container").attr("class", phase_info.css_classes);
+
+            jQuery('.logic-model-game-phase-instructions').html(phase_info.instructions);
+            if (self.current_phase == 0) {
+                jQuery ('.previous_phase').hide();
+            } else {
+                jQuery ('.previous_phase').show();
+            }
+            if (self.current_phase == self.phases.length - 1) {
+                jQuery ('.next_phase').hide();
+            } else {
+                jQuery ('.next_phase').show();
+            }
+
+        },
+
+
+
+        goToNextPhase: function() {
+            var self = this;
+            self.current_phase = self.current_phase  + 1;
+            self.paintPhase();
+        },
+
+
+        goToPreviousPhase: function() {
+            var self = this;
+            jQuery("li.next, h1.section-label-header, li.previous").hide();
+            self.current_phase = self.current_phase - 1;
+            self.paintPhase();
+        },
+
+        render: function() {
+            var self = this;
+            jQuery("li.next, h1.section-label-header, li.previous").hide();
+            //
+            self.paintPhase();
+        },
+
+        onAddColumn: function(column) {
+            var self = this;
             var view = new ColumnView({
                 model: column,
                 parentView: this
@@ -99,6 +156,7 @@
             jQuery("div.logic-model-columns").append(view.el);
         },
         onRemoveColumn: function(column) {
+            var self = this;
             console.log ("removingcolumn");
         },
     });
