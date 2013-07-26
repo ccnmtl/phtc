@@ -6,30 +6,62 @@ header#masthead {
   padding-top: 0px;
 }
 
+
+
+
+textarea#reflections {
+  margin: 2px;
+  padding: 2px;
+  width:835px;
+  clear:both;
+  font-size: .8em;
+}
+
+.logic-model-columns {
+    width: 840px;
+    height: 420px;
+    border: 1px solid #ccc;
+}
+
+.centered {
+  margin: auto;
+  display: block;
+}
+
+.divclearfix {
+  clear: both;
+}
+
 span.column_span {
-    width:  90px;
-    margin-left:0px;
-    font-size: .8em;
-}
-
-span.logic_model_box {
-    height: 100px;
+    width:  140px;
     margin-left:0px;
 }
 
-div.logic-model-columns {
-   clear:both; 
+.cell {
+  width: 130px;
+  height: 50px;
+  margin: 2px;
+  padding: 2px;
+  float: left;
+  border: 1px solid #ccc;
+  font-size: .8em;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-div.reflections_box {
-   clear:both; 
+.colhead {
+  font-size: .8em;
+  width: 130px;
+  height: 50px;
+  margin: 2px;
+  padding: 2px; 
+  float: left;
+  border: 1px solid #ccc;
+  background-color: #ccc;
+
 }
 
 
-div.reflections_box  textarea { 
-   clear:both; 
-    font-size: .8em;
-}
+
 /*
 
 .module-rgt-activity {
