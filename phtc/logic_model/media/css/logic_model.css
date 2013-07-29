@@ -73,9 +73,19 @@ input.text_box {
   cursor: pointer;
 
 }
+.box_droppable {
+  height: 50px;
+}
 
 .active_droppable {
   background-color: green;
+}
+
+.box_draggable .box_handle {
+  position: relative;
+  left : 100px;
+  top : 10px;
+
 }
 
 .hover_droppable {

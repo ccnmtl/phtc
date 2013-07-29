@@ -3,7 +3,10 @@
 
 
 
+    function repaint_droppables () {
 
+
+    }
 
 
 
@@ -16,6 +19,7 @@
 
     var Box = Backbone.Model.extend({
         defaults: {
+            "contents":  "",
         },
         aboutMe: function() {
         },
@@ -27,23 +31,26 @@
     var BoxView = Backbone.View.extend({
         className: "backbone_box_div",
         events: {
+            'change input' : 'testForDraggable'
         },
         initialize: function (options, render) {
             var self = this;
-            _.bindAll(this, "render", "unrender", "onDrop", "setUpDroppable", "setUpDraggable");
+            _.bindAll(this, "render", "unrender", "setUpDroppable", "setUpDraggable", "testForDraggable");
             this.model.bind("destroy", this.unrender);
-            this.model.bind("change:minimized", this.render);
             this.template = _.template(jQuery("#logic-model-box").html());
             this.render();
         },
 
         onDrop: function (event, ui) {
-            console.log ('on drop');
             the_draggable = ui.draggable;
             var origin_text = the_draggable.find('.text_box').val();
             the_draggable.css({top: '0px', left: '0px'});
-
+            jQuery( event.target ).find( ".placeholder" ).remove();
             jQuery (event.target).find('.text_box').val(origin_text);
+            jQuery (event.target).find ('.box_droppable').droppable( "disable" );
+            jQuery (event.target).find ('.box_draggable').draggable( "enable" );
+            jQuery (event.target).find ('.box_handle').show();
+
         },
 
         setUpDroppable: function (){
@@ -52,20 +59,35 @@
                 accept: ".box_draggable" ,
                 /* activeClass: "active_droppable", */
                 hoverClass: "hover_droppable",
-                drop: self.onDrop
+                drop: self.onDrop,
+                activate: self.testForDraggable
             }
             jQuery (this.el).find ('.box_droppable').droppable(droppable_options);
 
         },
+        testForDraggable: function() {
+            console.log ('testiong for draggable.')
+            if (jQuery (this.el).find('.text_box').val().length > 0) {
+                jQuery (this.el).find ('.box_droppable').droppable( "disable" );
+                jQuery (this.el).find ('.box_draggable').draggable( "enable" );
+                jQuery (this.el).find ('.box_handle').show();
+            } else { // empty
+                jQuery (this.el).find ('.box_droppable').droppable( "enable" );
+                jQuery (this.el).find ('.box_draggable').draggable( "disable" );
+                jQuery (this.el).find ('.box_handle').hide();
+            }
+
+        },
+
 
         setUpDraggable: function () {
             var self = this;
             draggable_options = {
                 handle : '.box_handle',
             }
-
             jQuery (this.el).find ('.box_draggable').draggable(draggable_options);
         },
+
         render: function () {
             var self = this;
             var ctx = this.model.toJSON();
@@ -73,6 +95,8 @@
 
             self.setUpDraggable();
             self.setUpDroppable();
+            self.testForDraggable();
+            //self.activateDraggable();
             return this;
         },
 
