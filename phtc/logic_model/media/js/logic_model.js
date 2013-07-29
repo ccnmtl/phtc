@@ -2,6 +2,49 @@
     Backbone.sync = function (method, model, success, error) {
     };
 
+    var DEBUG_PHASE = 4;
+
+    var Box = Backbone.Model.extend({
+        defaults: {
+        },
+        aboutMe: function() {
+        },
+    });
+    var BoxCollection = Backbone.Collection.extend({
+        model: Box
+    });
+
+    var BoxView = Backbone.View.extend({
+        className: "backbone_box_div",
+        events: {
+        },
+        initialize: function (options, render) {
+            var self = this;
+            _.bindAll(this, "render", "unrender");
+            this.model.bind("destroy", this.unrender);
+            this.model.bind("change:minimized", this.render);
+            this.template = _.template(jQuery("#logic-model-box").html());
+            this.render();
+        },
+
+
+
+        render: function () {
+            var ctx = this.model.toJSON();
+            this.el.innerHTML = this.template(ctx);
+            return this;
+        },
+        unrender: function () {
+            jQuery(this.el).fadeOut('fast', function() {
+                jQuery(this.el).remove();
+            });            
+        },
+    });
+
+
+    //////////////////
+
+
     var Column = Backbone.Model.extend({
         defaults: {
         },
@@ -19,21 +62,51 @@
         },
         initialize: function (options, render) {
             var self = this;
-            _.bindAll(this, "render", "unrender");
-            this.model.bind("destroy", this.unrender);
-            this.model.bind("change:minimized", this.render);
-            this.template = _.template(jQuery("#logic-model-column").html());
-            this.render();
+            _.bindAll(self, "render", "unrender",  "addBox");
+            self.model.bind("destroy", self.unrender);
+            self.model.bind("change:minimized", self.render);
+            
+            self.boxes = new BoxCollection();
+            self.boxes.add ([
+                    { name: '1'  },
+                    { name: '2' },
+                    { name: '3' },
+                    { name: '4' },
+                    { name: '5' },
+                    { name: '6' }
+            ]);
+            
+            self.template = _.template(jQuery("#logic-model-column").html());
+            self.render();
         },
+
+        addBoxes: function() {
+            var self = this;
+            self.boxes.each(self.addBox);
+        },
+
+
+        addBox: function(box) {
+            var self = this;
+            view = new BoxView({
+                model: box,
+                parentView : self
+            });
+            jQuery(self.el).find('.boxes').append(view.el);
+        },
+
         render: function () {
+            var self = this;
             var ctx = this.model.toJSON();
             this.el.innerHTML = this.template(ctx);
+            self.addBoxes();
+            return this;
         },
         unrender: function () {
             jQuery(this.el).fadeOut('fast', function() {
                 jQuery(this.el).remove();
             });            
-        }
+        },
     });
 
     ///////
@@ -100,7 +173,11 @@
         },
         setUpPhases : function() {
             var self = this;
-            self.current_phase = 0;
+            if (DEBUG_PHASE != undefined) {
+                self.current_phase = DEBUG_PHASE;
+            } else {
+                self.current_phase = 0;
+            }
         },
 
         paintPhase: function() {
