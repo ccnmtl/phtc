@@ -64,7 +64,23 @@ span.backbone_column_span {
 
 /* Phases of the game */
 
+input.text_box {
+  width : 50px;
 
+}
+
+.box_draggable {
+  cursor: pointer;
+
+}
+
+.active_droppable {
+  background-color: green;
+}
+
+.hover_droppable {
+  background-color: blue;
+}
 
 /* Pick scenario:*/
 #phase_container.pick_scenario div.logic-model-columns, 
@@ -88,7 +104,6 @@ span.backbone_column_span {
 }
 
 /* Add long term outcomes:*/
-
 #phase_container.add_long_term_outcomes .column_span.inputs,
 #phase_container.add_long_term_outcomes .column_span.outputs,
 #phase_container.add_long_term_outcomes .column_span.activities,

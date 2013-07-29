@@ -1,4 +1,14 @@
 (function (jQuery) {
+
+
+
+
+
+
+
+
+
+
     Backbone.sync = function (method, model, success, error) {
     };
 
@@ -20,25 +30,60 @@
         },
         initialize: function (options, render) {
             var self = this;
-            _.bindAll(this, "render", "unrender");
+            _.bindAll(this, "render", "unrender", "onDrop", "setUpDroppable", "setUpDraggable");
             this.model.bind("destroy", this.unrender);
             this.model.bind("change:minimized", this.render);
             this.template = _.template(jQuery("#logic-model-box").html());
             this.render();
         },
 
+        onDrop: function (event, ui) {
+            console.log ('on drop');
+            the_draggable = ui.draggable;
+            var origin_text = the_draggable.find('.text_box').val();
+            the_draggable.css({top: '0px', left: '0px'});
 
+            jQuery (event.target).find('.text_box').val(origin_text);
+        },
 
+        setUpDroppable: function (){
+            var self = this;
+            droppable_options = {
+                accept: ".box_draggable" ,
+                /* activeClass: "active_droppable", */
+                hoverClass: "hover_droppable",
+                drop: self.onDrop
+            }
+            jQuery (this.el).find ('.box_droppable').droppable(droppable_options);
+
+        },
+
+        setUpDraggable: function () {
+            var self = this;
+            draggable_options = {
+                handle : '.box_handle',
+            }
+
+            jQuery (this.el).find ('.box_draggable').draggable(draggable_options);
+        },
         render: function () {
+            var self = this;
             var ctx = this.model.toJSON();
             this.el.innerHTML = this.template(ctx);
+
+            self.setUpDraggable();
+            self.setUpDroppable();
             return this;
         },
+
         unrender: function () {
             jQuery(this.el).fadeOut('fast', function() {
                 jQuery(this.el).remove();
             });            
         },
+
+
+
     });
 
 
