@@ -17,9 +17,30 @@ class GamePhase (models.Model):
 
     def to_json(self):
         return {
+            'id': self.id,
             'name': self.name,
             'instructions': self.instructions,
             'css_classes': self.css_classes
+        }
+
+
+class ActivePhase (models.Model):
+    """ Indicates that a particular column is active (editable) during a particular phase"""
+
+    def __unicode__(self):
+        return "Column \"%s\" is active during game phase \"%s\"" % (self.column, self.game_phase)
+
+    game_phase = models.ForeignKey('GamePhase')
+    column     = models.ForeignKey('Column')
+
+    class Meta:
+        ordering = ['game_phase','column']
+        unique_together = ("game_phase", "column")
+
+    def to_json(self):
+        return {
+            'game_phase_id': self.game_phase.id,
+            'column_id'    : self.column.id
         }
 
 class Scenario  (models.Model):
@@ -36,6 +57,7 @@ class Scenario  (models.Model):
 
     def to_json(self):
         return {
+            'id': self.id,
             'title': self.title,
             'instructions': self.instructions,
             'difficulty': self.difficulty
@@ -57,6 +79,7 @@ class Column (models.Model):
 
     def to_json(self):
         return {
+            'id': self.id,
             'name': self.name,
             'css_classes': self.css_classes,
             'help_definition': self.help_definition,

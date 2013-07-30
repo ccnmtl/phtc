@@ -64,9 +64,11 @@ span.backbone_column_span {
 
 /* Phases of the game */
 
-input.text_box {
+.text_box {
   display: inline;
   position: relative;
+  font-size: .8em;
+  line-height: 1em; 
   top:    10px;
   left:   10px;
   width : 80px;
@@ -110,6 +112,14 @@ input.text_box {
   background-color: blue;
 }
 
+
+
+.inactive_box {
+  background-color: darkgrey;
+  opacity:0.4;
+  filter:alpha(opacity=40); /* For IE8 and earlier */
+}
+
 /* Pick scenario:*/
 #phase_container.pick_scenario div.logic-model-columns, 
 #phase_container.pick_scenario textarea#reflections {
@@ -119,57 +129,24 @@ input.text_box {
 
 /* Add inputs:*/
 
-#phase_container.add_inputs .column_span.outputs,
-#phase_container.add_inputs .column_span.activities,
-#phase_container.add_inputs .column_span.short_term_outcomes,
-#phase_container.add_inputs .column_span.intermediate_outcomes,
-#phase_container.add_inputs .column_span.long_term_outcomes
-{
-    background-color: grey;
-}
 #phase_container.add_inputs div.logic-model-initial-scenario_choice {
     display:none;
 }
 
-/* Add long term outcomes:*/
-#phase_container.add_long_term_outcomes .column_span.inputs,
-#phase_container.add_long_term_outcomes .column_span.outputs,
-#phase_container.add_long_term_outcomes .column_span.activities,
-#phase_container.add_long_term_outcomes .column_span.short_term_outcomes,
-#phase_container.add_long_term_outcomes .column_span.intermediate_outcomes
-{
-    background-color: grey;
-}
+/* Add long term outcomes */
 #phase_container.add_long_term_outcomes div.logic-model-initial-scenario_choice {
     display:none;
 }
 
-
 /* Add intermediate columns:*/
-
-
-
-#phase_container.add_intermediate_columns .column_span.inputs,
-#phase_container.add_intermediate_columns .column_span.long_term_outcomes
-{
-    background-color: grey;
-}
 #phase_container.add_intermediate_columns div.logic-model-initial-scenario_choice {
     display:none;
 }
-
-
-
-
-
 /* Finish work:*/
-
 #phase_container.finish_work div.logic-model-initial-scenario_choice {
     display:none;
 }
-
-
-/* Finish work:*/
+/* Conclusion:*/
 #phase_container.conclusion div.logic-model-initial-scenario_choice {
     display:none;
 }
