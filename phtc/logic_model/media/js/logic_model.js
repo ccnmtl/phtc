@@ -15,11 +15,9 @@
         },
     });
 
-
     var BoxCollection = Backbone.Collection.extend({
         model: Box
     });
-
 
     function turnOffBoth(element) {
         jQuery (element).find ('.box_droppable').droppable( "disable" );
@@ -55,21 +53,15 @@
             );
 
             self.model.bind("destroy", self.unrender);
-            //self.model.bind("testForDraggable", self.testForDraggable);
-
             self.model.bind("make_active", self.make_active);
             self.model.bind("make_inactive", self.make_inactive);
-
-
             self.model.bind("render", self.render);
             
             self.template = _.template(jQuery("#logic-model-box").html());
             var ctx = self.model.toJSON();
             self.el.innerHTML = self.template(ctx);
-            
             self.setUpDraggable();
             self.setUpDroppable();
-
             self.render();
         },
 
@@ -77,6 +69,8 @@
             var source = ui.draggable.context;
             var origin_text = jQuery(source).find('.text_box').val();
             var destination = event.target;
+            var the_actual_box = source.parentElement.parentElement;
+            
             //move the source back to its original spot:
             jQuery(source).css({top: '0px', left: '0px'});
             //remove the distracting placeholder:
@@ -89,14 +83,12 @@
             turnOnDraggable(destination);
             jQuery (destination).find ('.box_handle').show();
             // since the source is now empty, make it undraggable.
-            var the_actual_box = source.parentElement.parentElement;
             turnOffDraggable (the_actual_box);
             jQuery (the_actual_box).find ('.box_handle').hide();
 
         },
 
         setUpDroppable: function (){
-            //console.log ("in setupdroppable")
             var self = this;
             droppable_options = {
                 accept: ".box_draggable" ,
@@ -111,14 +103,12 @@
 
         hasText: function() {
             var self = this;
-
             if (jQuery (this.el).find('.text_box').val().length > 0) {
                 // this has content in it, so return true.
                 return true;
             }
             return false;
         },
-
 
         setUpDraggable: function () {
             var self = this;
@@ -139,7 +129,6 @@
                 jQuery (this.el).find ('.box_handle').hide();
             }
             else {
-
                 jQuery (this.el).removeClass ('inactive_box');
                 jQuery (this.el).find('.text_box').attr({'disabled':false})
                     if (self.hasText()) {
@@ -149,33 +138,23 @@
                         turnOffDraggable(this.el);
                         jQuery (this.el).find ('.box_handle').hide();
                     }
-
             }
-
-
-            //self.activateDraggable();
             return this;
         },
 
         make_active: function () {
             var self = this;
             self.model.set ({active: true});
-
         },
         make_inactive: function () {
             var self = this;
             self.model.set ({active: false});
         },
-
-
         unrender: function () {
             jQuery(this.el).fadeOut('fast', function() {
                 jQuery(this.el).remove();
             });            
         },
-
-
-
     });
 
 
@@ -202,10 +181,7 @@
         initialize: function (options, render) {
             var self = this;
             _.bindAll(self, "render", "unrender",  "addBox", "check_the_boxes");
-            //self.model.bind("destroy", self.unrender);
-            //self.model.bind("change:minimized", self.render);
             self.model.bind("check_the_boxes", self.check_the_boxes);
-            //console.log (self.model.title);
             self.boxes = new BoxCollection();
             self.boxes.add ([
                 { name: '1' },
@@ -219,8 +195,6 @@
             self.template = _.template(jQuery("#logic-model-column").html());
             self.render();
         },
-
-
 
         check_the_boxes: function() {
             var self = this;
@@ -265,22 +239,10 @@
 
     ///////
 
-
     window.LogicModelView = Backbone.View.extend({
         events: {
-            
             "click .next_phase": "goToNextPhase",
             "click .previous_phase": "goToPreviousPhase"
-            /*
-            "click .choose-again": "onChooseAgain",
-            "click i.icon-question-sign": "onHelp",
-            "click .choose-cirrhosis-again": "onResetState",
-            "click .run_test": "onRunTest"            
-            */
-            // new ones for changing the phase:
-
-            // new ones for changing the scenario:
-
         },
         phases: null,
         current_phase : null,
@@ -299,7 +261,6 @@
             self.getSettings();
             // Paint the columns:
             self.columns = new ColumnCollection();
-            //this.activityState.bind("change", this.render);
             self.columns.bind("add", this.onAddColumn);
             self.columns.bind("remove", this.onRemoveColumn);
 
@@ -334,30 +295,24 @@
             } else {
                 self.current_phase = 0;
             }
-
-
         },
 
         paintPhase: function() {
             var self = this;
+            jQuery("li.next, h1.section-label-header, li.previous").hide();
             var phase_info = self.phases[self.current_phase];
-            //console.log ('phase id is ' + phase_info.id);
             var active_columns_for_this_phase = self.columns_in_each_phase[phase_info.id];
-            //console.log (active_columns_for_this_phase);
             self.columns.each (function (col) {
-                //console.log (col.id)
-                var active = (active_columns_for_this_phase.indexOf (col.id) != -1 )
-                // console.log (active);
-                col.set ({active: active});
+                if (active_columns_for_this_phase != undefined) {
+                    var active = (active_columns_for_this_phase.indexOf (col.id) != -1 );
+                    col.set ({active: active});
+                }
+                // default is true, btw.
             });
-
             self.columns.each (function (a) { a.trigger ('check_the_boxes'); });
-            
-
             // set the #phase_container span so that
             // the CSS can properly paint this phase of the game.
             jQuery("#phase_container").attr("class", phase_info.css_classes);
-
             jQuery('.logic-model-game-phase-instructions').html(phase_info.instructions);
             if (self.current_phase == 0) {
                 jQuery ('.previous_phase').hide();
@@ -369,10 +324,7 @@
             } else {
                 jQuery ('.next_phase').show();
             }
-
         },
-
-
 
         goToNextPhase: function() {
             var self = this;
@@ -390,18 +342,10 @@
 
         render: function() {
             var self = this;
-            jQuery("li.next, h1.section-label-header, li.previous").hide();
-            //
             self.paintPhase();
         },
 
         onAddColumn: function(column) {
-            /*
-            console.log ('id is :')
-            console.log (column.get ('id'));
-            console.log ('name is :')
-            console.log (column.get ('name'));
-            */
             var self = this;
             var view = new ColumnView({
                 model: column,
@@ -414,6 +358,5 @@
             console.log ("removingcolumn");
         },
     });
-
 
 }(jQuery));    
