@@ -4,7 +4,7 @@
     Backbone.sync = function (method, model, success, error) {
     };
 
-    var DEBUG_PHASE = 1;
+    var DEBUG_PHASE = 0;
 
     var Box = Backbone.Model.extend({
         defaults: {
@@ -70,7 +70,7 @@
             var origin_text = jQuery(source).find('.text_box').val();
             var destination = event.target;
             var the_actual_box = source.parentElement.parentElement;
-            
+
             //move the source back to its original spot:
             jQuery(source).css({top: '0px', left: '0px'});
             //remove the distracting placeholder:
@@ -197,11 +197,14 @@
         },
 
         check_the_boxes: function() {
+            // this is basically a render function here.
             var self = this;
             if (self.model.get ('active')) {
                 self.boxes.each (function (a) { a.trigger ('make_active'); });
+                jQuery (this.el).addClass ('active_column');
             } else {
                 self.boxes.each (function (a) { a.trigger ('make_inactive'); });
+                jQuery (this.el).removeClass ('active_column');
             } 
             // test all boxes for draggableness.
             self.boxes.each (function (a) { a.trigger ('render'); });
@@ -242,6 +245,7 @@
     window.LogicModelView = Backbone.View.extend({
         events: {
             "click .next_phase": "goToNextPhase",
+            "click .done-button": "goToNextPhase",
             "click .previous_phase": "goToPreviousPhase"
         },
         phases: null,
@@ -323,6 +327,18 @@
                 jQuery ('.next_phase').hide();
             } else {
                 jQuery ('.next_phase').show();
+            }
+
+            // unhide the last active donebutton on the page:
+            //console.log (self.el);
+
+
+            jQuery('.done-button').removeClass ('visible');
+
+            //jQuery('.active_column').last().find ('.done-button').attr({'height':'100px'});
+
+            if (self.current_phase != self.phases.length - 1) {
+                jQuery('.active_column').last().find ('.done-button').addClass('visible');
             }
         },
 

@@ -15,7 +15,7 @@ textarea#reflections {
 
 .logic-model-columns {
     width: 840px;
-    height: 420px;
+    height: 500px;
     border: 1px solid #ccc;
 }
 
@@ -80,6 +80,14 @@ span.backbone_column_span {
   position: relative;
   left : 6px;
   top : 6px;
+}
+
+div.done-button {
+  display:  none;
+}
+
+div.done-button.visible {
+ display: inline-block;
 }
 
 

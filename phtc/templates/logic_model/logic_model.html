@@ -1,16 +1,11 @@
 <div class="logic-model-container">
 	<div id="phase_container">
 		<div class="logic-model-game-phase-instructions">Instructions for this phase of the game.</div>
-		<div class="logic-model-initial-scenario_choice">
-			Scenario 1<br/>
-			Scenario 2<br/>
-			Scenario 3<br/>
-		</div>
-		<div class="logic-model-columns"></div>
-		<textarea id ="reflections">Reflections</textarea>
-		<div id ="phase_nav">
-			<div class="btn btn-primary btn-large previous_phase">previous phase</div>
-			<div class="btn btn-primary btn-large next_phase">next phase</div>
-		</div>
-	</div>
+
+
+		{%include "logic_model/subtemplates/initial_scenario_choice.html" %}
+		
+		{%include "logic_model/subtemplates/table.html" %}
+
+
 </div>
