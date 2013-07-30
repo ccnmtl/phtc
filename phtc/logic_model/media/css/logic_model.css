@@ -65,14 +65,38 @@ span.backbone_column_span {
 /* Phases of the game */
 
 input.text_box {
-  width : 50px;
-
+  display: inline;
+  position: relative;
+  top:    10px;
+  left:   10px;
+  width : 80px;
+  height: 30px;
 }
+
+.box_draggable .box_handle {
+  display: inline;
+  position: relative;
+  left : 6px;
+  top : 6px;
+}
+
+
+.box_draggable .box_handle .icon-move{
+  /*
+  display: inline;
+  */
+  /*
+  position: relative;
+  left : 100px;
+  top :  100px;
+  */
+}
+
 
 .box_draggable {
   cursor: pointer;
-
 }
+
 .box_droppable {
   height: 50px;
 }
@@ -81,12 +105,6 @@ input.text_box {
   background-color: green;
 }
 
-.box_draggable .box_handle {
-  position: relative;
-  left : 100px;
-  top : 10px;
-
-}
 
 .hover_droppable {
   background-color: blue;
