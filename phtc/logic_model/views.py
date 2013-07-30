@@ -5,18 +5,13 @@ import simplejson
 
 @login_required
 def settings(request):
-    """ get the columns out to the front end."""
     #if not request.is_ajax() or request.method != "POST":
     #    return HttpResponseForbidden()
 
-    columns =     [c.to_json() for c in Column.objects.all()]
-    scenarios =   [s.to_json() for s in Scenario.objects.all()]
-    game_phases = [g.to_json() for g in GamePhase.objects.all()]
-
     the_settings = {
-        'columns': columns,
-        'scenarios': scenarios,
-        'game_phases': game_phases
+        'columns':     [c.to_json() for c in Column.objects.all()],
+        'scenarios':   [s.to_json() for s in Scenario.objects.all()],
+        'game_phases': [g.to_json() for g in GamePhase.objects.all()]
     }
 
     return HttpResponse(simplejson.dumps(the_settings, indent=2),  mimetype="application/json")

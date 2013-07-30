@@ -1,17 +1,6 @@
 (function (jQuery) {
 
 
-
-
-    function repaint_droppables () {
-
-
-    }
-
-
-
-
-
     Backbone.sync = function (method, model, success, error) {
     };
 
@@ -24,9 +13,26 @@
         aboutMe: function() {
         },
     });
+
+
     var BoxCollection = Backbone.Collection.extend({
         model: Box
     });
+
+
+
+    function turnOnDraggable(element) {
+            jQuery (element).find ('.box_droppable').droppable( "disable" );
+            jQuery (element).find ('.box_draggable').draggable( "enable" );
+            jQuery (element).find ('.box_handle').show();
+    }
+
+    function turnOffDraggable(element) {
+            the_droppable = jQuery (element).find ('.box_droppable');
+            the_droppable.droppable( "enable" );
+            jQuery (element).find ('.box_draggable').draggable( "disable");
+            jQuery (element).find ('.box_handle').hide();
+    }
 
     var BoxView = Backbone.View.extend({
         className: "backbone_box_div",
@@ -35,25 +41,40 @@
         },
         initialize: function (options, render) {
             var self = this;
-            _.bindAll(this, "render", "unrender", "setUpDroppable", "setUpDraggable", "testForDraggable");
+            _.bindAll(this,
+                "render",
+                "unrender",
+                "setUpDroppable",
+                "setUpDraggable",
+                "testForDraggable"
+            );
             this.model.bind("destroy", this.unrender);
             this.template = _.template(jQuery("#logic-model-box").html());
             this.render();
         },
 
         onDrop: function (event, ui) {
-            the_draggable = ui.draggable;
-            var origin_text = the_draggable.find('.text_box').val();
-            the_draggable.css({top: '0px', left: '0px'});
-            jQuery( event.target ).find( ".placeholder" ).remove();
-            jQuery (event.target).find('.text_box').val(origin_text);
-            jQuery (event.target).find ('.box_droppable').droppable( "disable" );
-            jQuery (event.target).find ('.box_draggable').draggable( "enable" );
-            jQuery (event.target).find ('.box_handle').show();
+            var source = ui.draggable.context;
+            var origin_text = jQuery(source).find('.text_box').val();
+            var destination = event.target;
+            //move the source back to its original spot:
+            jQuery(source).css({top: '0px', left: '0px'});
+            //remove the distracting placeholder:
+            jQuery( destination).find( ".placeholder" ).remove();
+            // set the text in the destination:
+            jQuery (destination).find('.text_box').val(origin_text);
+            // remove the text in the source:
+            jQuery(source).find('.text_box').val('');
+            // since the destination now has text in it, make it draggable.
+            turnOnDraggable(destination);
+            // since the source is now empty, make it undraggable.
+            var the_actual_box = source.parentElement.parentElement;
+            turnOffDraggable (the_actual_box);
 
         },
 
         setUpDroppable: function (){
+            //console.log ("in setupdroppable")
             var self = this;
             droppable_options = {
                 accept: ".box_draggable" ,
@@ -65,18 +86,14 @@
             jQuery (this.el).find ('.box_droppable').droppable(droppable_options);
 
         },
-        testForDraggable: function() {
-            console.log ('testiong for draggable.')
-            if (jQuery (this.el).find('.text_box').val().length > 0) {
-                jQuery (this.el).find ('.box_droppable').droppable( "disable" );
-                jQuery (this.el).find ('.box_draggable').draggable( "enable" );
-                jQuery (this.el).find ('.box_handle').show();
-            } else { // empty
-                jQuery (this.el).find ('.box_droppable').droppable( "enable" );
-                jQuery (this.el).find ('.box_draggable').draggable( "disable" );
-                jQuery (this.el).find ('.box_handle').hide();
-            }
 
+        testForDraggable: function() {
+            //console.log ('testiong for draggable.')
+            if (jQuery (this.el).find('.text_box').val().length > 0) {
+                turnOnDraggable(this.el);
+            } else { // empty
+                turnOffDraggable(this.el);
+            }
         },
 
 
@@ -137,12 +154,12 @@
             
             self.boxes = new BoxCollection();
             self.boxes.add ([
-                    { name: '1'  },
-                    { name: '2' },
-                    { name: '3' },
-                    { name: '4' },
-                    { name: '5' },
-                    { name: '6' }
+                { name: '1'  },
+                { name: '2' },
+                { name: '3' },
+                { name: '4' },
+                { name: '5' },
+                { name: '6' }
             ]);
             
             self.template = _.template(jQuery("#logic-model-column").html());
@@ -153,7 +170,6 @@
             var self = this;
             self.boxes.each(self.addBox);
         },
-
 
         addBox: function(box) {
             var self = this;
