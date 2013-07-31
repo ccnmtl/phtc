@@ -4,7 +4,52 @@
     Backbone.sync = function (method, model, success, error) {
     };
 
-    var DEBUG_PHASE = 4;
+    var DEBUG_PHASE = 0;
+
+
+    function findBox (el) {
+        return jQuery (el).closest('.backbone_box_div').data('view');
+    }
+
+
+    var Scenario = Backbone.Model.extend({
+        defaults: {
+        },
+        aboutMe: function() {
+        },
+    });
+
+    var ScenarioCollection = Backbone.Collection.extend({
+        model: Scenario
+    });
+
+    var ScenarioView = Backbone.View.extend({
+        className: "backbone_scenario_div",
+        events: {
+            //'change textarea' : 'render',
+            'click .try_this_scenario' : 'chooseMe'
+        },
+
+        initialize: function (options, render) {
+            var self = this;
+            _.bindAll(self,
+                "render"
+            );
+            self.template = _.template(jQuery("#logic-model-scenario").html());
+            var ctx = self.model.toJSON();
+            self.el.innerHTML = self.template(ctx);
+        },
+        chooseMe : function () {
+            var self = this;
+            console.log (self.model.get ('title') + ' chosen ' );
+            //jQuery ('.scenario_info').html (self.model.get ('instructions'));
+            jQuery ('.scenario_instructions').html (self.model.get ('instructions'));
+            self.LogicModelView.goToNextPhase();
+
+        }
+    });
+    /////////
+
 
     var Box = Backbone.Model.extend({
         defaults: {
@@ -19,26 +64,6 @@
         model: Box
     });
 
-    // TODO: turn these into methods of the box object.
-    function turnOffBoth(element) {
-        jQuery (element).find ('.box_droppable').droppable( "disable" );
-        jQuery (element).find ('.box_draggable').draggable( "disable" );
-    }
-
-    function turnOnDraggable(element) {
-        jQuery (element).find ('.box_droppable').droppable( "disable" );
-        jQuery (element).find ('.box_draggable').draggable( "enable" );
-    }
-
-    function turnOffDraggable(element) {
-        the_droppable = jQuery (element).find ('.box_droppable');
-        the_droppable.droppable( "enable" );
-        jQuery (element).find ('.box_draggable').draggable( "disable");
-    }
-
-    function findBox (el) {
-        return jQuery (el).closest('.backbone_box_div').data('view');
-    }
 
     var BoxView = Backbone.View.extend({
         className: "backbone_box_div",
@@ -58,7 +83,10 @@
                 "make_inactive",
                 "nextColor",
                 "draggedFrom",
-                "draggedTo"
+                "draggedTo",
+                "turnOffDraggableAndDroppable",
+                "turnOnDraggable",
+                "turnOffDraggable"
             );
 
             self.model.bind("destroy", self.unrender);
@@ -76,10 +104,33 @@
 
             // sorry, but we need to do this for the draggy-droppy stuff.
             self.$el.data('view', this);
+        },
 
-            
-            //console.log (self.model.get('column'));
 
+            // TODO: turn these into methods of the box object.
+        turnOnDraggable: function() {
+            var self = this;
+            var jel = self.$el;
+            jel.find ('.box_droppable').droppable( "disable" );
+            jel.find ('.box_draggable').draggable( "enable" );
+            jQuery (this.el).find ('.box_handle').show();
+        },
+
+        turnOffDraggable: function () {
+            var self = this;
+            var jel = self.$el;
+            the_droppable = jel.find ('.box_droppable');
+            the_droppable.droppable( "enable" );
+            jel.find ('.box_draggable').draggable( "disable");
+            jQuery (this.el).find ('.box_handle').hide();
+        },
+
+        turnOffDraggableAndDroppable : function() {
+            var self = this;
+            var jel = self.$el;
+            jel.find ('.box_droppable').droppable( "disable" );
+            jel.find ('.box_draggable').draggable( "disable" );
+            jel.find ('.box_handle').hide();
         },
 
         draggedFrom: function() {
@@ -90,6 +141,7 @@
             jel.find ('.box_droppable').droppable( "enable" );
             jel.find ('.box_draggable').draggable( "disable");
         },
+
         draggedTo: function() {
             var self = this;
             var jel = self.$el;
@@ -109,13 +161,10 @@
             dst_box.$el.find('.text_box').val(src_text);
             src_box.$el.find('.text_box').val('');
             // transfer color:
-            src_color_int = src_box.model.get('color_int');
-            dst_box.model.set({'color_int': src_color_int});
-            src_box.model.set({'color_int': 0});
+            dst_box.model.set({'color_int': src_box.model.get('color_int')});
             dst_box.setColor();
+            src_box.model.set({'color_int': 0});
             src_box.setColor();
-
-
         },
 
         setUpDroppable: function (){
@@ -171,19 +220,16 @@
 
             if (self.model.get('active') == false ) {
                 jQuery (this.el).addClass ('inactive_box');
+                self.turnOffDraggableAndDroppable();
                 jQuery (this.el).find('.text_box').attr({'disabled':true})
-                turnOffBoth(this.el);
-                jQuery (this.el).find ('.box_handle').hide();
             }
             else {
                 jQuery (this.el).removeClass ('inactive_box');
                 jQuery (this.el).find('.text_box').attr({'disabled':false})
                     if (self.hasText()) {
-                        turnOnDraggable(this.el);
-                        jQuery (this.el).find ('.box_handle').show();
+                        self.turnOnDraggable();
                     } else { // empty
-                        turnOffDraggable(this.el);
-                        jQuery (this.el).find ('.box_handle').hide();
+                        self.turnOffDraggable();
                     }
             }
             return this;
@@ -229,9 +275,7 @@
             var self = this;
             _.bindAll(self, "render", "unrender",  "addBox", "check_the_boxes");
             self.model.bind("check_the_boxes", self.check_the_boxes);
-
             self.model.set ({boxModels: []});
-
             self.boxes = new BoxCollection();
             self.boxes.add ([
                 { name: '1', column: self.model },
@@ -245,7 +289,6 @@
             self.model.set ()
             self.template = _.template(jQuery("#logic-model-column").html());
             self.render();
-
         },
 
         check_the_boxes: function() {
@@ -260,14 +303,11 @@
             } 
             // test all boxes for draggableness.
             self.boxes.each (function (a) { a.trigger ('render'); });
-
         },
 
         addBoxes: function() {
             var self = this;
             self.boxes.each(self.addBox);
-
-
         },
 
         addBox: function(box) {
@@ -301,7 +341,8 @@
         events: {
             "click .next_phase": "goToNextPhase",
             "click .done-button": "goToNextPhase",
-            "click .previous_phase": "goToPreviousPhase"
+            "click .previous_phase": "goToPreviousPhase",
+            "click .change_scenario": "goToFirstPhase"
         },
         phases: null,
         current_phase : null,
@@ -312,6 +353,7 @@
             _.bindAll(this ,
                 "render" ,
                 "onAddColumn",
+                "onAddScenario",
                 "onRemoveColumn",
                 "goToNextPhase",
                 "goToPreviousPhase"
@@ -321,7 +363,10 @@
             // Paint the columns:
             self.columns = new ColumnCollection();
             self.columns.bind("add", this.onAddColumn);
-            self.columns.bind("remove", this.onRemoveColumn);
+
+
+            self.scenarios = new ScenarioCollection();
+            self.scenarios.bind("add", this.onAddScenario);
 
         },
 
@@ -342,6 +387,7 @@
                     self.columns.add(json.columns);
                     self.setUpColors (json.colors);
                     self.phases = json.game_phases;
+                    self.scenarios.add (json.scenarios);
                     self.columns_in_each_phase = json.columns_in_each_phase;
                     self.setUpPhases();
                     self.render();
@@ -377,8 +423,8 @@
             var active_columns_for_this_phase = self.columns_in_each_phase[phase_info.id];
             self.columns.each (function (col) {
                 if (active_columns_for_this_phase != undefined) {
-                    var active = (active_columns_for_this_phase.indexOf (col.id) != -1 );
-                    col.set ({active: active});
+                    var whether_active = (active_columns_for_this_phase.indexOf (col.id) != -1 );
+                    col.set ({active: whether_active});
                 }
                 // default is true, btw.
             });
@@ -387,28 +433,31 @@
             // the CSS can properly paint this phase of the game.
             jQuery("#phase_container").attr("class", phase_info.css_classes);
             jQuery('.logic-model-game-phase-instructions').html(phase_info.instructions);
+
             if (self.current_phase == 0) {
                 jQuery ('.previous_phase').hide();
             } else {
                 jQuery ('.previous_phase').show();
             }
+            /*
             if (self.current_phase == self.phases.length - 1) {
                 jQuery ('.next_phase').hide();
             } else {
                 jQuery ('.next_phase').show();
             }
+            */
 
             // unhide the last active donebutton on the page:
-            //console.log (self.el);
-
-
             jQuery('.done-button').removeClass ('visible');
-
-            //jQuery('.active_column').last().find ('.done-button').attr({'height':'100px'});
-
             if (self.current_phase != self.phases.length - 1) {
                 jQuery('.active_column').last().find ('.done-button').addClass('visible');
             }
+        },
+
+        goToFirstPhase: function() {
+            var self = this;
+            self.current_phase = 0;
+            self.paintPhase();
         },
 
         goToNextPhase: function() {
@@ -416,7 +465,6 @@
             self.current_phase = self.current_phase  + 1;
             self.paintPhase();
         },
-
 
         goToPreviousPhase: function() {
             var self = this;
@@ -437,6 +485,20 @@
             });
             jQuery("div.logic-model-columns").append(view.el);
         },
+
+
+        onAddScenario: function(scenario) {
+            var self = this;
+
+            var view = new ScenarioView({
+                model: scenario
+            });
+
+            view.LogicModelView = self;
+
+            jQuery("div.logic-model-initial-scenario-list").append(view.el);
+        },
+
         onRemoveColumn: function(column) {
             var self = this;
             console.log ("removingcolumn");
