@@ -36,6 +36,10 @@
         jQuery (element).find ('.box_draggable').draggable( "disable");
     }
 
+    function findBox (el) {
+        return jQuery (el).closest('.backbone_box_div').data('view');
+    }
+
     var BoxView = Backbone.View.extend({
         className: "backbone_box_div",
         events: {
@@ -52,13 +56,15 @@
                 "hasText",
                 "make_active", 
                 "make_inactive",
-                "nextColor" 
+                "nextColor",
+                "draggedFrom",
+                "draggedTo"
             );
 
             self.model.bind("destroy", self.unrender);
             self.model.bind("make_active", self.make_active);
             self.model.bind("make_inactive", self.make_inactive);
-            self.model.bind("next_color", self.next_color);
+            self.model.bind("nextColor", self.nextColor);
             self.model.bind("render", self.render);
             
             self.template = _.template(jQuery("#logic-model-box").html());
@@ -67,31 +73,48 @@
             self.setUpDraggable();
             self.setUpDroppable();
             self.render();
+
+            // sorry, but we need to do this for the draggy-droppy stuff.
+            self.$el.data('view', this);
+
             
             //console.log (self.model.get('column'));
 
         },
 
-        onDrop: function (event, ui) {
-            var source = ui.draggable.context;
-            var origin_text = jQuery(source).find('.text_box').val();
-            var destination = event.target;
-            var the_actual_box = source.parentElement.parentElement;
+        draggedFrom: function() {
+            var self = this;
+            var jel = self.$el;
+            jel.find ('.box_draggable').css({top: '0px', left: '0px'});
+            jel.find ('.box_handle').hide();
+            jel.find ('.box_droppable').droppable( "enable" );
+            jel.find ('.box_draggable').draggable( "disable");
+        },
+        draggedTo: function() {
+            var self = this;
+            var jel = self.$el;
+            jel.find(".placeholder").remove();
+            jel.find(".box_handle").show();
+            jel.find ('.box_droppable').droppable( "disable" );
+            jel.find ('.box_draggable').draggable( "enable" );
+        },
 
-            //move the source back to its original spot:
-            jQuery(source).css({top: '0px', left: '0px'});
-            //remove the distracting placeholder:
-            jQuery( destination).find( ".placeholder" ).remove();
-            // set the text in the destination:
-            jQuery (destination).find('.text_box').val(origin_text);
-            // remove the text in the source:
-            jQuery(source).find('.text_box').val('');
-            // since the destination now has text in it, make it draggable.
-            turnOnDraggable(destination);
-            jQuery (destination).find ('.box_handle').show();
-            // since the source is now empty, make it undraggable.
-            turnOffDraggable (the_actual_box);
-            jQuery (the_actual_box).find ('.box_handle').hide();
+        onDrop: function (event, ui) {
+            src_box = findBox(ui.draggable.context);
+            dst_box = findBox(event.target);
+            src_box.draggedFrom();
+            dst_box.draggedTo();
+            // transfer text:
+            var src_text = src_box.$el.find('.text_box').val();
+            dst_box.$el.find('.text_box').val(src_text);
+            src_box.$el.find('.text_box').val('');
+            // transfer color:
+            src_color_int = src_box.model.get('color_int');
+            dst_box.model.set({'color_int': src_color_int});
+            src_box.model.set({'color_int': 0});
+            dst_box.setColor();
+            src_box.setColor();
+
 
         },
 
@@ -117,24 +140,20 @@
             return false;
         },
 
+        setColor: function () {
+            var self = this;
+            var the_colors = self.model.get ('colors');
+            var color_int  = self.model.get ('color_int');
+            var color =  '#' + (the_colors[color_int % the_colors.length]);
+            jQuery(self.el).find ('.cell').css('background-color', color);
+            jQuery(self.el).find ('.text_box').css('background-color', color);
+        },
+
 
         nextColor: function() {
             var self = this;
-            console.log (self.model.get ('colors'));
-            var the_colors = self.model.get ('colors');
-            console.log (self.model.get ('color_int'));
-            color_int = self.model.get ('color_int');
-            color_int = color_int + 1;
-            self.model.set ({color_int: color_int});
-
-            new_color =  '#' + (the_colors[color_int % the_colors.length]);
-            console.log (new_color);
-            //jQuery(self.el).css ('background-color', new_color);
-            //console.log (jQuery(self.el));
-
-            jQuery(self.el).find ('.cell').css('background-color', new_color);
-            jQuery(self.el).find ('.text_box').css('background-color', new_color);      
-
+            self.model.set ({color_int: self.model.get ('color_int') + 1 });
+            self.setColor();
         },
 
 
@@ -211,10 +230,7 @@
             _.bindAll(self, "render", "unrender",  "addBox", "check_the_boxes");
             self.model.bind("check_the_boxes", self.check_the_boxes);
 
-
-            console.log ("initializing...")
             self.model.set ({boxModels: []});
-            console.log (self.model.get ('boxModels'));
 
             self.boxes = new BoxCollection();
             self.boxes.add ([
@@ -259,19 +275,10 @@
             view = new BoxView({
                 model: box
             });
-
             jQuery(self.el).find('.boxes').append(view.el);
-
-
-            /// this doesn't feel right but...
-            // the column model needs to know about the box models that it contains. 
-            // or else.
-
             tmp = self.model.get('boxModels');
             tmp.push (view.model);
             self.model.set ({'boxModels' : tmp});
-
-            console.log (self.model.get ('boxModels'));
         },
 
         render: function () {
@@ -348,7 +355,8 @@
             self.columns.each (function (a) {
                 box_models = a.get('boxModels');
                 for (var i=0;i<box_models.length;i++)  {
-                    box_models[i].set ({colors:colors, color_int: 0})
+                    box_models[i].set ({colors:colors, color_int: -1})
+                    box_models[i].trigger ('nextColor');
                 }
              });
         },
