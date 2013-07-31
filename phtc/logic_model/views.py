@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseForbidden
-from phtc.logic_model.models import Column, Scenario, GamePhase, ActivePhase
+from phtc.logic_model.models import Column, Scenario, GamePhase, ActivePhase, BoxColor
 import simplejson
 
 @login_required
@@ -18,10 +18,8 @@ def settings(request):
         else:
             columns_in_each_phase[ap.game_phase.id] = [ap.column.id]
 
-        print columns_in_each_phase
-
-
     the_settings = {
+        'colors':        [c.color for c in BoxColor.objects.all()],
         'columns':       [c.to_json() for c in Column.objects.all()],
         'scenarios':     [s.to_json() for s in Scenario.objects.all()],
         'game_phases':   [g.to_json() for g in GamePhase.objects.all()],

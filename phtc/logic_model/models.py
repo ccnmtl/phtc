@@ -3,6 +3,23 @@ from django.contrib.contenttypes import generic
 from pagetree.models import PageBlock
 from django import forms
 
+
+class BoxColor (models.Model):
+    name  = models.CharField(max_length=256, default = '')
+    color = models.CharField(max_length=6, default = 'FFFFFF')
+    order_rank = models.IntegerField(default=0, null=True, blank=True, )
+    
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['order_rank']
+
+    def to_json(self):
+        return {
+            'color': self.color
+        }
+
 class GamePhase (models.Model):
     name = models.CharField(max_length=256, default = '')
     instructions = models.TextField(null=True, blank=True, default = '')

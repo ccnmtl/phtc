@@ -1,5 +1,5 @@
 from django.contrib import admin
-from phtc.logic_model.models import Column, Scenario, GamePhase, ActivePhase
+from phtc.logic_model.models import Column, Scenario, GamePhase, ActivePhase, BoxColor
 
 class ColumnAdmin(admin.ModelAdmin):
     list_display = ('__unicode__',
@@ -15,14 +15,15 @@ admin.site.register(Scenario, ScenarioAdmin)
 class GamePhaseAdmin(admin.ModelAdmin):
     list_display = ('__unicode__',
     				'order_rank')
-
 admin.site.register(GamePhase, GamePhaseAdmin)
-
-
-
 
 class ActivePhaseAdmin(admin.ModelAdmin):
     list_display = ('__unicode__',)
-
-
 admin.site.register(ActivePhase, ActivePhaseAdmin)
+
+
+class BoxColorAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__',)
+admin.site.register(BoxColor, BoxColorAdmin)
+
+

@@ -4,7 +4,7 @@
     Backbone.sync = function (method, model, success, error) {
     };
 
-    var DEBUG_PHASE = 0;
+    var DEBUG_PHASE = 4;
 
     var Box = Backbone.Model.extend({
         defaults: {
@@ -19,6 +19,7 @@
         model: Box
     });
 
+    // TODO: turn these into methods of the box object.
     function turnOffBoth(element) {
         jQuery (element).find ('.box_droppable').droppable( "disable" );
         jQuery (element).find ('.box_draggable').draggable( "disable" );
@@ -38,7 +39,8 @@
     var BoxView = Backbone.View.extend({
         className: "backbone_box_div",
         events: {
-            'change textarea' : 'render'
+            'change textarea' : 'render',
+            'click .switch_color' : 'nextColor'
         },
         initialize: function (options, render) {
             var self = this;
@@ -49,12 +51,14 @@
                 "setUpDraggable",
                 "hasText",
                 "make_active", 
-                "make_inactive"
+                "make_inactive",
+                "nextColor" 
             );
 
             self.model.bind("destroy", self.unrender);
             self.model.bind("make_active", self.make_active);
             self.model.bind("make_inactive", self.make_inactive);
+            self.model.bind("next_color", self.next_color);
             self.model.bind("render", self.render);
             
             self.template = _.template(jQuery("#logic-model-box").html());
@@ -63,6 +67,9 @@
             self.setUpDraggable();
             self.setUpDroppable();
             self.render();
+            
+            //console.log (self.model.get('column'));
+
         },
 
         onDrop: function (event, ui) {
@@ -109,6 +116,27 @@
             }
             return false;
         },
+
+
+        nextColor: function() {
+            var self = this;
+            console.log (self.model.get ('colors'));
+            var the_colors = self.model.get ('colors');
+            console.log (self.model.get ('color_int'));
+            color_int = self.model.get ('color_int');
+            color_int = color_int + 1;
+            self.model.set ({color_int: color_int});
+
+            new_color =  '#' + (the_colors[color_int % the_colors.length]);
+            console.log (new_color);
+            //jQuery(self.el).css ('background-color', new_color);
+            //console.log (jQuery(self.el));
+
+            jQuery(self.el).find ('.cell').css('background-color', new_color);
+            jQuery(self.el).find ('.text_box').css('background-color', new_color);      
+
+        },
+
 
         setUpDraggable: function () {
             var self = this;
@@ -182,18 +210,26 @@
             var self = this;
             _.bindAll(self, "render", "unrender",  "addBox", "check_the_boxes");
             self.model.bind("check_the_boxes", self.check_the_boxes);
+
+
+            console.log ("initializing...")
+            self.model.set ({boxModels: []});
+            console.log (self.model.get ('boxModels'));
+
             self.boxes = new BoxCollection();
             self.boxes.add ([
-                { name: '1' },
-                { name: '2' },
-                { name: '3' },
-                { name: '4' },
-                { name: '5' },
-                { name: '6' }
+                { name: '1', column: self.model },
+                { name: '2', column: self.model },
+                { name: '3', column: self.model },
+                { name: '4', column: self.model },
+                { name: '5', column: self.model },
+                { name: '6', column: self.model }
             ]);
             
+            self.model.set ()
             self.template = _.template(jQuery("#logic-model-column").html());
             self.render();
+
         },
 
         check_the_boxes: function() {
@@ -214,16 +250,28 @@
         addBoxes: function() {
             var self = this;
             self.boxes.each(self.addBox);
+
+
         },
 
         addBox: function(box) {
             var self = this;
             view = new BoxView({
-                model: box,
-                parentView : self
+                model: box
             });
 
             jQuery(self.el).find('.boxes').append(view.el);
+
+
+            /// this doesn't feel right but...
+            // the column model needs to know about the box models that it contains. 
+            // or else.
+
+            tmp = self.model.get('boxModels');
+            tmp.push (view.model);
+            self.model.set ({'boxModels' : tmp});
+
+            console.log (self.model.get ('boxModels'));
         },
 
         render: function () {
@@ -285,6 +333,7 @@
                 },
                 success: function (json, textStatus, xhr) {
                     self.columns.add(json.columns);
+                    self.setUpColors (json.colors);
                     self.phases = json.game_phases;
                     self.columns_in_each_phase = json.columns_in_each_phase;
                     self.setUpPhases();
@@ -292,6 +341,18 @@
                 }
             });
         },
+
+        setUpColors : function (colors) {
+            var self = this;
+            self.colors = { colors: colors };
+            self.columns.each (function (a) {
+                box_models = a.get('boxModels');
+                for (var i=0;i<box_models.length;i++)  {
+                    box_models[i].set ({colors:colors, color_int: 0})
+                }
+             });
+        },
+
         setUpPhases : function() {
             var self = this;
             if (DEBUG_PHASE != undefined) {
@@ -364,8 +425,7 @@
         onAddColumn: function(column) {
             var self = this;
             var view = new ColumnView({
-                model: column,
-                parentView: this
+                model: column
             });
             jQuery("div.logic-model-columns").append(view.el);
         },
