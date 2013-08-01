@@ -1,0 +1,461 @@
+header#masthead {
+  height:60px !important;
+}
+
+.row {
+  padding-top: 0px;
+}
+textarea#reflections {
+  margin: 2px;
+  padding: 2px;
+  width:835px;
+  clear:both;
+  font-size: .8em;
+}
+
+.logic-model-columns {
+    width: 840px;
+    height: 500px;
+    border: 1px solid #ccc;
+}
+
+.centered {
+  margin: auto;
+  display: block;
+}
+
+.divclearfix {
+  clear: both;
+}
+
+span.column_span {
+    width:  140px;
+    margin-left:0px;
+}
+
+span.backbone_column_span {
+    width:  140px;
+    margin-left:0px;
+}
+
+
+.cell {
+  width: 130px;
+  height: 50px;
+  margin: 2px;
+  padding: 2px;
+  float: left;
+  border: 1px solid #ccc;
+  font-size: .8em;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.colhead {
+  font-size: .8em;
+  width: 130px;
+  height: 50px;
+  margin: 2px;
+  padding: 2px; 
+  float: left;
+  border: 1px solid #ccc;
+  background-color: #ccc;
+
+}
+
+/* Phases of the game */
+
+.text_box {
+  display: inline;
+  position: absolute;
+  font-size: .8em;
+  line-height: 1em; 
+  top:    0px;
+  left:   10px;
+  width : 110px;
+  height: 41px;
+}
+
+.box_draggable .box_handle {
+  display: inline;
+  position: absolute;
+  left : -4px;
+  top :  -4px;
+}
+
+.box_draggable .switch_color {
+  display: inline;
+  position: absolute;
+  left : 0px;
+  top : 10px;
+  height:15px;
+  width:15px;
+  border: 1px solid #ccc;
+  background-color: #ccc;
+  color: grey;
+}
+
+div.done-button {
+  display:  none;
+}
+
+div.done-button.visible {
+ display: inline-block;
+}
+
+
+.box_draggable .box_handle .icon-move{
+  /*
+  display: inline;
+  */
+  /*
+  position: relative;
+  left : 100px;
+  top :  100px;
+  */
+}
+
+
+.box_draggable {
+  cursor: pointer;
+}
+
+.box_droppable {
+  height: 50px;
+}
+
+.active_droppable {
+  background-color: green;
+}
+
+
+.hover_droppable {
+  background-color: blue;
+}
+
+.inactive_box {
+  background-color: darkgrey;
+  opacity:0.4;
+  filter:alpha(opacity=40); /* For IE8 and earlier */
+}
+
+/* Pick scenario:*/
+#phase_container.pick_scenario div.logic-model-columns, 
+#phase_container.pick_scenario textarea#reflections,
+#phase_container.pick_scenario .change_scenario,
+#phase_container.pick_scenario .scenario_info,
+#phase_container.pick_scenario .scenario_instructions,
+#phase_container.pick_scenario .next_phase  {
+    display:none;
+}
+
+
+/* Add inputs:*/
+
+#phase_container.add_inputs div.logic-model-initial-scenario_choice {
+    display:none;
+}
+
+
+#phase_container.add_inputs div.previous_phase {
+    display:none !important; /* no need to since the "change scenario" button does the same thing. */
+}
+
+
+/* Add long term outcomes */
+#phase_container.add_long_term_outcomes div.logic-model-initial-scenario_choice {
+    display:none;
+}
+
+/* Add intermediate columns:*/
+#phase_container.add_intermediate_columns div.logic-model-initial-scenario_choice {
+    display:none;
+}
+/* Finish work:*/
+#phase_container.finish_work div.logic-model-initial-scenario_choice {
+    display:none;
+}
+/* Conclusion:*/
+#phase_container.conclusion div.logic-model-initial-scenario_choice {
+    display:none;
+}
+
+
+
+/*
+
+.module-rgt-activity {
+  #sidebar {
+    display: none;
+  }
+  
+  .container.main {
+  .span9 {
+    width: 100%;
+    margin: 0 0 0 0;
+  }
+}
+}
+.treatment-activity-view {
+
+   input {
+      margin: 0 5px 0 0;
+    }
+}
+
+  .treatment-activity-container {
+}
+
+.treatment-activity-container h3 {
+    margin-bottom: 0;
+}
+
+.treatment-activity-view {
+  
+  .factors-choice {
+    border: 2px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 5px;
+    width: 475px;
+    text-align: center;
+    background-color: #fff;
+    &.stop {
+     border-color: #ed513b;
+     background-color: #edb3ab;
+      p {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+
+
+div.patient-factors {
+    margin: 5px 0;
+}
+
+input.reset-state {
+    margin: auto 0;
+}
+
+div.treatment-steps {
+}
+
+div.treatment-step {
+    clear: both;
+}
+
+div.week {
+    font-size: .8em;
+    font-weight: bold;
+}
+
+div.timeline {
+    float: left;
+    width: 100px;
+    padding-right: 5px;
+    text-align: center;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+div.timeline div.duration {
+    background-color: #E7E7E7;
+    width: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+div.medication {
+    float: left;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    margin-top: 20px;
+    padding: 5px;
+    width: 350px;
+    text-align: center;
+    background-color: #fff;
+    
+
+    &.stop {
+     border-color: #ed513b;
+     background-color: #edb3ab;
+      p {
+        font-weight: bold;
+      }
+    }
+}
+
+div.medication p {
+    display: inline;
+}
+
+div.edit-step {
+    float: left;
+    width: 16px;
+    margin-top: 15px;
+    margin-left: 10px;
+}
+
+div.medication .icon-question-sign,
+div.medication .icon-edit {
+    float: right;
+    cursor: pointer;
+    margin-left: 5px;
+    opacity: .75;
+    
+   &:hover {
+     opacity: 1;
+   }
+}
+
+
+div.treatment-step-help {
+  max-height: 200px;
+  position: absolute;
+  right: 400px;
+  width: 250px;
+  border: 1px solid #eee;
+  padding: 10px;
+  margin-top: 20px;
+  overflow-y: auto;
+  background-color: #eee;
+  border-radius: 8px;
+}
+
+
+div.height-0 {
+    height: 20px;
+    background-color: white;
+}
+
+div.height-4 {
+    height: 40px;
+}
+
+div.height-8 {
+    height: 80px;
+}
+
+div.height-12 {
+    height: 120px;
+}
+
+div.height-24 {
+    height: 240px;
+}
+
+.treatment-step {
+  .time {
+    font-size: .8em;
+    font-weight: bold;
+    text-transform: uppercase;
+    clear: both;
+    display: block;
+    margin: 0;
+  }  
+  
+  .step-content {
+    margin: 0 0 0 38px;
+  }
+  
+}
+
+div.treatment-step.minimized div.duration,
+div.treament-step.minimized div.medication {
+    height: 35px !important;
+}
+
+/* Decision Point */
+div.treatment-step.DP.minimized div.duration {
+    height: 1px !important;
+}
+
+div.treatment-step.DP.minimized div.medication {
+  border-bottom: none;
+  padding-bottom: 5px;
+  margin-bottom: 0;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+  background: #ffc23f;
+  border-color: #fdb61e;
+}
+
+
+div.treatment-step.DP .duration {
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-bottom-color: gray;
+    position: relative;
+    background-color: #fafafa;
+    margin-top: 25px;
+}
+
+div.treatment-step.DP .duration:after {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 10px;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-top-color: gray;
+}
+
+
+/* Decision Point Branch (Parent) */
+div.treatment-step.PR div.medication {
+    border-top: none;
+    padding-top: 5px;
+    margin-top: 0;
+    border-radius: 0 0 8px 8px;
+}
+
+
+div.treatment-step.ST .duration {
+    width: 25px;
+    height: 25px;
+    background: #b94a48;
+    position: relative;
+    top: 47px;
+}
+
+div.treatment-step.ST .duration:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-bottom: 7px solid #b94a48;
+    border-left: 7px solid white;
+    border-right: 7px solid white;
+    width: 11px;
+    height: 0;
+}
+
+div.treatment-step.ST .duration:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-top: 7px solid #b94a48;
+    border-left: 7px solid white;
+    border-right: 7px solid white;
+    width: 11px;
+    height: 0;
+}
+div.treatment-step.ST {
+  .medication {
+    border-color: #eed3d7;
+    background-color: #f2dede;
+    color: #b94a48;
+  }
+}
+
+btn.reset-state {
+  margin-top: 10px;
+}
+
+
+*/

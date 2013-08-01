@@ -99,6 +99,7 @@ INSTALLED_APPS = (
     'django_jenkins',
     'treebeard',
     'phtc.treatment_activity',
+    'phtc.logic_model',
 )
 
 LETTUCE_APPS = (
@@ -119,7 +120,8 @@ PAGEBLOCKS = ['pageblocks.TextBlock',
               'pageblocks.ImageBlock',
               'pageblocks.ImagePullQuoteBlock',
               'quizblock.Quiz',
-              'treatment_activity.TreatmentActivityBlock'
+              'treatment_activity.TreatmentActivityBlock',
+              'logic_model.LogicModelBlock'
               ]
 
 

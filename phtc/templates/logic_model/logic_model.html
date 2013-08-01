@@ -1,0 +1,13 @@
+<div class="logic-model-container">
+	<div id="phase_container">
+
+	<div class ="well">
+		<div class="logic-model-game-phase-instructions">Instructions for this phase of the game.</div>
+		<div class="btn btn-info previous_phase">&larr;Go back</div>
+	</div>
+
+		<!-- choose scenario -->
+		{%include "logic_model/subtemplates/initial_scenario_choice.html" %}
+		<!-- all subsequent phases of the game -->
+		{%include "logic_model/subtemplates/table.html" %}
+</div>

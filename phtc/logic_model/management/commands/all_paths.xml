@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TreatmentPaths>
+    <TreatmentPath>
+        <field type="CharField" name="name">Boceprevir for treatment-naive patients without known cirrhosis</field>
+        <field type="TreatmentNode" name="tree">A1. Boceprevir for treatment-naive patients without known cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">False</field>
+        <field type="IntegerField" name="treatment_status">0</field>
+        <field type="CharField" name="drug_choice">boceprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Boceprevir for prior relapsers without cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">A2. Boceprevir for prior relapsers and partial responders without known cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">False</field>
+        <field type="IntegerField" name="treatment_status">2</field>
+        <field type="CharField" name="drug_choice">boceprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Boceprevir for partial responders without cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">A2. Boceprevir for prior relapsers and partial responders without known cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">False</field>
+        <field type="IntegerField" name="treatment_status">3</field>
+        <field type="CharField" name="drug_choice">boceprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Telaprevir for treatment-naive patients without known cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">A3. Telaprevir for treatment-naive patients and prior relapsers without known cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">False</field>
+        <field type="IntegerField" name="treatment_status">0</field>
+        <field type="CharField" name="drug_choice">telaprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Boceprevir for treatment-naive with cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">B1. Boceprevir for null responders and patients with cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">True</field>
+        <field type="IntegerField" name="treatment_status">0</field>
+        <field type="CharField" name="drug_choice">boceprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Boceprevir for prior relapsers with cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">B1. Boceprevir for null responders and patients with cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">True</field>
+        <field type="IntegerField" name="treatment_status">2</field>
+        <field type="CharField" name="drug_choice">boceprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Boceprevir for partial responders with cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">B1. Boceprevir for null responders and patients with cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">True</field>
+        <field type="IntegerField" name="treatment_status">3</field>
+        <field type="CharField" name="drug_choice">boceprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Boceprevir for null responders with cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">B1. Boceprevir for null responders and patients with cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">True</field>
+        <field type="IntegerField" name="treatment_status">1</field>
+        <field type="CharField" name="drug_choice">boceprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Boceprevir for null responders without cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">B1. Boceprevir for null responders and patients with cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">False</field>
+        <field type="IntegerField" name="treatment_status">1</field>
+        <field type="CharField" name="drug_choice">boceprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Telaprevir for prior relapsers without cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">A3. Telaprevir for treatment-naive patients and prior relapsers without known cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">False</field>
+        <field type="IntegerField" name="treatment_status">2</field>
+        <field type="CharField" name="drug_choice">telaprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Telaprevir for treatment-naive with cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">B2. Telaprevir for prior partial or null responders or patients with cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">True</field>
+        <field type="IntegerField" name="treatment_status">0</field>
+        <field type="CharField" name="drug_choice">telaprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Telaprevir for prior relapsers with cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">B2. Telaprevir for prior partial or null responders or patients with cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">True</field>
+        <field type="IntegerField" name="treatment_status">2</field>
+        <field type="CharField" name="drug_choice">telaprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Telaprevir for prior partial responders with cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">B2. Telaprevir for prior partial or null responders or patients with cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">True</field>
+        <field type="IntegerField" name="treatment_status">3</field>
+        <field type="CharField" name="drug_choice">telaprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Telaprevir for prior partial responders without cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">B2. Telaprevir for prior partial or null responders or patients with cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">False</field>
+        <field type="IntegerField" name="treatment_status">3</field>
+        <field type="CharField" name="drug_choice">telaprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Telaprevir for null responders with cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">B2. Telaprevir for prior partial or null responders or patients with cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">True</field>
+        <field type="IntegerField" name="treatment_status">1</field>
+        <field type="CharField" name="drug_choice">telaprevir</field>
+    </TreatmentPath>
+    <TreatmentPath>
+        <field type="CharField" name="name">Telaprevir for null responders without cirrhosis</field>
+        <field to="treatment_activity.treatmentnode" name="tree">B2. Telaprevir for prior partial or null responders or patients with cirrhosis</field>
+        <field type="BooleanField" name="cirrhosis">False</field>
+        <field type="IntegerField" name="treatment_status">1</field>
+        <field type="CharField" name="drug_choice">telaprevir</field>
+    </TreatmentPath>
+</TreatmentPaths>
