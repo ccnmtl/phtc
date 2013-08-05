@@ -1,0 +1,272 @@
+#infochart01 {
+    position: relative;
+    width: 670px;
+    height: 650px;
+    background: url('img/bg_chart.png') no-repeat 0 0;
+}
+
+#infochart01 #charttitle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 670px;
+    height: 47px;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: url('img/chart_title.png') no-repeat 0 0;
+}
+
+#infochart01 #chartcontent {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 670px;
+    height: 590px;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+#infochart01 #chartcontent #chartnav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 670px;
+    height: 78px;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+#infochart01 #imagemap_shim {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    z-index: 700;
+    display: block;
+    width: 670px;
+    height: 78px;
+}
+
+#infochart01 #chartcontent #charttext {
+    position: absolute;
+    top: 80px;
+    left: 0px;
+    width: 670px;
+    height: 495px;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: normal 13px/130% "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #000;
+    overflow: hidden;
+}
+
+#infochart01 #chartcontent #charttext table {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-collapse:collapse;
+}
+
+#infochart01 #chartcontent #charttext table tr {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-collapse:collapse;
+}
+
+#infochart01 #chartcontent #charttext table td {
+    margin: 0;
+    padding: 2px;
+    border: 0;
+    border: 1px solid #000;
+    border-collapse:collapse;
+}
+
+#infochart01 #chartcontent #charttext ul {
+    display: block;
+    padding: 71px 0 0 0;
+    margin: 0 0 0 20px;
+    border: 0;
+    margin: 0;
+    padding: 5px 0 5px 20px;
+}
+
+
+#infochart01 #chartcontent #charttext .textactive {
+    display: block;
+}
+
+#infochart01 #chartcontent #charttext div {
+    margin: 20px 40px;
+    padding: 0;
+    border: 0;
+}
+
+#infochart01 #chartcontent #charttext h2 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: #336699;
+    font-weight: normal;
+    font: normal 24px/100% "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#infochart01 #chartcontent #charttext div ul li {
+    display: block;
+    padding: 0 0 4px 14px;
+    margin: 0 0 4px 0;
+    border: 0;
+}
+
+#infochart01 #chartcontent #chart_navlocating {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 400;
+    width: 122px;
+    height: 78px;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+#infochart01 #chartcontent #chart_navgaining {
+    position: absolute;
+    top: 0px;
+    left: 103px;
+    z-index: 400;
+    width: 144px;
+    height: 78px;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+#infochart01 #chartcontent #chart_navsampling {
+    position: absolute;
+    top: 0px;
+    left: 231px;
+    z-index: 400;
+    width: 109px;
+    height: 78px;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+#infochart01 #chartcontent #chart_navcollecting {
+    position: absolute;
+    top: 0px;
+    left: 323px;
+    z-index: 400;
+    width: 105px;
+    height: 78px;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+#infochart01 #chartcontent #chart_navrecording {
+    position: absolute;
+    top: 0px;
+    left: 409px;
+    z-index: 400;
+    width: 109px;
+    height: 78px;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+#infochart01 #chartcontent #chart_navresolving {
+    position: absolute;
+    top: 0px;
+    left: 500px;
+    z-index: 400;
+    width: 100px;
+    height: 78px;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+#infochart01 #chartcontent #chart_navstoring {
+    position: absolute;
+    top: 0px;
+    left: 583px;
+    z-index: 400;
+    width: 87px;
+    height: 78px;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+
+
+
+
+
+
+
+.infotext_default {display: none;}
+.infotext_default div.instructions {
+    border: 0;
+    font-size: 14px;
+    line-height: 140%;
+}
+
+
+
+
+.navlocating {background: url('img/navlocating.png') no-repeat -244px 0px;}
+.navlocating-hover {background: url('img/navlocating.png') no-repeat -122px 0px; cursor: pointer;}
+.navlocating-active {background: url('img/navlocating.png') no-repeat 0px 0px; cursor: pointer;}
+.textlocating {display: none; padding-top: 30px;}
+
+.navgaining {background: url('img/navgaining.png') no-repeat -288px 0px;}
+.navgaining-hover {background: url('img/navgaining.png') no-repeat -144px 0px; cursor: pointer;}
+.navgaining-active {background: url('img/navgaining.png') no-repeat 0px 0px; cursor: pointer;}
+.textgaining {display: none; padding-top: 30px;}
+
+.navsampling {background: url('img/navsampling.png') no-repeat -218px 0px;}
+.navsampling-hover {background: url('img/navsampling.png') no-repeat -109px 0px; cursor: pointer;}
+.navsampling-active {background: url('img/navsampling.png') no-repeat 0px 0px; cursor: pointer;}
+.textsampling {display: none; padding-top: 30px;}
+
+.navcollecting {background: url('img/navcollecting.png') no-repeat -210px 0px;}
+.navcollecting-hover {background: url('img/navcollecting.png') no-repeat -105px 0px; cursor: pointer;}
+.navcollecting-active {background: url('img/navcollecting.png') no-repeat 0px 0px; cursor: pointer;}
+.textcollecting {display: none; padding-top: 30px;}
+
+.navrecording {background: url('img/navrecording.png') no-repeat -218px 0px;}
+.navrecording-hover {background: url('img/navrecording.png') no-repeat -109px 0px; cursor: pointer;}
+.navrecording-active {background: url('img/navrecording.png') no-repeat 0px 0px; cursor: pointer;}
+.textrecording {display: none; padding-top: 30px;}
+
+.navresolving {background: url('img/navresolving.png') no-repeat -200px 0px;}
+.navresolving-hover {background: url('img/navresolving.png') no-repeat -100px 0px; cursor: pointer;}
+.navresolving-active {background: url('img/navresolving.png') no-repeat 0px 0px; cursor: pointer;}
+.textresolving {display: none; padding-top: 30px;}
+
+.navstoring {background: url('img/navstoring.png') no-repeat -174px 0px;}
+.navstoring-hover {background: url('img/navstoring.png') no-repeat -87px 0px; cursor: pointer;}
+.navstoring-active {background: url('img/navstoring.png') no-repeat 0px 0px; cursor: pointer;}
+.textstoring {display: none; padding-top: 30px;}
