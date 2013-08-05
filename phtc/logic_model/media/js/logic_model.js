@@ -14,10 +14,6 @@
 
 
     var Scenario = Backbone.Model.extend({
-        defaults: {
-        },
-        aboutMe: function() {
-        },
     });
 
     var ScenarioCollection = Backbone.Collection.extend({
@@ -27,25 +23,24 @@
     var ScenarioView = Backbone.View.extend({
         className: "backbone_scenario_div",
         events: {
-            //'change textarea' : 'render',
             'click .try_this_scenario' : 'chooseMe'
         },
 
         initialize: function (options, render) {
             var self = this;
-            _.bindAll(self,
-                "render"
-            );
             self.template = _.template(jQuery("#logic-model-scenario").html());
             var ctx = self.model.toJSON();
             self.el.innerHTML = self.template(ctx);
         },
+
         chooseMe : function () {
             var self = this;
-            //jQuery ('.scenario_info').html (self.model.get ('instructions'));
             jQuery ('.scenario_instructions').html (self.model.get ('instructions'));
-            self.LogicModelView.goToNextPhase();
+            jQuery ('.scenario_title_2').html (self.model.get ('title'));
 
+
+
+            self.LogicModelView.goToNextPhase();
         }
     });
     /////////
@@ -174,7 +169,6 @@
                 /* activeClass: "active_droppable", */
                 hoverClass: "hover_droppable",
                 drop: self.onDrop,
-                //greedy: true,
                 activate: self.render
             };
             jQuery (this.el).find ('.box_droppable').droppable(droppable_options);
@@ -183,8 +177,7 @@
 
         hasText: function() {
             var self = this;
-            if (jQuery (this.el).find('.text_box').val().length > 0) {
-                // this has content in it, so return true.
+            if (jQuery (self.el).find('.text_box').val().length > 0) {
                 return true;
             }
             return false;
@@ -199,22 +192,18 @@
             jQuery(self.el).find ('.text_box').css('background-color', color);
         },
 
-
         nextColor: function() {
             var self = this;
             self.model.set ({color_int: self.model.get ('color_int') + 1 });
             self.setColor();
         },
 
-
         setUpDraggable: function () {
             var self = this;
             var draggable_options = {
                 handle : '.box_handle',
                 revert : 'invalid',
-                cursor: 'move',
-                /*                helper: "clone", */
-
+                cursor: 'move'
             };
             jQuery (this.el).find ('.box_draggable').draggable(draggable_options);
         },
@@ -232,7 +221,7 @@
                 jQuery (this.el).find('.text_box').attr({'disabled':false});
                     if (self.hasText()) {
                         self.turnOnDraggable();
-                    } else { // empty
+                    } else {
                         self.turnOffDraggable();
                     }
             }
@@ -273,8 +262,11 @@
     var ColumnView = Backbone.View.extend({
         tagName: "span",
         className: "backbone_column_span",
+        
         events: {
+            "click .column_help_button": "showHelpBox" 
         },
+
         initialize: function (options, render) {
             var self = this;
             _.bindAll(self, "render", "unrender",  "addBox", "check_the_boxes");
@@ -282,13 +274,31 @@
             self.model.set ({boxModels: []});
             self.boxes = new BoxCollection();
             var the_columns = _.map (_.range(1, NUMBER_OF_COLUMNS + 1), function (num) {
-                    return {'name':num.toString(), 'column' : self.model};
+                    return {
+                        'name':num.toString(),
+                        'column' : self.model
+                    };
                 }
             );
             self.boxes.add (the_columns);            
             self.model.set ();
             self.template = _.template(jQuery("#logic-model-column").html());
+
+            var ctx = self.model.toJSON();
+            self.el.innerHTML = self.template(ctx);
             self.render();
+        },
+
+        showHelpBox: function () {
+            var self = this;
+            var the_template = jQuery('#logic-model-help-box').html();
+            var the_data = {
+                'examples'  : self.model.get ('help_examples'  ),
+                'definition': self.model.get ('help_definition')
+            };
+            var the_html = _.template(the_template, the_data);
+            jQuery( ".help_box" ).html (the_html);
+            jQuery( ".help_box" ).show();
         },
 
         check_the_boxes: function() {
@@ -305,11 +315,6 @@
             self.boxes.each (function (a) { a.trigger ('render'); });
         },
 
-        addBoxes: function() {
-            var self = this;
-            self.boxes.each(self.addBox);
-        },
-
         addBox: function(box) {
             var self = this;
             var view = new BoxView({
@@ -323,9 +328,7 @@
 
         render: function () {
             var self = this;
-            var ctx = this.model.toJSON();
-            this.el.innerHTML = this.template(ctx);
-            self.addBoxes();
+            self.boxes.each(self.addBox);
             return this;
         },
         unrender: function () {
@@ -367,6 +370,7 @@
 
             self.scenarios = new ScenarioCollection();
             self.scenarios.bind("add", this.onAddScenario);
+
 
         },
 
@@ -503,6 +507,8 @@
             var self = this;
             console.log ("removingcolumn");
         },
+
+
     });
 
 }(jQuery));    

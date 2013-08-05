@@ -26,6 +26,9 @@ textarea#reflections {
   display: block;
 }
 
+.previous_phase {
+  width: 100px;
+}
 .divclearfix {
   clear: both;
 }
@@ -40,6 +43,14 @@ span.backbone_column_span {
     margin-left:0px;
 }
 
+.help_box {
+  display: none;
+  position: absolute;
+  top: 400px;
+  left:100px;
+  width: 400px;
+  height: 400px;
+}
 
 .cell {
   width: 130px;
@@ -88,7 +99,7 @@ span.backbone_column_span {
   position: absolute;
   left : 0px;
   top : 10px;
-  height:15px;
+  height:16px;
   width:15px;
   border: 1px solid #ccc;
   background-color: #ccc;
