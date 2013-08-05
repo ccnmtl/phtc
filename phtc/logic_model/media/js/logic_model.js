@@ -5,8 +5,8 @@
     Backbone.sync = function (method, model, success, error) {
         };
 
-    var DEBUG_PHASE = 0;
-
+    var DEBUG_PHASE = 1;
+    var NUMBER_OF_COLUMNS = 9;
 
     function findBox (el) {
         return jQuery (el).closest('.backbone_box_div').data('view');
@@ -42,7 +42,6 @@
         },
         chooseMe : function () {
             var self = this;
-            console.log (self.model.get ('title') + ' chosen ' );
             //jQuery ('.scenario_info').html (self.model.get ('instructions'));
             jQuery ('.scenario_instructions').html (self.model.get ('instructions'));
             self.LogicModelView.goToNextPhase();
@@ -153,8 +152,8 @@
         },
 
         onDrop: function (event, ui) {
-            src_box = findBox(ui.draggable.context);
-            dst_box = findBox(event.target);
+            var src_box = findBox(ui.draggable.context);
+            var dst_box = findBox(event.target);
             src_box.draggedFrom();
             dst_box.draggedTo();
             // transfer text:
@@ -175,6 +174,7 @@
                 /* activeClass: "active_droppable", */
                 hoverClass: "hover_droppable",
                 drop: self.onDrop,
+                //greedy: true,
                 activate: self.render
             };
             jQuery (this.el).find ('.box_droppable').droppable(droppable_options);
@@ -211,7 +211,10 @@
             var self = this;
             var draggable_options = {
                 handle : '.box_handle',
-                revert : 'invalid'
+                revert : 'invalid',
+                cursor: 'move',
+                /*                helper: "clone", */
+
             };
             jQuery (this.el).find ('.box_draggable').draggable(draggable_options);
         },
@@ -278,15 +281,11 @@
             self.model.bind("check_the_boxes", self.check_the_boxes);
             self.model.set ({boxModels: []});
             self.boxes = new BoxCollection();
-            self.boxes.add ([
-                { name: '1', column: self.model },
-                { name: '2', column: self.model },
-                { name: '3', column: self.model },
-                { name: '4', column: self.model },
-                { name: '5', column: self.model },
-                { name: '6', column: self.model }
-            ]);
-            
+            var the_columns = _.map (_.range(1, NUMBER_OF_COLUMNS + 1), function (num) {
+                    return {'name':num.toString(), 'column' : self.model};
+                }
+            );
+            self.boxes.add (the_columns);            
             self.model.set ();
             self.template = _.template(jQuery("#logic-model-column").html());
             self.render();

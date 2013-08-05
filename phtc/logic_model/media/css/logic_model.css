@@ -15,8 +15,10 @@ textarea#reflections {
 
 .logic-model-columns {
     width: 840px;
+    /*
     height: 500px;
     border: 1px solid #ccc;
+    */
 }
 
 .centered {
@@ -103,14 +105,27 @@ div.done-button.visible {
 
 
 .box_draggable .box_handle .icon-move{
-  /*
   display: inline;
-  */
-  /*
-  position: relative;
-  left : 100px;
-  top :  100px;
-  */
+  position: absolute;
+  left : 1px;
+  top :  33px;
+}
+
+
+.hover_droppable {
+  background-color: blue;
+  /*opacity:0.4;
+  filter:alpha(opacity=40); */
+}
+
+
+
+.hover_droppable .text_box, 
+.hover_droppable .box_handle,
+.hover_droppable .switch_color {
+  z-index: -100;
+  opacity:0.0;
+  filter:alpha(opacity=0);
 }
 
 
@@ -127,9 +142,6 @@ div.done-button.visible {
 }
 
 
-.hover_droppable {
-  background-color: blue;
-}
 
 .inactive_box {
   background-color: darkgrey;
@@ -142,7 +154,7 @@ div.done-button.visible {
 #phase_container.pick_scenario textarea#reflections,
 #phase_container.pick_scenario .change_scenario,
 #phase_container.pick_scenario .scenario_info,
-#phase_container.pick_scenario .scenario_instructions,
+#phase_container.pick_scenario .scenario_instructions_container,
 #phase_container.pick_scenario .next_phase  {
     display:none;
 }

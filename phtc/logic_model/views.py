@@ -7,8 +7,8 @@ import simplejson
 def settings(request):
     if not request.is_ajax() or request.method != "POST":
         return HttpResponseForbidden()
-    columns_in_each_phase = {}
     
+    columns_in_each_phase = {}
     for ap in ActivePhase.objects.all():
         if ap.game_phase_id in columns_in_each_phase:
             columns_in_each_phase[ap.game_phase.id].append (ap.column.id)
