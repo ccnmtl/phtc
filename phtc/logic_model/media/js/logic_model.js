@@ -170,7 +170,7 @@
                 drop: self.onDrop,
                 //activate: self.render,
                 activate: self.startDrag,
-                tolerance: 'touch'
+                tolerance: 'pointer'
             };
             jQuery (this.el).find ('.box_droppable').droppable(droppable_options);
 
