@@ -5,7 +5,7 @@
     Backbone.sync = function (method, model, success, error) {
         };
 
-    var DEBUG_PHASE = 1;
+    //var DEBUG_PHASE = 1;
     var NUMBER_OF_COLUMNS = 9;
 
     function findBox (el) {
@@ -14,10 +14,6 @@
 
 
     var Scenario = Backbone.Model.extend({
-        defaults: {
-        },
-        aboutMe: function() {
-        },
     });
 
     var ScenarioCollection = Backbone.Collection.extend({
@@ -27,25 +23,24 @@
     var ScenarioView = Backbone.View.extend({
         className: "backbone_scenario_div",
         events: {
-            //'change textarea' : 'render',
             'click .try_this_scenario' : 'chooseMe'
         },
 
         initialize: function (options, render) {
             var self = this;
-            _.bindAll(self,
-                "render"
-            );
             self.template = _.template(jQuery("#logic-model-scenario").html());
             var ctx = self.model.toJSON();
             self.el.innerHTML = self.template(ctx);
         },
+
         chooseMe : function () {
             var self = this;
-            //jQuery ('.scenario_info').html (self.model.get ('instructions'));
             jQuery ('.scenario_instructions').html (self.model.get ('instructions'));
-            self.LogicModelView.goToNextPhase();
+            jQuery ('.scenario_title_2').html (self.model.get ('title'));
 
+
+
+            self.LogicModelView.goToNextPhase();
         }
     });
     /////////
@@ -106,8 +101,6 @@
             self.$el.data('view', this);
         },
 
-
-            // TODO: turn these into methods of the box object.
         turnOnDraggable: function() {
             var self = this;
             var jel = self.$el;
@@ -145,8 +138,8 @@
         draggedTo: function() {
             var self = this;
             var jel = self.$el;
-            jel.find(".placeholder").remove();
-            jel.find(".box_handle").show();
+            jel.find (".placeholder").remove();
+            jel.find (".box_handle").show();
             jel.find ('.box_droppable').droppable( "disable" );
             jel.find ('.box_draggable').draggable( "enable" );
         },
@@ -174,7 +167,6 @@
                 /* activeClass: "active_droppable", */
                 hoverClass: "hover_droppable",
                 drop: self.onDrop,
-                //greedy: true,
                 activate: self.render
             };
             jQuery (this.el).find ('.box_droppable').droppable(droppable_options);
@@ -183,8 +175,7 @@
 
         hasText: function() {
             var self = this;
-            if (jQuery (this.el).find('.text_box').val().length > 0) {
-                // this has content in it, so return true.
+            if (jQuery (self.el).find('.text_box').val().length > 0) {
                 return true;
             }
             return false;
@@ -199,22 +190,18 @@
             jQuery(self.el).find ('.text_box').css('background-color', color);
         },
 
-
         nextColor: function() {
             var self = this;
             self.model.set ({color_int: self.model.get ('color_int') + 1 });
             self.setColor();
         },
 
-
         setUpDraggable: function () {
             var self = this;
             var draggable_options = {
                 handle : '.box_handle',
                 revert : 'invalid',
-                cursor: 'move',
-                /*                helper: "clone", */
-
+                cursor: 'move'
             };
             jQuery (this.el).find ('.box_draggable').draggable(draggable_options);
         },
@@ -232,7 +219,7 @@
                 jQuery (this.el).find('.text_box').attr({'disabled':false});
                     if (self.hasText()) {
                         self.turnOnDraggable();
-                    } else { // empty
+                    } else {
                         self.turnOffDraggable();
                     }
             }
@@ -273,25 +260,55 @@
     var ColumnView = Backbone.View.extend({
         tagName: "span",
         className: "backbone_column_span",
+        
         events: {
+            "click .column_help_button_span": "showHelpBox"
         },
+
+
         initialize: function (options, render) {
             var self = this;
-            _.bindAll(self, "render", "unrender",  "addBox", "check_the_boxes");
-            self.model.bind("check_the_boxes", self.check_the_boxes);
+            _.bindAll(self, "render", "unrender",  "addBox", "checkBoxes", "showHelpBox");
+            self.model.bind("checkBoxes", self.checkBoxes);
             self.model.set ({boxModels: []});
             self.boxes = new BoxCollection();
             var the_columns = _.map (_.range(1, NUMBER_OF_COLUMNS + 1), function (num) {
-                    return {'name':num.toString(), 'column' : self.model};
+                    return {
+                        'name':num.toString(),
+                        'column' : self.model
+                    };
                 }
             );
             self.boxes.add (the_columns);            
             self.model.set ();
             self.template = _.template(jQuery("#logic-model-column").html());
+
+            var ctx = self.model.toJSON();
+            self.el.innerHTML = self.template(ctx);
             self.render();
         },
 
-        check_the_boxes: function() {
+        showHelpBox: function () {
+            var self = this;
+            var the_template = jQuery('#logic-model-help-box').html();
+            var examples_copy = self.model.get ('help_examples'  );
+            if (examples_copy === '' || examples_copy == undefined ) {
+                examples_copy = 'Lorem ipsum';
+            }
+            var definition_copy = self.model.get ('help_definition'  );
+            if (definition_copy === '' || definition_copy === undefined ) {
+                definition_copy = 'Lorem ipsum';
+            }
+            var the_data = {
+                'help_title'  : definition_copy,
+                'help_body': examples_copy
+            };
+            var the_html = _.template(the_template, the_data);
+            jQuery( ".help_box" ).html (the_html);
+            jQuery( ".help_box" ).show();
+        },
+
+        checkBoxes: function() {
             // this is basically a render function here.
             var self = this;
             if (self.model.get ('active')) {
@@ -303,11 +320,6 @@
             } 
             // test all boxes for draggableness.
             self.boxes.each (function (a) { a.trigger ('render'); });
-        },
-
-        addBoxes: function() {
-            var self = this;
-            self.boxes.each(self.addBox);
         },
 
         addBox: function(box) {
@@ -323,9 +335,7 @@
 
         render: function () {
             var self = this;
-            var ctx = this.model.toJSON();
-            this.el.innerHTML = this.template(ctx);
-            self.addBoxes();
+            self.boxes.each(self.addBox);
             return this;
         },
         unrender: function () {
@@ -342,7 +352,9 @@
             "click .next_phase": "goToNextPhase",
             "click .done-button": "goToNextPhase",
             "click .previous_phase": "goToPreviousPhase",
-            "click .change_scenario": "goToFirstPhase"
+            "click .change_scenario": "goToFirstPhase",
+            "click .game-phase-help-button-div" : "showGamePhaseHelpBox",
+            "click .help_box": "closeHelpBox"
         },
         phases: null,
         current_phase : null,
@@ -356,20 +368,45 @@
                 "onAddScenario",
                 "onRemoveColumn",
                 "goToNextPhase",
-                "goToPreviousPhase"
-
+                "goToPreviousPhase",
+                "showGamePhaseHelpBox"
             );
             self.getSettings();
             // Paint the columns:
             self.columns = new ColumnCollection();
             self.columns.bind("add", this.onAddColumn);
 
-
             self.scenarios = new ScenarioCollection();
             self.scenarios.bind("add", this.onAddScenario);
 
         },
 
+        showGamePhaseHelpBox: function () {
+            var self = this;
+            var phase_info = self.currentPhaseInfo();
+            var the_template = jQuery('#logic-model-help-box').html();
+            var title_copy = phase_info.name;
+            if (title_copy === '' || title_copy === undefined ) {
+                title_copy = 'Lorem ipsum';
+            }
+            var body_copy = phase_info.instructions;
+            if (body_copy === '' || body_copy === undefined ) {
+                body_copy = 'Lorem ipsum';
+            }
+            var the_data = {
+                'help_title'  : title_copy,
+                'help_body'   : body_copy
+            };
+            var the_html = _.template(the_template, the_data);
+            jQuery( ".help_box" ).html (the_html);
+            jQuery( ".help_box" ).show();
+        },
+
+        closeHelpBox : function() {
+            var self = this;
+            jQuery('.help_box').hide();
+            jQuery('.help_box').html('');
+        },
 
         getSettings: function() {
             // Fetch the list of columns and scenarios from the back end.
@@ -409,17 +446,22 @@
 
         setUpPhases : function() {
             var self = this;
-            if (DEBUG_PHASE !== undefined) {
+            if (typeof DEBUG_PHASE !== "undefined") {
                 self.current_phase = DEBUG_PHASE;
             } else {
                 self.current_phase = 0;
             }
         },
 
+        currentPhaseInfo: function() {
+            var self = this;
+            return self.phases[self.current_phase];
+        },
+
         paintPhase: function() {
             var self = this;
             jQuery("li.next, h1.section-label-header, li.previous").hide();
-            var phase_info = self.phases[self.current_phase];
+            var phase_info = self.currentPhaseInfo();
             var active_columns_for_this_phase = self.columns_in_each_phase[phase_info.id];
             self.columns.each (function (col) {
                 if (active_columns_for_this_phase !== undefined) {
@@ -428,11 +470,11 @@
                 }
                 // default is true, btw.
             });
-            self.columns.each (function (a) { a.trigger ('check_the_boxes'); });
+            self.columns.each (function (a) { a.trigger ('checkBoxes'); });
             // set the #phase_container span so that
             // the CSS can properly paint this phase of the game.
             jQuery("#phase_container").attr("class", phase_info.css_classes);
-            jQuery('.logic-model-game-phase-instructions').html(phase_info.instructions);
+            jQuery('.logic-model-game-phase-name').html(phase_info.name);
 
             if (self.current_phase === 0) {
                 jQuery ('.previous_phase').hide();
@@ -503,6 +545,9 @@
             var self = this;
             console.log ("removingcolumn");
         },
+
+
+
     });
 
 }(jQuery));    

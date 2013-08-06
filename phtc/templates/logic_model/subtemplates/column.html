@@ -1,8 +1,17 @@
 <script type="text/template" id="logic-model-column">
 	<span class ="column_span <%=css_classes %>">
-	    <div class="colhead"><%=name %></div>
+	    <div class="colhead">
+	    	<div class = "column_name">
+		    	<%=name %>
+	    	</div>
+	    	<div class="column_help_button_span">
+				<i class="column_help_button icon-large icon-question-sign"></i>
+	    	</div>
+	    </div>
 	    <span class ="boxes"></span>
-	    <div class="btn btn-primary btn-large btn-success done-button">I'm Done!</div>
+	    <div class="btn btn-primary btn-large btn-success done-button">
+	    	I'm Done!
+	    </div>
 	    <div class="divclearfix"></div>
     </span>
 </script>
