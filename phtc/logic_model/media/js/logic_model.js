@@ -446,7 +446,7 @@
 
         setUpPhases : function() {
             var self = this;
-            if (DEBUG_PHASE !== undefined) {
+            if (typeof DEBUG_PHASE !== "undefined") {
                 self.current_phase = DEBUG_PHASE;
             } else {
                 self.current_phase = 0;
