@@ -180,7 +180,7 @@
             var self = this;
             //console.log (ui.helper);
             //console.log ('a');
-            ui.helper.css('z-index', 1000);
+            ui.helper.css('z-index', 100);
             self.render();
 
         },
