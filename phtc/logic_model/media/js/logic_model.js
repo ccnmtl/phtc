@@ -5,7 +5,7 @@
     Backbone.sync = function (method, model, success, error) {
         };
 
-    var DEBUG_PHASE = 1;
+    //var DEBUG_PHASE = 1;
     var NUMBER_OF_COLUMNS = 9;
 
     function findBox (el) {
@@ -381,14 +381,9 @@
 
         },
 
-
-
         showGamePhaseHelpBox: function () {
             var self = this;
             var phase_info = self.currentPhaseInfo();
-            console.log (phase_info.instructions);
-
-
             var the_template = jQuery('#logic-model-help-box').html();
             var title_copy = phase_info.name;
             if (title_copy === '' || title_copy === undefined ) {
@@ -405,29 +400,13 @@
             var the_html = _.template(the_template, the_data);
             jQuery( ".help_box" ).html (the_html);
             jQuery( ".help_box" ).show();
-            /*
-
-            var definition_copy = self.model.get ('help_definition'  );
-            if (definition_copy === '' || definition_copy === undefined ) {
-                definition_copy = 'Lorem ipsum';
-            }
-            var the_data = {
-                'help_title'  : definition_copy,
-                'help_body': examples_copy
-            };
-            var the_html = _.template(the_template, the_data);
-            jQuery( ".help_box" ).html (the_html);
-            jQuery( ".help_box" ).show();
-            */
         },
-
 
         closeHelpBox : function() {
             var self = this;
             jQuery('.help_box').hide();
             jQuery('.help_box').html('');
         },
-
 
         getSettings: function() {
             // Fetch the list of columns and scenarios from the back end.
