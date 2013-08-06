@@ -308,8 +308,6 @@
             jQuery( ".help_box" ).show();
         },
 
-
-
         checkBoxes: function() {
             // this is basically a render function here.
             var self = this;
@@ -355,6 +353,7 @@
             "click .done-button": "goToNextPhase",
             "click .previous_phase": "goToPreviousPhase",
             "click .change_scenario": "goToFirstPhase",
+            "click .game-phase-help-button-div" : "showGamePhaseHelpBox",
             "click .help_box": "closeHelpBox"
         },
         phases: null,
@@ -369,20 +368,58 @@
                 "onAddScenario",
                 "onRemoveColumn",
                 "goToNextPhase",
-                "goToPreviousPhase"
+                "goToPreviousPhase",
+                "showGamePhaseHelpBox"
             );
             self.getSettings();
             // Paint the columns:
             self.columns = new ColumnCollection();
             self.columns.bind("add", this.onAddColumn);
 
-
             self.scenarios = new ScenarioCollection();
             self.scenarios.bind("add", this.onAddScenario);
 
-
         },
 
+
+
+        showGamePhaseHelpBox: function () {
+            var self = this;
+            var phase_info = self.currentPhaseInfo();
+            console.log (phase_info.instructions);
+
+
+            var the_template = jQuery('#logic-model-help-box').html();
+            var title_copy = phase_info.name;
+            if (title_copy === '' || title_copy === undefined ) {
+                title_copy = 'Lorem ipsum';
+            }
+            var body_copy = phase_info.instructions;
+            if (body_copy === '' || body_copy === undefined ) {
+                body_copy = 'Lorem ipsum';
+            }
+            var the_data = {
+                'help_title'  : title_copy,
+                'help_body'   : body_copy
+            };
+            var the_html = _.template(the_template, the_data);
+            jQuery( ".help_box" ).html (the_html);
+            jQuery( ".help_box" ).show();
+            /*
+
+            var definition_copy = self.model.get ('help_definition'  );
+            if (definition_copy === '' || definition_copy === undefined ) {
+                definition_copy = 'Lorem ipsum';
+            }
+            var the_data = {
+                'help_title'  : definition_copy,
+                'help_body': examples_copy
+            };
+            var the_html = _.template(the_template, the_data);
+            jQuery( ".help_box" ).html (the_html);
+            jQuery( ".help_box" ).show();
+            */
+        },
 
 
         closeHelpBox : function() {
@@ -437,10 +474,15 @@
             }
         },
 
+        currentPhaseInfo: function() {
+            var self = this;
+            return self.phases[self.current_phase];
+        },
+
         paintPhase: function() {
             var self = this;
             jQuery("li.next, h1.section-label-header, li.previous").hide();
-            var phase_info = self.phases[self.current_phase];
+            var phase_info = self.currentPhaseInfo();
             var active_columns_for_this_phase = self.columns_in_each_phase[phase_info.id];
             self.columns.each (function (col) {
                 if (active_columns_for_this_phase !== undefined) {
@@ -453,7 +495,7 @@
             // set the #phase_container span so that
             // the CSS can properly paint this phase of the game.
             jQuery("#phase_container").attr("class", phase_info.css_classes);
-            jQuery('.logic-model-game-phase-instructions').html(phase_info.instructions);
+            jQuery('.logic-model-game-phase-name').html(phase_info.name);
 
             if (self.current_phase === 0) {
                 jQuery ('.previous_phase').hide();
