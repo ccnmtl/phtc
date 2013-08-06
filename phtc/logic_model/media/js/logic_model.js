@@ -101,8 +101,6 @@
             self.$el.data('view', this);
         },
 
-
-            // TODO: turn these into methods of the box object.
         turnOnDraggable: function() {
             var self = this;
             var jel = self.$el;
@@ -140,8 +138,8 @@
         draggedTo: function() {
             var self = this;
             var jel = self.$el;
-            jel.find(".placeholder").remove();
-            jel.find(".box_handle").show();
+            jel.find (".placeholder").remove();
+            jel.find (".box_handle").show();
             jel.find ('.box_droppable').droppable( "disable" );
             jel.find ('.box_draggable').draggable( "enable" );
         },
@@ -264,13 +262,14 @@
         className: "backbone_column_span",
         
         events: {
-            "click .column_help_button": "showHelpBox" 
+            "click .column_help_button_span": "showHelpBox"
         },
+
 
         initialize: function (options, render) {
             var self = this;
-            _.bindAll(self, "render", "unrender",  "addBox", "check_the_boxes");
-            self.model.bind("check_the_boxes", self.check_the_boxes);
+            _.bindAll(self, "render", "unrender",  "addBox", "checkBoxes", "showHelpBox");
+            self.model.bind("checkBoxes", self.checkBoxes);
             self.model.set ({boxModels: []});
             self.boxes = new BoxCollection();
             var the_columns = _.map (_.range(1, NUMBER_OF_COLUMNS + 1), function (num) {
@@ -292,16 +291,26 @@
         showHelpBox: function () {
             var self = this;
             var the_template = jQuery('#logic-model-help-box').html();
+            var examples_copy = self.model.get ('help_examples'  );
+            if (examples_copy === '' || examples_copy == undefined ) {
+                examples_copy = 'Lorem ipsum';
+            }
+            var definition_copy = self.model.get ('help_definition'  );
+            if (definition_copy === '' || definition_copy === undefined ) {
+                definition_copy = 'Lorem ipsum';
+            }
             var the_data = {
-                'examples'  : self.model.get ('help_examples'  ),
-                'definition': self.model.get ('help_definition')
+                'help_title'  : definition_copy,
+                'help_body': examples_copy
             };
             var the_html = _.template(the_template, the_data);
             jQuery( ".help_box" ).html (the_html);
             jQuery( ".help_box" ).show();
         },
 
-        check_the_boxes: function() {
+
+
+        checkBoxes: function() {
             // this is basically a render function here.
             var self = this;
             if (self.model.get ('active')) {
@@ -345,7 +354,8 @@
             "click .next_phase": "goToNextPhase",
             "click .done-button": "goToNextPhase",
             "click .previous_phase": "goToPreviousPhase",
-            "click .change_scenario": "goToFirstPhase"
+            "click .change_scenario": "goToFirstPhase",
+            "click .help_box": "closeHelpBox"
         },
         phases: null,
         current_phase : null,
@@ -360,7 +370,6 @@
                 "onRemoveColumn",
                 "goToNextPhase",
                 "goToPreviousPhase"
-
             );
             self.getSettings();
             // Paint the columns:
@@ -372,6 +381,14 @@
             self.scenarios.bind("add", this.onAddScenario);
 
 
+        },
+
+
+
+        closeHelpBox : function() {
+            var self = this;
+            jQuery('.help_box').hide();
+            jQuery('.help_box').html('');
         },
 
 
@@ -432,7 +449,7 @@
                 }
                 // default is true, btw.
             });
-            self.columns.each (function (a) { a.trigger ('check_the_boxes'); });
+            self.columns.each (function (a) { a.trigger ('checkBoxes'); });
             // set the #phase_container span so that
             // the CSS can properly paint this phase of the game.
             jQuery("#phase_container").attr("class", phase_info.css_classes);
@@ -507,6 +524,7 @@
             var self = this;
             console.log ("removingcolumn");
         },
+
 
 
     });
