@@ -57,6 +57,7 @@ span.backbone_column_span {
   left:100px;
   width: 400px;
   height: 400px;
+  z-index: 300;
 }
 
 .cell {
@@ -92,6 +93,7 @@ span.backbone_column_span {
   left:   10px;
   width : 110px;
   height: 41px;
+  resize: none;
 }
 
 .box_draggable .box_handle {

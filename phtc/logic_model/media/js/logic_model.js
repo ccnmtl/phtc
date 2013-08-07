@@ -81,7 +81,8 @@
                 "draggedTo",
                 "turnOffDraggableAndDroppable",
                 "turnOnDraggable",
-                "turnOffDraggable"
+                "turnOffDraggable",
+                "startDrag"
             );
 
             self.model.bind("destroy", self.unrender);
@@ -167,9 +168,20 @@
                 /* activeClass: "active_droppable", */
                 hoverClass: "hover_droppable",
                 drop: self.onDrop,
-                activate: self.render
+                //activate: self.render,
+                activate: self.startDrag,
+                tolerance: 'pointer'
             };
             jQuery (this.el).find ('.box_droppable').droppable(droppable_options);
+
+        },
+
+        startDrag: function(event, ui) {
+            var self = this;
+            //console.log (ui.helper);
+            //console.log ('a');
+            ui.helper.css('z-index', 100);
+            self.render();
 
         },
 
