@@ -139,7 +139,6 @@ div.add_a_row_button.visible {
  display: inline-block;
 }
 
-
 .show_expert_logic_model_link_div {
     display:none;
 }
@@ -200,6 +199,9 @@ div.add_a_row_button.visible {
 }
 
 
+.wipe-table-button-div {
+    display: none;   
+}
 
 .inactive_box {
   background-color: darkgrey;
@@ -208,6 +210,8 @@ div.add_a_row_button.visible {
 }
 
 /* Pick scenario:*/
+
+#phase_container.pick_scenario div.wipe-table-div, 
 #phase_container.pick_scenario div.logic-model-columns, 
 #phase_container.pick_scenario textarea#reflections,
 #phase_container.pick_scenario .change_scenario,

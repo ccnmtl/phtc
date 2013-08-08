@@ -6,7 +6,10 @@ LogicModel.LogicModelView = Backbone.View.extend({
         "click .change_scenario": "goToFirstPhase",
         "click .game-phase-help-button-div" : "showGamePhaseHelpBox",
         "click .help_box": "closeHelpBox",
-        "click .add_a_row_button": "addARow"
+        "click .add_a_row_button": "addARow",
+        "click .wipe-table-button": "showWipeTableWarning",
+        "click .wipe-table-confirm-button": "wipeTable",
+        "click .wipe-table-cancel-button": "cancelWipeTable"
     },
     phases: null,
     current_phase : null,
@@ -23,7 +26,10 @@ LogicModel.LogicModelView = Backbone.View.extend({
             "showGamePhaseHelpBox",
             "addARow",
             "adjustRows",
-            "checkEmptyBoxes"
+            "checkEmptyBoxes",
+            "showWipeTableWarning",
+            "wipeTable",
+            "cancelWipeTable"
         );
         self.getSettings();
         
@@ -65,6 +71,33 @@ LogicModel.LogicModelView = Backbone.View.extend({
         jQuery('.help_box').html('');
     },
 
+    showWipeTableWarning : function () {
+        var self = this;
+        jQuery ('.wipe-table-button').hide();
+        jQuery ('.wipe-table-button-div').show();
+    },
+
+    wipeTable : function () {
+        var self = this;
+        jQuery('.text_box').each(function (a, b) {console.log (b); b.value = ''; })
+        self.columns.each (function (a) {
+            var box_models = a.get('boxModels');
+            for (var i=0; i < box_models.length; i++)  {
+                box_models[i].set ({'contents': ''});
+            }
+        });
+        jQuery ('.wipe-table-button').show();
+        jQuery ('.wipe-table-button-div').hide();
+        self.current_phase = 1;
+        self.paintPhase();
+
+    },
+
+    cancelWipeTable : function () {
+        var self = this;
+        jQuery ('.wipe-table-button').show();
+        jQuery ('.wipe-table-button-div').hide();
+    },
 
     checkEmptyBoxes : function() {
         var self = this;
