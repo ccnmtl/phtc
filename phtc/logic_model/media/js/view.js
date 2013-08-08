@@ -5,7 +5,8 @@ LogicModel.LogicModelView = Backbone.View.extend({
         "click .previous_phase": "goToPreviousPhase",
         "click .change_scenario": "goToFirstPhase",
         "click .game-phase-help-button-div" : "showGamePhaseHelpBox",
-        "click .help_box": "closeHelpBox"
+        "click .help_box": "closeHelpBox",
+        "click .add_a_row_button": "addARow"
     },
     phases: null,
     current_phase : null,
@@ -20,16 +21,21 @@ LogicModel.LogicModelView = Backbone.View.extend({
             "onRemoveColumn",
             "goToNextPhase",
             "goToPreviousPhase",
-            "showGamePhaseHelpBox"
+            "showGamePhaseHelpBox",
+            "addARow",
+            "adjustRows"
         );
         self.getSettings();
+        
+
+        self.current_number_of_rows = LogicModel.NUMBER_OF_ROWS_INITIALLY_VISIBLE;
+        
         // Paint the columns:
         self.columns = new LogicModel.ColumnCollection();
         self.columns.bind("add", this.onAddColumn);
 
         self.scenarios = new LogicModel.ScenarioCollection();
         self.scenarios.bind("add", this.onAddScenario);
-
     },
 
     showGamePhaseHelpBox: function () {
@@ -78,6 +84,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
                 self.scenarios.add (json.scenarios);
                 self.columns_in_each_phase = json.columns_in_each_phase;
                 self.setUpPhases();
+                self.adjustRows();
                 self.render();
             }
         });
@@ -95,10 +102,34 @@ LogicModel.LogicModelView = Backbone.View.extend({
          });
     },
 
+
+    addARow: function() {
+        var self = this;
+        self.current_number_of_rows = self.current_number_of_rows + 1;
+        self.adjustRows();
+        if ( self.current_number_of_rows === LogicModel.NUMBER_OF_ROWS_TOTAL) {
+            jQuery ('.add_a_row_button').hide();
+        }
+    },
+
+    adjustRows: function() {
+        var self = this;
+        self.columns.each (function (c) {
+            var box_models = c.get('boxModels');
+            for (var i=0;i<box_models.length;i++)  {
+                if (box_models[i].get ('row') <= self.current_number_of_rows) {
+                    box_models[i].trigger ('showBox');
+                }
+            }
+         });
+
+    },
+
+
     setUpPhases : function() {
         var self = this;
-        if (typeof DEBUG_PHASE !== "undefined") {
-            self.current_phase = DEBUG_PHASE;
+        if (typeof LogicModel.DEBUG_PHASE !== "undefined") {
+            self.current_phase = LogicModel.DEBUG_PHASE;
         } else {
             self.current_phase = 0;
         }
@@ -176,21 +207,20 @@ LogicModel.LogicModelView = Backbone.View.extend({
         var view = new LogicModel.ColumnView({
             model: column
         });
+        view.parentView = self;
         jQuery("div.logic-model-columns").append(view.el);
     },
 
     onAddScenario: function(scenario) {
         var self = this;
-
         var view = new LogicModel.ScenarioView({
             model: scenario
         });
-
         view.LogicModelView = self;
-
         jQuery("div.logic-model-initial-scenario-list").append(view.el);
     },
 
+    // todo axe
     onRemoveColumn: function(column) {
         var self = this;
         console.log ("removingcolumn");

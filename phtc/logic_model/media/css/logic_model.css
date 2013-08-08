@@ -132,6 +132,17 @@ div.done-button.visible {
 }
 
 
+.backbone_box_div {
+    display:block;
+}
+
+
+
+.backbone_box_div.hidden_box {
+    display:none;
+}
+
+
 .hover_droppable {
   background-color: blue;
   /*opacity:0.4;

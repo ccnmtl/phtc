@@ -37,13 +37,16 @@ LogicModel.BoxView = Backbone.View.extend({
             "turnOffDraggableAndDroppable",
             "turnOnDraggable",
             "turnOffDraggable",
-            "startDrag"
+            "startDrag",
+            "showBox",
+            "hideBox"
         );
 
         self.model.bind("destroy", self.unrender);
         self.model.bind("makeActive", self.makeActive);
         self.model.bind("makeInactive", self.makeInactive);
-        self.model.bind("nextColor", self.nextColor);
+        self.model.bind("nextColor", self.nextColor)
+        self.model.bind("showBox", self.showBox);
         self.model.bind("render", self.render);
         
         self.template = _.template(jQuery("#logic-model-box").html());
@@ -57,12 +60,27 @@ LogicModel.BoxView = Backbone.View.extend({
         self.$el.data('view', this);
     },
 
+
+    showBox: function() {
+        var self = this;
+        var jel = self.$el;
+        jel.removeClass('hidden_box');
+    },
+
+
+    hideBox: function() {
+        var self = this;
+        var jel = self.$el;
+        jel.addClass('hidden_box');
+    },
+
+
     turnOnDraggable: function() {
         var self = this;
         var jel = self.$el;
         jel.find ('.box_droppable').droppable( "disable" );
         jel.find ('.box_draggable').draggable( "enable" );
-        jQuery (this.el).find ('.box_handle').show();
+        jel.find ('.box_handle').show();
     },
 
     turnOffDraggable: function () {
@@ -71,7 +89,7 @@ LogicModel.BoxView = Backbone.View.extend({
         var the_droppable = jel.find ('.box_droppable');
         the_droppable.droppable( "enable" );
         jel.find ('.box_draggable').draggable( "disable");
-        jQuery (this.el).find ('.box_handle').hide();
+        jel.find ('.box_handle').hide();
     },
 
     turnOffDraggableAndDroppable : function() {

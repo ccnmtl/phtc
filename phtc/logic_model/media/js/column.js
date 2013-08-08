@@ -25,19 +25,20 @@ LogicModel.ColumnView = Backbone.View.extend({
         self.model.bind("checkBoxes", self.checkBoxes);
         self.model.set ({boxModels: []});
         self.boxes = new LogicModel.BoxCollection();
-        var the_columns = _.map (_.range(1, LogicModel.NUMBER_OF_ROWS_TOTAL + 1), function (num) {
+        var the_boxes = _.map (_.range(1, LogicModel.NUMBER_OF_ROWS_TOTAL + 1), function (num) {
                 return {
+                    'row': num,
                     'name':num.toString(),
                     'column' : self.model
                 };
             }
         );
-        self.boxes.add (the_columns);            
-        self.model.set ();
+        self.boxes.add (the_boxes);
         self.template = _.template(jQuery("#logic-model-column").html());
 
         var ctx = self.model.toJSON();
         self.el.innerHTML = self.template(ctx);
+        //self.current_number_of_rows = LogicModel.NUMBER_OF_ROWS_INITIALLY_VISIBLE;
         self.render();
     },
 
@@ -65,25 +66,33 @@ LogicModel.ColumnView = Backbone.View.extend({
         // this is basically a render function here.
         var self = this;
         if (self.model.get ('active')) {
-            self.boxes.each (function (a) { a.trigger ('makeActive'); });
+            self.boxes.each (function (b) { b.trigger ('makeActive'); });
             jQuery (this.el).addClass ('active_column');
         } else {
-            self.boxes.each (function (a) { a.trigger ('makeInactive'); });
+            self.boxes.each (function (b) { b.trigger ('makeInactive'); });
             jQuery (this.el).removeClass ('active_column');
         } 
         // test all boxes for draggableness.
-        self.boxes.each (function (a) { a.trigger ('render'); });
+        self.boxes.each (function (b) { b.trigger ('render'); });
     },
 
     addBox: function(box) {
-        var self = this;
+
+        var self = this;        
         var view = new LogicModel.BoxView({
             model: box
         });
+
         jQuery(self.el).find('.boxes').append(view.el);
+        view.parentView = self;
+        view.$el.addClass ('hidden_box');
         var tmp = self.model.get('boxModels');
         tmp.push (view.model);
         self.model.set ({'boxModels' : tmp});
+    },
+
+    adjustNumberOfVisibleBoxes: function () {
+        console.log (parentView.current_number_of_rows);
     },
 
     render: function () {
