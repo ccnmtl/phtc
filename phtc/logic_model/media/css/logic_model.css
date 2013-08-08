@@ -57,11 +57,20 @@ span.backbone_column_span {
 .help_box {
   display: none;
   position: absolute;
-  top: 400px;
-  left:100px;
+  top: 150px;
+  left: 150px;
   width: 400px;
   height: 400px;
   z-index: 300;
+  opacity:0.9;
+  filter:alpha(opacity=0.9);
+}
+
+.help-alert {
+  width: 400px;
+  height: 400px;
+  opacity:0.9;
+  filter:alpha(opacity=0.9);
 }
 
 .cell {

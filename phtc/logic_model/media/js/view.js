@@ -79,7 +79,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
 
     wipeTable : function () {
         var self = this;
-        jQuery('.text_box').each(function (a, b) {console.log (b); b.value = ''; })
+        jQuery('.text_box').each(function (a, b) {b.value = ''; })
         self.columns.each (function (a) {
             var box_models = a.get('boxModels');
             for (var i=0; i < box_models.length; i++)  {
@@ -212,6 +212,18 @@ LogicModel.LogicModelView = Backbone.View.extend({
     paintPhase: function() {
         var self = this;
         var phase_info = self.currentPhaseInfo();
+        if (phase_info.hasOwnProperty ('already_seen'))  {
+            console.log ("Already seen")
+
+        }
+        else {
+
+            console.log ("This is new.")
+            self.showGamePhaseHelpBox();
+            phase_info ['already_seen'] = true;
+
+        }
+
         var active_columns_for_this_phase = self.columns_in_each_phase[phase_info.id];
         self.columns.each (function (col) {
             if (active_columns_for_this_phase !== undefined) {
@@ -231,7 +243,6 @@ LogicModel.LogicModelView = Backbone.View.extend({
             jQuery("li.previous").show();
             self.ok_to_proceed = true;
         } else {
-
             jQuery("li.previous").hide();
             jQuery ('.previous_phase').show();
         }
