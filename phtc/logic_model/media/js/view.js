@@ -176,6 +176,11 @@ LogicModel.LogicModelView = Backbone.View.extend({
         if (self.current_phase != self.phases.length - 1) {
             jQuery('.active_column').last().find ('.done-button').addClass('visible');
         }
+
+        // unhide the last active donebutton on the page:
+        jQuery('.add_a_row_button').removeClass ('visible');
+        jQuery('.active_column').first().find('.add_a_row_button').addClass('visible')
+        
     },
 
     goToFirstPhase: function() {

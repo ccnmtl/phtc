@@ -124,6 +124,17 @@ div.done-button.visible {
 }
 
 
+
+div.add_a_row_button {
+  display:  none;
+}
+
+div.add_a_row_button.visible {
+ display: inline-block;
+}
+
+
+
 .box_draggable .box_handle .icon-move{
   display: inline;
   position: absolute;
