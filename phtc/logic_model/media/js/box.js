@@ -18,14 +18,13 @@ LogicModel.BoxCollection = Backbone.Collection.extend({
 LogicModel.BoxView = Backbone.View.extend({
     className: "backbone_box_div",
     events: {
-        'change textarea' : 'render',
+        'change textarea' : 'onBoxEdited',
         'click .switch_color' : 'nextColor'
     },
     initialize: function (options, render) {
         var self = this;
         _.bindAll(self,
             "render",
-            "unrender",
             "setUpDroppable",
             "setUpDraggable",
             "hasText",
@@ -39,7 +38,8 @@ LogicModel.BoxView = Backbone.View.extend({
             "turnOffDraggable",
             "startDrag",
             "showBox",
-            "hideBox"
+            "hideBox",
+            "onBoxEdited"
         );
 
         self.model.bind("destroy", self.unrender);
@@ -48,6 +48,7 @@ LogicModel.BoxView = Backbone.View.extend({
         self.model.bind("nextColor", self.nextColor)
         self.model.bind("showBox", self.showBox);
         self.model.bind("render", self.render);
+        self.model.bind("onBoxEdited", self.onBoxEdited);
         
         self.template = _.template(jQuery("#logic-model-box").html());
         var ctx = self.model.toJSON();
@@ -107,6 +108,7 @@ LogicModel.BoxView = Backbone.View.extend({
         jel.find ('.box_handle').hide();
         jel.find ('.box_droppable').droppable( "enable" );
         jel.find ('.box_draggable').draggable( "disable");
+        //self.model.trigger('onBoxEdited');
     },
 
     draggedTo: function() {
@@ -116,6 +118,7 @@ LogicModel.BoxView = Backbone.View.extend({
         jel.find (".box_handle").show();
         jel.find ('.box_droppable').droppable( "disable" );
         jel.find ('.box_draggable').draggable( "enable" );
+        //self.model.trigger('onBoxEdited');
     },
 
     onDrop: function (event, ui) {
@@ -133,6 +136,10 @@ LogicModel.BoxView = Backbone.View.extend({
         dst_box.setColor();
         src_box.model.set({'color_int': 0});
         src_box.setColor();
+
+
+        dst_box.model.trigger ('onBoxEdited');
+        src_box.model.trigger ('onBoxEdited');
     },
 
     setUpDroppable: function (){
@@ -154,7 +161,6 @@ LogicModel.BoxView = Backbone.View.extend({
         var self = this;
         ui.helper.css('z-index', 100);
         self.render();
-
     },
 
     hasText: function() {
@@ -170,8 +176,11 @@ LogicModel.BoxView = Backbone.View.extend({
         var the_colors = self.model.get ('colors');
         var color_int  = self.model.get ('color_int');
         var color =  '#' + (the_colors[color_int % the_colors.length]);
-        jQuery(self.el).find ('.cell').css('background-color', color);
-        jQuery(self.el).find ('.text_box').css('background-color', color);
+        //jQuery(self.el).find ('.cell').css('background-color', color);
+        //jQuery(self.el).find ('.text_box').css('background-color', color);
+
+
+        jQuery(self.el).find ('.text_box').css('color', color);
     },
 
     nextColor: function() {
@@ -188,6 +197,14 @@ LogicModel.BoxView = Backbone.View.extend({
             cursor: 'move'
         };
         jQuery (this.el).find ('.box_draggable').draggable(draggable_options);
+    },
+
+    onBoxEdited: function () {
+        var self = this;
+        self.model.set ({'contents': self.$el.find ('.text_box').val()});
+        self.model.trigger('checkEmptyBoxes')
+        self.render();
+        
     },
 
     render: function () {
@@ -214,13 +231,9 @@ LogicModel.BoxView = Backbone.View.extend({
         var self = this;
         self.model.set ({active: true});
     },
+
     makeInactive: function () {
         var self = this;
         self.model.set ({active: false});
-    },
-    unrender: function () {
-        jQuery(this.el).fadeOut('fast', function() {
-            jQuery(this.el).remove();
-        });            
-    },
+    }
 });

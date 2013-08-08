@@ -21,8 +21,8 @@ LogicModel.ColumnView = Backbone.View.extend({
 
     initialize: function (options, render) {
         var self = this;
-        _.bindAll(self, "render", "unrender",  "addBox", "checkBoxes", "showHelpBox");
-        self.model.bind("checkBoxes", self.checkBoxes);
+        _.bindAll(self, "render", "unrender",  "addBox", "turnOnActiveBoxes", "showHelpBox");
+        self.model.bind("turnOnActiveBoxes", self.turnOnActiveBoxes);
         self.model.set ({boxModels: []});
         self.boxes = new LogicModel.BoxCollection();
         var the_boxes = _.map (_.range(1, LogicModel.NUMBER_OF_ROWS_TOTAL + 1), function (num) {
@@ -39,7 +39,11 @@ LogicModel.ColumnView = Backbone.View.extend({
         var ctx = self.model.toJSON();
         self.el.innerHTML = self.template(ctx);
         //self.current_number_of_rows = LogicModel.NUMBER_OF_ROWS_INITIALLY_VISIBLE;
+
+
         self.render();
+    
+
     },
 
     showHelpBox: function () {
@@ -62,8 +66,8 @@ LogicModel.ColumnView = Backbone.View.extend({
         jQuery( ".help_box" ).show();
     },
 
-    checkBoxes: function() {
-        // this is basically a render function here.
+    turnOnActiveBoxes: function() {
+        // Make boxes in active columns editable and draggable, and turn off the others.
         var self = this;
         if (self.model.get ('active')) {
             self.boxes.each (function (b) { b.trigger ('makeActive'); });

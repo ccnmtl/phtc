@@ -18,12 +18,12 @@ LogicModel.LogicModelView = Backbone.View.extend({
             "render" ,
             "onAddColumn",
             "onAddScenario",
-            "onRemoveColumn",
             "goToNextPhase",
             "goToPreviousPhase",
             "showGamePhaseHelpBox",
             "addARow",
-            "adjustRows"
+            "adjustRows",
+            "checkEmptyBoxes"
         );
         self.getSettings();
         
@@ -64,6 +64,37 @@ LogicModel.LogicModelView = Backbone.View.extend({
         jQuery('.help_box').hide();
         jQuery('.help_box').html('');
     },
+
+
+    checkEmptyBoxes : function() {
+        var self = this;
+        number_of_empty_active_columns = 0;
+        self.columns.each (function (a) {
+            column_is_active = a.get ('active');
+            var box_models = a.get('boxModels');
+            if (column_is_active) {
+                column_is_empty = true;
+                for (var i=0; i < box_models.length; i++)  {
+                    if (box_models[i].get('contents').length > 0) {
+                        column_is_empty = false;
+                    }
+                }
+                if (column_is_empty) {
+                    number_of_empty_active_columns = number_of_empty_active_columns + 1;
+                    return;
+                }
+            }
+        });
+        if (number_of_empty_active_columns  === 0) {
+            if (self.current_phase != self.phases.length - 1) {
+                jQuery('.active_column').last().find ('.done-button').addClass('visible');
+            }
+        }
+        else {
+            jQuery('.active_column').last().find ('.done-button').removeClass('visible');
+        }
+    },
+
 
     getSettings: function() {
         // Fetch the list of columns and scenarios from the back end.
@@ -120,11 +151,14 @@ LogicModel.LogicModelView = Backbone.View.extend({
                 if (box_models[i].get ('row') <= self.current_number_of_rows) {
                     box_models[i].trigger ('showBox');
                 }
+
+
+                //checkEmptyBoxes
+
             }
+
          });
-
     },
-
 
     setUpPhases : function() {
         var self = this;
@@ -142,7 +176,6 @@ LogicModel.LogicModelView = Backbone.View.extend({
 
     paintPhase: function() {
         var self = this;
-        jQuery("li.next, h1.section-label-header, li.previous").hide();
         var phase_info = self.currentPhaseInfo();
         var active_columns_for_this_phase = self.columns_in_each_phase[phase_info.id];
         self.columns.each (function (col) {
@@ -152,7 +185,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
             }
             // default is true, btw.
         });
-        self.columns.each (function (a) { a.trigger ('checkBoxes'); });
+        self.columns.each (function (a) { a.trigger ('turnOnActiveBoxes'); });
         // set the #phase_container span so that
         // the CSS can properly paint this phase of the game.
         jQuery("#phase_container").attr("class", phase_info.css_classes);
@@ -160,26 +193,37 @@ LogicModel.LogicModelView = Backbone.View.extend({
 
         if (self.current_phase === 0) {
             jQuery ('.previous_phase').hide();
+            jQuery("li.previous").show();
         } else {
+
+            jQuery("li.previous").hide();
             jQuery ('.previous_phase').show();
         }
-        /*
+
+
+        
         if (self.current_phase == self.phases.length - 1) {
-            jQuery ('.next_phase').hide();
+                jQuery("li.next").show();
+            //jQuery ('.next_phase').hide();
         } else {
-            jQuery ('.next_phase').show();
+                jQuery("li.next").hide();
+            //jQuery ('.next_phase').show();
+        }
+        
+
+        // unhide the last active donebutton on the page:
+        jQuery('.done-button').removeClass ('visible');
+        /*
+        if (self.current_phase != self.phases.length - 1) {
+            jQuery('.active_column').last().find ('.done-button').addClass('visible');
         }
         */
 
         // unhide the last active donebutton on the page:
-        jQuery('.done-button').removeClass ('visible');
-        if (self.current_phase != self.phases.length - 1) {
-            jQuery('.active_column').last().find ('.done-button').addClass('visible');
-        }
-
-        // unhide the last active donebutton on the page:
         jQuery('.add_a_row_button').removeClass ('visible');
-        jQuery('.active_column').first().find('.add_a_row_button').addClass('visible')
+        jQuery('.active_column').first().find('.add_a_row_button').addClass('visible');
+
+        self.checkEmptyBoxes();
         
     },
 
@@ -213,6 +257,8 @@ LogicModel.LogicModelView = Backbone.View.extend({
             model: column
         });
         view.parentView = self;
+
+        view.boxes.bind("checkEmptyBoxes", self.checkEmptyBoxes);
         jQuery("div.logic-model-columns").append(view.el);
     },
 
@@ -223,12 +269,6 @@ LogicModel.LogicModelView = Backbone.View.extend({
         });
         view.LogicModelView = self;
         jQuery("div.logic-model-initial-scenario-list").append(view.el);
-    },
-
-    // todo axe
-    onRemoveColumn: function(column) {
-        var self = this;
-        console.log ("removingcolumn");
-    },
+    }
 
 });

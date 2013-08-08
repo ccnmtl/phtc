@@ -1,3 +1,7 @@
+#sidebarleft, li.next, li.previous, h1.section-label-header{
+    display:none;
+}
+
 header#masthead {
   height:60px !important;
 }
@@ -83,7 +87,6 @@ span.backbone_column_span {
 
 }
 
-/* Phases of the game */
 .text_box {
   display: inline;
   position: absolute;
@@ -93,6 +96,7 @@ span.backbone_column_span {
   left:   10px;
   width : 110px;
   height: 41px;
+  background-color: #444;
   resize: none;
 }
 
@@ -128,9 +132,18 @@ div.done-button.visible {
 div.add_a_row_button {
   display:  none;
 }
-
 div.add_a_row_button.visible {
  display: inline-block;
+}
+
+
+.show_expert_logic_model_link_div {
+    display:none;
+}
+
+#phase_container.conclusion .show_expert_logic_model_link_div {
+        display:block;
+    }
 }
 
 
