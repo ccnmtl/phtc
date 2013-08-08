@@ -68,6 +68,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
 
     checkEmptyBoxes : function() {
         var self = this;
+        self.ok_to_proceed = false;
         number_of_empty_active_columns = 0;
         self.columns.each (function (a) {
             column_is_active = a.get ('active');
@@ -85,13 +86,19 @@ LogicModel.LogicModelView = Backbone.View.extend({
                 }
             }
         });
+
+        jQuery('.done-button').hide();
         if (number_of_empty_active_columns  === 0) {
             if (self.current_phase != self.phases.length - 1) {
-                jQuery('.active_column').last().find ('.done-button').addClass('visible');
+                jQuery('.active_column').last().find ('.done-button').show();
+                jQuery('.active_column').last().find ('.done-button').addClass('active');
+                self.ok_to_proceed = true;
             }
         }
         else {
-            jQuery('.active_column').last().find ('.done-button').removeClass('visible');
+            jQuery('.active_column').last().find ('.done-button').show();
+            jQuery('.active_column').last().find ('.done-button').removeClass('active');
+            self.ok_to_proceed = false;
         }
     },
 
@@ -151,12 +158,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
                 if (box_models[i].get ('row') <= self.current_number_of_rows) {
                     box_models[i].trigger ('showBox');
                 }
-
-
-                //checkEmptyBoxes
-
             }
-
          });
     },
 
@@ -194,6 +196,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
         if (self.current_phase === 0) {
             jQuery ('.previous_phase').hide();
             jQuery("li.previous").show();
+            self.ok_to_proceed = true;
         } else {
 
             jQuery("li.previous").hide();
@@ -223,7 +226,9 @@ LogicModel.LogicModelView = Backbone.View.extend({
         jQuery('.add_a_row_button').removeClass ('visible');
         jQuery('.active_column').first().find('.add_a_row_button').addClass('visible');
 
-        self.checkEmptyBoxes();
+        if (self.current_phase != 0) {
+           self.checkEmptyBoxes();
+        }
         
     },
 
@@ -235,6 +240,9 @@ LogicModel.LogicModelView = Backbone.View.extend({
 
     goToNextPhase: function() {
         var self = this;
+        if (self.ok_to_proceed === false) {
+            return;
+        }
         self.current_phase = self.current_phase  + 1;
         self.paintPhase();
     },

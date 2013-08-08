@@ -120,11 +120,14 @@ span.backbone_column_span {
 }
 
 div.done-button {
-  display:  none;
+  opacity:0.4;
+  filter:alpha(opacity=0.4);
 }
 
-div.done-button.visible {
- display: inline-block;
+div.done-button.active {
+  display: inline-block;
+  opacity:1.0;
+  filter:alpha(opacity=1.0);
 }
 
 
