@@ -42,4 +42,3 @@ def choose_treatment_path(request):
         return HttpResponseForbidden()
     path = TreatmentPath.objects.all()[0]
     return get_next_steps(request, path.id, path.tree.id)
-

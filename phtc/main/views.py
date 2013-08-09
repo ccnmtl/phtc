@@ -384,16 +384,17 @@ def page(request, path):
     root = section.hierarchy.get_root()
     module = get_module(section)
     is_visited = user_visits(request)
-    page_dict = dict(section=section,
-                module=module,
-                is_visited=is_visited,
-                needs_submit=needs_submit(section),
-                is_submitted=submitted(section, request.user),
-                modules=root.get_children(),
-                root=section.hierarchy.get_root(),
-                )
-    if (not module == None and 
-        module == module.hierarchy.get_root().get_children()[0]):
+    page_dict = dict(
+        section=section,
+        module=module,
+        is_visited=is_visited,
+        needs_submit=needs_submit(section),
+        is_submitted=submitted(section, request.user),
+        modules=root.get_children(),
+        root=section.hierarchy.get_root(),
+    )
+    if (module is not None and
+            module == module.hierarchy.get_root().get_children()[0]):
         page_dict['is_mod_one'] = True
     else:
         page_dict['is_mod_one'] = False
@@ -476,7 +477,7 @@ def edit_page(request, path):
 
         section_css, created = SectionCss.objects.get_or_create(
             section_css=section)
-        
+
         if request.method == "POST":
             try:
                 dashboard.info = request.POST['dashboard_info']
@@ -490,7 +491,7 @@ def edit_page(request, path):
         dashboard.save()
         section_css.save()
         module_type.save()
-        
+
         return dict(section=section,
                     section_css=section_css,
                     dashboard=dashboard,
@@ -673,7 +674,7 @@ def render_dashboard(request):
                 dashboard_info=dashboard_info, empty=empty,
                 is_visited=is_visited, section_css=section_css,
                 module_type=module_type)
-    
+
 
 @render_to('flatpages/about.html')
 def about_page(request):
@@ -782,9 +783,9 @@ def reports(request):
         if report == "course_report":
             pre_test_data = get_pre_test_data(completed_modules, modules)
             post_test_data = get_post_test_data(completed_modules, modules)
-            course_report_table = create_course_report_table(completed_modules, 
-                                                                pre_test_data,
-                                                                post_test_data)
+            course_report_table = create_course_report_table(completed_modules,
+                                                             pre_test_data,
+                                                             post_test_data)
             return create_csv_report2(request, course_report_table, report)
 
         if ev_report:
@@ -887,11 +888,12 @@ def aggregate_responses(evaluation_report):
             qr.append(counter)
     return qr
 
+
 def get_pre_test_data(completed_modules, modules):
     module_pre_test_map = []
     quizes = [x for x in Quiz.objects.filter(pre_test="TRUE")]
     pre_tests = [q for q in quizes if q.pageblocks.all().count() > 0]
-    
+
     for test in pre_tests:
         obj = {}
         qrep_module = get_module(test.pageblock().section)
@@ -905,7 +907,7 @@ def get_post_test_data(completed_modules, modules):
     module_post_test_map = []
     quizes = [x for x in Quiz.objects.filter(post_test="TRUE")]
     post_tests = [q for q in quizes if q.pageblocks.all().count() > 0]
-    
+
     for test in post_tests:
         obj = {}
         qrep_module = get_module(test.pageblock().section)
@@ -947,34 +949,39 @@ def is_question_of_interest(question, qoi):
         if question.text.strip(' \t\n\r') == q:
             return True
 
+
 def sort_test_data(test_data, mod):
     qreps = []
     for data in test_data:
-        if  data['quiz_label'] == mod.section.label:
+        if data['quiz_label'] == mod.section.label:
             for val in data['submission_set'].values():
                 if mod.user_id == val['user_id']:
                     uid = str(val['user_id'])
                     qid = str(val['quiz_id'])
                     sub = Submission.objects.extra(
-                        where=["user_id="+uid,"quiz_id="+qid])
+                        where=["user_id=" + uid, "quiz_id=" + qid])
                     subid = str(sub.values()[0]['id'])
                     questions = Question.objects.extra(
                         where=["quiz_id="+qid])
                     for ques in questions:
                         query = Response.objects.extra(
-                            where=["question_id="+str(ques.id),"submission_id="+subid])
+                            where=["question_id=" + str(ques.id),
+                                   "submission_id=" + subid])
 
                         if len(query) > 0:
                             cln_qry_vals = query.values()[0]['value']
-                            cln_qry_vals = cln_qry_vals.encode('utf-8','ignore')
+                            cln_qry_vals = cln_qry_vals.encode('utf-8',
+                                                               'ignore')
                             qreps.append(cln_qry_vals)
                         else:
                             qreps.append('none')
     return qreps
 
-def create_course_report_table(completed_modules, pre_test_data, post_test_data):
+
+def create_course_report_table(completed_modules, pre_test_data,
+                               post_test_data):
     course_table = []
-    for mod in completed_modules: 
+    for mod in completed_modules:
         course = []
         pre_qreps = sort_test_data(pre_test_data, mod)
         post_qreps = sort_test_data(post_test_data, mod)
@@ -1023,7 +1030,7 @@ def create_course_report_table(completed_modules, pre_test_data, post_test_data)
             course_table.append(course)
         except:
             UserProfile.DoesNotExist
-    
+
     return course_table
 
 

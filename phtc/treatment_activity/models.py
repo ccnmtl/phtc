@@ -6,11 +6,17 @@ from treebeard.mp_tree import MP_Node
 
 
 NODE_CHOICES = (
-    ('RT', 'Root'), # trivial -- at the very top.
-    ('PR', 'Parent'), #Decision Point Branch -- similar to Decision Point, but different and appears more friendly to non-binary
-    ('IF', 'TreatmentStep'), #  Generic Treatment Step  -- trivial -- describes what happens .
-    ('DP', 'DecisionPoint'), # shows a yes  or no question, returns 1 or 0.
-    ('ST', 'Stop') # trivial -- a leaf node.
+    # trivial -- at the very top.
+    ('RT', 'Root'),
+    # Decision Point Branch -- similar to Decision Point,
+    # but different and appears more friendly to non-binary
+    ('PR', 'Parent'),
+    #  Generic Treatment Step  -- trivial -- describes what happens .
+    ('IF', 'TreatmentStep'),
+    # shows a yes  or no question, returns 1 or 0.
+    ('DP', 'DecisionPoint'),
+    # trivial -- a leaf node.
+    ('ST', 'Stop'),
 )
 
 STATUS_CHOICES = (
@@ -50,8 +56,9 @@ class TreatmentNode(MP_Node):
             'text': self.text,
             'help': self.help,
             'duration': self.duration,
-            'value': self.value, 
-            'children_list': [{'name': c.name, 'id': c.id, 'value': c.value} for c in self.get_children()]
+            'value': self.value,
+            'children_list': [{'name': c.name, 'id': c.id, 'value': c.value}
+                              for c in self.get_children()]
         }
 
 
