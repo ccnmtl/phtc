@@ -15,6 +15,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
     current_phase : null,
 
     initialize: function(options) {
+        "use strict";
         var self = this;
 
         _.bindAll(this ,
@@ -45,6 +46,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
     },
 
     showGamePhaseHelpBox: function () {
+        "use strict";
         var self = this;
         var phase_info = self.currentPhaseInfo();
         var the_template = jQuery('#logic-model-help-box').html();
@@ -66,55 +68,59 @@ LogicModel.LogicModelView = Backbone.View.extend({
     },
 
     closeHelpBox : function() {
+        "use strict";
         var self = this;
         jQuery('.help_box').hide();
         jQuery('.help_box').html('');
     },
 
     showWipeTableWarning : function () {
+        "use strict";
         var self = this;
         jQuery ('.wipe-table-button').hide();
         jQuery ('.wipe-table-button-div').show();
     },
 
     wipeTable : function () {
+        "use strict";
         var self = this;
-        jQuery('.text_box').each(function (a, b) {b.value = ''; })
+        jQuery('.text_box').each(function (a, b) {b.value = ''; });
         self.columns.each (function (a) {
             var box_models = a.get('boxModels');
             for (var i=0; i < box_models.length; i++)  {
                 box_models[i].set ({'contents': ''});
                 box_models[i].set({'color_int': 0});
                 box_models[i].trigger ('setColor');
-
                 //box_models[i].set ({color_int: -1});
                 //box_models[i].trigger ('nextColor');
-                
-
             }
         });
         jQuery ('.wipe-table-button').show();
         jQuery ('.wipe-table-button-div').hide();
         self.current_phase = 1;
+        self.current_number_of_rows = LogicModel.NUMBER_OF_ROWS_INITIALLY_VISIBLE;
+        self.adjustRows();
         self.paintPhase();
 
     },
 
     cancelWipeTable : function () {
+        "use strict";
         var self = this;
         jQuery ('.wipe-table-button').show();
         jQuery ('.wipe-table-button-div').hide();
     },
 
     checkEmptyBoxes : function() {
+        "use strict";
         var self = this;
-        self.ok_to_proceed = false;
-        number_of_empty_active_columns = 0;
+        self.ok_to_proceed = false;0
+        var number_of_empty_active_columns = 0;
         self.columns.each (function (a) {
-            column_is_active = a.get ('active');
+            var column_is_active = a.get ('active');
             var box_models = a.get('boxModels');
             if (column_is_active) {
-                column_is_empty = true;
+                var column_is_empty = true;
                 for (var i=0; i < box_models.length; i++)  {
                     if (box_models[i].get('contents').length > 0) {
                         column_is_empty = false;
@@ -144,6 +150,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
 
 
     getSettings: function() {
+        "use strict";
         // Fetch the list of columns and scenarios from the back end.
         var self = this;
         jQuery.ajax({
@@ -169,6 +176,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
     },
 
     setUpColors : function (colors) {
+        "use strict";
         var self = this;
         self.colors = { colors: colors };
         self.columns.each (function (a) {
@@ -181,6 +189,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
     },
 
     addARow: function() {
+        "use strict";
         var self = this;
         self.current_number_of_rows = self.current_number_of_rows + 1;
         self.adjustRows();
@@ -191,17 +200,22 @@ LogicModel.LogicModelView = Backbone.View.extend({
 
     adjustRows: function() {
         var self = this;
+        "use strict";
         self.columns.each (function (c) {
             var box_models = c.get('boxModels');
             for (var i=0;i<box_models.length;i++)  {
                 if (box_models[i].get ('row') <= self.current_number_of_rows) {
                     box_models[i].trigger ('showBox');
                 }
+                else {
+                    box_models[i].trigger ('hideBox');
+                }
             }
          });
     },
 
     setUpPhases : function() {
+        "use strict";
         var self = this;
         if (typeof LogicModel.DEBUG_PHASE !== "undefined") {
             self.current_phase = LogicModel.DEBUG_PHASE;
@@ -211,11 +225,13 @@ LogicModel.LogicModelView = Backbone.View.extend({
     },
 
     currentPhaseInfo: function() {
+        "use strict";
         var self = this;
         return self.phases[self.current_phase];
     },
 
     paintPhase: function() {
+        "use strict";
         var self = this;
         var phase_info = self.currentPhaseInfo();
         if (phase_info.hasOwnProperty ('already_seen'))  {
@@ -223,8 +239,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
         }
         else {
             self.showGamePhaseHelpBox();
-            phase_info ['already_seen'] = true;
-
+            phase_info.already_seen = true;
         }
 
         var active_columns_for_this_phase = self.columns_in_each_phase[phase_info.id];
@@ -260,7 +275,6 @@ LogicModel.LogicModelView = Backbone.View.extend({
             //jQuery ('.next_phase').show();
         }
         
-
         // unhide the last active donebutton on the page:
         jQuery('.done-button').removeClass ('visible');
         /*
@@ -273,19 +287,20 @@ LogicModel.LogicModelView = Backbone.View.extend({
         jQuery('.add_a_row_button').removeClass ('visible');
         jQuery('.active_column').first().find('.add_a_row_button').addClass('visible');
 
-        if (self.current_phase != 0) {
+        if (self.current_phase !== 0) {
            self.checkEmptyBoxes();
         }
-        
     },
 
     goToFirstPhase: function() {
+        "use strict";
         var self = this;
         self.current_phase = 0;
         self.paintPhase();
     },
 
     goToNextPhase: function() {
+        "use strict";
         var self = this;
         if (self.ok_to_proceed === false) {
             return;
@@ -295,6 +310,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
     },
 
     goToPreviousPhase: function() {
+        "use strict";
         var self = this;
         jQuery("li.next, h1.section-label-header, li.previous").hide();
         self.current_phase = self.current_phase - 1;
@@ -302,11 +318,13 @@ LogicModel.LogicModelView = Backbone.View.extend({
     },
 
     render: function() {
+        "use strict";
         var self = this;
         self.paintPhase();
     },
 
     onAddColumn: function(column) {
+        "use strict";
         var self = this;
         var view = new LogicModel.ColumnView({
             model: column
@@ -318,6 +336,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
     },
 
     onAddScenario: function(scenario) {
+        "use strict";
         var self = this;
         var view = new LogicModel.ScenarioView({
             model: scenario

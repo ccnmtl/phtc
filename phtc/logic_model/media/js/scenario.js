@@ -1,5 +1,4 @@
 //(function (jQuery) {
-"use strict";
 LogicModel.Scenario = Backbone.Model.extend({
 });
 
@@ -14,6 +13,7 @@ LogicModel.ScenarioView = Backbone.View.extend({
     },
 
     initialize: function (options, render) {
+        "use strict";
         var self = this;
         self.template = _.template(jQuery("#logic-model-scenario").html());
         var ctx = self.model.toJSON();
@@ -21,6 +21,7 @@ LogicModel.ScenarioView = Backbone.View.extend({
     },
 
     chooseMe : function () {
+        "use strict";
         var self = this;
         jQuery ('.scenario_instructions').html (self.model.get ('instructions'));
         jQuery ('.scenario_title_2').html (self.model.get ('title'));
