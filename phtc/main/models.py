@@ -120,5 +120,5 @@ class SectionCss(models.Model):
     def edit_form(self):
         class EditSectionCssForm(forms.Form):
             section_css_field = forms.CharField(widget=forms.Textarea,
-                                             initial=self.css_field)
+                                                initial=self.css_field)
         return EditSectionCssForm()
