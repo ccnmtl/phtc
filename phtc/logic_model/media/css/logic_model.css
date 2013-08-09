@@ -1,3 +1,7 @@
+#sidebarleft, li.next, li.previous, h1.section-label-header{
+    display:none;
+}
+
 header#masthead {
   height:60px !important;
 }
@@ -53,11 +57,20 @@ span.backbone_column_span {
 .help_box {
   display: none;
   position: absolute;
-  top: 400px;
-  left:100px;
+  top: 150px;
+  left: 150px;
   width: 400px;
   height: 400px;
   z-index: 300;
+  opacity:0.9;
+  filter:alpha(opacity=0.9);
+}
+
+.help-alert {
+  width: 400px;
+  height: 400px;
+  opacity:0.9;
+  filter:alpha(opacity=0.9);
 }
 
 .cell {
@@ -83,7 +96,6 @@ span.backbone_column_span {
 
 }
 
-/* Phases of the game */
 .text_box {
   display: inline;
   position: absolute;
@@ -93,6 +105,7 @@ span.backbone_column_span {
   left:   10px;
   width : 110px;
   height: 41px;
+  background-color: #444;
   resize: none;
 }
 
@@ -116,12 +129,34 @@ span.backbone_column_span {
 }
 
 div.done-button {
-  display:  none;
+  opacity:0.4;
+  filter:alpha(opacity=0.4);
 }
 
-div.done-button.visible {
+div.done-button.active {
+  display: inline-block;
+  opacity:1.0;
+  filter:alpha(opacity=1.0);
+}
+
+
+
+div.add_a_row_button {
+  display:  none;
+}
+div.add_a_row_button.visible {
  display: inline-block;
 }
+
+.show_expert_logic_model_link_div {
+    display:none;
+}
+
+#phase_container.conclusion .show_expert_logic_model_link_div {
+        display:block;
+    }
+}
+
 
 
 .box_draggable .box_handle .icon-move{
@@ -129,6 +164,17 @@ div.done-button.visible {
   position: absolute;
   left : 1px;
   top :  33px;
+}
+
+
+.backbone_box_div {
+    display:block;
+}
+
+
+
+.backbone_box_div.hidden_box {
+    display:none;
 }
 
 
@@ -162,6 +208,9 @@ div.done-button.visible {
 }
 
 
+.wipe-table-button-div {
+    display: none;   
+}
 
 .inactive_box {
   background-color: darkgrey;
@@ -170,6 +219,8 @@ div.done-button.visible {
 }
 
 /* Pick scenario:*/
+
+#phase_container.pick_scenario div.wipe-table-div, 
 #phase_container.pick_scenario div.logic-model-columns, 
 #phase_container.pick_scenario textarea#reflections,
 #phase_container.pick_scenario .change_scenario,
