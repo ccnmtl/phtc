@@ -133,7 +133,7 @@ body {
 }
 
 #modules .active {
-    background: url("../img/toc-arrow.png") right center no-repeat;
+    background: url("/site_media/img/toc-arrow.png") right center no-repeat;
 }
 
 #return {
@@ -143,7 +143,7 @@ body {
 }
 
 .errornote {
-    background: url("../img/icon_alert.png") no-repeat 5px 5px #FFEBE8;
+    background: url("/site_media/img/icon_alert.png") no-repeat 5px 5px #FFEBE8;
     border: 1px solid #C00;
     display: block;
     font-size: 11px;
@@ -341,7 +341,7 @@ h2 {
     height: 30px;
     display: block;
     float: left;
-    background: transparent url('../img/status_inprogress.png') left center no-repeat;
+    background: transparent url('/site_media/img/status_inprogress.png') left center no-repeat;
 }
 
 .inprogress-icon-sml {
@@ -349,7 +349,7 @@ h2 {
     height: 24px;
     display: block;
     float: left;
-    background: transparent url('../img/status_inprogress_sml.png') center center no-repeat;
+    background: transparent url('/site_media/img/status_inprogress_sml.png') center center no-repeat;
 }
 
 .uninitiated-icon {
@@ -357,7 +357,7 @@ h2 {
     height: 30px;
     display: block;
     float: left;
-    background: transparent url('../img/status_uninitiated_gray.png') left center no-repeat;
+    background: transparent url('/site_media/img/status_uninitiated_gray.png') left center no-repeat;
 }
 
 .uninitiated-icon-sml {
@@ -365,7 +365,7 @@ h2 {
     height: 24px;
     display: block;
     float: left;
-    background: transparent url('../img/status_uninitiated_gray_sml.png') center center no-repeat;
+    background: transparent url('/site_media/img/status_uninitiated_gray_sml.png') center center no-repeat;
 }
 
 .unavailable-icon {
@@ -373,7 +373,7 @@ h2 {
     height: 30px;
     display: block;
     float: left;
-    background: transparent url('../img/shim.png') left center no-repeat;
+    background: transparent url('/site_media/img/shim.png') left center no-repeat;
 }
 
 .unavailable-icon-sml {
@@ -381,7 +381,7 @@ h2 {
     height: 24px;
     display: block;
     float: left;
-    background: transparent url('../img/shim.png') left center no-repeat;
+    background: transparent url('/site_media/img/shim.png') left center no-repeat;
 }
 
 .completed-icon {
@@ -389,7 +389,7 @@ h2 {
     height: 30px;
     display: block;
     float: left;
-    background: transparent url('../img/status_completed.png') left center no-repeat;
+    background: transparent url('/site_media/img/status_completed.png') left center no-repeat;
 }
 
 .completed-icon-sml {
@@ -397,7 +397,7 @@ h2 {
     height: 24px;
     display: block;
     float: left;
-    background: transparent url('../img/status_completed_sml.png') center center no-repeat;
+    background: transparent url('/site_media/img/status_completed_sml.png') center center no-repeat;
 }
 
 .certificate {
@@ -405,7 +405,7 @@ h2 {
     height: 30px;
     display: block;
     float: right;
-    background: transparent url('../img/icon_printer.png') center center no-repeat;
+    background: transparent url('/site_media/img/icon_printer.png') center center no-repeat;
 }
 
 body.dashboard .content{
@@ -786,4 +786,98 @@ p.your-answer{
 .answer-value input[type="radio"]{
 float: none !important;
 margin: 0 7px 0 -2px !important; 
+}
+
+/* -- Qual-Quan Comparison Table -- */
+
+.comp_set {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.comp_block {
+    margin: 10px auto;
+    padding: 0;
+    border: 0;
+    width: 650px;
+}
+
+.comp_descriptor {
+    height: 34px;
+}
+
+.comp_header {
+    cursor: pointer;
+    border: 1px solid #ccc;
+    height: 40px;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+    z-index: 1;
+    background: #ffcc99 url('/site_media/img/caret_close.png') 10px 12px no-repeat;
+}
+
+.comp_block .active {
+    background: #ffcc99 url('/site_media/img/caret_open.png') 10px 12px no-repeat;
+}
+
+.comp_criteria {
+    width: 310px;
+    margin: 0;
+    padding: 0 0 0 30px;
+    border: 0;
+    float: left;
+    font: 16px/40px normal "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.comp_quantitative {
+    width: 150px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    float: left;
+    text-align: center;
+    height: 40px;
+}
+
+.comp_qualitative {
+    width: 150px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    float: left;
+    text-align: center;
+    height: 40px;
+}
+
+.comp_quantitative img,
+.comp_qualitative img {
+    margin: 3px 0 0 0;
+    padding: 0;
+    border: 0;
+}
+
+.comp_content {
+    clear: both;
+    margin: 0;
+    padding: 10px;
+    border: 0;
+    border: 1px solid #ccc;
+    border-top: 0;
+    z-index: 2;
+    display: none;
+}
+
+.comp_descriptor .comp_criteria,
+.comp_descriptor .comp_quantitative,
+.comp_descriptor .comp_qualitative {
+    margin: 0;
+    padding: 0;
+    font: 20px/34px normal "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #cc6633;
+}
+
+.comp_descriptor .comp_criteria {
+    width: 340px;
 }
