@@ -20,6 +20,7 @@ LogicModel.ColumnView = Backbone.View.extend({
     },
 
     initialize: function (options, render) {
+        "use strict";
         var self = this;
         _.bindAll(self, "render", "unrender",  "addBox", "turnOnActiveBoxes", "showHelpBox");
         self.model.bind("turnOnActiveBoxes", self.turnOnActiveBoxes);
@@ -47,10 +48,11 @@ LogicModel.ColumnView = Backbone.View.extend({
     },
 
     showHelpBox: function () {
+        "use strict";
         var self = this;
         var the_template = jQuery('#logic-model-help-box').html();
         var examples_copy = self.model.get ('help_examples'  );
-        if (examples_copy === '' || examples_copy == undefined ) {
+        if (examples_copy === '' || examples_copy === undefined ) {
             examples_copy = 'Lorem ipsum';
         }
         var definition_copy = self.model.get ('help_definition'  );
@@ -67,6 +69,7 @@ LogicModel.ColumnView = Backbone.View.extend({
     },
 
     turnOnActiveBoxes: function() {
+        "use strict";
         // Make boxes in active columns editable and draggable, and turn off the others.
         var self = this;
         if (self.model.get ('active')) {
@@ -81,7 +84,7 @@ LogicModel.ColumnView = Backbone.View.extend({
     },
 
     addBox: function(box) {
-
+        "use strict";
         var self = this;        
         var view = new LogicModel.BoxView({
             model: box
@@ -100,11 +103,13 @@ LogicModel.ColumnView = Backbone.View.extend({
     },
 
     render: function () {
+        "use strict";
         var self = this;
         self.boxes.each(self.addBox);
         return this;
     },
     unrender: function () {
+        "use strict";
         jQuery(this.el).fadeOut('fast', function() {
             jQuery(this.el).remove();
         });            

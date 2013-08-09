@@ -1,6 +1,7 @@
 LogicModel.findBox = function (el) {
+    "use strict";
     return jQuery (el).closest('.backbone_box_div').data('view');
-}
+};
 
 LogicModel.Box = Backbone.Model.extend({
     defaults: {
@@ -18,10 +19,14 @@ LogicModel.BoxCollection = Backbone.Collection.extend({
 LogicModel.BoxView = Backbone.View.extend({
     className: "backbone_box_div",
     events: {
-        'change textarea' : 'onBoxEdited',
-        'click .switch_color' : 'nextColor'
+        'change .text_box'     : 'onBoxEdited',
+        'blur   .text_box'     : 'onBoxEdited',
+        'keyup  .text_box'     : 'onBoxEdited', 
+        'click  .switch_color' : 'nextColor'
     },
     initialize: function (options, render) {
+        "use strict";
+
         var self = this;
         _.bindAll(self,
             "render",
@@ -30,6 +35,7 @@ LogicModel.BoxView = Backbone.View.extend({
             "hasText",
             "makeActive", 
             "makeInactive",
+            "setColor",
             "nextColor",
             "draggedFrom",
             "draggedTo",
@@ -45,8 +51,10 @@ LogicModel.BoxView = Backbone.View.extend({
         self.model.bind("destroy", self.unrender);
         self.model.bind("makeActive", self.makeActive);
         self.model.bind("makeInactive", self.makeInactive);
-        self.model.bind("nextColor", self.nextColor)
+        self.model.bind("nextColor", self.nextColor);
+        self.model.bind("setColor", self.setColor);
         self.model.bind("showBox", self.showBox);
+        self.model.bind("hideBox", self.hideBox);
         self.model.bind("render", self.render);
         self.model.bind("onBoxEdited", self.onBoxEdited);
         
@@ -63,6 +71,7 @@ LogicModel.BoxView = Backbone.View.extend({
 
 
     showBox: function() {
+        "use strict";
         var self = this;
         var jel = self.$el;
         jel.removeClass('hidden_box');
@@ -70,6 +79,7 @@ LogicModel.BoxView = Backbone.View.extend({
 
 
     hideBox: function() {
+        "use strict";
         var self = this;
         var jel = self.$el;
         jel.addClass('hidden_box');
@@ -77,6 +87,7 @@ LogicModel.BoxView = Backbone.View.extend({
 
 
     turnOnDraggable: function() {
+        "use strict";
         var self = this;
         var jel = self.$el;
         jel.find ('.box_droppable').droppable( "disable" );
@@ -85,6 +96,7 @@ LogicModel.BoxView = Backbone.View.extend({
     },
 
     turnOffDraggable: function () {
+        "use strict";
         var self = this;
         var jel = self.$el;
         var the_droppable = jel.find ('.box_droppable');
@@ -94,6 +106,7 @@ LogicModel.BoxView = Backbone.View.extend({
     },
 
     turnOffDraggableAndDroppable : function() {
+        "use strict";
         var self = this;
         var jel = self.$el;
         jel.find ('.box_droppable').droppable( "disable" );
@@ -102,6 +115,7 @@ LogicModel.BoxView = Backbone.View.extend({
     },
 
     draggedFrom: function() {
+        "use strict";
         var self = this;
         var jel = self.$el;
         jel.find ('.box_draggable').css({top: '0px', left: '0px'});
@@ -112,6 +126,7 @@ LogicModel.BoxView = Backbone.View.extend({
     },
 
     draggedTo: function() {
+        "use strict";
         var self = this;
         var jel = self.$el;
         jel.find (".placeholder").remove();
@@ -122,6 +137,7 @@ LogicModel.BoxView = Backbone.View.extend({
     },
 
     onDrop: function (event, ui) {
+        "use strict";
         var self = this;
         var src_box = LogicModel.findBox(ui.draggable.context);
         var dst_box = LogicModel.findBox(event.target);
@@ -143,6 +159,7 @@ LogicModel.BoxView = Backbone.View.extend({
     },
 
     setUpDroppable: function (){
+        "use strict";
         var self = this;
         var droppable_options = {
             accept: ".box_draggable" ,
@@ -158,12 +175,14 @@ LogicModel.BoxView = Backbone.View.extend({
     },
 
     startDrag: function(event, ui) {
+        "use strict";
         var self = this;
         ui.helper.css('z-index', 100);
         self.render();
     },
 
     hasText: function() {
+        "use strict";
         var self = this;
         if (jQuery (self.el).find('.text_box').val().length > 0) {
             return true;
@@ -172,24 +191,26 @@ LogicModel.BoxView = Backbone.View.extend({
     },
 
     setColor: function () {
+        "use strict";
         var self = this;
         var the_colors = self.model.get ('colors');
         var color_int  = self.model.get ('color_int');
         var color =  '#' + (the_colors[color_int % the_colors.length]);
-        //jQuery(self.el).find ('.cell').css('background-color', color);
+        jQuery(self.el).find ('.cell').css('background-color', color);
         //jQuery(self.el).find ('.text_box').css('background-color', color);
-
-
         jQuery(self.el).find ('.text_box').css('color', color);
+        jQuery(self.el).find ('.cell').css('border-color', color);
     },
 
     nextColor: function() {
+        "use strict";
         var self = this;
         self.model.set ({color_int: self.model.get ('color_int') + 1 });
         self.setColor();
     },
 
     setUpDraggable: function () {
+        "use strict";
         var self = this;
         var draggable_options = {
             handle : '.box_handle',
@@ -200,14 +221,16 @@ LogicModel.BoxView = Backbone.View.extend({
     },
 
     onBoxEdited: function () {
+        "use strict";
         var self = this;
         self.model.set ({'contents': self.$el.find ('.text_box').val()});
-        self.model.trigger('checkEmptyBoxes')
+        self.model.trigger('checkEmptyBoxes');
         self.render();
         
     },
 
     render: function () {
+        "use strict";
         var self = this;
 
         if (self.model.get('active') === false ) {
@@ -228,11 +251,13 @@ LogicModel.BoxView = Backbone.View.extend({
     },
 
     makeActive: function () {
+        "use strict";
         var self = this;
         self.model.set ({active: true});
     },
 
     makeInactive: function () {
+        "use strict";
         var self = this;
         self.model.set ({active: false});
     }
