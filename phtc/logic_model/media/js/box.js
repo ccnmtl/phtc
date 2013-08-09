@@ -30,6 +30,7 @@ LogicModel.BoxView = Backbone.View.extend({
             "hasText",
             "makeActive", 
             "makeInactive",
+            "setColor",
             "nextColor",
             "draggedFrom",
             "draggedTo",
@@ -46,6 +47,7 @@ LogicModel.BoxView = Backbone.View.extend({
         self.model.bind("makeActive", self.makeActive);
         self.model.bind("makeInactive", self.makeInactive);
         self.model.bind("nextColor", self.nextColor)
+        self.model.bind("setColor", self.setColor)
         self.model.bind("showBox", self.showBox);
         self.model.bind("render", self.render);
         self.model.bind("onBoxEdited", self.onBoxEdited);
@@ -176,11 +178,10 @@ LogicModel.BoxView = Backbone.View.extend({
         var the_colors = self.model.get ('colors');
         var color_int  = self.model.get ('color_int');
         var color =  '#' + (the_colors[color_int % the_colors.length]);
-        //jQuery(self.el).find ('.cell').css('background-color', color);
+        jQuery(self.el).find ('.cell').css('background-color', color);
         //jQuery(self.el).find ('.text_box').css('background-color', color);
-
-
         jQuery(self.el).find ('.text_box').css('color', color);
+        jQuery(self.el).find ('.cell').css('border-color', color);
     },
 
     nextColor: function() {

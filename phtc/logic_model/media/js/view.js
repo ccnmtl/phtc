@@ -84,6 +84,13 @@ LogicModel.LogicModelView = Backbone.View.extend({
             var box_models = a.get('boxModels');
             for (var i=0; i < box_models.length; i++)  {
                 box_models[i].set ({'contents': ''});
+                box_models[i].set({'color_int': 0});
+                box_models[i].trigger ('setColor');
+
+                //box_models[i].set ({color_int: -1});
+                //box_models[i].trigger ('nextColor');
+                
+
             }
         });
         jQuery ('.wipe-table-button').show();
@@ -173,7 +180,6 @@ LogicModel.LogicModelView = Backbone.View.extend({
          });
     },
 
-
     addARow: function() {
         var self = this;
         self.current_number_of_rows = self.current_number_of_rows + 1;
@@ -213,12 +219,9 @@ LogicModel.LogicModelView = Backbone.View.extend({
         var self = this;
         var phase_info = self.currentPhaseInfo();
         if (phase_info.hasOwnProperty ('already_seen'))  {
-            console.log ("Already seen")
-
+            //console.log ("Already seen")
         }
         else {
-
-            console.log ("This is new.")
             self.showGamePhaseHelpBox();
             phase_info ['already_seen'] = true;
 
