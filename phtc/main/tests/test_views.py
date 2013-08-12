@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.test.client import Client
 from phtc.main.views import set_row_total
 from phtc.main.views import calculate_age_gender
+from phtc.main.views import create_age_gender_dict
 
 
 class SimpleViewTest(TestCase):
@@ -62,6 +63,45 @@ class TestUtilFunctions(TestCase):
             dict(Male=0, Female=0, Total=0),
         ]
         r = calculate_age_gender(completers, items)
+        self.assertEqual(r[0]['Male'], 1)
+        self.assertEqual(r[0]['Female'], 1)
+        self.assertEqual(r[0]['Total'], 2)
+
+        self.assertEqual(r[1]['Male'], 1)
+        self.assertEqual(r[1]['Female'], 0)
+        self.assertEqual(r[1]['Total'], 1)
+
+        self.assertEqual(r[2]['Male'], 1)
+        self.assertEqual(r[2]['Female'], 0)
+        self.assertEqual(r[2]['Total'], 1)
+
+        self.assertEqual(r[3]['Male'], 1)
+        self.assertEqual(r[3]['Female'], 0)
+        self.assertEqual(r[3]['Total'], 1)
+
+        self.assertEqual(r[4]['Male'], 1)
+        self.assertEqual(r[4]['Female'], 0)
+        self.assertEqual(r[4]['Total'], 1)
+
+        self.assertEqual(r[5]['Male'], 1)
+        self.assertEqual(r[5]['Female'], 0)
+        self.assertEqual(r[5]['Total'], 1)
+
+        self.assertEqual(r[6]['Male'], 6)
+        self.assertEqual(r[6]['Female'], 1)
+        self.assertEqual(r[6]['Total'], 7)
+
+    def test_create_age_gender_dict(self):
+        completers = [
+            FakeCompleter(),
+            FakeCompleter(sex="female"),
+            FakeCompleter(age="20-29"),
+            FakeCompleter(age="30-39"),
+            FakeCompleter(age="40-49"),
+            FakeCompleter(age="50-59"),
+            FakeCompleter(age="60-69"),
+        ]
+        r = create_age_gender_dict(completers)
         self.assertEqual(r[0]['Male'], 1)
         self.assertEqual(r[0]['Female'], 1)
         self.assertEqual(r[0]['Total'], 2)
