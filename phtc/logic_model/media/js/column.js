@@ -98,16 +98,13 @@ LogicModel.ColumnView = Backbone.View.extend({
         self.model.set ({'boxModels' : tmp});
     },
 
-    adjustNumberOfVisibleBoxes: function () {
-        console.log (parentView.current_number_of_rows);
-    },
-
     render: function () {
         "use strict";
         var self = this;
         self.boxes.each(self.addBox);
         return this;
     },
+    
     unrender: function () {
         "use strict";
         jQuery(this.el).fadeOut('fast', function() {
