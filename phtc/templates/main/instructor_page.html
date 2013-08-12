@@ -52,6 +52,7 @@
 {% endblock %}
 
 {% block content-nav %}
+    <div class="content-nav">
 
 {% if section.get_previous %}
 <a href="/instructor{{section.get_previous.get_absolute_url}}" id="previous">« {{section.get_previous.label}}</a>
@@ -60,5 +61,6 @@
 {% if section.get_next %}
 <a href="/instructor{{section.get_next.get_absolute_url}}" id="next">{{section.get_next.label}} »</a>
 {% endif %}
+    </div><!-- div id="content-nav" -->
 
 {% endblock %}
