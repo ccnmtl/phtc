@@ -67,8 +67,6 @@ TEMPLATE_DIRS = (
                  "../ve/lib/python2.7/site-packages/treebeard/templates")
 )
 
-
-
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',

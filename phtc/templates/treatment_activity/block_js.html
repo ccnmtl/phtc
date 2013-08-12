@@ -49,7 +49,7 @@
             <div class="timeline">
                 <div class="duration"></div>
             </div>
-            <div class="medication">
+            <div class="medication challenge">
                 <% if (help) { %><i class="icon-question-sign"></i><% } %>
                 <% if (can_edit) { %>
                     <a href="/admin/treatment_activity/treatmentnode/<%=id%>/"
@@ -60,13 +60,13 @@
                 <% } %>
                 
                 <p class="step-content">
-                    <%= name %>? 
+                    CHALLENGE: <%= name %>? 
                     <% if (decision === undefined) { %>
                         <div class="decision_buttons">
                             <% for (var i = 0; i < children_list.length; i++) { %>
                                   <% var answer = children_list[i]; %>
                                   <div>
-                                        <button type="button" value = "<%= answer['value'] %>"class="btn btn-small btn-info btn-primary decision-point-button">
+                                        <button type="button" value = "<%= answer['value'] %>"class="btn btn-primary decision-point-button">
                                             <%= answer['name'] %>
                                         </button>
                                   </div>
@@ -74,8 +74,8 @@
                         </div>
                     <% } else { %>
                         <p class="step-content">
-                            <span><%=children_list[decision - 1]['name']%></span>
-                            <button type="button" class="btn btn-small choose-again"
+                            <br /><span>YOU CHOSE: <%=children_list[decision - 1]['name']%></span>
+                            <br /><button type="button" class="btn choose-again"
                                 data-id="<%=id%>" data-loading-text="Loading..."><i class="icon-refresh"></i> Choose again</button>
                         </p>
                     <% } %>
