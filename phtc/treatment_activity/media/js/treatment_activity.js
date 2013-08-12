@@ -47,9 +47,9 @@
             if (self.model.get('last')) {
                 setTimeout(function() {
                     var eltStep = jQuery(self.el).find("div.treatment-step");
-                    jQuery('html, body').animate({
+                    /* jQuery('html, body').animate({
                         scrollTop: jQuery(eltStep).position().top
-                    }, 300);
+                    }, 300);*/
                     self.model.set('last', false);
                 }, 0);
             }

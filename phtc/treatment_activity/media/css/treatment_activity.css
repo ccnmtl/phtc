@@ -34,7 +34,7 @@
     margin-bottom: 20px;
     padding: 5px;
     width: 475px;
-    text-align: center;
+    text-align: left;
     background-color: #fff;
     &.stop {
      border-color: #ed513b;
@@ -72,7 +72,7 @@ div.timeline {
     float: left;
     width: 100px;
     padding-right: 5px;
-    text-align: center;
+    text-align: left;
     margin-bottom: 5px;
     margin-top: 5px;
 }
@@ -89,9 +89,10 @@ div.medication {
     border: 2px solid #eee;
     border-radius: 8px;
     margin-top: 20px;
+    margin: 0;
     padding: 5px;
-    width: 350px;
-    text-align: center;
+    width: 450px;
+    text-align: left;
     background-color: #fff;
     
   /*  &:hover {
@@ -197,7 +198,7 @@ div.treatment-step.DP.minimized div.medication {
   border-bottom: none;
   padding-bottom: 5px;
   margin-bottom: 0;
-  text-align: center;
+  text-align: left;
   border-radius: 8px 8px 0 0;
   background: #ffc23f;
   border-color: #fdb61e;
@@ -281,4 +282,15 @@ btn.reset-state {
   margin-top: 10px;
 }
 
+.btn {
+    text-align: left;
+}
 
+.decision-point-button {
+    width: 100%;
+    margin: 2px 0;
+}
+
+.challenge {
+    margin-top: 20px !important;
+}
