@@ -1,5 +1,6 @@
 from django.test import TestCase
 from phtc.main.models import DashboardInfo, NYLEARNS_Course_Map
+from phtc.main.models import ModuleType, SectionCss
 from pagetree.models import Hierarchy
 
 
@@ -17,3 +18,19 @@ class NYLEARNS_Course_MapTest(TestCase):
         ncm = NYLEARNS_Course_Map.objects.create(
             courseID="foo", phtc_url="bar")
         self.assertEqual(str(ncm), "url path:bar")
+
+
+class ModuleTypeTest(TestCase):
+    def test_edit_form(self):
+        h = Hierarchy.from_dict({'name': 'main', 'base_url': ""})
+        root = h.get_root()
+        m = ModuleType.objects.create(module_type=root, info="")
+        self.assertTrue(m.edit_form() is not None)
+
+
+class SectionCssTest(TestCase):
+    def test_edit_form(self):
+        h = Hierarchy.from_dict({'name': 'main', 'base_url': ""})
+        root = h.get_root()
+        sc = SectionCss.objects.create(section_css=root, css_field="")
+        self.assertTrue(sc.edit_form() is not None)
