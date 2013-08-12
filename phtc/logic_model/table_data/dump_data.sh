@@ -1,4 +1,4 @@
-pg_dump -U eddie \
+pg_dump -U pusher \
 --column-inserts \
 --data-only \
 --no-owner \
