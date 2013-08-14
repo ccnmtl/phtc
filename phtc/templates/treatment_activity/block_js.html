@@ -60,7 +60,7 @@
                 <% } %>
                 
                 <p class="step-content">
-                    CHALLENGE: <%= name %>? 
+                    <b>CHALLENGE:</b> <%= name %>? 
                     <% if (decision === undefined) { %>
                         <div class="decision_buttons">
                             <% for (var i = 0; i < children_list.length; i++) { %>
@@ -74,7 +74,7 @@
                         </div>
                     <% } else { %>
                         <p class="step-content">
-                            <br /><span>YOU CHOSE: <%=children_list[decision - 1]['name']%></span>
+                            <br /><span><b>YOU CHOSE:</b> <%=children_list[decision - 1]['name']%></span>
                             <br /><button type="button" class="btn choose-again"
                                 data-id="<%=id%>" data-loading-text="Loading..."><i class="icon-refresh"></i> Choose again</button>
                         </p>
