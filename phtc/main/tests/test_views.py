@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.test.client import Client
+from django.contrib.auth.models import User
 from phtc.main.views import set_row_total
 from phtc.main.views import calculate_age_gender
 from phtc.main.views import create_age_gender_dict
@@ -12,6 +13,29 @@ class SimpleViewTest(TestCase):
     def test_index(self):
         result = self.c.get("/")
         self.assertEqual(result.status_code, 302)
+
+    def test_testnylearns_username(self):
+        result = self.c.post("/test_nylearns_username/", dict(username="foo"))
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.content, "False")
+
+        result = self.c.get("/test_nylearns_username/?username=foo")
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.content, "POST only")
+
+
+class LoggedInTest(TestCase):
+    def setUp(self):
+        self.c = Client()
+        self.user = User.objects.create(username="test")
+        self.user.set_password("test")
+        self.user.save()
+        self.c.login(username="test", password="test")
+
+    def test_testnylearns_username(self):
+        result = self.c.post("/test_nylearns_username/", dict(username="test"))
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.content, "True")
 
 
 class FakeCompleter(object):

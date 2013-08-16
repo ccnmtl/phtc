@@ -37,6 +37,8 @@ def test_nylearns_username(request):
             return HttpResponse(True)
         except User.DoesNotExist:
             return HttpResponse(False)
+    else:
+        return HttpResponse("POST only")
 
 
 @render_to('registration/nylearns_registration_form.html')
