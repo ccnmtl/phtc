@@ -23,6 +23,47 @@ class SimpleViewTest(TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertEqual(result.content, "POST only")
 
+    def test_nylearns(self):
+        result = self.c.get("/nylearns/")
+        self.assertEqual(result.status_code, 200)
+
+    def test_create_nylearns_user(self):
+        result = self.c.post(
+            "/create_nylearns_user/",
+            dict(
+                username="test",
+                password1="test",
+                email="test@example.com",
+                is_nylearns="is_nylearns",
+                nylearns_user_id="nylearns_user_id",
+                nylearns_course_init="nylearns_course_init",
+                fname="fname",
+                lname="lname",
+                degree="degree",
+                sex="sex",
+                age="age",
+                origin="origin",
+                ethnicity="ethnicity",
+                work_city="work_city",
+                work_state="work_state",
+                work_zip="work_zip",
+                employment_location="employment_location",
+                umc="umc",
+                position="position",
+                dept_health="dept_health",
+                geo_dept_health="geo_dept_health",
+                experience="experience",
+                rural="rural",
+            )
+        )
+        self.assertEqual(result.status_code, 302)
+
+    def test_nylearns_login(self):
+        result = self.c.post(
+            "/nylearns_login/?course=none&user_id=foo",
+            dict(username="test", password="test"))
+        self.assertEqual(result.status_code, 200)
+
 
 class LoggedInTest(TestCase):
     def setUp(self):
@@ -36,6 +77,19 @@ class LoggedInTest(TestCase):
         result = self.c.post("/test_nylearns_username/", dict(username="test"))
         self.assertEqual(result.status_code, 200)
         self.assertEqual(result.content, "True")
+
+    def test_nylearns(self):
+        result = self.c.get("/nylearns/")
+        # logged in, we get redirected to course map or dashboard
+        self.assertEqual(result.status_code, 302)
+
+    def test_get_profile(self):
+        result = self.c.get("/profile/")
+        self.assertEqual(result.status_code, 200)
+
+    def test_reports(self):
+        result = self.c.get("/reports/")
+        self.assertEqual(result.status_code, 200)
 
 
 class FakeCompleter(object):
