@@ -5,10 +5,10 @@ from django import forms
 
 
 class BoxColor (models.Model):
-    name  = models.CharField(max_length=256, default = '')
-    color = models.CharField(max_length=6, default = 'FFFFFF')
+    name = models.CharField(max_length=256, default='')
+    color = models.CharField(max_length=6, default='FFFFFF')
     order_rank = models.IntegerField(default=0, null=True, blank=True, )
-    
+
     def __unicode__(self):
         return self.name
 
@@ -20,11 +20,13 @@ class BoxColor (models.Model):
             'color': self.color
         }
 
+
 class GamePhase (models.Model):
-    name = models.CharField(max_length=256, default = '')
-    instructions = models.TextField(null=True, blank=True, default = '')
+    name = models.CharField(max_length=256, default='')
+    instructions = models.TextField(null=True, blank=True, default='')
     order_rank = models.IntegerField(default=0, null=True, blank=True, )
-    css_classes = models.CharField(max_length=256, null=True, blank=True, default = '')
+    css_classes = models.CharField(max_length=256, null=True, blank=True,
+                                   default='')
 
     class Meta:
         ordering = ['order_rank']
@@ -42,29 +44,32 @@ class GamePhase (models.Model):
 
 
 class ActivePhase (models.Model):
-    """ Indicates that a particular column is active (editable) during a particular phase"""
+    """ Indicates that a particular column is active (editable)
+    during a particular phase"""
 
     def __unicode__(self):
-        return "Column \"%s\" is active during game phase \"%s\"" % (self.column, self.game_phase)
+        return "Column \"%s\" is active during game phase \"%s\"" % (
+            self.column, self.game_phase)
 
     game_phase = models.ForeignKey('GamePhase')
-    column     = models.ForeignKey('Column')
+    column = models.ForeignKey('Column')
 
     class Meta:
-        ordering = ['game_phase','column']
+        ordering = ['game_phase', 'column']
         unique_together = ("game_phase", "column")
 
     def to_json(self):
         return {
             'game_phase_id': self.game_phase.id,
-            'column_id'    : self.column.id
+            'column_id': self.column.id
         }
 
+
 class Scenario  (models.Model):
-    title = models.CharField(max_length=256, default = '')
-    difficulty = models.CharField(max_length=256, default = '')
+    title = models.CharField(max_length=256, default='')
+    difficulty = models.CharField(max_length=256, default='')
     order_rank = models.IntegerField(default=0, null=True, blank=True, )
-    instructions = models.TextField(null=True, blank=True, default = '')
+    instructions = models.TextField(null=True, blank=True, default='')
 
     class Meta:
         ordering = ['order_rank']
@@ -80,16 +85,18 @@ class Scenario  (models.Model):
             'difficulty': self.difficulty
         }
 
+
 class Column (models.Model):
-    name = models.CharField(max_length=256, default = '')
+    name = models.CharField(max_length=256, default='')
     order_rank = models.IntegerField(default=0, null=True, blank=True, )
-    css_classes = models.CharField(max_length=256, null=True, blank=True, default = '')
-    help_definition  = models.TextField(null=True, blank=True, default = '')
-    help_examples  = models.TextField(null=True, blank=True, default = '')
-    flavor = models.CharField(max_length=256, default = '')
+    css_classes = models.CharField(max_length=256, null=True, blank=True,
+                                   default='')
+    help_definition = models.TextField(null=True, blank=True, default='')
+    help_examples = models.TextField(null=True, blank=True, default='')
+    flavor = models.CharField(max_length=256, default='')
+
     class Meta:
         ordering = ['order_rank']
-
 
     def __unicode__(self):
         return self.name
@@ -103,6 +110,7 @@ class Column (models.Model):
             'help_examples': self.help_examples,
             'flavor': self.flavor
         }
+
 
 class LogicModelBlock(models.Model):
     pageblocks = generic.GenericRelation(PageBlock)
@@ -133,9 +141,10 @@ class LogicModelBlock(models.Model):
         return form.save()
 
     def edit(self, vals, files):
-        form = LogicModelBlockForm(data=vals,
-                                          files=files,
-                                          instance=self)
+        form = LogicModelBlockForm(
+            data=vals,
+            files=files,
+            instance=self)
         if form.is_valid():
             form.save()
 
@@ -149,46 +158,3 @@ class LogicModelBlock(models.Model):
 class LogicModelBlockForm(forms.ModelForm):
     class Meta:
         model = LogicModelBlock
-
-
-if 1 == 0:
-    class TreatmentNode(MP_Node):
-        name = models.CharField(max_length=256)
-        type = models.CharField(max_length=2, choices=NODE_CHOICES)
-        text = models.TextField(null=True, blank=True)
-        help = models.TextField(null=True, blank=True)
-        duration = models.IntegerField(default=0)
-        value = models.IntegerField(default=0)
-
-        def __unicode__(self):
-            if self.type == 'DP':
-                return "  Decision Point: " + self.name
-            elif self.duration:
-                return "  %s weeks: %s" % (self.duration, self.name)
-            else:
-                return "  %s" % self.name
-
-        def to_json(self):
-            return {
-                'id': self.id,
-                'name': self.name,
-                'type': self.type,
-                'text': self.text,
-                'help': self.help,
-                'duration': self.duration,
-                'value': self.value, 
-                'children_list': [{'name': c.name, 'id': c.id, 'value': c.value} for c in self.get_children()]
-            }
-
-
-    class TreatmentPath(models.Model):
-        name = models.CharField(max_length=512)
-        tree = models.ForeignKey(TreatmentNode)
-        cirrhosis = models.BooleanField()
-        treatment_status = models.IntegerField(choices=STATUS_CHOICES)
-        drug_choice = models.CharField(max_length=12, choices=DRUG_CHOICES)
-
-        def __unicode__(self):
-            return self.name
-
-
