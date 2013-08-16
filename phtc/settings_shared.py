@@ -155,7 +155,8 @@ JENKINS_TASKS = (
     'django_jenkins.tasks.run_pyflakes',
 )
 
-PROJECT_APPS = ['phtc.main', 'quizblock', ]
+PROJECT_APPS = ['phtc.main', 'quizblock', 'phtc.logic_model',
+                'phtc.treatment_activity']
 
 if 'harvest' in sys.argv:
     DATABASES = {

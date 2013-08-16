@@ -19,25 +19,9 @@ class BasicTest(TestCase):
         response = self.c.get("/")
         self.assertEquals(response.status_code, 200)
 
-    def test_edit(self):
-        response = self.c.get("/edit/")
-        self.assertEquals(response.status_code, 200)
-
     def test_reset(self):
         response = self.c.post(
             "/",
             dict(action="reset"),
         )
         self.assertEquals(response.status_code, 302)
-
-    def test_submit(self):
-        response = self.c.post(
-            "/",
-            dict(action=""),
-        )
-        self.assertEquals(response.status_code, 302)
-
-    def test_smoketest(self):
-        response = self.c.get("/smoketest/")
-        self.assertEquals(response.status_code, 200)
-        assert "PASS" in response.content
