@@ -5,6 +5,11 @@ from phtc.main.views import set_row_total
 from phtc.main.views import calculate_age_gender
 from phtc.main.views import create_age_gender_dict
 from phtc.main.views import calculate_status
+from phtc.main.views import get_pre_test_data
+from phtc.main.views import get_post_test_data
+from phtc.main.views import create_eval_report
+from phtc.main.views import create_training_env_report
+from phtc.main.views import create_user_report_table
 
 
 class SimpleViewTest(TestCase):
@@ -94,6 +99,14 @@ class LoggedInTest(TestCase):
 
     def test_reports(self):
         result = self.c.get("/reports/")
+        self.assertEqual(result.status_code, 200)
+
+    def test_dashboard(self):
+        result = self.c.get("/dashboard/")
+        self.assertEqual(result.status_code, 302)
+
+    def test_dashboard_panel(self):
+        result = self.c.get("/dashboard_panel/")
         self.assertEqual(result.status_code, 200)
 
 
@@ -232,3 +245,38 @@ class CalculateStatusTest(TestCase):
     def test_uv_else(self):
         self.assertEqual(calculate_status("in_progress", None), "in_progress")
         self.assertEqual(calculate_status("foo", None), "incomplete")
+
+
+class PreTestDataTest(TestCase):
+    def test_empty(self):
+        result = get_pre_test_data([], [])
+        self.assertEqual(result, [])
+
+
+class PostTestDataTest(TestCase):
+    def test_empty(self):
+        result = get_post_test_data([], [])
+        self.assertEqual(result, [])
+
+
+class CreateEvalReportTest(TestCase):
+    def test_create_eval_report_empty(self):
+        result = create_eval_report([], [], [])
+        self.assertEqual(result, [])
+
+
+class CreateTrainingEnvReportTest(TestCase):
+    def test_create_training_env_report_empty(self):
+        result = create_training_env_report([], 0, [])
+        self.assertEqual(result[0][0],
+                         ('Total Unique Registered Users', 0))
+        self.assertEqual(result[0][1],
+                         ('Total Number Completers Unduplicated', 0))
+        self.assertEqual(result[0][2],
+                         ('Total Number Completers_duplicated', 0))
+
+
+class CreateUserReportTableTest(TestCase):
+    def test_create_user_report_table_empty(self):
+        result = create_user_report_table([], [])
+        self.assertEqual(result, [])
