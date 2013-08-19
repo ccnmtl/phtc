@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from phtc.main.views import set_row_total
 from phtc.main.views import calculate_age_gender
 from phtc.main.views import create_age_gender_dict
+from phtc.main.views import calculate_status
 
 
 class SimpleViewTest(TestCase):
@@ -25,6 +26,10 @@ class SimpleViewTest(TestCase):
 
     def test_nylearns(self):
         result = self.c.get("/nylearns/")
+        self.assertEqual(result.status_code, 200)
+
+    def test_nylearns_post(self):
+        result = self.c.post("/nylearns/")
         self.assertEqual(result.status_code, 200)
 
     def test_create_nylearns_user(self):
@@ -207,3 +212,23 @@ class TestUtilFunctions(TestCase):
         self.assertEqual(r[6]['Male'], 6)
         self.assertEqual(r[6]['Female'], 1)
         self.assertEqual(r[6]['Total'], 7)
+
+
+class CalculateStatusTest(TestCase):
+    def test_uv_case(self):
+
+        class UV(object):
+            def __init__(self, s="complete"):
+                self.status = s
+
+        self.assertEqual(calculate_status("complete", UV()), "in_progress")
+        self.assertEqual(calculate_status("in_progress", UV()), "in_progress")
+        self.assertEqual(calculate_status("foo", UV("allowed")), "in_progress")
+        self.assertEqual(calculate_status("foo", UV("in_progress")),
+                         "in_progress")
+        self.assertEqual(calculate_status("foo", UV()), "complete")
+        self.assertEqual(calculate_status("foo", UV("foo")), "incomplete")
+
+    def test_uv_else(self):
+        self.assertEqual(calculate_status("in_progress", None), "in_progress")
+        self.assertEqual(calculate_status("foo", None), "incomplete")
