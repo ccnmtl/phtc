@@ -365,3 +365,7 @@ div.add_a_row_button.visible {
     border-top: 0;
     display: none;
 }
+
+.pull-center {
+    text-align: center;
+}
