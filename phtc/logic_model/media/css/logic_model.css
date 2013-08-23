@@ -59,11 +59,7 @@ span.backbone_column_span {
   position: absolute;
   top: 150px;
   left: 150px;
-  width: 400px;
-  height: 400px;
   z-index: 300;
-  opacity:0.9;
-  filter:alpha(opacity=0.9);
 }
 
 .help-alert {
@@ -261,8 +257,58 @@ div.add_a_row_button.visible {
 
 /* CSS override of EVERYTHING for this activity */
 
+.logic-model-activity h3 {
+    font-size: 24px;
+    line-height: 36px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 30px;
+    color: #000;
+}
+
+
 #maincontent {
     width: auto;
     margin-right: 20px;
     padding: 0;
+}
+
+.popover-parent {
+    width: auto;
+    height: 500px;
+    background-color: #fff;
+    border: 1px solid #999;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+}
+
+.logic-model-activity .popover-title {
+  font-size: 18px;
+  line-height: 27px;
+  padding: 9px 15px;
+  line-height: 1;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #eee;
+  -webkit-border-radius: 3px 3px 0 0;
+     -moz-border-radius: 3px 3px 0 0;
+          border-radius: 3px 3px 0 0;
+}
+
+.logic-model-game-phase-name {
+    font-size: 20px;
+    font-weight: normal;
+    margin: 0 0 20px 0;
+}
+
+.logic-model-activity .scenario_title {
+    font-size: 18px;
+    line-height: 140%;
+    margin-bottom: 10px;
+    padding-bottom: 0;
+}
+
+.instructions_for_scenario {
+    margin: 0 0 20px 0;
 }
