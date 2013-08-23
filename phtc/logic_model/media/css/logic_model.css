@@ -257,3 +257,12 @@ div.add_a_row_button.visible {
 #phase_container.conclusion div.logic-model-initial-scenario_choice {
     display:none;
 }
+
+
+/* CSS override of EVERYTHING for this activity */
+
+#maincontent {
+    width: auto;
+    margin-right: 20px;
+    padding: 0;
+}
