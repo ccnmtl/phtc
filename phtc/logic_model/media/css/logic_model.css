@@ -57,8 +57,9 @@ span.backbone_column_span {
 .help_box {
   display: none;
   position: absolute;
-  top: 150px;
-  left: 150px;
+  top: 50px;
+  left: 20px;
+  width: 880px;
   z-index: 300;
 }
 
@@ -274,6 +275,15 @@ div.add_a_row_button.visible {
     padding: 0;
 }
 
+#content {
+    position: relative;
+    width: 920px;
+}
+
+.logic-model-container {
+    width: 100%;
+}
+
 .popover-parent {
     width: auto;
     height: 500px;
@@ -282,6 +292,9 @@ div.add_a_row_button.visible {
   -webkit-border-radius: 3px;
      -moz-border-radius: 3px;
           border-radius: 3px;
+  -webkit-box-shadow: 0 0 50px #666666;
+     -moz-box-shadow: 0 0 50px #666666;
+          box-shadow: 0 0 50px #666666;
 }
 
 .logic-model-activity .popover-title {
