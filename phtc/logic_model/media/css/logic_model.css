@@ -297,8 +297,9 @@ div.add_a_row_button.visible {
 }
 
 .logic-model-game-phase-name {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: normal;
+    line-height: 130%;
     margin: 0 0 20px 0;
 }
 
@@ -307,8 +308,47 @@ div.add_a_row_button.visible {
     line-height: 140%;
     margin-bottom: 10px;
     padding-bottom: 0;
+    font-weight: normal;
 }
 
 .instructions_for_scenario {
     margin: 0 0 20px 0;
+}
+
+
+.scenario_block {
+    margin: 10px auto;
+    padding: 0;
+    border: 0;
+    width: auto;
+}
+
+.scenario_header {
+    cursor: pointer;
+    height: 40px;
+    z-index: 1;
+    background: transparent url('/site_media/img/caret_close.png') 10px 12px no-repeat;
+}
+
+.scenario_block .active {
+    background: transparent url('/site_media/img/caret_open.png') 10px 12px no-repeat;
+}
+
+.scenario_criteria {
+    margin: 0;
+    padding: 0 0 0 30px;
+    border: 0;
+    float: left;
+    font-size: 18px;
+    line-height: 40px;
+    font-weight: normal;
+}
+
+.scenario_content {
+    clear: both;
+    margin: 0 0 0 30px;
+    padding: 10px;
+    border: 0;
+    border-top: 0;
+    display: none;
 }

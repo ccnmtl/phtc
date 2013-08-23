@@ -19,3 +19,12 @@
 		{%include "logic_model/subtemplates/help_box.html" %}
 	</div>
 </div>
+
+<script type="text/javascript" language="javascript">
+    jQuery(document).ready(function(jQuery){
+        jQuery(".scenario_header").click(function(){
+            jQuery(this).next(".scenario_content").slideToggle("fast");
+            jQuery(this).toggleClass("active");
+        });
+    });
+</script>
