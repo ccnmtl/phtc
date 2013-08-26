@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.test.client import Client
 from django.contrib.auth.models import User
+from pagetree.models import Hierarchy
 from phtc.main.views import set_row_total
 from phtc.main.views import calculate_age_gender
 from phtc.main.views import create_age_gender_dict
@@ -10,6 +11,8 @@ from phtc.main.views import get_post_test_data
 from phtc.main.views import create_eval_report
 from phtc.main.views import create_training_env_report
 from phtc.main.views import create_user_report_table
+from .test_models import FakeRequest
+from phtc.main.models import user_created
 
 
 class SimpleViewTest(TestCase):
@@ -104,7 +107,7 @@ class LoggedInTest(TestCase):
     def test_reports_training_env(self):
         result = self.c.post(
             "/reports/",
-            dict(report="training_env", ev_report=True)
+            dict(report="training_env")
         )
         self.assertEqual(result.status_code, 200)
 
@@ -122,6 +125,79 @@ class LoggedInTest(TestCase):
     def test_dashboard_panel(self):
         result = self.c.get("/dashboard_panel/")
         self.assertEqual(result.status_code, 200)
+
+    def test_page(self):
+        h = Hierarchy.objects.create(name="main", base_url="/")
+        root = h.get_root()
+        root.add_child_section_from_dict(
+            {'label': "One", 'slug': "socialwork",
+             'children': [{'label': "Three", 'slug': "introduction"}]
+             })
+        root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
+        r = self.c.get("/socialwork/introduction/")
+        self.assertEqual(r.status_code, 200)
+
+    def test_page_post(self):
+        h = Hierarchy.objects.create(name="main", base_url="/")
+        root = h.get_root()
+        root.add_child_section_from_dict(
+            {'label': "One", 'slug': "socialwork",
+             'children': [{'label': "Three", 'slug': "introduction"}]
+             })
+        root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
+        r = self.c.post("/socialwork/introduction/")
+        self.assertEqual(r.status_code, 302)
+
+    def test_page_post_reset(self):
+        h = Hierarchy.objects.create(name="main", base_url="/")
+        root = h.get_root()
+        root.add_child_section_from_dict(
+            {'label': "One", 'slug': "socialwork",
+             'children': [{'label': "Three", 'slug': "introduction"}]
+             })
+        root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
+        r = self.c.post("/socialwork/introduction/", dict(action='reset'))
+        self.assertEqual(r.status_code, 302)
+
+    def test_page_post_post_test(self):
+        h = Hierarchy.objects.create(name="main", base_url="/")
+        root = h.get_root()
+        root.add_child_section_from_dict(
+            {'label': "One", 'slug': "socialwork",
+             'children': [{'label': "Three", 'slug': "introduction"}]
+             })
+        root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
+        req = FakeRequest()
+        user_created(None, self.user, req)
+        r = self.c.post("/socialwork/introduction/", dict(post_test='true'))
+        self.assertEqual(r.status_code, 302)
+
+    def test_page_post_pre_test(self):
+        h = Hierarchy.objects.create(name="main", base_url="/")
+        root = h.get_root()
+        root.add_child_section_from_dict(
+            {'label': "One", 'slug': "socialwork",
+             'children': [{'label': "Three", 'slug': "introduction"}]
+             })
+        root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
+
+        r = self.c.post("/socialwork/introduction/", dict(pre_test='true'))
+        self.assertEqual(r.status_code, 302)
+
+    def test_edit_page(self):
+        h = Hierarchy.objects.create(name="main", base_url="/")
+        root = h.get_root()
+        root.add_child_section_from_dict(
+            {'label': "One", 'slug': "socialwork",
+             'children': [{'label': "Three", 'slug': "introduction"}]
+             })
+        root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
+        r = self.c.get("/edit/socialwork/introduction/")
+        self.assertEqual(r.status_code, 302)
+        self.user.is_staff = True
+        self.user.save()
+        r = self.c.get("/edit/socialwork/introduction/")
+        self.assertEqual(r.status_code, 200)
 
 
 class FakeCompleter(object):
