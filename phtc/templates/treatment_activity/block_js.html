@@ -28,7 +28,6 @@
                 
             </div>
             <div class="medication <% if (!minimized && duration > 0) { %>height-<%=duration%><% } %>">
-                <% if (help) { %><i class="icon-question-sign"></i><% } %>
                 <% if (can_edit) { %>
                     <a href="/admin/treatment_activity/treatmentnode/<%=id%>/"
                        target="_blank"
@@ -50,7 +49,6 @@
                 <div class="duration"></div>
             </div>
             <div class="medication challenge">
-                <% if (help) { %><i class="icon-question-sign"></i><% } %>
                 <% if (can_edit) { %>
                     <a href="/admin/treatment_activity/treatmentnode/<%=id%>/"
                        target="_blank"
@@ -95,7 +93,6 @@
                 <div class="duration"></div>
             </div>
             <div class="medication">
-                <% if (help) { %><i class="icon-question-sign"></i><% } %>
                 <% if (can_edit) { %>
                     <a href="/admin/treatment_activity/treatmentnode/<%=id%>/"
                        target="_blank"
