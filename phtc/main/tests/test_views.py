@@ -101,6 +101,20 @@ class LoggedInTest(TestCase):
         result = self.c.get("/reports/")
         self.assertEqual(result.status_code, 200)
 
+    def test_reports_training_env(self):
+        result = self.c.post(
+            "/reports/",
+            dict(report="training_env", ev_report=True)
+        )
+        self.assertEqual(result.status_code, 200)
+
+    def test_reports_age_gender_report(self):
+        result = self.c.post(
+            "/reports/",
+            dict(report="age_gender_report")
+        )
+        self.assertEqual(result.status_code, 200)
+
     def test_dashboard(self):
         result = self.c.get("/dashboard/")
         self.assertEqual(result.status_code, 302)
