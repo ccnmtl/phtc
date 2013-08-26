@@ -151,9 +151,6 @@ class LogicModelBlock(models.Model):
     def unlocked(self, user):
         return True
 
-    def treatment_paths(self):
-        return TreatmentPath.objects.all()
-
 
 class LogicModelBlockForm(forms.ModelForm):
     class Meta:
