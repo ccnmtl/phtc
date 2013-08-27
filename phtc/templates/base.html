@@ -151,11 +151,11 @@ the Health Resources and Services Administration, U.S. Department of Health and 
 
 <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 
+{% block js %}{% endblock %}
 {% compress js %}
 <script src="/site_media/bootstrap/js/bootstrap.js"></script>
 {% endcompress %}
 
-{% block js %}{% endblock %}
 <script>
 //add tooltip
   jQuery("span.user_profile").tooltip({

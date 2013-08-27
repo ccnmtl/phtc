@@ -32,7 +32,7 @@ textarea#reflections {
 }
 
 .logic-model-columns {
-    width: 840px;
+    width: 900px;
     /*
     height: 500px;
     border: 1px solid #ccc;
@@ -44,21 +44,17 @@ textarea#reflections {
     display: block;
 }
 
-.previous_phase {
-    width: 100px;
-}
-
 .divclearfix {
     clear: both;
 }
 
 span.column_span {
-    width:  140px;
+    width:  150px;
     margin-left:0px;
 }
 
 span.backbone_column_span {
-    width:  140px;
+    width:  150px;
     margin-left:0px;
 }
 
@@ -79,25 +75,38 @@ span.backbone_column_span {
 }
 
 .cell {
-    width: 130px;
+    width: 143px;
     height: 50px;
-    margin: 2px;
+    margin: 2px 0;
     padding: 2px;
     float: left;
-    border: 2px solid;
-    font-size: .8em;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border: 0;
 }
 
 .colhead {
-    font-size: .8em;
-    width: 130px;
-    height: 50px;
-    margin: 2px;
-    padding: 2px; 
+    width: 137px;
+    height: 30px;
+    margin: 0;
+    padding: 5px;
+    border: 0;
+    background-color: #e0e0e0;
+    font-size: 12px;
+    
+}
+
+.column_name {
     float: left;
-    border: 1px solid #ccc;
-    background-color: #ccc;
+    width: 115px;
+    line-height: 110%;
+    font-weight: bold;
+}
+
+.column_help_button_span {
+    float: left;
+    width: 20px;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
 }
 
 .text_box {
@@ -105,8 +114,8 @@ span.backbone_column_span {
     position: absolute;
     font: normal 11px/100% verdana;
     top: 0px;
-    left: 10px;
-    width : 110px;
+    left: 17px;
+    width : 117px;
     height: 41px;
     background-color: #fff;
     resize: none;
@@ -115,20 +124,31 @@ span.backbone_column_span {
 .box_draggable .box_handle {
     display: inline;
     position: absolute;
-    left : -4px;
-    top :  -4px;
+    left: 0;
+    top: 2px;
+    height: 16px;
+    width: 15px;
+    border: 0;
+    background-color: #fff;
+  -webkit-border-radius: 50%;
+     -moz-border-radius: 50%;
+          border-radius: 50%;
+    cursor: pointer;
 }
 
 .box_draggable .switch_color {
-    display: inline;
+    display: block;
     position: absolute;
     left: 0px;
-    top: 10px;
+    top: 25px;
     height: 16px;
     width: 15px;
-    border: 1px solid #ccc;
-    background-color: #ccc;
-    color: grey;
+    border: 0;
+    background-color: #fff;
+  -webkit-border-radius: 50%;
+     -moz-border-radius: 50%;
+          border-radius: 50%;
+    cursor: pointer;
 }
 
 div.done-button {
@@ -155,15 +175,19 @@ div.add_a_row_button.visible {
 }
 
 #phase_container.conclusion .show_expert_logic_model_link_div {
-    display:block;
+    display: inline;
 }
 
-.box_draggable .box_handle .icon-move{
+#phase_container.conclusion .show_expert_logic_model_link_div a {
+    color: inherit;
+}
+
+/*.box_draggable .box_handle .icon-move{
     display: inline;
     position: absolute;
     left : 1px;
     top :  33px;
-}
+}*/
 
 .backbone_box_div {
     display:block;
@@ -174,7 +198,7 @@ div.add_a_row_button.visible {
 }
 
 .hover_droppable {
-    background-color: blue;
+    background-color: #ccc;
     /*opacity:0.4;
     filter:alpha(opacity=40); */
 }
@@ -200,18 +224,34 @@ div.add_a_row_button.visible {
 }
 
 .wipe-table-button-div {
-    display: none;   
+    display: none;
+    position: absolute;
+    top: 160px;
+    left: 0;
+    width: 880px;
+    z-index: 300;
+    width: auto;
+    height: 300px;
+    background-color: #fff;
+    border: 1px solid #999;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+  -webkit-box-shadow: 0 0 50px #666666;
+     -moz-box-shadow: 0 0 50px #666666;
+          box-shadow: 0 0 50px #666666;
 }
 
 .inactive_box {
-    background-color: darkgrey;
-    opacity:0.4;
-    filter:alpha(opacity=40); /* For IE8 and earlier */
+    background-color: #666;
+    opacity:0.3;
+    filter:alpha(opacity=30); /* For IE8 and earlier */
 }
 
 /* Pick scenario:*/
 
 #phase_container.pick_scenario div.wipe-table-div, 
+#phase_container.pick_scenario div.table-toolbar, 
 #phase_container.pick_scenario div.logic-model-columns, 
 #phase_container.pick_scenario textarea#reflections,
 #phase_container.pick_scenario .change_scenario,
@@ -219,6 +259,10 @@ div.add_a_row_button.visible {
 #phase_container.pick_scenario .scenario_instructions_container,
 #phase_container.pick_scenario .next_phase  {
     display:none;
+}
+
+div.table-toolbar {
+    margin-bottom: 5px;
 }
 
 /* Add inputs:*/
@@ -321,7 +365,7 @@ div.add_a_row_button.visible {
 }
 
 .scenario-block {
-    margin: 10px auto;
+    margin: 10px auto 30px auto;
     padding: 0;
     border: 0;
     width: auto;
