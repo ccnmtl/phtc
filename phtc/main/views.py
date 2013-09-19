@@ -1008,6 +1008,8 @@ def create_course_report_table(completed_modules, pre_test_data,
             course.append(('work_zip_code', user.work_zip))
             course.append((
                 'primary_discipline_specialty', user.position))
+            course.append((
+                'employment_location', user.employment_location))
             course.append(('work_in_doh', user.dept_health))
             course.append(('target_doh', user.geo_dept_health))
             course.append(('experience_in_pulic_health', user.experience))
