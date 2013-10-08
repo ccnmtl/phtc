@@ -9,7 +9,7 @@ ADMINS = ()
 
 MANAGERS = ADMINS
 
-ALLOW_HOSTS = [
+ALLOWED_HOSTS = [
     "training.lowernysphtc.org",
     ".ccnmtl.columbia.edu", "localhost"]
 
