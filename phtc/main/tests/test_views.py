@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.test.client import Client
 from django.contrib.auth.models import User
+from phtc.main.models import UserProfile
 from pagetree.models import Hierarchy
 from phtc.main.views import set_row_total
 from phtc.main.views import calculate_age_gender
@@ -127,6 +128,7 @@ class LoggedInTest(TestCase):
         self.assertEqual(result.status_code, 200)
 
     def test_page(self):
+        userprofile = UserProfile.objects.create(user=self.user)
         h = Hierarchy.objects.create(name="main", base_url="/")
         root = h.get_root()
         root.add_child_section_from_dict(
@@ -138,6 +140,7 @@ class LoggedInTest(TestCase):
         self.assertEqual(r.status_code, 200)
 
     def test_page_with_prev(self):
+        userprofile = UserProfile.objects.create(user=self.user)
         h = Hierarchy.objects.create(name="main", base_url="/")
         root = h.get_root()
         root.add_child_section_from_dict(
@@ -173,6 +176,7 @@ class LoggedInTest(TestCase):
         self.assertEqual(r.status_code, 302)
 
     def test_page_post_then_visit(self):
+        userprofile = UserProfile.objects.create(user=self.user)
         h = Hierarchy.objects.create(name="main", base_url="/")
         root = h.get_root()
         root.add_child_section_from_dict(
@@ -248,7 +252,7 @@ class LoggedInTest(TestCase):
         )
         self.assertEqual(r.status_code, 200)
 
-    def test_update_profile(self):
+    def test_update_profile(self): 
         d = dict(
             username="testuser",
             password1="",
