@@ -178,6 +178,17 @@ the Health Resources and Services Administration, U.S. Department of Health and 
     });
     return vars;
   }//end getUrlVars
+
+  PHTC.formInputLength = function(){
+    jQuery('input[type=text]').each(function(){
+      var elem = jQuery(this);
+      elem.attr('maxlength','50');
+    });
+  }
+
+if(window.phtcInputFormCheck){
+  PHTC.formInputLength();
+}
   if (PHTC.getUrlVars()['incomplete'] ){
     var message = "You must complete the previous part in order to continue. \n\n We redirected you back to the dashboard so you can check your status and remeber where you left off."
     alert(message);
