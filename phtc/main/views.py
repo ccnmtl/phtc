@@ -570,49 +570,51 @@ def get_user_profile(request):
 
 @login_required
 def update_user_profile(request):
-    form = UserRegistrationForm(request.POST)
-    request.user.username = form.data["username"]
-    if form.data["password1"] != "":
-        request.user.set_password(form.data["password1"])
-    try:
-        userprofile = UserProfile.objects.get(user=request.user)
-    except UserProfile.DoesNotExist:
-        userprofile = UserProfile.objects.create(user=request.user)
+    if request.method == "POST":    
+        form = UserRegistrationForm(request.POST)
+        request.user.username = form.data["username"]
+        if form.data["password1"] != "":
+            request.user.set_password(form.data["password1"])
+        try:
+            userprofile = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            userprofile = UserProfile.objects.create(user=request.user)
 
-    try:
-        userprofile.other_employment_location = form.data[
-            "other_employment_location"]
-    except:
-        pass
+        try:
+            userprofile.other_employment_location = form.data[
+                "other_employment_location"]
+        except:
+            pass
 
-    try:
-        userprofile.other_position_category = form.data[
-            "other_position_category"]
-    except:
-        pass
-    request.user.email = form.data["email"]
-    userprofile.fname = form.data["fname"]
-    userprofile.lname = form.data["lname"]
-    userprofile.degree = form.data["degree"]
-    userprofile.sex = form.data["sex"]
-    userprofile.age = form.data["age"]
-    userprofile.origin = form.data["origin"]
-    userprofile.ethnicity = form.data["ethnicity"]
-    userprofile.degree = form.data["degree"]
-    userprofile.work_city = form.data["work_city"]
-    userprofile.work_state = form.data["work_state"]
-    userprofile.work_zip = form.data["work_zip"]
-    userprofile.employment_location = form.data["employment_location"]
-    userprofile.umc = form.data["umc"]
-    userprofile.position = form.data["position"]
-    userprofile.dept_health = form.data["dept_health"]
-    userprofile.geo_dept_health = form.data["geo_dept_health"]
-    userprofile.experience = form.data["experience"]
-    userprofile.rural = form.data["rural"]
-    userprofile.save()
-    request.user.save()
-    return HttpResponseRedirect('/profile/?saved=true/')
-
+        try:
+            userprofile.other_position_category = form.data[
+                "other_position_category"]
+        except:
+            pass
+        request.user.email = form.data["email"]
+        userprofile.fname = form.data["fname"]
+        userprofile.lname = form.data["lname"]
+        userprofile.degree = form.data["degree"]
+        userprofile.sex = form.data["sex"]
+        userprofile.age = form.data["age"]
+        userprofile.origin = form.data["origin"]
+        userprofile.ethnicity = form.data["ethnicity"]
+        userprofile.degree = form.data["degree"]
+        userprofile.work_city = form.data["work_city"]
+        userprofile.work_state = form.data["work_state"]
+        userprofile.work_zip = form.data["work_zip"]
+        userprofile.employment_location = form.data["employment_location"]
+        userprofile.umc = form.data["umc"]
+        userprofile.position = form.data["position"]
+        userprofile.dept_health = form.data["dept_health"]
+        userprofile.geo_dept_health = form.data["geo_dept_health"]
+        userprofile.experience = form.data["experience"]
+        userprofile.rural = form.data["rural"]
+        userprofile.save()
+        request.user.save()
+        return HttpResponseRedirect('/profile/?saved=true/')
+    else:
+        return HttpResponseRedirect('/profile/')
 
 @login_required
 @render_to('main/dashboard.html')
