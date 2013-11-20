@@ -382,7 +382,8 @@ def process_dashboard_ajax(user, section, module):
 @login_required
 @render_to('main/page.html')
 def page(request, path):
-    
+    import pdb
+    pdb.set_trace()
     try: 
         request.user.userprofile
         user_prof = True

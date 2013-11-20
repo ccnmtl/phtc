@@ -193,6 +193,7 @@ if(window.phtcInputFormCheck){
     var message = "You must complete the previous part in order to continue. \n\n We redirected you back to the dashboard so you can check your status and remeber where you left off."
     alert(message);
   }
+  window.PHTC = PHTC;
 </script>
 {% if STAGING_ENV %}
 <div class="alert alert-error" style="position: fixed; bottom: 0px;">

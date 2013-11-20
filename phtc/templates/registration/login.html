@@ -51,7 +51,18 @@
     </div><!--end #greeting-login-->
 
 
-
+<script>
+jQuery(document).ready(function(){
+    var urlVars = window.PHTC.getUrlVars();
+    if(urlVars.next.search('complete')){
+        return;
+    }else{
+        var complete = '?complete=true'
+        var location = window.location.href 
+        window.location.href =  location + complete
+    }
+})
+</script>
 
 
 {% endblock %}
