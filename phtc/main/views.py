@@ -423,6 +423,12 @@ def page(request, path):
     if rv:
         return rv
 
+    # if this is a deep link to the module make sure ro go to dashboard
+    # as to not break the locking
+    if request.GET.get('deep_link') and request.GET.get('deep_link') == "true":
+        if not(is_module(module, section)):
+            return HttpResponseRedirect('/dashboard/')
+
     # is the page already completed? If so, do not update status
     if(section.get_uservisit(request.user) and
        section.get_uservisit(request.user).status == "complete"):

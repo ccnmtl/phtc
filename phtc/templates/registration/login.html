@@ -51,7 +51,18 @@
     </div><!--end #greeting-login-->
 
 
-
+<script>
+jQuery(document).ready(function(){
+    var urlVars = window.PHTC.getUrlVars();
+    if(urlVars['next'].length>0 && urlVars['next'].search('deep_link') >-1){
+       return;
+    }else{
+        var deep_link = '?deep_link=true';
+        var location = window.location.href; 
+        window.location.href =  location + deep_link;
+    }
+})
+</script>
 
 
 {% endblock %}
