@@ -54,12 +54,12 @@
 <script>
 jQuery(document).ready(function(){
     var urlVars = window.PHTC.getUrlVars();
-    if(urlVars.next.search('complete')){
-        return;
+    if(urlVars['next'].length>0 && urlVars['next'].search('deep_link') >-1){
+       return;
     }else{
-        var complete = '?complete=true'
-        var location = window.location.href 
-        window.location.href =  location + complete
+        var deep_link = '?deep_link=true';
+        var location = window.location.href; 
+        window.location.href =  location + deep_link;
     }
 })
 </script>

@@ -382,8 +382,6 @@ def process_dashboard_ajax(user, section, module):
 @login_required
 @render_to('main/page.html')
 def page(request, path):
-    import pdb
-    pdb.set_trace()
     try: 
         request.user.userprofile
         user_prof = True
@@ -424,6 +422,12 @@ def page(request, path):
     rv = redirect_to_first_section_if_root(section, root)
     if rv:
         return rv
+
+    # if this is a deep link to the module make sure ro go to dashboard
+    # as to not break the locking
+    if request.GET.get('deep_link') and request.GET.get('deep_link') == "true":
+        if not(is_module(module, section)):
+            return HttpResponseRedirect('/dashboard/')
 
     # is the page already completed? If so, do not update status
     if(section.get_uservisit(request.user) and
