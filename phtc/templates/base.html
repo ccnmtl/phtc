@@ -179,13 +179,6 @@ the Health Resources and Services Administration, U.S. Department of Health and 
     return vars;
   }//end getUrlVars
 
-  PHTC.formInputLength = function(){
-    jQuery('input[type=text]').each(function(){
-      var elem = jQuery(this);
-      elem.attr('maxlength','50');
-    });
-  }
-
 if(window.phtcInputFormCheck){
   PHTC.formInputLength();
 }
