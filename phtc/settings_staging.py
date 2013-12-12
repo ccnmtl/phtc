@@ -4,7 +4,7 @@ from settings_shared import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'phtc',
+        'NAME': 'phtc_stage',
         'HOST': '',
         'PORT': 6432,
         'USER': '',
