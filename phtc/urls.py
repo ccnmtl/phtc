@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, include, url
-from registration.views import register
+from registration.views import RegistrationView
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic.simple import direct_to_template
@@ -25,9 +25,7 @@ urlpatterns = patterns(
     auth_urls,
     logout_page,
     url(r'^registration/register/$',
-        register,
-        {'backend': 'registration.backends.default.DefaultBackend',
-         'form_class': UserRegistrationForm},
+        RegistrationView.as_view(form_class=UserRegistrationForm),
         name='registration_register'),
     (r'^registration/', include('registration.urls')),
     (r'^test_nylearns_username/$', 'phtc.main.views.test_nylearns_username'),

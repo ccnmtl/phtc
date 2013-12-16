@@ -128,7 +128,7 @@ class LoggedInTest(TestCase):
         self.assertEqual(result.status_code, 200)
 
     def test_page(self):
-        userprofile = UserProfile.objects.create(user=self.user)
+        UserProfile.objects.create(user=self.user)
         h = Hierarchy.objects.create(name="main", base_url="/")
         root = h.get_root()
         root.add_child_section_from_dict(
@@ -140,7 +140,7 @@ class LoggedInTest(TestCase):
         self.assertEqual(r.status_code, 200)
 
     def test_page_with_prev(self):
-        userprofile = UserProfile.objects.create(user=self.user)
+        UserProfile.objects.create(user=self.user)
         h = Hierarchy.objects.create(name="main", base_url="/")
         root = h.get_root()
         root.add_child_section_from_dict(
@@ -176,7 +176,7 @@ class LoggedInTest(TestCase):
         self.assertEqual(r.status_code, 302)
 
     def test_page_post_then_visit(self):
-        userprofile = UserProfile.objects.create(user=self.user)
+        UserProfile.objects.create(user=self.user)
         h = Hierarchy.objects.create(name="main", base_url="/")
         root = h.get_root()
         root.add_child_section_from_dict(
@@ -252,7 +252,7 @@ class LoggedInTest(TestCase):
         )
         self.assertEqual(r.status_code, 200)
 
-    def test_update_profile(self): 
+    def test_update_profile(self):
         d = dict(
             username="testuser",
             password1="",
