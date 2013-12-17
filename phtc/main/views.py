@@ -750,7 +750,17 @@ def create_csv_report2(request, report, report_name):
     for row in report:
         fields = []
         for field in row:
-            fields.append(field[1])
+            field_string = field[1]
+            
+            if type(field_string) == int:
+                field_string = str(field_string)
+            try:
+                field_string = field_string.encode('utf-8');
+            except:
+                pass
+            field_string = field_string[:10000000]
+            fields.append(field_string)
+
         writer.writerow(fields)
     return response
 
