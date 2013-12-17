@@ -753,8 +753,10 @@ def create_csv_report2(request, report, report_name):
             
             if type(field_string) == int:
                 field_string = str(field_string)
-
-            field_string = field_string.encode('utf-8');
+            try:
+                field_string = field_string.encode('utf-8');
+            except:
+                pass
             field_string = field_string[:10000000]
             fields.append(field_string)
 
