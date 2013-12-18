@@ -382,7 +382,7 @@ def process_dashboard_ajax(user, section, module):
 @login_required
 @render_to('main/page.html')
 def page(request, path):
-    try: 
+    try:
         request.user.userprofile
         user_prof = True
     except UserProfile.DoesNotExist:
@@ -575,7 +575,7 @@ def get_user_profile(request):
 
 @login_required
 def update_user_profile(request):
-    if request.method == "POST":    
+    if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         request.user.username = form.data["username"]
         if form.data["password1"] != "":
@@ -620,6 +620,7 @@ def update_user_profile(request):
         return HttpResponseRedirect('/profile/?saved=true/')
     else:
         return HttpResponseRedirect('/profile/')
+
 
 @login_required
 @render_to('main/dashboard.html')
@@ -925,7 +926,7 @@ def get_pre_test_data(completed_modules, modules):
 
     for test in pre_tests:
         obj = {}
-        qrep_module = get_module(test.pageblock().section)
+        get_module(test.pageblock().section)
         obj['quiz_label'] = get_module(test.pageblock().section).label
         obj['submission_set'] = test.submission_set
         module_pre_test_map.append(obj)
@@ -939,7 +940,7 @@ def get_post_test_data(completed_modules, modules):
 
     for test in post_tests:
         obj = {}
-        qrep_module = get_module(test.pageblock().section)
+        get_module(test.pageblock().section)
         obj['quiz_label'] = get_module(test.pageblock().section).label
         obj['submission_set'] = test.submission_set
         module_post_test_map.append(obj)

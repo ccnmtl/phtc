@@ -13,3 +13,4 @@ cover/
 *.DS_Store
 reports/
 ghostdriver.log
+node_modules
