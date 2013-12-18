@@ -749,7 +749,17 @@ def create_csv_report2(request, report, report_name):
     for row in report:
         fields = []
         for field in row:
-            fields.append(field[1])
+            field_string = field[1]
+            
+            if type(field_string) == int:
+                field_string = str(field_string)
+            try:
+                field_string = field_string.encode('utf-8');
+            except:
+                pass
+            field_string = field_string[:10000000]
+            fields.append(field_string)
+
         writer.writerow(fields)
     return response
 
@@ -1007,31 +1017,32 @@ def create_course_report_table(completed_modules, pre_test_data,
         date = UserPageVisit.objects.get(
             user=mod.user, section=mod.section).last_visit
 
-        try:
-            user = UserProfile.objects.get(user_id=mod.user_id)
-            course.append(('course_name', mod.section.label))
-            course.append(('date_completed', date.strftime("%D")))
-            course.append(('username', user.user.username))
-            course.append(('email', user.user.email))
-            course.append(('first_name', user.fname))
-            course.append(('last_name', user.lname))
-            course.append(('age', user.age))
-            course.append(('gender', user.sex))
-            course.append(('hispanic_origin', user.origin))
-            course.append(('race', user.ethnicity))
-            course.append(('heighest_degree_earned', user.degree))
-            course.append(('work_city', user.work_city))
-            course.append(('work_state', user.work_state))
-            course.append(('work_zip_code', user.work_zip))
-            course.append((
-                'primary_discipline_specialty', user.position))
-            course.append((
-                'employment_location', user.employment_location))
-            course.append(('work_in_doh', user.dept_health))
-            course.append(('target_doh', user.geo_dept_health))
-            course.append(('experience_in_pulic_health', user.experience))
-            course.append(('muc', user.umc))
-            course.append(('rural', user.rural))
+        
+        user = UserProfile.objects.get(user_id=mod.user_id)
+        course.append(('course_name', mod.section.label))
+        course.append(('date_completed', date.strftime("%D")))
+        course.append(('username', user.user.username))
+        course.append(('email', user.user.email))
+        course.append(('first_name', user.fname))
+        course.append(('last_name', user.lname))
+        course.append(('age', user.age))
+        course.append(('gender', user.sex))
+        course.append(('hispanic_origin', user.origin))
+        course.append(('race', user.ethnicity))
+        course.append(('heighest_degree_earned', user.degree))
+        course.append(('work_city', user.work_city))
+        course.append(('work_state', user.work_state))
+        course.append(('work_zip_code', user.work_zip))
+        course.append((
+            'primary_discipline_specialty', user.position))
+        course.append((
+            'employment_location', user.employment_location))
+        course.append(('work_in_doh', user.dept_health))
+        course.append(('target_doh', user.geo_dept_health))
+        course.append(('experience_in_pulic_health', user.experience))
+        course.append(('muc', user.umc))
+        course.append(('rural', user.rural))
+        if len(pre_qreps) == 8:
             course.append(('PreQ1', pre_qreps[0]))
             course.append(('PreQ2', pre_qreps[1]))
             course.append(('PreQ3', pre_qreps[2]))
@@ -1040,6 +1051,16 @@ def create_course_report_table(completed_modules, pre_test_data,
             course.append(('PreQ6', pre_qreps[5]))
             course.append(('PreQ7', pre_qreps[6]))
             course.append(('PreQ8', pre_qreps[7]))
+        else:
+            course.append(('PreQ1', ''))
+            course.append(('PreQ2', ''))
+            course.append(('PreQ3', ''))
+            course.append(('PreQ4',''))
+            course.append(('PreQ5', ''))
+            course.append(('PreQ6', ''))
+            course.append(('PreQ7', ''))
+            course.append(('PreQ8', ''))
+        if len(post_qreps) == 8:
             course.append(('PostQ1', post_qreps[0]))
             course.append(('PostQ2', post_qreps[1]))
             course.append(('PostQ3', post_qreps[2]))
@@ -1048,9 +1069,17 @@ def create_course_report_table(completed_modules, pre_test_data,
             course.append(('PostQ6', post_qreps[5]))
             course.append(('PostQ7', post_qreps[6]))
             course.append(('PostQ8', post_qreps[7]))
-            course_table.append(course)
-        except:
-            UserProfile.DoesNotExist
+        else:
+            course.append(('PostQ1', ''))
+            course.append(('PostQ2', ''))
+            course.append(('PostQ3', ''))
+            course.append(('PostQ4', ''))
+            course.append(('PostQ5', ''))
+            course.append(('PostQ6', ''))
+            course.append(('PostQ7', ''))
+            course.append(('PostQ8', ''))
+        course_table.append(course)
+
 
     return course_table
 
