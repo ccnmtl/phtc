@@ -783,16 +783,17 @@ def reports(request):
         completed_modules_counted = count_modules_completed(completed_modules)
         completers = create_completers_list(completed_modules)
         qoi = [
-            'The course was of overall high quality.',
-            ('I would recommend this course for employees '
-             'in positions similar to mine.'),
-            'The course content achieved the objectives.',
+            'What is your overall assessment of this training?',
+            ('I would recommend this course to others.'),
+            ('To what extent do you agree or disagree with the ' 
+             'following statement: I can apply the information '
+             'I learned in the training in my practice setting.'),
             ('This online training was an effective method for '
              'me to learn this material.'),
             'Approximately how long did it take you to complete the course?',
-            ('Please add any additional comments, including suggestions '
-             'for improving the course and requests for future web-based '
-             'training modules.')
+            ('Please add any additional comments, including '
+             'suggestions for improving the course and requests '
+             'for future web-based training modules.')
         ]
 
         if report == "training_env":
