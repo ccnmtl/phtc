@@ -988,9 +988,6 @@ def sort_test_data(test_data, mod):
         if data['quiz_label'] == mod.section.label:
 
             for val in data['submission_set'].values():
-                #print 'fired'
-                #import pdb
-                #pdb.set_trace()
                 if mod.user_id == val['user_id']:
                     
 
@@ -1015,9 +1012,6 @@ def sort_test_data(test_data, mod):
                             qreps.append(cln_qry_vals)
                         else:
                             qreps.append('none')
-                        #print 'sort_test_data'
-                        #import pdb
-                        #pdb.set_trace()
     return qreps
 
 
@@ -1032,13 +1026,8 @@ def create_course_report_table(completed_modules, pre_test_data,
         post_qreps = sort_test_data(post_test_data, mod)
         date = UserPageVisit.objects.get(
             user=mod.user, section=mod.section).last_visit
-
         
         user = UserProfile.objects.get(user_id=mod.user_id)
-
-        #import pdb
-        #pdb.set_trace()
-
         preq_length.append(dict({'length':len(pre_qreps), 'section':mod.section.label}) )
         postq_length.append(dict({'length': len(post_qreps), 'section':mod.section.label}) )
 
@@ -1130,9 +1119,6 @@ def create_course_report_table(completed_modules, pre_test_data,
             course.append(('PostQ14', 'n/a'))
 
         course_table.append(course)
-
-    import pdb
-    pdb.set_trace()
     return course_table
 
 
