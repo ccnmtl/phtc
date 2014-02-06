@@ -982,11 +982,19 @@ def is_question_of_interest(question, qoi):
 
 
 def sort_test_data(test_data, mod):
+
     qreps = []
     for data in test_data:
         if data['quiz_label'] == mod.section.label:
+
             for val in data['submission_set'].values():
+                #print 'fired'
+                #import pdb
+                #pdb.set_trace()
                 if mod.user_id == val['user_id']:
+                    
+
+
                     uid = str(val['user_id'])
                     qid = str(val['quiz_id'])
                     sub = Submission.objects.extra(
@@ -994,6 +1002,7 @@ def sort_test_data(test_data, mod):
                     subid = str(sub.values()[0]['id'])
                     questions = Question.objects.extra(
                         where=["quiz_id="+qid])
+
                     for ques in questions:
                         query = Response.objects.extra(
                             where=["question_id=" + str(ques.id),
@@ -1006,12 +1015,17 @@ def sort_test_data(test_data, mod):
                             qreps.append(cln_qry_vals)
                         else:
                             qreps.append('none')
+                        #print 'sort_test_data'
+                        #import pdb
+                        #pdb.set_trace()
     return qreps
 
 
 def create_course_report_table(completed_modules, pre_test_data,
                                post_test_data):
     course_table = []
+    preq_length = []
+    postq_length = []
     for mod in completed_modules:
         course = []
         pre_qreps = sort_test_data(pre_test_data, mod)
@@ -1021,6 +1035,13 @@ def create_course_report_table(completed_modules, pre_test_data,
 
         
         user = UserProfile.objects.get(user_id=mod.user_id)
+
+        #import pdb
+        #pdb.set_trace()
+
+        preq_length.append(dict({'length':len(pre_qreps), 'section':mod.section.label}) )
+        postq_length.append(dict({'length': len(post_qreps), 'section':mod.section.label}) )
+
         course.append(('course_name', mod.section.label))
         course.append(('date_completed', date.strftime("%D")))
         course.append(('username', user.user.username))
@@ -1054,15 +1075,30 @@ def create_course_report_table(completed_modules, pre_test_data,
             course.append(('PreQ7', pre_qreps[6]))
             course.append(('PreQ8', pre_qreps[7]))
         else:
-            course.append(('PreQ1', ''))
-            course.append(('PreQ2', ''))
-            course.append(('PreQ3', ''))
-            course.append(('PreQ4',''))
-            course.append(('PreQ5', ''))
-            course.append(('PreQ6', ''))
-            course.append(('PreQ7', ''))
-            course.append(('PreQ8', ''))
-        if len(post_qreps) == 8:
+            course.append(('PreQ1', 'n/a'))
+            course.append(('PreQ2', 'n/a'))
+            course.append(('PreQ3', 'n/a'))
+            course.append(('PreQ4','n/a'))
+            course.append(('PreQ5', 'n/a'))
+            course.append(('PreQ6', 'n/a'))
+            course.append(('PreQ7', 'n/a'))
+            course.append(('PreQ8', 'n/a'))
+        if len(post_qreps) == 6:
+            course.append(('PostQ1', post_qreps[0]))
+            course.append(('PostQ2', post_qreps[1]))
+            course.append(('PostQ3', post_qreps[2]))
+            course.append(('PostQ4', post_qreps[3]))
+            course.append(('PostQ5', post_qreps[4]))
+            course.append(('PostQ6', post_qreps[5]))
+            course.append(('PostQ7', 'n/a'))
+            course.append(('PostQ8', 'n/a'))
+            course.append(('PostQ9', 'n/a'))
+            course.append(('PostQ10', 'n/a'))
+            course.append(('PostQ11', 'n/a'))
+            course.append(('PostQ12', 'n/a'))
+            course.append(('PostQ13', 'n/a'))
+            course.append(('PostQ14', 'n/a'))
+        elif len(post_qreps) == 14:
             course.append(('PostQ1', post_qreps[0]))
             course.append(('PostQ2', post_qreps[1]))
             course.append(('PostQ3', post_qreps[2]))
@@ -1071,18 +1107,32 @@ def create_course_report_table(completed_modules, pre_test_data,
             course.append(('PostQ6', post_qreps[5]))
             course.append(('PostQ7', post_qreps[6]))
             course.append(('PostQ8', post_qreps[7]))
+            course.append(('PostQ9', post_qreps[8]))
+            course.append(('PostQ10', post_qreps[9]))
+            course.append(('PostQ11', post_qreps[10]))
+            course.append(('PostQ12', post_qreps[11]))
+            course.append(('PostQ13', post_qreps[12]))
+            course.append(('PostQ14', post_qreps[13]))
         else:
-            course.append(('PostQ1', ''))
-            course.append(('PostQ2', ''))
-            course.append(('PostQ3', ''))
-            course.append(('PostQ4', ''))
-            course.append(('PostQ5', ''))
-            course.append(('PostQ6', ''))
-            course.append(('PostQ7', ''))
-            course.append(('PostQ8', ''))
+            course.append(('PostQ1', 'n/a'))
+            course.append(('PostQ2', 'n/a'))
+            course.append(('PostQ3', 'n/a'))
+            course.append(('PostQ4', 'n/a'))
+            course.append(('PostQ5', 'n/a'))
+            course.append(('PostQ6', 'n/a'))
+            course.append(('PostQ7', 'n/a'))
+            course.append(('PostQ8', 'n/a'))
+            course.append(('PostQ9', 'n/a'))
+            course.append(('PostQ10', 'n/a'))
+            course.append(('PostQ11', 'n/a'))
+            course.append(('PostQ12', 'n/a'))
+            course.append(('PostQ13', 'n/a'))
+            course.append(('PostQ14', 'n/a'))
+
         course_table.append(course)
 
-
+    import pdb
+    pdb.set_trace()
     return course_table
 
 
