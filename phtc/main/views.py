@@ -751,11 +751,10 @@ def create_csv_report2(request, report, report_name):
         fields = []
         for field in row:
             field_string = field[1]
-            
             if type(field_string) == int:
                 field_string = str(field_string)
             try:
-                field_string = field_string.encode('utf-8');
+                field_string = field_string.encode('utf-8')
             except:
                 pass
             field_string = field_string[:10000000]
@@ -785,7 +784,7 @@ def reports(request):
         qoi = [
             'What is your overall assessment of this training?',
             ('I would recommend this course to others.'),
-            ('To what extent do you agree or disagree with the ' 
+            ('To what extent do you agree or disagree with the '
              'following statement: I can apply the information '
              'I learned in the training in my practice setting.'),
             ('This online training was an effective method for '
@@ -989,9 +988,6 @@ def sort_test_data(test_data, mod):
 
             for val in data['submission_set'].values():
                 if mod.user_id == val['user_id']:
-                    
-
-
                     uid = str(val['user_id'])
                     qid = str(val['quiz_id'])
                     sub = Submission.objects.extra(
@@ -1026,10 +1022,11 @@ def create_course_report_table(completed_modules, pre_test_data,
         post_qreps = sort_test_data(post_test_data, mod)
         date = UserPageVisit.objects.get(
             user=mod.user, section=mod.section).last_visit
-        
         user = UserProfile.objects.get(user_id=mod.user_id)
-        preq_length.append(dict({'length':len(pre_qreps), 'section':mod.section.label}) )
-        postq_length.append(dict({'length': len(post_qreps), 'section':mod.section.label}) )
+        preq_length.append(
+            dict({'length': len(pre_qreps), 'section': mod.section.label}))
+        postq_length.append(
+            dict({'length': len(post_qreps), 'section': mod.section.label}))
 
         course.append(('course_name', mod.section.label))
         course.append(('date_completed', date.strftime("%D")))
@@ -1067,7 +1064,7 @@ def create_course_report_table(completed_modules, pre_test_data,
             course.append(('PreQ1', 'n/a'))
             course.append(('PreQ2', 'n/a'))
             course.append(('PreQ3', 'n/a'))
-            course.append(('PreQ4','n/a'))
+            course.append(('PreQ4', 'n/a'))
             course.append(('PreQ5', 'n/a'))
             course.append(('PreQ6', 'n/a'))
             course.append(('PreQ7', 'n/a'))
