@@ -773,7 +773,9 @@ def reports(request):
     root = h.get_root()
     modules = root.get_children()
     pagevisits = UserPageVisit.objects.all()
-    total_number_of_users = len(UserProfile.objects.all())
+    users = UserProfile.objects.all()
+    total_number_of_users = len(users)
+    attempted_modules = get_all_attempted_modules(root, modules, pagevisits)
     completed_modules = get_all_completed_modules(root, modules, pagevisits)
     if request.method == "POST":
 
@@ -802,9 +804,14 @@ def reports(request):
                 total_number_of_users, completed_modules_counted)
             return create_csv_report2(request, training_env_report, report)
 
-        if report == "user_report":
+        if report == "user_report_completed":
             user_report_table = create_user_report_table(
-                completed_modules, completers)
+                completed_modules, users)
+            return create_csv_report2(request, user_report_table, report)
+
+        if report == "user_report_attempted":
+            user_report_table = create_user_report_table(
+                attempted_modules, users)
             return create_csv_report2(request, user_report_table, report)
 
         if report == "age_gender_report":
@@ -1140,6 +1147,15 @@ def create_training_env_report(completers,
         return table
 
 
+def get_all_attempted_modules(root, modules, pagevisits):
+    attempted_modules = []
+    for module in modules:
+        for pv in pagevisits:
+            if module.id == pv.section_id:
+                attempted_modules.append(pv)
+    return attempted_modules
+
+
 def get_all_completed_modules(root, modules, pagevisits):
     completed_modules = []
     for module in modules:
@@ -1204,9 +1220,13 @@ def create_user_report_table(completed_modules, completers):
 
         #Gather those that have completed more than one module
         for mod in completed_modules:
-            if v.user_id == mod.user_id:
-                num_of_courses_completed += 1
-        obj.append(('# of courses completed', num_of_courses_completed))
+            try:
+                if v.user_id == mod.user_id:
+                    num_of_courses_completed += 1
+            except  AttributeError:
+                num_of_courses_completed += 0
+                
+        obj.append(('# of courses completed/attempted', num_of_courses_completed))
         completer_objects.append(obj)
 
     return completer_objects
