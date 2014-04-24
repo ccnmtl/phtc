@@ -1027,8 +1027,10 @@ def create_course_report_table(completed_modules, pre_test_data,
         course = []
         pre_qreps = sort_test_data(pre_test_data, mod)
         post_qreps = sort_test_data(post_test_data, mod)
-        date = UserPageVisit.objects.get(
-            user=mod.user, section=mod.section).last_visit
+        
+        date = UserPageVisit.objects.filter(
+            user=mod.user, section=mod.section)
+        date = date[len(date)-1].last_visit
         user = UserProfile.objects.get(user_id=mod.user_id)
         preq_length.append(
             dict({'length': len(pre_qreps), 'section': mod.section.label}))
