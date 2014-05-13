@@ -871,27 +871,29 @@ def flatten_response_tables(qr):
 def aggregate_responses(evaluation_report):
     # create single report
     qr = []
+
+    response_list_count = [
+        ('strongly_disagree', 0),
+        ('neither_agree_nor_disagree', 0),
+        ('disagree', 0),
+        ('agree', 0),
+        ('strongly_agree', 0)
+    ]
+    response_time_list_count = [
+        ('30_minutes_or_less', 0),
+        ('1_hour', 0),
+        ('1.5_hours', 0),
+        ('2_hours', 0),
+        ('2.5_hours', 0),
+        ('3_hours', 0),
+        ('3.5_hours', 0),
+        ('4_hours', 0)
+    ]
+
     for ev in evaluation_report['question_response']:
         question = ev['question'].text.strip(
             ' \t\n\r').replace(" ", "_").lower()
 
-        response_list_count = [
-            ('strongly_disagree', 0),
-            ('neither_agree_nor_disagree', 0),
-            ('disagree', 0),
-            ('agree', 0),
-            ('strongly_agree', 0)
-        ]
-        response_time_list_count = [
-            ('30_minutes_or_less', 0),
-            ('1_hour', 0),
-            ('1.5_hours', 0),
-            ('2_hours', 0),
-            ('2.5_hours', 0),
-            ('3_hours', 0),
-            ('3.5_hours', 0),
-            ('4_hours', 0)
-        ]
         if question.startswith('approximately_how_long_did'):
             counter = []
             for val in response_time_list_count:
