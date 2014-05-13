@@ -895,36 +895,53 @@ def aggregate_responses(evaluation_report):
             ' \t\n\r').replace(" ", "_").lower()
 
         if question.startswith('approximately_how_long_did'):
-            counter = []
-            for val in response_time_list_count:
-                for res in ev['responses']:
-                    response = res.value.strip(
-                        ' \t\n\r').replace(" ", "_").lower()
-                    if response == val[0]:
-                        val = (val[0], val[1] + 1)
-                counter.append((question, val[0]))
-                counter.append(('# of Responses', val[1]))
-            qr.append(counter)
+            qr = question_approximately_how_long(
+                question, response_time_list_count, qr, ev)
         elif question.startswith('please_add'):
-            comments = []
-            for i in range(len(ev['responses'])):
-                if not ev['responses'][i].value == '':
-                    comments.append(
-                        (question, ev['responses'][i].value))
-                    # keep report uniform
-                    comments.append(('', ''))
-            qr.append(comments)
+            qr = question_please_add(question, ev, qr)
         else:
-            counter = []
-            for val in response_list_count:
-                for res in ev['responses']:
-                    response = res.value.strip(
-                        ' \t\n\r').replace(" ", "_").lower()
-                    if response == val[0]:
-                        val = (val[0], val[1] + 1)
-                counter.append((question, val[0]))
-                counter.append(('# of Responses', val[1]))
-            qr.append(counter)
+            qr = question_other(question, ev, response_list_count, qr)
+    return qr
+
+
+def question_other(question, ev, response_list_count, qr):
+    counter = []
+    for val in response_list_count:
+        for res in ev['responses']:
+            response = res.value.strip(
+                ' \t\n\r').replace(" ", "_").lower()
+            if response == val[0]:
+                val = (val[0], val[1] + 1)
+        counter.append((question, val[0]))
+        counter.append(('# of Responses', val[1]))
+    qr.append(counter)
+    return qr
+
+
+def question_please_add(question, ev, qr):
+    comments = []
+    for i in range(len(ev['responses'])):
+        if not ev['responses'][i].value == '':
+            comments.append(
+                (question, ev['responses'][i].value))
+            # keep report uniform
+            comments.append(('', ''))
+    qr.append(comments)
+    return qr
+
+
+def question_approximately_how_long(question, response_time_list_count,
+                                    qr, ev):
+    counter = []
+    for val in response_time_list_count:
+        for res in ev['responses']:
+            response = res.value.strip(
+                ' \t\n\r').replace(" ", "_").lower()
+            if response == val[0]:
+                val = (val[0], val[1] + 1)
+        counter.append((question, val[0]))
+        counter.append(('# of Responses', val[1]))
+    qr.append(counter)
     return qr
 
 
