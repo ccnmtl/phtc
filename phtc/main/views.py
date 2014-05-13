@@ -763,6 +763,20 @@ def create_csv_report2(request, report, report_name):
         writer.writerow(fields)
     return response
 
+QOI = [
+    'What is your overall assessment of this training?',
+    ('I would recommend this course to others.'),
+    ('To what extent do you agree or disagree with the '
+     'following statement: I can apply the information '
+     'I learned in the training in my practice setting.'),
+    ('This online training was an effective method for '
+     'me to learn this material.'),
+    'Approximately how long did it take you to complete the course?',
+    ('Please add any additional comments, including '
+     'suggestions for improving the course and requests '
+     'for future web-based training modules.')
+]
+
 
 @login_required
 @render_to('main/reports.html')
@@ -783,20 +797,6 @@ def reports(request):
         # vars used to create reports
         completed_modules_counted = count_modules_completed(completed_modules)
         completers = create_completers_list(completed_modules)
-        qoi = [
-            'What is your overall assessment of this training?',
-            ('I would recommend this course to others.'),
-            ('To what extent do you agree or disagree with the '
-             'following statement: I can apply the information '
-             'I learned in the training in my practice setting.'),
-            ('This online training was an effective method for '
-             'me to learn this material.'),
-            'Approximately how long did it take you to complete the course?',
-            ('Please add any additional comments, including '
-             'suggestions for improving the course and requests '
-             'for future web-based training modules.')
-        ]
-
         if report == "training_env":
             training_env_report = create_training_env_report(
                 completers,
@@ -828,7 +828,7 @@ def reports(request):
         if ev_report:
             mod = Section.objects.get(label=ev_report)
             evaluation_reports = create_eval_report(
-                completed_modules, modules, qoi)
+                completed_modules, modules, QOI)
 
             for ev in evaluation_reports:
                 if ev['module'] == mod:
