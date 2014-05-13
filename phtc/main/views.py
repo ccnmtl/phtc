@@ -321,35 +321,33 @@ def make_sure_parts_are_allowed(module, user, section, is_module):
     #handle Module one seperately
     if is_module_one(module):
         make_sure_module1_parts_are_allowed(module, user)
-    else:
-        if is_module:
+    elif is_module:
+        if UserPageVisit.objects.get(
+            section=module,
+                user=user).status == "complete":
+            module.user_pagevisit(user, status="complete")
+            return
+        try:
+            status = "exists"
+            UserPageVisit.objects.get(
+                section=section.get_next(), user=user)
+        except UserPageVisit.DoesNotExist:
+            status = "created"
 
+        if status == "exists":
+            ns = section.get_next()
             if UserPageVisit.objects.get(
-                section=module,
-                    user=user).status == "complete":
-                module.user_pagevisit(user, status="complete")
-                return
-            try:
-                status = "exists"
-                UserPageVisit.objects.get(
-                    section=section.get_next(), user=user)
-            except UserPageVisit.DoesNotExist:
-                status = "created"
-
-            if status == "exists":
-                ns = section.get_next()
-                if UserPageVisit.objects.get(
-                        section=ns, user=user).status == "in_progress":
-                    section.get_next().user_pagevisit(user,
-                                                      status="complete")
-                elif UserPageVisit.objects.get(
-                        section=ns,
-                        user=user).status == "allowed":
-                    section.get_next().user_pagevisit(user,
-                                                      status="in_progress")
-            if status == "created":
-                section.get_next().user_pagevisit(
-                    user, status="allowed")
+                    section=ns, user=user).status == "in_progress":
+                section.get_next().user_pagevisit(user,
+                                                  status="complete")
+            elif UserPageVisit.objects.get(
+                    section=ns,
+                    user=user).status == "allowed":
+                section.get_next().user_pagevisit(user,
+                                                  status="in_progress")
+        if status == "created":
+            section.get_next().user_pagevisit(
+                user, status="allowed")
 
 
 def part_flagged_as_allowed(upv):
