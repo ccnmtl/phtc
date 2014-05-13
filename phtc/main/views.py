@@ -317,6 +317,15 @@ def make_sure_module1_parts_are_allowed(module, user):
             part.user_pagevisit(user, status="allowed")
 
 
+def get_userpagevisit_status(section, user):
+    try:
+        UserPageVisit.objects.get(
+            section=section.get_next(), user=user)
+        return "exists"
+    except UserPageVisit.DoesNotExist:
+        return "created"
+
+
 def make_sure_parts_are_allowed(module, user, section, is_module):
     #handle Module one seperately
     if is_module_one(module):
@@ -327,13 +336,7 @@ def make_sure_parts_are_allowed(module, user, section, is_module):
                 user=user).status == "complete":
             module.user_pagevisit(user, status="complete")
             return
-        try:
-            status = "exists"
-            UserPageVisit.objects.get(
-                section=section.get_next(), user=user)
-        except UserPageVisit.DoesNotExist:
-            status = "created"
-
+        status = get_userpagevisit_status(section, user)
         if status == "exists":
             ns = section.get_next()
             if UserPageVisit.objects.get(
