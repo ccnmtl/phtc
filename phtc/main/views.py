@@ -379,16 +379,18 @@ def process_dashboard_ajax(user, section, module):
         return reverse("dashboard")
 
 
+def has_user_prof(request):
+    try:
+        request.user.userprofile
+        return True
+    except UserProfile.DoesNotExist:
+        return False
+
+
 @login_required
 @render_to('main/page.html')
 def page(request, path):
-    try:
-        request.user.userprofile
-        user_prof = True
-    except UserProfile.DoesNotExist:
-        user_prof = False
-
-    if not user_prof:
+    if not has_user_prof(request):
         return HttpResponseRedirect("/dashboard/")
 
     section = get_section_from_path(path)
