@@ -826,24 +826,28 @@ def reports(request):
             return create_csv_report2(request, course_report_table, report)
 
         if ev_report:
-            mod = Section.objects.get(label=ev_report)
-            evaluation_reports = create_eval_report(
-                completed_modules, modules, QOI)
+            return create_ev_report(request, ev_report, completed_modules,
+                                    modules)
+    return dict(welcome_msg=welcome_msg, modules=modules)
 
-            for ev in evaluation_reports:
-                if ev['module'] == mod:
-                    evaluation_report = ev
 
-            try:
-                qr = aggregate_responses(evaluation_report)
-                flat_report = flatten_response_tables(qr)
-                return create_csv_report2(
-                    request, flat_report, 'evaluation_report')
-            except UnboundLocalError:
-                return dict(welcome_msg='Report could not be found.',
-                            modules=modules)
-    return dict(
-        welcome_msg=welcome_msg, modules=modules)
+def create_ev_report(request, ev_report, completed_modules, modules):
+    mod = Section.objects.get(label=ev_report)
+    evaluation_reports = create_eval_report(
+        completed_modules, modules, QOI)
+
+    for ev in evaluation_reports:
+        if ev['module'] == mod:
+            evaluation_report = ev
+
+    try:
+        qr = aggregate_responses(evaluation_report)
+        flat_report = flatten_response_tables(qr)
+        return create_csv_report2(
+            request, flat_report, 'evaluation_report')
+    except UnboundLocalError:
+        return dict(welcome_msg='Report could not be found.',
+                    modules=modules)
 
 
 def flatten_response_tables(qr):
