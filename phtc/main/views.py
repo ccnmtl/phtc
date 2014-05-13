@@ -1027,7 +1027,6 @@ def create_course_report_table(completed_modules, pre_test_data,
         course = []
         pre_qreps = sort_test_data(pre_test_data, mod)
         post_qreps = sort_test_data(post_test_data, mod)
-        
         date = UserPageVisit.objects.filter(
             user=mod.user, section=mod.section)
         date = date[len(date)-1].last_visit
@@ -1222,10 +1221,11 @@ def create_user_report_table(completed_modules, completers):
             try:
                 if v.user_id == mod.user_id:
                     num_of_courses_completed += 1
-            except  AttributeError:
+            except AttributeError:
                 num_of_courses_completed += 0
-                
-        obj.append(('# of courses completed/attempted', num_of_courses_completed))
+
+        obj.append(('# of courses completed/attempted',
+                    num_of_courses_completed))
         completer_objects.append(obj)
 
     return completer_objects
