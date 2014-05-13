@@ -387,6 +387,11 @@ def has_user_prof(request):
         return False
 
 
+def is_mod_one(module):
+    return (module is not None and
+            module == module.hierarchy.get_root().get_children()[0])
+
+
 @login_required
 @render_to('main/page.html')
 def page(request, path):
@@ -406,11 +411,8 @@ def page(request, path):
         modules=root.get_children(),
         root=section.hierarchy.get_root(),
     )
-    if (module is not None and
-            module == module.hierarchy.get_root().get_children()[0]):
-        page_dict['is_mod_one'] = True
-    else:
-        page_dict['is_mod_one'] = False
+
+    page_dict['is_mod_one'] = is_mod_one(module)
 
     # dashboard ajax
     if request.POST.get('module'):
