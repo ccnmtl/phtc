@@ -410,9 +410,8 @@ def page(request, path):
         is_submitted=submitted(section, request.user),
         modules=root.get_children(),
         root=section.hierarchy.get_root(),
+        is_mod_one=is_mod_one(module),
     )
-
-    page_dict['is_mod_one'] = is_mod_one(module)
 
     # dashboard ajax
     if request.POST.get('module'):
