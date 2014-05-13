@@ -74,14 +74,7 @@ class Command(BaseCommand):
             node = self.get_nodes_by_name(r, 'TreatmentNode')[0]
             label = node.attributes.getNamedItem('Label').nodeValue
 
-            try:
-                root = TreatmentNode.objects.get(name=label,
-                                                 type='RT')
-            except TreatmentNode.DoesNotExist:
-                root = TreatmentNode.add_root(
-                    name=label,
-                    type=self.get_activity_type(node))
-
+            root = self.add_root(label, node)
             self.add_children(node.childNodes, root)
 
         paths = xmldoc.getElementsByTagName('TreatmentPath')
@@ -89,6 +82,15 @@ class Command(BaseCommand):
             TreatmentPath.objects.all().delete()
             for p in paths:
                 self.new_treatment_path(p)
+
+    def add_root(self, label, node):
+        try:
+            return TreatmentNode.objects.get(name=label,
+                                             type='RT')
+        except TreatmentNode.DoesNotExist:
+            return TreatmentNode.add_root(
+                name=label,
+                type=self.get_activity_type(node))
 
     def new_treatment_path(self, p):
         new_path = TreatmentPath()
