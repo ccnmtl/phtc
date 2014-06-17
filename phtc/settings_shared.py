@@ -64,13 +64,14 @@ TEMPLATE_DIRS = (
     "/var/www/phtc/templates/",
     os.path.join(os.path.dirname(__file__), "templates"),
     os.path.join(os.path.dirname(__file__),
-                 "../ve/lib/python2.7/site-packages/treebeard/templates")
+                 "../ve/lib/python2.7/site-packages/treebeard/templates"),
 )
 
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django.contrib.markup',

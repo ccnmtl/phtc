@@ -1,9 +1,9 @@
 from django.conf.urls import patterns, include, url
 from registration.backends.default.views import RegistrationView
-from registration.forms import RegistrationFormUniqueEmail
+from phtc.main.forms import UserRegistrationForm
 
-class RegistrationViewUniqueEmail(RegistrationView):
-    form_class = RegistrationFormUniqueEmail
+class RegistrationView(RegistrationView):
+    form_class = UserRegistrationForm
 
 from django.contrib import admin
 from django.conf import settings
@@ -29,7 +29,7 @@ urlpatterns = patterns(
     '',
     auth_urls,
     logout_page,
-    url(r'^registration/register/$',RegistrationViewUniqueEmail.as_view(),name='registration_register'),
+     url(r'^registration/register/$',RegistrationView.as_view(), name='registration_register'),
     (r'^registration/', include('registration.backends.default.urls')),
     (r'^test_nylearns_username/$', 'phtc.main.views.test_nylearns_username'),
     (r'^create_nylearns_user/$', 'phtc.main.views.create_nylearns_user'),
