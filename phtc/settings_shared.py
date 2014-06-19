@@ -87,7 +87,6 @@ INSTALLED_APPS = (
     'compressor',
     'django_statsd',
     'bootstrapform',
-    'lettuce.django',
     'phtc.main',
     'pagetree',
     'pageblocks',

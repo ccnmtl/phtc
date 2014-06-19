@@ -36,6 +36,8 @@ urlpatterns = patterns(
     (r'^nylearns_login/$', 'phtc.main.views.nylearns_login'),
     (r'^nylearns/$', 'phtc.main.views.nylearns'),
     (r'^profile/$', 'phtc.main.views.get_user_profile'),
+    (r'^del_dupe_upv/$', 'phtc.main.views.delete_dupe_userpagevisits'),
+    (r'^del_dupe_uloc/$', 'phtc.main.views.delete_dupe_userlocation'),
     (r'^update_profile/$',
      'phtc.main.views.update_user_profile'),
     (r'^reports/$', 'phtc.main.views.reports'),
