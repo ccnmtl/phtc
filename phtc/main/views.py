@@ -70,6 +70,12 @@ def nylearns(request):
 
     if request.method == "POST":
         form = UserRegistrationForm()
+        username = request.POST.get('username')
+        try:
+            User.objects.get(username=username)
+            return HttpResponse(True)
+        except User.DoesNotExist:
+            return HttpResponse(False)
         return render_to_response('registration/registration_form.html', form)
 
     if not request.GET.get('has_account'):
