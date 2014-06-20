@@ -13,6 +13,7 @@ from phtc.main.models import DashboardInfo
 from phtc.main.models import ModuleType
 from phtc.main.models import SectionCss
 from pagetree.models import UserPageVisit
+from pagetree.models import UserLocation
 from phtc.main.models import NYLEARNS_Course_Map
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.flatpages.models import FlatPage
@@ -69,6 +70,12 @@ def nylearns(request):
 
     if request.method == "POST":
         form = UserRegistrationForm()
+        username = request.POST.get('username')
+        try:
+            User.objects.get(username=username)
+            return HttpResponse(True)
+        except User.DoesNotExist:
+            return HttpResponse(False)
         return render_to_response('registration/registration_form.html', form)
 
     if not request.GET.get('has_account'):
@@ -1351,3 +1358,38 @@ def set_row_total(completer, items, row):
         items[row]['Female'] += 1
         items[6]['Female'] += 1  # this is the Total row
     return items
+
+
+def delete_dupe_userpagevisits(request):
+    from collections import Counter
+    users = User.objects.all()
+    for user in users:
+        upv = UserPageVisit.objects.filter(user_id = user.id)
+        section_visits = []
+        for visit in upv:
+            section_visits.append(visit.section_id)
+        dupes = [k for k,v in Counter(section_visits).items() if v>1]
+        if len(dupes) >= 1:
+            for dupe in dupes:
+                dupe_upv = upv.filter(section_id=dupe).order_by('last_visit')
+                dupe_index_total = len(dupe_upv) - 1
+                counter = 0
+                for dupe_del in dupe_upv:
+                    if not dupe_upv[dupe_index_total] == dupe_del:
+                        print dupe_upv[counter].id
+                        dupe_upv[counter].delete()
+                        counter += 1
+    return HttpResponse(request)
+
+def delete_dupe_userlocation(request):
+    users = User.objects.all()
+    for user in users:
+        user_locations = UserLocation.objects.filter(user_id=user.id)
+        if len(user_locations) > 1:
+            counter = 0
+            for location in user_locations:
+                counter +=1
+                if counter > 0:
+                    print location.id
+                    location.delete()
+    return HttpResponse(request)

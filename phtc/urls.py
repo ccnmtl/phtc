@@ -1,9 +1,14 @@
-from django.conf.urls.defaults import patterns, include, url
-from registration.views import register
+from django.conf.urls import patterns, include, url
+from registration.backends.default.views import RegistrationView
+from phtc.main.forms import UserRegistrationForm
+
+class RegistrationView(RegistrationView):
+    form_class = UserRegistrationForm
+
 from django.contrib import admin
 from django.conf import settings
-from django.views.generic.simple import direct_to_template
-from django.views.generic.simple import redirect_to
+from django.views.generic import TemplateView
+from django.views.generic import RedirectView
 import os.path
 admin.autodiscover()
 import staticmedia
@@ -24,24 +29,21 @@ urlpatterns = patterns(
     '',
     auth_urls,
     logout_page,
-    url(r'^registration/register/$',
-        register,
-        {'backend': 'registration.backends.default.DefaultBackend',
-         'form_class': UserRegistrationForm},
-        name='registration_register'),
-    (r'^registration/', include('registration.urls')),
+     url(r'^registration/register/$',RegistrationView.as_view(), name='registration_register'),
+    (r'^registration/', include('registration.backends.default.urls')),
     (r'^test_nylearns_username/$', 'phtc.main.views.test_nylearns_username'),
     (r'^create_nylearns_user/$', 'phtc.main.views.create_nylearns_user'),
     (r'^nylearns_login/$', 'phtc.main.views.nylearns_login'),
     (r'^nylearns/$', 'phtc.main.views.nylearns'),
     (r'^profile/$', 'phtc.main.views.get_user_profile'),
+    (r'^del_dupe_upv/$', 'phtc.main.views.delete_dupe_userpagevisits'),
+    (r'^del_dupe_uloc/$', 'phtc.main.views.delete_dupe_userlocation'),
     (r'^update_profile/$',
      'phtc.main.views.update_user_profile'),
     (r'^reports/$', 'phtc.main.views.reports'),
     (r'^admin/', include(admin.site.urls)),
     (r'^munin/', include('munin.urls')),
-    (r'^accounts/profile/$', redirect_to,
-     {'url': '/dashboard/'}),
+    (r'^accounts/profile/$', RedirectView.as_view(url='/dashboard/')),
     url(r'^dashboard/',
         view='phtc.main.views.dashboard',
         name='dashboard'),
@@ -55,8 +57,7 @@ urlpatterns = patterns(
      'phtc.main.views.contact_page'),
     (r'^certificate/(?P<path>.*)$',
      'phtc.main.views.certificate'),
-    (r'^_stats/', direct_to_template,
-     {'template': 'stats.html'}),
+    (r'^_stats/', TemplateView.as_view(template_name='stats.html')),
     (r'^site_media/(?P<path>.*)$',
      'django.views.static.serve',
      {'document_root': site_media_root}),

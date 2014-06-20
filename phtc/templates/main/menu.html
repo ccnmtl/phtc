@@ -2,14 +2,6 @@
 
 <ul>
 {% for s in module.get_descendants %}  
-{% if s.needs_submit %}
-  {% if s.is_submitted  %}
-  <h4>Ye - s.is_submitted  </h4>
-  {% else %}
-  <h4>nope - s.is_submitted </h4>
-  {% endif %}
-{% endif %}
-
   {% ifequal s.id module.id %}
   {% else %}
   <li class="menu-{{s.depth}}">
