@@ -1364,11 +1364,11 @@ def delete_dupe_userpagevisits(request):
     from collections import Counter
     users = User.objects.all()
     for user in users:
-        upv = UserPageVisit.objects.filter(user_id = user.id)
+        upv = UserPageVisit.objects.filter(user_id=user.id)
         section_visits = []
         for visit in upv:
             section_visits.append(visit.section_id)
-        dupes = [k for k,v in Counter(section_visits).items() if v>1]
+        dupes = [k for k, v in Counter(section_visits).items() if v > 1]
         if len(dupes) >= 1:
             for dupe in dupes:
                 dupe_upv = upv.filter(section_id=dupe).order_by('last_visit')
@@ -1381,6 +1381,7 @@ def delete_dupe_userpagevisits(request):
                         counter += 1
     return HttpResponse(request)
 
+
 def delete_dupe_userlocation(request):
     users = User.objects.all()
     for user in users:
@@ -1388,7 +1389,7 @@ def delete_dupe_userlocation(request):
         if len(user_locations) > 1:
             counter = 0
             for location in user_locations:
-                counter +=1
+                counter += 1
                 if counter > 0:
                     print location.id
                     location.delete()

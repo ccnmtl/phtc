@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from registration.backends.default.views import RegistrationView
 from phtc.main.forms import UserRegistrationForm
 
+
 class RegistrationView(RegistrationView):
     form_class = UserRegistrationForm
 
@@ -12,7 +13,6 @@ from django.views.generic import RedirectView
 import os.path
 admin.autodiscover()
 import staticmedia
-from phtc.main.forms import UserRegistrationForm
 
 site_media_root = os.path.join(os.path.dirname(__file__), "../media")
 
@@ -29,7 +29,8 @@ urlpatterns = patterns(
     '',
     auth_urls,
     logout_page,
-     url(r'^registration/register/$',RegistrationView.as_view(), name='registration_register'),
+    url(r'^registration/register/$', RegistrationView.as_view(),
+        name='registration_register'),
     (r'^registration/', include('registration.backends.default.urls')),
     (r'^test_nylearns_username/$', 'phtc.main.views.test_nylearns_username'),
     (r'^create_nylearns_user/$', 'phtc.main.views.create_nylearns_user'),
@@ -48,9 +49,9 @@ urlpatterns = patterns(
         view='phtc.main.views.dashboard',
         name='dashboard'),
     (r'^dashboard_panel/',
-     'phtc.main.views.dashboard_panel'),
+        'phtc.main.views.dashboard_panel'),
     (r'^about/$',
-     'phtc.main.views.about_page'),
+        'phtc.main.views.about_page'),
     (r'^help/$',
      'phtc.main.views.help_page'),
     (r'^contact/$',
