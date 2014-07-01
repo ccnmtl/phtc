@@ -111,6 +111,7 @@ INSTALLED_APPS = [
     'phtc.treatment_activity',
     'phtc.logic_model',
     'django_markwhat',
+    'smoketest',
 ]
 
 LETTUCE_APPS = (

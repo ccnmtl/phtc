@@ -88,6 +88,7 @@ INSTALLED_APPS = (
     'registration',
     'debug_toolbar',
     'smartif',
+    'smoketest',
 )
 
 LETTUCE_APPS = (
