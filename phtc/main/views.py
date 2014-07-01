@@ -324,39 +324,40 @@ def make_sure_module1_parts_are_allowed(module, user):
             part.user_pagevisit(user, status="allowed")
 
 
+def get_userpagevisit_status(section, user):
+    try:
+        UserPageVisit.objects.get(
+            section=section.get_next(), user=user)
+        return "exists"
+    except UserPageVisit.DoesNotExist:
+        return "created"
+
+
 def make_sure_parts_are_allowed(module, user, section, is_module):
     #handle Module one seperately
     if is_module_one(module):
         make_sure_module1_parts_are_allowed(module, user)
-    else:
-        if is_module:
-
+    elif is_module:
+        if UserPageVisit.objects.get(
+            section=module,
+                user=user).status == "complete":
+            module.user_pagevisit(user, status="complete")
+            return
+        status = get_userpagevisit_status(section, user)
+        if status == "exists":
+            ns = section.get_next()
             if UserPageVisit.objects.get(
-                section=module,
-                    user=user).status == "complete":
-                module.user_pagevisit(user, status="complete")
-                return
-            try:
-                status = "exists"
-                UserPageVisit.objects.get(
-                    section=section.get_next(), user=user)
-            except UserPageVisit.DoesNotExist:
-                status = "created"
-
-            if status == "exists":
-                ns = section.get_next()
-                if UserPageVisit.objects.get(
-                        section=ns, user=user).status == "in_progress":
-                    section.get_next().user_pagevisit(user,
-                                                      status="complete")
-                elif UserPageVisit.objects.get(
-                        section=ns,
-                        user=user).status == "allowed":
-                    section.get_next().user_pagevisit(user,
-                                                      status="in_progress")
-            if status == "created":
-                section.get_next().user_pagevisit(
-                    user, status="allowed")
+                    section=ns, user=user).status == "in_progress":
+                section.get_next().user_pagevisit(user,
+                                                  status="complete")
+            elif UserPageVisit.objects.get(
+                    section=ns,
+                    user=user).status == "allowed":
+                section.get_next().user_pagevisit(user,
+                                                  status="in_progress")
+        if status == "created":
+            section.get_next().user_pagevisit(
+                user, status="allowed")
 
 
 def part_flagged_as_allowed(upv):
@@ -386,16 +387,23 @@ def process_dashboard_ajax(user, section, module):
         return reverse("dashboard")
 
 
+def has_user_prof(request):
+    try:
+        request.user.userprofile
+        return True
+    except UserProfile.DoesNotExist:
+        return False
+
+
+def is_mod_one(module):
+    return (module is not None and
+            module == module.hierarchy.get_root().get_children()[0])
+
+
 @login_required
 @render_to('main/page.html')
 def page(request, path):
-    try:
-        request.user.userprofile
-        user_prof = True
-    except UserProfile.DoesNotExist:
-        user_prof = False
-
-    if not user_prof:
+    if not has_user_prof(request):
         return HttpResponseRedirect("/dashboard/")
 
     section = get_section_from_path(path)
@@ -410,12 +418,8 @@ def page(request, path):
         is_submitted=submitted(section, request.user),
         modules=root.get_children(),
         root=section.hierarchy.get_root(),
+        is_mod_one=is_mod_one(module),
     )
-    if (module is not None and
-            module == module.hierarchy.get_root().get_children()[0]):
-        page_dict['is_mod_one'] = True
-    else:
-        page_dict['is_mod_one'] = False
 
     # dashboard ajax
     if request.POST.get('module'):
@@ -432,9 +436,9 @@ def page(request, path):
 
     # if this is a deep link to the module make sure ro go to dashboard
     # as to not break the locking
-    if request.GET.get('deep_link') and request.GET.get('deep_link') == "true":
-        if not(is_module(module, section)):
-            return HttpResponseRedirect('/dashboard/')
+    if (request.GET.get('deep_link') and request.GET.get('deep_link') == "true"
+            and not(is_module(module, section))):
+        return HttpResponseRedirect('/dashboard/')
 
     # is the page already completed? If so, do not update status
     if(section.get_uservisit(request.user) and
@@ -758,11 +762,10 @@ def create_csv_report2(request, report, report_name):
         fields = []
         for field in row:
             field_string = field[1]
-            
             if type(field_string) == int:
                 field_string = str(field_string)
             try:
-                field_string = field_string.encode('utf-8');
+                field_string = field_string.encode('utf-8')
             except:
                 pass
             field_string = field_string[:10000000]
@@ -770,6 +773,20 @@ def create_csv_report2(request, report, report_name):
 
         writer.writerow(fields)
     return response
+
+QOI = [
+    'What is your overall assessment of this training?',
+    ('I would recommend this course to others.'),
+    ('To what extent do you agree or disagree with the '
+     'following statement: I can apply the information '
+     'I learned in the training in my practice setting.'),
+    ('This online training was an effective method for '
+     'me to learn this material.'),
+    'Approximately how long did it take you to complete the course?',
+    ('Please add any additional comments, including '
+     'suggestions for improving the course and requests '
+     'for future web-based training modules.')
+]
 
 
 @login_required
@@ -791,20 +808,6 @@ def reports(request):
         # vars used to create reports
         completed_modules_counted = count_modules_completed(completed_modules)
         completers = create_completers_list(completed_modules)
-        qoi = [
-            'What is your overall assessment of this training?',
-            ('I would recommend this course to others.'),
-            ('To what extent do you agree or disagree with the ' 
-             'following statement: I can apply the information '
-             'I learned in the training in my practice setting.'),
-            ('This online training was an effective method for '
-             'me to learn this material.'),
-            'Approximately how long did it take you to complete the course?',
-            ('Please add any additional comments, including '
-             'suggestions for improving the course and requests '
-             'for future web-based training modules.')
-        ]
-
         if report == "training_env":
             training_env_report = create_training_env_report(
                 completers,
@@ -834,24 +837,28 @@ def reports(request):
             return create_csv_report2(request, course_report_table, report)
 
         if ev_report:
-            mod = Section.objects.get(label=ev_report)
-            evaluation_reports = create_eval_report(
-                completed_modules, modules, qoi)
+            return create_ev_report(request, ev_report, completed_modules,
+                                    modules)
+    return dict(welcome_msg=welcome_msg, modules=modules)
 
-            for ev in evaluation_reports:
-                if ev['module'] == mod:
-                    evaluation_report = ev
 
-            try:
-                qr = aggregate_responses(evaluation_report)
-                flat_report = flatten_response_tables(qr)
-                return create_csv_report2(
-                    request, flat_report, 'evaluation_report')
-            except UnboundLocalError:
-                return dict(welcome_msg='Report could not be found.',
-                            modules=modules)
-    return dict(
-        welcome_msg=welcome_msg, modules=modules)
+def create_ev_report(request, ev_report, completed_modules, modules):
+    mod = Section.objects.get(label=ev_report)
+    evaluation_reports = create_eval_report(
+        completed_modules, modules, QOI)
+
+    for ev in evaluation_reports:
+        if ev['module'] == mod:
+            evaluation_report = ev
+
+    try:
+        qr = aggregate_responses(evaluation_report)
+        flat_report = flatten_response_tables(qr)
+        return create_csv_report2(
+            request, flat_report, 'evaluation_report')
+    except UnboundLocalError:
+        return dict(welcome_msg='Report could not be found.',
+                    modules=modules)
 
 
 def flatten_response_tables(qr):
@@ -879,58 +886,77 @@ def flatten_response_tables(qr):
 def aggregate_responses(evaluation_report):
     # create single report
     qr = []
+
+    response_list_count = [
+        ('strongly_disagree', 0),
+        ('neither_agree_nor_disagree', 0),
+        ('disagree', 0),
+        ('agree', 0),
+        ('strongly_agree', 0)
+    ]
+    response_time_list_count = [
+        ('30_minutes_or_less', 0),
+        ('1_hour', 0),
+        ('1.5_hours', 0),
+        ('2_hours', 0),
+        ('2.5_hours', 0),
+        ('3_hours', 0),
+        ('3.5_hours', 0),
+        ('4_hours', 0)
+    ]
+
     for ev in evaluation_report['question_response']:
         question = ev['question'].text.strip(
             ' \t\n\r').replace(" ", "_").lower()
 
-        response_list_count = [
-            ('strongly_disagree', 0),
-            ('neither_agree_nor_disagree', 0),
-            ('disagree', 0),
-            ('agree', 0),
-            ('strongly_agree', 0)
-        ]
-        response_time_list_count = [
-            ('30_minutes_or_less', 0),
-            ('1_hour', 0),
-            ('1.5_hours', 0),
-            ('2_hours', 0),
-            ('2.5_hours', 0),
-            ('3_hours', 0),
-            ('3.5_hours', 0),
-            ('4_hours', 0)
-        ]
         if question.startswith('approximately_how_long_did'):
-            counter = []
-            for val in response_time_list_count:
-                for res in ev['responses']:
-                    response = res.value.strip(
-                        ' \t\n\r').replace(" ", "_").lower()
-                    if response == val[0]:
-                        val = (val[0], val[1] + 1)
-                counter.append((question, val[0]))
-                counter.append(('# of Responses', val[1]))
-            qr.append(counter)
+            qr = question_approximately_how_long(
+                question, response_time_list_count, qr, ev)
         elif question.startswith('please_add'):
-            comments = []
-            for i in range(len(ev['responses'])):
-                if not ev['responses'][i].value == '':
-                    comments.append(
-                        (question, ev['responses'][i].value))
-                    # keep report uniform
-                    comments.append(('', ''))
-            qr.append(comments)
+            qr = question_please_add(question, ev, qr)
         else:
-            counter = []
-            for val in response_list_count:
-                for res in ev['responses']:
-                    response = res.value.strip(
-                        ' \t\n\r').replace(" ", "_").lower()
-                    if response == val[0]:
-                        val = (val[0], val[1] + 1)
-                counter.append((question, val[0]))
-                counter.append(('# of Responses', val[1]))
-            qr.append(counter)
+            qr = question_other(question, ev, response_list_count, qr)
+    return qr
+
+
+def question_other(question, ev, response_list_count, qr):
+    counter = []
+    for val in response_list_count:
+        for res in ev['responses']:
+            response = res.value.strip(
+                ' \t\n\r').replace(" ", "_").lower()
+            if response == val[0]:
+                val = (val[0], val[1] + 1)
+        counter.append((question, val[0]))
+        counter.append(('# of Responses', val[1]))
+    qr.append(counter)
+    return qr
+
+
+def question_please_add(question, ev, qr):
+    comments = []
+    for i in range(len(ev['responses'])):
+        if not ev['responses'][i].value == '':
+            comments.append(
+                (question, ev['responses'][i].value))
+            # keep report uniform
+            comments.append(('', ''))
+    qr.append(comments)
+    return qr
+
+
+def question_approximately_how_long(question, response_time_list_count,
+                                    qr, ev):
+    counter = []
+    for val in response_time_list_count:
+        for res in ev['responses']:
+            response = res.value.strip(
+                ' \t\n\r').replace(" ", "_").lower()
+            if response == val[0]:
+                val = (val[0], val[1] + 1)
+        counter.append((question, val[0]))
+        counter.append(('# of Responses', val[1]))
+    qr.append(counter)
     return qr
 
 
@@ -1003,9 +1029,6 @@ def sort_test_data(test_data, mod):
 
             for val in data['submission_set'].values():
                 if mod.user_id == val['user_id']:
-                    
-
-
                     uid = str(val['user_id'])
                     qid = str(val['quiz_id'])
                     sub = Submission.objects.extra(
@@ -1038,12 +1061,14 @@ def create_course_report_table(completed_modules, pre_test_data,
         course = []
         pre_qreps = sort_test_data(pre_test_data, mod)
         post_qreps = sort_test_data(post_test_data, mod)
-        date = UserPageVisit.objects.get(
-            user=mod.user, section=mod.section).last_visit
-        
+        date = UserPageVisit.objects.filter(
+            user=mod.user, section=mod.section)
+        date = date[len(date)-1].last_visit
         user = UserProfile.objects.get(user_id=mod.user_id)
-        preq_length.append(dict({'length':len(pre_qreps), 'section':mod.section.label}) )
-        postq_length.append(dict({'length': len(post_qreps), 'section':mod.section.label}) )
+        preq_length.append(
+            dict({'length': len(pre_qreps), 'section': mod.section.label}))
+        postq_length.append(
+            dict({'length': len(post_qreps), 'section': mod.section.label}))
 
         course.append(('course_name', mod.section.label))
         course.append(('date_completed', date.strftime("%D")))
@@ -1081,7 +1106,7 @@ def create_course_report_table(completed_modules, pre_test_data,
             course.append(('PreQ1', 'n/a'))
             course.append(('PreQ2', 'n/a'))
             course.append(('PreQ3', 'n/a'))
-            course.append(('PreQ4','n/a'))
+            course.append(('PreQ4', 'n/a'))
             course.append(('PreQ5', 'n/a'))
             course.append(('PreQ6', 'n/a'))
             course.append(('PreQ7', 'n/a'))
@@ -1230,10 +1255,11 @@ def create_user_report_table(completed_modules, completers):
             try:
                 if v.user_id == mod.user_id:
                     num_of_courses_completed += 1
-            except  AttributeError:
+            except AttributeError:
                 num_of_courses_completed += 0
-                
-        obj.append(('# of courses completed/attempted', num_of_courses_completed))
+
+        obj.append(('# of courses completed/attempted',
+                    num_of_courses_completed))
         completer_objects.append(obj)
 
     return completer_objects

@@ -67,7 +67,7 @@ TEMPLATE_DIRS = (
                  "../ve/lib/python2.7/site-packages/treebeard/templates"),
 )
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -98,7 +98,7 @@ INSTALLED_APPS = (
     'treebeard',
     'phtc.treatment_activity',
     'phtc.logic_model',
-)
+]
 
 LETTUCE_APPS = (
     'phtc.main',
