@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from registration.backends.default.views import RegistrationView
 from phtc.main.forms import UserRegistrationForm
 
+
 class RegistrationView(RegistrationView):
     form_class = UserRegistrationForm
 
@@ -12,7 +13,6 @@ from django.views.generic import RedirectView
 import os.path
 admin.autodiscover()
 import staticmedia
-from phtc.main.forms import UserRegistrationForm
 
 site_media_root = os.path.join(os.path.dirname(__file__), "../media")
 
@@ -29,15 +29,14 @@ urlpatterns = patterns(
     '',
     auth_urls,
     logout_page,
-     url(r'^registration/register/$',RegistrationView.as_view(), name='registration_register'),
+    url(r'^registration/register/$', RegistrationView.as_view(),
+        name='registration_register'),
     (r'^registration/', include('registration.backends.default.urls')),
     (r'^test_nylearns_username/$', 'phtc.main.views.test_nylearns_username'),
     (r'^create_nylearns_user/$', 'phtc.main.views.create_nylearns_user'),
     (r'^nylearns_login/$', 'phtc.main.views.nylearns_login'),
     (r'^nylearns/$', 'phtc.main.views.nylearns'),
     (r'^profile/$', 'phtc.main.views.get_user_profile'),
-    (r'^del_dupe_upv/$', 'phtc.main.views.delete_dupe_userpagevisits'),
-    (r'^del_dupe_uloc/$', 'phtc.main.views.delete_dupe_userlocation'),
     (r'^update_profile/$',
      'phtc.main.views.update_user_profile'),
     (r'^reports/$', 'phtc.main.views.reports'),
