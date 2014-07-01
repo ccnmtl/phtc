@@ -9,18 +9,18 @@
   <meta name="author" content="CCNMTL">
 
   {% compress css %}
-  <link href="/site_media/bootstrap/css/bootstrap.css" rel="stylesheet">
-  {% comment %} <link href="/site_media/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">{% endcomment %}
-  <link href="/site_media/css/main.css?site=phtc" rel="stylesheet">
+  <link href="{{STATIC_URL}}bootstrap/css/bootstrap.css" rel="stylesheet">
+  {% comment %} <link href="{{STATIC_URL}}bootstrap/css/bootstrap-responsive.css" rel="stylesheet">{% endcomment %}
+  <link href="{{STATIC_URL}}css/main.css?site=phtc" rel="stylesheet">
   {% endcompress %}
-	<link rel="shortcut icon" href="/site_media/img/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="{{STATIC_URL}}img/favicon.ico" type="image/x-icon" />
 	{% block css %}{% endblock %}
-  <script src="/site_media/js/jquery-1.7.2.min.js"></script>
+  <script src="{{STATIC_URL}}js/jquery-1.7.2.min.js"></script>
 
 <!-- shield -->
-<link rel="stylesheet" href="/site_media/js/shield-1.0/shield.css" type="text/css" media="all" />
-<script src="/site_media/js/shield-1.0/browserdetect.js" type="text/javascript" language="javascript"></script>
-<script type="text/javascript" src="/site_media/js/shield-1.0/shield.js"></script>
+<link rel="stylesheet" href="{{STATIC_URL}}js/shield-1.0/shield.css" type="text/css" media="all" />
+<script src="{{STATIC_URL}}js/shield-1.0/browserdetect.js" type="text/javascript" language="javascript"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/shield-1.0/shield.js"></script>
 <script type="text/javascript">
 /* Select from list: Chrome, Firefox, Safari, MSIE */
 shieldbrowser({"Chrome":13,"Firefox":6,"MSIE":9,"Safari":5});
@@ -127,7 +127,7 @@ shieldbrowser({"Chrome":13,"Firefox":6,"MSIE":9,"Safari":5});
 
 {% block footer %}
   {% comment %}<footer class="footer navbar-fixed-bottom hidden-phone">
-  <img src="/site_media/img/logo_ccnmtl_sidebar.gif" class="printonly pull-right" />
+  <img src="{{STATIC_URL}}img/logo_ccnmtl_sidebar.gif" class="printonly pull-right" />
   </footer>
   {% endcomment %}
   <footer class="footer">
@@ -153,7 +153,7 @@ the Health Resources and Services Administration, U.S. Department of Health and 
 <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 
 {% compress js %}
-<script src="/site_media/bootstrap/js/bootstrap.js"></script>
+<script src="{{STATIC_URL}}bootstrap/js/bootstrap.js"></script>
 {% endcompress %}
 
 {% block js %}{% endblock %}

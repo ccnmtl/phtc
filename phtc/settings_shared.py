@@ -32,6 +32,19 @@ USE_I18N = False
 MEDIA_ROOT = "/var/www/phtc/uploads/"
 MEDIA_URL = '/uploads/'
 STATIC_URL = '/media/'
+STATICFILES_DIRS = (
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "../media/")),
+)
+STATIC_ROOT = ""
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
+COMPRESS_URL = "/media/"
+COMPRESS_ROOT = "media/"
+
 SECRET_KEY = ')ng#)ef_u@_^zvvu@dxm7ql-yb^_!a6%v3v^j3b(mp+)l+5%@h'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -42,6 +55,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
+    'django.core.context_processors.static',
     'stagingcontext.staging_processor',
 )
 
@@ -74,14 +88,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'django.contrib.markup',
-    'staticmedia',
+    'django.contrib.staticfiles',
     'sorl.thumbnail',
     'django.contrib.admin',
     'tagging',
     'typogrify',
     'raven.contrib.django',
-    'munin',
     'south',
     'django_nose',
     'compressor',
@@ -98,6 +110,7 @@ INSTALLED_APPS = [
     'treebeard',
     'phtc.treatment_activity',
     'phtc.logic_model',
+    'django_markwhat',
 ]
 
 LETTUCE_APPS = (
@@ -127,7 +140,7 @@ STATSD_CLIENT = 'statsd.client'
 STATSD_PREFIX = 'phtc'
 STATSD_HOST = '127.0.0.1'
 STATSD_PORT = 8125
-STATSD_PATCHES = ['django_statsd.patches.db', ]
+STATSD_PATCHES = []
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 if 'test' in sys.argv or 'jenkins' in sys.argv:
@@ -141,6 +154,7 @@ if 'test' in sys.argv or 'jenkins' in sys.argv:
             'PASSWORD': '',
         }
     }
+    COMPRESS_ENABLED = False
 
 NOSE_ARGS = [
     '--with-coverage',
@@ -150,7 +164,6 @@ NOSE_ARGS = [
 JENKINS_TASKS = (
     'django_jenkins.tasks.run_pylint',
     'django_jenkins.tasks.with_coverage',
-    'django_jenkins.tasks.django_tests',
     'django_jenkins.tasks.run_pep8',
     'django_jenkins.tasks.run_pyflakes',
 )
@@ -178,12 +191,7 @@ EMAIL_SUBJECT_PREFIX = "[phtc] "
 EMAIL_HOST = 'localhost'
 SERVER_EMAIL = "phtc@ccnmtl.columbia.edu"
 
-# put any static media here to override app served static media
-STATICMEDIA_MOUNTS = (
-    ('/sitemedia', 'sitemedia'),
-)
-
-COMPRESS_URL = "/site_media/"
+COMPRESS_URL = "/media/"
 COMPRESS_ROOT = "media/"
 COMPRESS_PARSER = "compressor.parser.HtmlParser"
 
@@ -207,15 +215,13 @@ SESSION_COOKIE_HTTPONLY = True
 INTERNAL_IPS = ('127.0.0.1',)
 
 DEBUG_TOOLBAR_PANELS = (
-    'debug_toolbar.panels.version.VersionDebugPanel',
-    'debug_toolbar.panels.timer.TimerDebugPanel',
-    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
-    'debug_toolbar.panels.headers.HeaderDebugPanel',
-    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-    'debug_toolbar.panels.template.TemplateDebugPanel',
-    'debug_toolbar.panels.sql.SQLDebugPanel',
-    'debug_toolbar.panels.signals.SignalDebugPanel',
-    'debug_toolbar.panels.logger.LoggingPanel',
+    'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.templates.TemplatesPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
 )
 
 PROD_BASE_URL = "http://training.lowernysphtc.org/"

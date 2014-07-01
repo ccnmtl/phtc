@@ -153,7 +153,7 @@ STATICMEDIA_MOUNTS = (
     ('/sitemedia', 'sitemedia'),
 )
 
-COMPRESS_URL = "/site_media/"
+COMPRESS_URL = "/media/"
 COMPRESS_ROOT = "/usr/local/share/sandboxes/common/phtc/media"
 COMPRESS_PARSER = "compressor.parser.HtmlParser"
 

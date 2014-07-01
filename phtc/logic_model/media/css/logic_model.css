@@ -375,11 +375,11 @@ div.table-toolbar {
     cursor: pointer;
     height: 40px;
     z-index: 1;
-    background: transparent url('/site_media/img/caret_close.png') 10px 12px no-repeat;
+    background: transparent url('/media/img/caret_close.png') 10px 12px no-repeat;
 }
 
 .scenario-block .active {
-    background: transparent url('/site_media/img/caret_open.png') 10px 12px no-repeat;
+    background: transparent url('/media/img/caret_open.png') 10px 12px no-repeat;
 }
 
 .scenario-criteria {

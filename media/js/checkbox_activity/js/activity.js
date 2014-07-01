@@ -211,7 +211,7 @@ function CheckboxActivity($, context){
 		// this will need to change depending on how the activity is
 		// installed into your site. Just refence the relatice location 
 		// of the checkbox_activity styles.css
-		var myStylesLocation = "/site_media/js/checkbox_activity/styles.css";
+		var myStylesLocation = "/media/js/checkbox_activity/styles.css";
 		$('<style type="text/css">@import url("' + myStylesLocation + '")</style>')
     .appendTo("head");
 	},

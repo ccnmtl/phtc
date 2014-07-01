@@ -10,33 +10,33 @@
   {% include 'quizblock/question.html' %}
 {% endfor %}
 	{% if block.matching %}
-		<script src="/site_media/js/matching.js"></script>
+		<script src="{{STATIC_URL}}js/matching.js"></script>
 	{% endif %}
 	{% if is_submitted  %}
 	{% else %}
 		{% if block.pre_test %}
-			<script src="/site_media/js/pre_test.js"></script>
-			<script src="/site_media/js/required_answers.js"></script>
+			<script src="{{STATIC_URL}}js/pre_test.js"></script>
+			<script src="{{STATIC_URL}}js/required_answers.js"></script>
 		{% endif %}
 	{% endif %}
 	{% if is_submitted  %}
 	{% else %}
 		{% if block.post_test %}
-			<script src="/site_media/js/post_test.js"></script>
-			<script src="/site_media/js/required_answers.js"></script>
+			<script src="{{STATIC_URL}}js/post_test.js"></script>
+			<script src="{{STATIC_URL}}js/required_answers.js"></script>
 		{% endif %}
 	{% endif %}
 	{% if is_submitted  %}
 	{% else %}
 		{% if block.reading_exercise %}
-			<script src="/site_media/js/reading_exercise.js"></script>
+			<script src="{{STATIC_URL}}js/reading_exercise.js"></script>
 		{% endif %}
 	{% endif %}
 	{% if block.rhetorical %}
 		{% if block.feedback%}
-			<script src="/site_media/js/feedback.js"></script>
+			<script src="{{STATIC_URL}}js/feedback.js"></script>
 		{% else %}
-			<script src="/site_media/js/quizshow.js"></script>
+			<script src="{{STATIC_URL}}js/quizshow.js"></script>
 		{% endif %}
 	{% endif %}	
 

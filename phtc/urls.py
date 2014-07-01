@@ -10,11 +10,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.views.generic import RedirectView
-import os.path
 admin.autodiscover()
-import staticmedia
-
-site_media_root = os.path.join(os.path.dirname(__file__), "../media")
 
 redirect_after_logout = getattr(settings, 'LOGOUT_REDIRECT_URL', None)
 auth_urls = (r'^accounts/', include('django.contrib.auth.urls'))
@@ -41,7 +37,6 @@ urlpatterns = patterns(
      'phtc.main.views.update_user_profile'),
     (r'^reports/$', 'phtc.main.views.reports'),
     (r'^admin/', include(admin.site.urls)),
-    (r'^munin/', include('munin.urls')),
     (r'^accounts/profile/$', RedirectView.as_view(url='/dashboard/')),
     url(r'^dashboard/',
         view='phtc.main.views.dashboard',
@@ -57,9 +52,6 @@ urlpatterns = patterns(
     (r'^certificate/(?P<path>.*)$',
      'phtc.main.views.certificate'),
     (r'^_stats/', TemplateView.as_view(template_name='stats.html')),
-    (r'^site_media/(?P<path>.*)$',
-     'django.views.static.serve',
-     {'document_root': site_media_root}),
     (r'^uploads/(?P<path>.*)$',
      'django.views.static.serve',
      {'document_root': settings.MEDIA_ROOT}),
@@ -73,4 +65,4 @@ urlpatterns = patterns(
     (r'^instructor/(?P<path>.*)$',
      'phtc.main.views.instructor_page'),
     (r'^(?P<path>.*)$', 'phtc.main.views.page'),
-) + staticmedia.serve()
+)

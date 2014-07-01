@@ -10,7 +10,7 @@ jQuery(document).ready(function(){
 	var answer_array = [a1,a2,a3,a4];
 	question.children('.casecontent').children('.casequestion').children('.answerchoices').children('li').children('input').each(function(i){
 		var img = new Image();
-		jQuery(img).attr('src', '/site_media/img/' + answer_array[i]);
+		jQuery(img).attr('src', '/media/img/' + answer_array[i]);
 		jQuery(this).after(img)
 	})
 })

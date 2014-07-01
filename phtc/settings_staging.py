@@ -18,10 +18,9 @@ TEMPLATE_DIRS = (
 )
 
 MEDIA_ROOT = '/var/www/phtc/uploads/'
-# put any static media here to override app served static media
-STATICMEDIA_MOUNTS = (
-    ('/sitemedia', '/var/www/phtc/phtc/sitemedia'),
-)
+
+STATICFILES_DIRS = ()
+STATIC_ROOT = "/var/www/phtc/phtc/media/"
 
 COMPRESS_ROOT = "/var/www/phtc/phtc/media/"
 DEBUG = False

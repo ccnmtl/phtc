@@ -30,7 +30,7 @@
 		{% for info in dashboard_info %}
 			{% ifequal p.id info.dashboard_id %}
 				{% ifnotequal info.info "" %}
-					<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/></div>
+					<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="{{STATIC_URL}}img/status_info.png"/></div>
 				{% endifnotequal %}
 			{% endifequal %}
 		{% endfor %}
@@ -68,7 +68,7 @@
 			{% comment %}{% for info in dashboard_info %}
 			{% ifequal s.id info.dashboard_id %}
 				{% ifnotequal info.info "" %}
-				<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/></div>
+				<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="{{STATIC_URL}}img/status_info.png"/></div>
 				{% endifnotequal %}
 			{% endifequal %}
 			{% endfor %}{% endcomment %}
@@ -99,7 +99,7 @@
 					{% comment %}{% for info in dashboard_info %}
 						{% ifequal sub.id info.dashboard_id %}
 							{% ifnotequal info.info "" %}
-							<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="/site_media/img/status_info.png"/></div>
+							<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="{{STATIC_URL}}img/status_info.png"/></div>
 							{% endifnotequal %}
 						{% endifequal %}
 					{% endfor %}{% endcomment %}
@@ -137,5 +137,5 @@
 	{% endfor %}
 	</div><!--end part_id_{{ module.id }}-->
 {% endfor %}
-<script src="/site_media/js/dashboard.js"></script>
+<script src="{{STATIC_URL}}js/dashboard.js"></script>
 {% endblock %}

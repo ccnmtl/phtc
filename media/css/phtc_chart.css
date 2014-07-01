@@ -2,7 +2,7 @@
     position: relative;
     width: 670px;
     height: 650px;
-    background: url('/site_media/img/infographics/bg_chart.png') no-repeat 0 0;
+    background: url('/media/img/infographics/bg_chart.png') no-repeat 0 0;
 }
 
 #infochart01 #charttitle {
@@ -15,7 +15,7 @@
     margin: 0;
     padding: 0;
     border: 0;
-    background: url('/site_media/img/infographics/chart_title.png') no-repeat 0 0;
+    background: url('/media/img/infographics/chart_title.png') no-repeat 0 0;
 }
 
 #infochart01 #chartcontent {
@@ -236,37 +236,37 @@
 
 
 
-.navlocating {background: url('/site_media/img/infographics/navlocating.png') no-repeat -244px 0px;}
-.navlocating-hover {background: url('/site_media/img/infographics/navlocating.png') no-repeat -122px 0px; cursor: pointer;}
-.navlocating-active {background: url('/site_media/img/infographics/navlocating.png') no-repeat 0px 0px; cursor: pointer;}
+.navlocating {background: url('/media/img/infographics/navlocating.png') no-repeat -244px 0px;}
+.navlocating-hover {background: url('/media/img/infographics/navlocating.png') no-repeat -122px 0px; cursor: pointer;}
+.navlocating-active {background: url('/media/img/infographics/navlocating.png') no-repeat 0px 0px; cursor: pointer;}
 .textlocating {display: none; padding-top: 30px;}
 
-.navgaining {background: url('/site_media/img/infographics/navgaining.png') no-repeat -288px 0px;}
-.navgaining-hover {background: url('/site_media/img/infographics/navgaining.png') no-repeat -144px 0px; cursor: pointer;}
-.navgaining-active {background: url('/site_media/img/infographics/navgaining.png') no-repeat 0px 0px; cursor: pointer;}
+.navgaining {background: url('/media/img/infographics/navgaining.png') no-repeat -288px 0px;}
+.navgaining-hover {background: url('/media/img/infographics/navgaining.png') no-repeat -144px 0px; cursor: pointer;}
+.navgaining-active {background: url('/media/img/infographics/navgaining.png') no-repeat 0px 0px; cursor: pointer;}
 .textgaining {display: none; padding-top: 30px;}
 
-.navsampling {background: url('/site_media/img/infographics/navsampling.png') no-repeat -218px 0px;}
-.navsampling-hover {background: url('/site_media/img/infographics/navsampling.png') no-repeat -109px 0px; cursor: pointer;}
-.navsampling-active {background: url('/site_media/img/infographics/navsampling.png') no-repeat 0px 0px; cursor: pointer;}
+.navsampling {background: url('/media/img/infographics/navsampling.png') no-repeat -218px 0px;}
+.navsampling-hover {background: url('/media/img/infographics/navsampling.png') no-repeat -109px 0px; cursor: pointer;}
+.navsampling-active {background: url('/media/img/infographics/navsampling.png') no-repeat 0px 0px; cursor: pointer;}
 .textsampling {display: none; padding-top: 30px;}
 
-.navcollecting {background: url('/site_media/img/infographics/navcollecting.png') no-repeat -210px 0px;}
-.navcollecting-hover {background: url('/site_media/img/infographics/navcollecting.png') no-repeat -105px 0px; cursor: pointer;}
-.navcollecting-active {background: url('/site_media/img/infographics/navcollecting.png') no-repeat 0px 0px; cursor: pointer;}
+.navcollecting {background: url('/media/img/infographics/navcollecting.png') no-repeat -210px 0px;}
+.navcollecting-hover {background: url('/media/img/infographics/navcollecting.png') no-repeat -105px 0px; cursor: pointer;}
+.navcollecting-active {background: url('/media/img/infographics/navcollecting.png') no-repeat 0px 0px; cursor: pointer;}
 .textcollecting {display: none; padding-top: 30px;}
 
-.navrecording {background: url('/site_media/img/infographics/navrecording.png') no-repeat -218px 0px;}
-.navrecording-hover {background: url('/site_media/img/infographics/navrecording.png') no-repeat -109px 0px; cursor: pointer;}
-.navrecording-active {background: url('/site_media/img/infographics/navrecording.png') no-repeat 0px 0px; cursor: pointer;}
+.navrecording {background: url('/media/img/infographics/navrecording.png') no-repeat -218px 0px;}
+.navrecording-hover {background: url('/media/img/infographics/navrecording.png') no-repeat -109px 0px; cursor: pointer;}
+.navrecording-active {background: url('/media/img/infographics/navrecording.png') no-repeat 0px 0px; cursor: pointer;}
 .textrecording {display: none; padding-top: 30px;}
 
-.navresolving {background: url('/site_media/img/infographics/navresolving.png') no-repeat -200px 0px;}
-.navresolving-hover {background: url('/site_media/img/infographics/navresolving.png') no-repeat -100px 0px; cursor: pointer;}
-.navresolving-active {background: url('/site_media/img/infographics/navresolving.png') no-repeat 0px 0px; cursor: pointer;}
+.navresolving {background: url('/media/img/infographics/navresolving.png') no-repeat -200px 0px;}
+.navresolving-hover {background: url('/media/img/infographics/navresolving.png') no-repeat -100px 0px; cursor: pointer;}
+.navresolving-active {background: url('/media/img/infographics/navresolving.png') no-repeat 0px 0px; cursor: pointer;}
 .textresolving {display: none; padding-top: 30px;}
 
-.navstoring {background: url('/site_media/img/infographics/navstoring.png') no-repeat -174px 0px;}
-.navstoring-hover {background: url('/site_media/img/infographics/navstoring.png') no-repeat -87px 0px; cursor: pointer;}
-.navstoring-active {background: url('/site_media/img/infographics/navstoring.png') no-repeat 0px 0px; cursor: pointer;}
+.navstoring {background: url('/media/img/infographics/navstoring.png') no-repeat -174px 0px;}
+.navstoring-hover {background: url('/media/img/infographics/navstoring.png') no-repeat -87px 0px; cursor: pointer;}
+.navstoring-active {background: url('/media/img/infographics/navstoring.png') no-repeat 0px 0px; cursor: pointer;}
 .textstoring {display: none; padding-top: 30px;}

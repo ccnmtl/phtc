@@ -31,7 +31,7 @@ class UserProfile(models.Model):
     disadvantaged = models.TextField()
 
     #NYNJ additions
-    is_nylearns = models.BooleanField()
+    is_nylearns = models.BooleanField(default=False)
     nylearns_course_init = models.TextField(default='none')
     nylearns_user_id = models.TextField(default='none')
 

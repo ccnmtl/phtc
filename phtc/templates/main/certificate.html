@@ -10,7 +10,7 @@
 #certificate{
 	position: relative;
 	margin: 50px 0 0 0;
-	background: url(/site_media/img/certificate_blank.jpg) no-repeat;
+	background: url({{STATIC_URL}}img/certificate_blank.jpg) no-repeat;
 	min-height:300px;
 	width:370px;
 }
@@ -101,7 +101,7 @@ a.print-certificate
 	</p>
 
 	<div class="printable">
- 		<img class="certificate-diploma" src="/site_media/img/certificate_blank.jpg">
+ 		<img class="certificate-diploma" src="{{STATIC_URL}}img/certificate_blank.jpg">
  		<div id="inner-wrap">
 			<div id="user">{{ profile.fname }} {{ profile.lname }} has completed</div>
 			<div id="label">{{ module.label }}</div>
@@ -110,7 +110,7 @@ a.print-certificate
 	</div><!--end .printable-->
 	
 	
-	<script src="/site_media/js/jquery.print.js"></script>
+	<script src="{{STATIC_URL}}js/jquery.print.js"></script>
 	<script>
 		jQuery( "a.print-certificate" )
 			.attr( "href", "javascript:void( 0 )" )
