@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 var saveOrder = function() {
-    var url = "{% url reorder-answer question.id %}?";
+    var url = "{% url 'reorder-answer' question.id %}?";
     var worktodo = 0;
     jQuery("#answers li").each(function(index,element) {
        worktodo = 1;
@@ -43,7 +43,7 @@ var saveOrder = function() {
 <ul class="breadcrumb">
 <li><a href="/edit{{question.quiz.pageblock.section.get_absolute_url}}">{{question.quiz.pageblock.section.label}}</a>
 <span class="divider">/</span></li>
-<li><a href="{% url edit-quiz question.quiz.id %}">Edit Quiz</a><span class="divider">/</span></li>
+<li><a href="{% url 'edit-quiz' question.quiz.id %}">Edit Quiz</a><span class="divider">/</span></li>
 <li>Edit Question</li>
 </ul>
 
@@ -61,9 +61,9 @@ var saveOrder = function() {
 <ul class="dragparent" id="answers">
 {% for answer in question.answer_set.all %}
 <li class="draggable" id="answer-{{answer.id}}">
-<span title="drag to reorder answers" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span>[<a href="{% url delete-answer answer.id %}">delete</a>] 
+<span title="drag to reorder answers" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span>[<a href="{% url 'delete-answer' answer.id %}">delete</a>] 
 Answer {{ answer.display_number }}: 
-<a href="{% url edit-answer answer.id %}">
+<a href="{% url 'edit-answer' answer.id %}">
   {% if answer.label == "" %}
     Edit
   {% endif %}
