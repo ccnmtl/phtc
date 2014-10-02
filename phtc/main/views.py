@@ -20,6 +20,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.forms import AuthenticationForm
 from django.template.loader import get_template
 from django.template import Context
+from django.template import RequestContext
 from pagetree.models import Section
 from quizblock.models import Quiz
 from quizblock.models import Question
@@ -79,9 +80,9 @@ def nylearns(request):
 
     if not request.GET.get('has_account'):
         form = AuthenticationForm()
+        c = RequestContext(request, {'form': form, 'args': args})
         return render_to_response(
-            'registration/nylearns_login.html',
-            {'form': form, 'args': args, 'request': request})
+            'registration/nylearns_login.html', c)
     else:
         return dict(form=form, args=args)
 
