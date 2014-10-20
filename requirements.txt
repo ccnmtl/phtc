@@ -49,7 +49,7 @@ raven==4.0.3
 django-bootstrap-form==2.0.3
 django-debug-toolbar==1.1
 django-treebeard==2.0b2
-django-pagetree==0.14.3
+django-pagetree== 1.0.1
 django-pageblocks==0.5.13
 django-markwhat==1.0
 django-pagetree_export==0.3
