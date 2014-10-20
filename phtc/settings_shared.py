@@ -198,10 +198,9 @@ COMPRESS_PARSER = "compressor.parser.HtmlParser"
 
 # WIND settings
 
-AUTHENTICATION_BACKENDS = ('djangowind.auth.WindAuthBackend',
+AUTHENTICATION_BACKENDS = ('djangowind.auth.SAMLAuthBackend',
                            'django.contrib.auth.backends.ModelBackend',)
-WIND_BASE = "https://wind.columbia.edu/"
-WIND_SERVICE = "cnmtl_full_np"
+CAS_BASE = "https://cas.columbia.edu/"
 WIND_PROFILE_HANDLERS = ['djangowind.auth.CDAPProfileHandler']
 WIND_AFFIL_HANDLERS = ['djangowind.auth.AffilGroupMapper',
                        'djangowind.auth.StaffMapper',
