@@ -3,9 +3,9 @@
 
 <h2>Choose a Login Option...</h2>
 
-<form method="get" action="https://wind.columbia.edu/login" class="well">
+<form method="get" action="{{CAS_BASE}}cas/login" class="well">
 <input type="hidden" name="service" value="cnmtl_full_np" />
-<input type="hidden" name="destination" value="http://{{ request.get_host }}/accounts/windlogin/?next=/admin/&amp;this_is_the_admin_form=1" />
+<input type="hidden" name="destination" value="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}/accounts/caslogin/?next=/admin/&amp;this_is_the_admin_form=1" />
 <p>If you have a Columbia University Network ID
         (UNI)... </p><input type="submit" value="LOG IN" class="btn btn-primary"/></p>
 </form>

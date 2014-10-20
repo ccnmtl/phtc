@@ -41,8 +41,8 @@
             <p class="smalltxt"><span class="tooltip-bottom" rel="tooltip" title="Create your own PHTC account"><a href="/registration/register/">Need a new account?</a></span> | <span class="tooltip-bottom" rel="tooltip" title="Reset your password"><a href="/registration/password/reset/">Forgot password?</a></span></p>
             </form>
             
-            <form method="get" action="https://cas.columbia.edu/cas/login" class="well">
-            <input type="hidden" name="destination" value="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}/accounts/windlogin/?next={{ next }}" />
+            <form method="get" action="{{CAS_BASE}}cas/login" class="well">
+            <input type="hidden" name="destination" value="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}/accounts/caslogin/?next={{ next }}" />
             <p>If you have a Columbia University Network ID
             (UNI)... </p><input type="submit" value="LOG IN" class="btn btn-primary"/></p>
             </form>
