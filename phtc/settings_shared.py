@@ -203,6 +203,7 @@ COMPRESS_PARSER = "compressor.parser.HtmlParser"
 AUTHENTICATION_BACKENDS = ('djangowind.auth.SAMLAuthBackend',
                            'django.contrib.auth.backends.ModelBackend',)
 CAS_BASE = "https://cas.columbia.edu/"
+LOGOUT_REDIRECT_URL = "https://cas.columbia.edu/cas/logout"
 WIND_PROFILE_HANDLERS = ['djangowind.auth.CDAPProfileHandler']
 WIND_AFFIL_HANDLERS = ['djangowind.auth.AffilGroupMapper',
                        'djangowind.auth.StaffMapper',
