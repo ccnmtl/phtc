@@ -55,6 +55,6 @@ django-markwhat==1.0
 django-pagetree_export==0.3
 django-registration==1.0
 django-smartif==0.1
-django-jenkins==0.15.0
+django-jenkins==0.16.3
 django-stagingcontext==0.1.0
 django-smoketest==0.3.0
