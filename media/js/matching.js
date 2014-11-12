@@ -35,10 +35,11 @@ jQuery(document).ready(function ($) {
     //clean string function
     function cleanup_string(str, kill_space){
         var punctuationless = str.replace(/[\.,-\/?#!$%\^&\*;:{}=\-_`~()]/g,"");
-        if(kill_space == true){
-            var spaceless = punctuationless.replace(/\s/g, "");
+				var spaceless;
+        if(kill_space === true){
+            spaceless = punctuationless.replace(/\s/g, "");
         }else{
-            var spaceless = punctuationless;
+            spaceless = punctuationless;
         }
         var filter = spaceless.replace(/'/g,"");//take out the single quotes
         var filter1 = filter.replace(/\[/g,"");//replace [

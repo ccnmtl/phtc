@@ -11,6 +11,6 @@ jQuery(document).ready(function(){
 	question.children('.casecontent').children('.casequestion').children('.answerchoices').children('li').children('input').each(function(i){
 		var img = new Image();
 		jQuery(img).attr('src', '/media/img/' + answer_array[i]);
-		jQuery(this).after(img)
-	})
-})
+		jQuery(this).after(img);
+	});
+});

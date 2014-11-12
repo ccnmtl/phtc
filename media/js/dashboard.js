@@ -12,9 +12,9 @@ jQuery(document).ready(function(){
             $(this).parent().remove();
             $('#modules').append(clone);
 
-        })
+        });
     }
-    move_video_modules()
+    move_video_modules();
 
     /*
     ** Initiate the bootstrap popup
@@ -48,8 +48,8 @@ jQuery(document).ready(function(){
     ** Module/Part UI 
     */
     $('.show-module').click(function(){
-        $('.show-module').parent().removeClass('active')
-        $(this).parent().toggleClass('active')
+        $('.show-module').parent().removeClass('active');
+        $(this).parent().toggleClass('active');
         var link = $(this).attr('rel');
         var id = $(this).parent().attr('id');
         jQuery('.content').append('<div id="page-load"><h1>Loading...</h1</div>');
@@ -71,7 +71,7 @@ jQuery(document).ready(function(){
     });//end click
 
     // NYNJ -> is the course available?
-    if (PHTC.getUrlVars()['course_not_available'] == "true"){
+    if (PHTC.getUrlVars().course_not_available === "true"){
         jQuery('#myModal').modal('toggle');
     }
 
