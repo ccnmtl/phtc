@@ -8,13 +8,13 @@ jQuery(document).ready(function(){
 	submit_btn.parent().append(submit_clone);
 	submit_clone.click(function(){
 		alert('Please answer all questions.');
-	})
+	});
 
 	jQuery('.reading-exercise').blur(function(){
 		var num_answers = jQuery('.reading-exercise').length;
 		var answered = [];
 		jQuery('.reading-exercise').each(function(){
-			if(jQuery(this).val() != ""){
+			if(jQuery(this).val() !== ""){
 				answered.push(true);
 				check_answer();
 			}
@@ -25,8 +25,8 @@ jQuery(document).ready(function(){
 					submit_btn.css('display','block');
 				}
 			}
-		})//end .each()
+		}); //end .each()
 
-	})//end .blur()
+	}); //end .blur()
 
-})// end doc.ready
+}); // end doc.ready

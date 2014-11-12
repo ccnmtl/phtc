@@ -35,7 +35,7 @@ function generateSelector() {
     var notationValue = ['NR', 'R', 'X', 'O', '&nbsp;'];
     var divCell = [];
     jQuery('.interactive-scenario').append('<div class="notation_select" id="notation_selections">');
-    for (i=0; i<notationValue.length; i++) {
+    for (var i=0; i<notationValue.length; i++) {
         divCell[i] = '<div class="notation_option btn btn-primary">' + notationValue[i] + '</div>';
         jQuery('.notation_select').append(divCell[i]);
     }
@@ -43,10 +43,10 @@ function generateSelector() {
 
 function generateGrid() {
     jQuery('.interactive-scenario').append('<div class="notation_gridbox">');
-    for (i=0; i<2; i++) {
+    for (var i=0; i<2; i++) {
         jQuery('.notation_gridbox').append('<div class="notation_row">');
     }
-    for (j=0; j<colNum; j++) {
+    for (var j=0; j<colNum; j++) {
         jQuery('.notation_row').append('<div class="notation_field" id="r'+i+'c'+j+'" />');
     }
     jQuery('.interactive-scenario').append('<button id="checkanswer" type="submit" class="btn">Check answer</button>');

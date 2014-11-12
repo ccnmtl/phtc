@@ -9,7 +9,7 @@ jQuery(document).ready(function() {
             {"modalContentPath":"/evaluationqs/","modalTitle":"Evaluation Questions"}
         ];
         
-        for (i=0; i<modalSet.length; i++) {
+        for (var i=0; i<modalSet.length; i++) {
             jQuery('.modalpageNav').append('<a href="'+modalSet[i].modalContentPath+'" role="button" class="btn btn-mini btn-default" data-toggle="modal" data-target="#modalBox"'+i+1+'>'+modalSet[i].modalTitle+'</a> ');
         }
     

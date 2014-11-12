@@ -1,13 +1,15 @@
+var clickhandler = function () {
+		show(this);
+		return false;
+};
+
 function initShowHide() {
 	if (document.getElementById && document.getElementsByTagName && document.createTextNode) {
 		hideAll();
 		var as = document.getElementsByTagName('a');
 		for (var i = 0; i < as.length; i++) {
 			if (as[i].className == "moretoggle") {
-				as[i].onclick = function() {
-					show(this);
-					return false;
-				}
+				as[i].onclick = clickhandler;
 			}
 		}			
 	}
@@ -20,7 +22,7 @@ function show(s) {
 	s.onclick = function () {
 		hide(this);
 		return false;
-	}
+	};
 }
 
 function hide(s) {
@@ -30,7 +32,7 @@ function hide(s) {
 	s.onclick = function () {
 		show(this);
 		return false;
-	}
+	};
 }
 
 function hideAll() {
@@ -50,7 +52,7 @@ function addLoadEvent(func) {
     		window.onload = function() {
       			oldonload();
       			func();
-    		}
+    		};
   	}
 }
 
