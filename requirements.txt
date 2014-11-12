@@ -1,4 +1,4 @@
-Django==1.6.5
+Django==1.6.8
 httplib2==0.8
 restclient==0.11.0
 feedparser==4.1
@@ -57,4 +57,4 @@ django-registration==1.0
 django-smartif==0.1
 django-jenkins==0.15.0
 django-stagingcontext==0.1.0
-django-smoketest==0.2.2
+django-smoketest==0.3.0
