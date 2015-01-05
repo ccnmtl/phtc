@@ -32,7 +32,7 @@ def get_next_steps(request, path_id, node_id):
             'can_edit': request.user.is_superuser}
 
     return HttpResponse(simplejson.dumps(data, indent=2),
-                        mimetype="application/json")
+                        content_type="application/json")
 
 
 @login_required
