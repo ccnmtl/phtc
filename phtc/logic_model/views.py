@@ -27,4 +27,4 @@ def settings(request):
 
     return HttpResponse(
         simplejson.dumps(the_settings, indent=2),
-        mimetype="application/json")
+        content_type="application/json")
