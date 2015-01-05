@@ -1,7 +1,6 @@
 from annoying.decorators import render_to
 from django.http import HttpResponseRedirect, HttpResponse
 from pagetree.helpers import get_section_from_path, get_hierarchy
-from pagetree.helpers import get_module, needs_submit, submitted
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from json import dumps
@@ -61,7 +60,7 @@ def nylearns(request):
             #courses must be mapped to first page in module
             course_url = url[1] + '/' + url[2]
             section = get_section_from_path(course_url)
-            module = get_module(section)
+            module = section.get_module()
             process_dashboard_ajax(request.user, section, module)
             return HttpResponseRedirect(course_map.phtc_url)
         except NYLEARNS_Course_Map.DoesNotExist:
@@ -408,14 +407,14 @@ def page(request, path):
 
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
-    module = get_module(section)
+    module = section.get_module()
     is_visited = user_visits(request)
     page_dict = dict(
         section=section,
         module=module,
         is_visited=is_visited,
-        needs_submit=needs_submit(section),
-        is_submitted=submitted(section, request.user),
+        needs_submit=section.needs_submit(),
+        is_submitted=section.submitted(request.user),
         modules=root.get_children(),
         root=section.hierarchy.get_root(),
         is_mod_one=is_mod_one(module),
@@ -524,7 +523,7 @@ def edit_page(request, path):
                     section_css=section_css,
                     dashboard=dashboard,
                     module_type=module_type,
-                    module=get_module(section),
+                    module=section.get_module(),
                     modules=root.get_children(),
                     root=section.hierarchy.get_root(),
                     edit_page=edit_page)
@@ -659,7 +658,7 @@ def dashboard_panel(request):
 def certificate(request, path):
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
-    module = get_module(section)
+    module = section.get_module()
     is_visited = user_visits(request)
     # make sure this page is only viewable if the module is completed.
     if (module.get_uservisit(request.user)
@@ -668,8 +667,8 @@ def certificate(request, path):
             section=section,
             module=module,
             is_visited=is_visited,
-            needs_submit=needs_submit(section),
-            is_submitted=submitted(section, request.user),
+            needs_submit=section.needs_submit(),
+            is_submitted=section.submitted(request.user),
             modules=root.get_children(),
             root=section.hierarchy.get_root(),
             user=request.user,
@@ -967,8 +966,8 @@ def get_pre_test_data(completed_modules, modules):
 
     for test in pre_tests:
         obj = {}
-        get_module(test.pageblock().section)
-        obj['quiz_label'] = get_module(test.pageblock().section).label
+        test.pageblock().section.get_module()
+        obj['quiz_label'] = test.pageblock().section.get_module().label
         obj['submission_set'] = test.submission_set
         module_pre_test_map.append(obj)
     return module_pre_test_map
@@ -981,8 +980,8 @@ def get_post_test_data(completed_modules, modules):
 
     for test in post_tests:
         obj = {}
-        get_module(test.pageblock().section)
-        obj['quiz_label'] = get_module(test.pageblock().section).label
+        test.pageblock().section.get_module()
+        obj['quiz_label'] = test.pageblock().section.get_module().label
         obj['submission_set'] = test.submission_set
         module_post_test_map.append(obj)
     return module_post_test_map
