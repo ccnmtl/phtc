@@ -1,6 +1,4 @@
 Django==1.6.10
-httplib2==0.8
-restclient==0.11.0
 feedparser==4.1
 Markdown==2.3.1
 pyenchant==1.5.1
