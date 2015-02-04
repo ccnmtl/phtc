@@ -39,9 +39,9 @@ urlpatterns = patterns(
     (r'^register/complete/$', RedirectView.as_view(url='/dashboard/')),
     (r'^registration/', include('registration.backends.default.urls')),
 
-    url(r'^activate/complete/$',
-       TemplateView.as_view(template_name='registration/activation_complete.html'),
-       name='registration_activation_complete'),
+    url(r'^activate/complete/$', TemplateView.as_view(
+        template_name='registration/activation_complete.html'),
+        name='registration_activation_complete'),
     (r'^test_nylearns_username/$', 'phtc.main.views.test_nylearns_username'),
     (r'^create_nylearns_user/$', 'phtc.main.views.create_nylearns_user'),
     (r'^nylearns_login/$', 'phtc.main.views.nylearns_login'),
