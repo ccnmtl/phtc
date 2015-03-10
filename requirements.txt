@@ -1,4 +1,4 @@
-Django==1.6.10
+Django==1.7.6
 feedparser==4.1
 Markdown==2.3.1
 pyenchant==1.5.1
@@ -34,11 +34,10 @@ djangowind==0.13.2
 sorl==3.1
 tagging==0.3-pre
 typogrify==2.0.0
-django-appconf==0.4.1
+django-appconf==0.6
 django-indexer==0.3.0
 django-templatetag-sugar==0.1
 django-paging==0.2.5
-South==1.0
 django-annoying==0.8.0
 django-nose==1.2
 django_compressor==1.4
@@ -48,10 +47,10 @@ django-bootstrap-form==2.0.3
 django-debug-toolbar==1.1
 django-treebeard==2.0b2
 django-pagetree== 1.0.1
-django-pageblocks==0.5.13
-django-markwhat==1.0
+django-pageblocks==1.0.0
+django-markwhat==2014.9.20
 django-pagetree_export==0.3
-django-registration==1.0
+django-registration-redux==1.1
 django-smartif==0.1
 django-jenkins==0.16.3
 django-stagingcontext==0.1.0

@@ -1,83 +1,94 @@
-# -*- coding: utf-8 -*-
 # flake8: noqa
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+from django.conf import settings
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'UserProfile'
-        db.create_table('main_userprofile', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
-            ('sex', self.gf('django.db.models.fields.TextField')()),
-            ('age', self.gf('django.db.models.fields.TextField')()),
-            ('origin', self.gf('django.db.models.fields.TextField')()),
-            ('ethnicity', self.gf('django.db.models.fields.TextField')()),
-            ('disadvantaged', self.gf('django.db.models.fields.TextField')()),
-            ('employment_location', self.gf('django.db.models.fields.TextField')()),
-            ('position', self.gf('django.db.models.fields.TextField')()),
-        ))
-        db.send_create_signal('main', ['UserProfile'])
+    dependencies = [
+        ('pagetree', '0001_initial'),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
 
-
-    def backwards(self, orm):
-        # Deleting model 'UserProfile'
-        db.delete_table('main_userprofile')
-
-
-    models = {
-        'auth.group': {
-            'Meta': {'object_name': 'Group'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
-            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
-        },
-        'auth.permission': {
-            'Meta': {'ordering': "('content_type__app_label', 'content_type__model', 'codename')", 'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
-            'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        'auth.user': {
-            'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
-            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
-        },
-        'contenttypes.contenttype': {
-            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
-            'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        'main.userprofile': {
-            'Meta': {'object_name': 'UserProfile'},
-            'age': ('django.db.models.fields.TextField', [], {}),
-            'disadvantaged': ('django.db.models.fields.TextField', [], {}),
-            'employment_location': ('django.db.models.fields.TextField', [], {}),
-            'ethnicity': ('django.db.models.fields.TextField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'origin': ('django.db.models.fields.TextField', [], {}),
-            'position': ('django.db.models.fields.TextField', [], {}),
-            'sex': ('django.db.models.fields.TextField', [], {}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'})
-        }
-    }
-
-    complete_apps = ['main']
+    operations = [
+        migrations.CreateModel(
+            name='DashboardInfo',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('info', models.TextField(default=b'')),
+                ('dashboard', models.OneToOneField(to='pagetree.Section')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='ModuleType',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('info', models.TextField(default=b'')),
+                ('module_type', models.OneToOneField(to='pagetree.Section')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='NYLEARNS_Course_Map',
+            fields=[
+                ('id', models.AutoField(serialize=False, primary_key=True)),
+                ('courseID', models.TextField()),
+                ('phtc_url', models.TextField()),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='SectionCss',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('css_field', models.TextField()),
+                ('section_css', models.OneToOneField(to='pagetree.Section')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='UserProfile',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('fname', models.TextField()),
+                ('lname', models.TextField()),
+                ('work_city', models.TextField()),
+                ('work_state', models.TextField()),
+                ('work_zip', models.TextField()),
+                ('sex', models.TextField()),
+                ('age', models.TextField()),
+                ('origin', models.TextField()),
+                ('ethnicity', models.TextField()),
+                ('umc', models.TextField(default=b'')),
+                ('employment_location', models.TextField()),
+                ('other_employment_location', models.TextField()),
+                ('position', models.TextField()),
+                ('other_position_category', models.TextField()),
+                ('dept_health', models.TextField()),
+                ('geo_dept_health', models.TextField()),
+                ('experience', models.TextField()),
+                ('rural', models.TextField()),
+                ('degree', models.TextField()),
+                ('disadvantaged', models.TextField()),
+                ('is_nylearns', models.BooleanField(default=False)),
+                ('nylearns_course_init', models.TextField(default=b'none')),
+                ('nylearns_user_id', models.TextField(default=b'none')),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+    ]
