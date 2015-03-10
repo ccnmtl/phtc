@@ -96,7 +96,6 @@ INSTALLED_APPS = [
     'tagging',
     'typogrify',
     'raven.contrib.django',
-    'south',
     'django_nose',
     'compressor',
     'django_statsd',
@@ -184,8 +183,6 @@ if 'harvest' in sys.argv:
         }
     }
 
-
-SOUTH_TESTS_MIGRATE = False
 
 THUMBNAIL_SUBDIR = "thumbs"
 EMAIL_SUBJECT_PREFIX = "[phtc] "

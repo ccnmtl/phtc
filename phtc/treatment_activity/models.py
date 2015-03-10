@@ -65,7 +65,7 @@ class TreatmentNode(MP_Node):
 class TreatmentPath(models.Model):
     name = models.CharField(max_length=512)
     tree = models.ForeignKey(TreatmentNode)
-    cirrhosis = models.BooleanField()
+    cirrhosis = models.BooleanField(default=False)
     treatment_status = models.IntegerField(choices=STATUS_CHOICES)
     drug_choice = models.CharField(max_length=12, choices=DRUG_CHOICES)
 
