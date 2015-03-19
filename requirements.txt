@@ -1,4 +1,4 @@
-Django==1.7.6
+Django==1.7.7
 feedparser==4.1
 Markdown==2.6.1
 pyenchant==1.5.1
