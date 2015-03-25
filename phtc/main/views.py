@@ -57,7 +57,7 @@ def nylearns(request):
         try:
             course_map = NYLEARNS_Course_Map.objects.get(courseID=course)
             url = course_map.phtc_url.split('/')
-            #courses must be mapped to first page in module
+            # courses must be mapped to first page in module
             course_url = url[1] + '/' + url[2]
             section = get_section_from_path(course_url)
             module = section.get_module()
@@ -301,10 +301,10 @@ def page_post(request, section, module):
         section.user_pagevisit(request.user, status="complete")
         return HttpResponseRedirect(section.get_next().get_absolute_url())
     elif request.POST.get('post_test') == "true":
-        #forward over to dashboard
+        # forward over to dashboard
         return HttpResponseRedirect(reverse('dashboard'))
     elif request.POST.get('pre_test') == "true":
-        #return HttpResponse(request.POST)
+        # return HttpResponse(request.POST)
         return HttpResponseRedirect(section.get_absolute_url())
     else:
         # giving them feedback before they proceed
@@ -333,7 +333,7 @@ def get_userpagevisit_status(section, user):
 
 
 def make_sure_parts_are_allowed(module, user, section, is_module):
-    #handle Module one seperately
+    # handle Module one seperately
     if is_module_one(module):
         make_sure_module1_parts_are_allowed(module, user)
     elif is_module:
@@ -425,7 +425,7 @@ def page(request, path):
         return HttpResponse(
             process_dashboard_ajax(request.user, section, module))
 
-    #is the user allowed?
+    # is the user allowed?
     if request.user.is_anonymous():
         section.user_pagevisit(request.user)
 
@@ -453,7 +453,7 @@ def page(request, path):
     # decide whether to change status
     previous_section_handle_status(section, request, module)
 
-    #return page
+    # return page
     return page_dict
 
 
@@ -637,7 +637,7 @@ def update_user_profile(request):
 def dashboard(request):
     # test if the user profile has been completed
     if request.GET and request.GET.get('course_not_available'):
-        #return HttpResponseRedirect('/profile/')
+        # return HttpResponseRedirect('/profile/')
         request.META['HTTP_REFERER'] = ''
         HttpResponseRedirect('/dashboard/?course_not_available=true')
     try:
@@ -751,7 +751,7 @@ def create_csv_report2(request, report, report_name):
         'attachment; filename="' + report_name + '.csv"')
     writer = csv.writer(response)
 
-    #write a header row
+    # write a header row
     header_fields = []
     for row in report[0]:
         header_fields.append(row[0])
@@ -861,7 +861,7 @@ def create_ev_report(request, ev_report, completed_modules, modules):
 
 
 def flatten_response_tables(qr):
-    #set the number of rows in the report
+    # set the number of rows in the report
     qr_rows = 0
     for qr_table in qr:
         if qr_rows < len(qr_table):
@@ -1205,7 +1205,7 @@ def count_modules_completed(completed_modules):
 
 def create_completers_list(completed_modules):
     completers_list = []
-    #create a list map so we only add unduplicated completers
+    # create a list map so we only add unduplicated completers
     completer_set = []
     for v in completed_modules:
         completer_set.append(v.user_id)
@@ -1249,7 +1249,7 @@ def create_user_report_table(completed_modules, completers):
             obj.append(('Primary Discipline/Seciality',
                         v.other_position_category))
 
-        #Gather those that have completed more than one module
+        # Gather those that have completed more than one module
         for mod in completed_modules:
             try:
                 if v.user_id == mod.user_id:
