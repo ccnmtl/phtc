@@ -95,7 +95,6 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'tagging',
     'typogrify',
-    'raven.contrib.django',
     'django_nose',
     'compressor',
     'django_statsd',
