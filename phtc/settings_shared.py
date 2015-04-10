@@ -29,7 +29,7 @@ TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
 USE_I18N = False
-MEDIA_ROOT = "/var/www/phtc/uploads/"
+MEDIA_ROOT = "/var/www/phtc/uploads"
 MEDIA_URL = '/uploads/'
 STATIC_URL = '/media/'
 STATICFILES_DIRS = (
@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     'django_nose',
     'compressor',
     'django_statsd',
+    'bootstrap3',
     'bootstrapform',
     'phtc.main',
     'pagetree',
