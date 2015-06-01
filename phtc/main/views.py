@@ -312,6 +312,7 @@ def page_post(request, section, module):
 
 
 def make_sure_module1_parts_are_allowed(module, user):
+
     parts = module.get_children()
     for part in parts:
         v = part.get_uservisit(user)
@@ -319,8 +320,8 @@ def make_sure_module1_parts_are_allowed(module, user):
             if (v.status == "in_progress"
                     and part.get_previous().get_uservisit(user)):
                 part.get_previous().user_pagevisit(user, status="complete")
-        else:
-            part.user_pagevisit(user, status="allowed")
+            else:
+                part.user_pagevisit(user, status="allowed")
 
 
 def get_userpagevisit_status(section, user):
