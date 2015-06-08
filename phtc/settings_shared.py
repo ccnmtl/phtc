@@ -95,7 +95,6 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'tagging',
     'typogrify',
-    'django_nose',
     'compressor',
     'django_statsd',
     'bootstrapform',
@@ -143,7 +142,7 @@ STATSD_HOST = '127.0.0.1'
 STATSD_PORT = 8125
 STATSD_PATCHES = []
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 if 'test' in sys.argv or 'jenkins' in sys.argv:
     DATABASES = {
         'default': {
@@ -156,11 +155,6 @@ if 'test' in sys.argv or 'jenkins' in sys.argv:
         }
     }
     COMPRESS_ENABLED = False
-
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=phtc',
-]
 
 JENKINS_TASKS = (
     'django_jenkins.tasks.run_pep8',
