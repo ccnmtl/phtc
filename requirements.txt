@@ -34,7 +34,7 @@ six==1.9.0
 djangowind==0.13.3
 sorl==3.1
 tagging==0.3-pre
-typogrify==2.0.0
+typogrify==2.0.7
 django-appconf==0.6
 django-indexer==0.3.0
 django-templatetag-sugar==0.1
