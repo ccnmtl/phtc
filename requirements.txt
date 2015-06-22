@@ -16,7 +16,7 @@ ipython==3.0.0
 ipdb==0.8
 sure==1.2.9
 fuzzywuzzy==0.4.0
-cssselect==0.8
+cssselect==0.9.1
 rdflib==4.1.2
 selenium==2.45.0
 coverage==3.7.1
