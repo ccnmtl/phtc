@@ -79,7 +79,6 @@ urlpatterns = patterns(
      {}, 'edit-page'),
     (r'^instructor/(?P<path>.*)$',
      'phtc.main.views.instructor_page'),
-    (r'^(?P<path>.*)$', 'phtc.main.views.page'),
 
     # override the default urls for pasword
     url(r'^password/change/$',
@@ -103,4 +102,7 @@ urlpatterns = patterns(
 
     # and now add the registration urls
     url(r'', include('registration.backends.default.urls')),
+    (r'^(?P<path>.*)$', 'phtc.main.views.page'),
+    
+    
 )
