@@ -103,6 +103,4 @@ urlpatterns = patterns(
     # and now add the registration urls
     url(r'', include('registration.backends.default.urls')),
     (r'^(?P<path>.*)$', 'phtc.main.views.page'),
-    
-    
 )
