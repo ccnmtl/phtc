@@ -118,3 +118,4 @@ class TreatmentActivityBlock(models.Model):
 class TreatmentActivityBlockForm(forms.ModelForm):
     class Meta:
         model = TreatmentActivityBlock
+        exclude = []

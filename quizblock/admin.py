@@ -12,6 +12,7 @@ class AnswerInlineForm(forms.ModelForm):
         widgets = {
             'label': forms.Textarea(attrs={'rows': 1}),
         }
+        exclude = []
 
 
 class AnswerInlineAdmin(admin.TabularInline):
@@ -76,6 +77,7 @@ class QuizModelForm(forms.ModelForm):
         widgets = {
             'description': forms.Textarea(attrs={'rows': 3})
         }
+        exclude = []
 
 
 class QuizAdmin(admin.ModelAdmin):
