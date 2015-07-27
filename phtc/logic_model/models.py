@@ -155,3 +155,4 @@ class LogicModelBlock(models.Model):
 class LogicModelBlockForm(forms.ModelForm):
     class Meta:
         model = LogicModelBlock
+        exclude = []
