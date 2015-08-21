@@ -2,7 +2,7 @@ MANAGE=./manage.py
 APP=phtc
 FLAKE8=./ve/bin/flake8
 
-jenkins: ./ve/bin/python validate flake8 jshint test
+jenkins: ./ve/bin/python check flake8 jshint test
 
 ./ve/bin/python: requirements.txt bootstrap.py virtualenv.py
 	./bootstrap.py
@@ -27,14 +27,14 @@ jshint: node_modules/jshint/bin/jshint
 node_modules/jshint/bin/jshint:
 	npm install jshint --prefix .
 
-runserver: ./ve/bin/python validate
+runserver: ./ve/bin/python check
 	$(MANAGE) runserver
 
-migrate: ./ve/bin/python validate jenkins
+migrate: ./ve/bin/python check jenkins
 	$(MANAGE) migrate
 
-validate: ./ve/bin/python
-	$(MANAGE) validate
+check: ./ve/bin/python
+	$(MANAGE) check
 
 shell: ./ve/bin/python
 	$(MANAGE) shell_plus
@@ -49,14 +49,14 @@ clean:
 
 pull:
 	git pull
-	make validate
+	make check
 	make test
 	make migrate
 	make flake8
 
 rebase:
 	git pull --rebase
-	make validate
+	make check
 	make test
 	make migrate
 	make flake8
@@ -65,7 +65,7 @@ rebase:
 # this out on a new machine to set up dev
 # database, etc. You probably *DON'T* want
 # to run it after that, though.
-install: ./ve/bin/python validate jenkins
+install: ./ve/bin/python check jenkins
 	createdb $(APP)
 	$(MANAGE) syncdb --noinput
 	make migrate
