@@ -1,31 +1,30 @@
-from annoying.decorators import render_to
-from django.http import HttpResponseRedirect, HttpResponse
-from pagetree.helpers import get_section_from_path, get_hierarchy
-from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
+import csv
 from json import dumps
-from django.contrib.auth.models import User
+from annoying.decorators import render_to
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
+from django.contrib.flatpages.models import FlatPage
+from django.core.mail import EmailMultiAlternatives
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render_to_response
+from django.template.loader import get_template
+from django.template import Context
+from django.template import RequestContext
+from pagetree.helpers import get_section_from_path, get_hierarchy
+from pagetree.models import Section, UserPageVisit
 from phtc.main.models import UserProfile
 from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo
 from phtc.main.models import ModuleType
 from phtc.main.models import SectionCss
-from pagetree.models import UserPageVisit
 from phtc.main.models import NYLEARNS_Course_Map
-from django.core.mail import EmailMultiAlternatives
-from django.contrib.flatpages.models import FlatPage
-from django.shortcuts import render_to_response
-from django.contrib.auth.forms import AuthenticationForm
-from django.template.loader import get_template
-from django.template import Context
-from django.template import RequestContext
-from pagetree.models import Section
-from quizblock.models import Quiz
-from quizblock.models import Question
-from quizblock.models import Response
-from quizblock.models import Submission
-import csv
+# from quizblock.models import Quiz
+# from quizblock.models import Question
+# from quizblock.models import Response
+# from quizblock.models import Submission
 
 
 @render_to('registration/registration_form.html')
