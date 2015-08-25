@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block title %}My Dashboard{% endblock %}
 {% block noleftsidebar %} class="no-left-sidebar dashboard"{% endblock %}
 {% block content %}
@@ -29,16 +28,35 @@
 		 			{% endifequal %}
 		 		{% endfor %}'
 		  id="{{ module.id }}">
-
-		{%for type in module_type%}
+	      {%for type in module_type%}
 	 		{% ifequal module.id type.module_type_id %}
 				<span class='hide {{ type.info }}'>&nbsp;</span>
 	 		{% endifequal %}
-		{% endfor %}
-		
-		<a class="show-module" rel="{{ module.get_absolute_url }}" href="javascript:void(0);">{{ module.label }}</a>
-		<div class="divclearfix"></div>
-		
+		  {% endfor %}
+		  <a class="show-module" rel="{{ module.get_absolute_url }}" href="javascript:void(0);">{{ module.label }}</a>
+		  <div class="divclearfix"></div>
+		  <ul>
+            {% for s in module.get_descendants %}
+              {% ifequal s.id module.id %}
+              {% else %}
+                <li class="menu-{{s.depth}}">
+                  {% ifnotequal s.id section.id %}
+                    <a href="{{menu_base}}{{s.get_absolute_url}}">
+                  {% else %}
+                     <b>
+                  {% endifnotequal %}
+                    {{s.label}}
+                  {% ifnotequal s.id section.id %}
+                    </a>
+                  {% else %}
+                    </b>
+                  {% endifnotequal %}
+               {% if s.get_children %}<ul>{% else %}
+               {% if s.is_last_child %}</ul>{% endif %}{% endif %}
+                </li>
+               {% endifequal %}
+            {% endfor %}
+          </ul>
       </div><!--end .module-->
     {% endfor %}
   </div>

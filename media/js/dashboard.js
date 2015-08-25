@@ -48,6 +48,7 @@ jQuery(document).ready(function(){
     ** Module/Part UI 
     */
     $('.show-module').click(function(){
+    	console.log("show module");
         $('.show-module').parent().removeClass('active');
         $(this).parent().toggleClass('active');
         var link = $(this).attr('rel');
