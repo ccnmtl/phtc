@@ -47,28 +47,15 @@ jQuery(document).ready(function(){
     /*
     ** Module/Part UI 
     */
-    $('.show-module').click(function(){
+    $('.module').click(function(event){
     	console.log("show module");
-        $('.show-module').parent().removeClass('active');
-        $(this).parent().toggleClass('active');
-        var link = $(this).attr('rel');
-        var id = $(this).parent().attr('id');
-        jQuery('.content').append('<div id="page-load"><h1>Loading...</h1</div>');
-        $.ajax({
-            url: link,
-            mod_id: id,
-            type: "POST",
-            data: { module: link, mod_id: id }
-        }).done(function(data) {
-            
-            $('#return').empty().load('/dashboard_panel/ #part_id_'+ id, function(response, status, xhr){
-                if(status == "success"){
-                    $('#return').children().children().css('display','block');
-                    add_bootstrap_popup();
-                }
-                jQuery('#page-load').remove();
-            });
-        });
+       var printthis = $(this).find('.show-descendants');
+       console.log(printthis);
+       /* shows as bullet list under the link */
+       //$(this).find('.show-descendants').show();
+       //$(this).find('.show-descendants').css('display','block');
+       var showdecendents = $(this).find('.show-descendants').html();
+       $(this).append(showdecendents).css('display','block');
     });//end click
 
     // NYNJ -> is the course available?
