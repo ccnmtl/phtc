@@ -1,14 +1,7 @@
-from django.conf.urls import patterns, include, url
-from registration.backends.default.views import RegistrationView
-from phtc.main.forms import UserRegistrationForm
-
-
-class RegistrationView(RegistrationView):
-    form_class = UserRegistrationForm
-
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.conf import settings
+from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 from django.views.generic import RedirectView
 admin.autodiscover()
@@ -55,9 +48,13 @@ urlpatterns = patterns(
         view='phtc.main.views.dashboard',
         name='dashboard'),
     (r'^dashboard_panel/',
-        'phtc.main.views.dashboard_panel'),
-    (r'^about/$',
-        'phtc.main.views.about_page'),
+        'phtc.main.views.dashboard_panel'),          
+     url(r'^help/$', TemplateView.as_view(
+        template_name='flatpages/help.html')),
+     url(r'^contact/$', TemplateView.as_view(
+        template_name='flatpages/contact.html')),
+     url(r'^about/$', TemplateView.as_view(
+        template_name='flatpages/about.html')),
     (r'^help/$',
      'phtc.main.views.help_page'),
     (r'^contact/$',
