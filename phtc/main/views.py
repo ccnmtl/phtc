@@ -54,96 +54,9 @@ def redirect_to_first_section_if_root(section, root):
             return HttpResponseRedirect(reverse("dashboard"))
 
 
-def send_nylearns_email(request, user, profile, module):
-    send_to_email = 'edlearn@health.state.ny.us'
-    (subject, from_email, to) = (
-        'PHTC - NYLearns Notification',
-        'NYC-LI-LTC Public Health Training Center <no-reply@lowernysphtc.org>',
-        send_to_email)
-    text_content = ''
-    username = profile.lname + ', ' + profile.fname
-    nylearns_userid = profile.nylearns_user_id
-    user_email = user.email
-    html = get_template('main/nylearns_email.html')
-    html_context = Context(
-        {
-            'username': username,
-            'module': module,
-            'nylearns_userid': nylearns_userid,
-            'user_email': user_email
-        })
-    html_content = html.render(html_context)
-
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
-
-
-def send_post_test_email(user, section, module, request):
-    profile = UserProfile.objects.get(user_id=user.id)
-    if profile.is_nylearns:
-        send_nylearns_email(request, user, profile, module)
-
-    (subject, from_email, to) = (
-        'Public Health Training Certificate',
-        'NYC-LI-LTC Public Health Training Center <no-reply@lowernysphtc.org>',
-        user.email)
-    text_content = ''
-    label = module.label
-    host = request.get_host()
-    abs_url = module.get_absolute_url()
-    html = get_template('main/completer_email.html')
-    html_context = Context(
-        {
-            'label': label,
-            'host': host,
-            'abs_url': abs_url
-        })
-    html_content = html.render(html_context)
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
-
-
 def page_post(request, section, module):
-    if request.POST.get('post_test') == "true":
-        send_post_test_email(request.user, section, module, request)
-        module.user_pagevisit(request.user, status="complete")
-        section.user_pagevisit(request.user, status="complete")
-
-    if request.user.is_anonymous():
-        return HttpResponse("you must login first")
-    # user has submitted a form. deal with it
-    if request.POST.get('action', '') == 'reset':
-        section.reset(request.user)
-        section.user_pagevisit(request.user, status="incomplete")
-        return HttpResponseRedirect(section.get_absolute_url())
-    proceed = section.submit(request.POST, request.user)
-    if proceed:
-        section.user_pagevisit(request.user, status="complete")
-        return HttpResponseRedirect(section.get_next().get_absolute_url())
-    elif request.POST.get('post_test') == "true":
-        # forward over to dashboard
-        return HttpResponseRedirect(reverse('dashboard'))
-    elif request.POST.get('pre_test') == "true":
-        # return HttpResponse(request.POST)
-        return HttpResponseRedirect(section.get_absolute_url())
-    else:
-        # giving them feedback before they proceed
-        return HttpResponseRedirect(section.get_absolute_url())
-
-
-def make_sure_module1_parts_are_allowed(module, user):
-
-    parts = module.get_children()
-    for part in parts:
-        v = part.get_uservisit(user)
-        if v:
-            if (v.status == "in_progress"
-                    and part.get_previous().get_uservisit(user)):
-                part.get_previous().user_pagevisit(user, status="complete")
-            else:
-                part.user_pagevisit(user, status="allowed")
+    # giving them feedback before they proceed
+    return HttpResponseRedirect(section.get_absolute_url())
 
 
 def is_module_one(module):
@@ -168,7 +81,6 @@ def is_mod_one(module):
             module == module.hierarchy.get_root().get_children()[0])
 
 
-@login_required
 @render_to('main/page.html')
 def page(request, path):
     section = get_section_from_path(path)
@@ -191,34 +103,6 @@ def page(request, path):
 
     # return page
     return page_dict
-
-
-def previous_section_handle_status(section, request, module):
-    if section.get_previous():
-        prev_section = section.get_previous()
-        prev_section_visit = prev_section.get_uservisit(request.user)
-        if (prev_section_visit
-                and prev_section_visit.status == "in_progress"
-                and not is_module(module, prev_section)):
-            prev_section.user_pagevisit(request.user, status="complete")
-        else:
-            # Need to catch whether a part has been flagged as "allowed"
-            upv = section.get_uservisit(request.user)
-            if upv:
-                prev_section_visit = part_flagged_as_allowed(upv)
-        # make sure user cannot type in url by hand to skip around
-        if not hand_type_secure(prev_section_visit, request, section):
-            section.user_pagevisit(request.user, status="incomplete")
-            return HttpResponseRedirect("/dashboard/?incomplete=true")
-
-
-def hand_type_secure(prev_section_visit, request, section):
-    if prev_section_visit:
-        return True
-    if request.user.is_staff:
-        section.user_pagevisit(request.user, status="in_progress")
-        return True
-    return False
 
 
 @login_required
@@ -293,7 +177,6 @@ def dashboard(request):
         return HttpResponseRedirect('/profile/?needs_edit=true/')
 
 
-@login_required
 @render_to('main/dashboard_panel.html')
 def dashboard_panel(request):
     return render_dashboard(request)
@@ -313,48 +196,16 @@ def render_dashboard(request):
 
     h = get_hierarchy("main")
     root = h.get_root()
-    last_session = h.get_user_section(request.user)
+    # last_session = h.get_user_section(request.user)
     dashboard_info = DashboardInfo.objects.all()
     module_type = ModuleType.objects.all()
     section_css = SectionCss.objects.all()
     # is_visited = user_visits(request)
     empty = ""
-    return dict(root=root, last_session=last_session,
+    return dict(root=root, # last_session=last_session,
                 dashboard_info=dashboard_info, empty=empty,
                 section_css=section_css,
                 module_type=module_type)
-
-
-def question_other(question, ev, response_list_count, qr):
-    counter = []
-    for val in response_list_count:
-        for res in ev['responses']:
-            response = res.value.strip(
-                ' \t\n\r').replace(" ", "_").lower()
-            if response == val[0]:
-                val = (val[0], val[1] + 1)
-        counter.append((question, val[0]))
-        counter.append(('# of Responses', val[1]))
-    qr.append(counter)
-    return qr
-
-
-def question_please_add(question, ev, qr):
-    comments = []
-    for i in range(len(ev['responses'])):
-        if not ev['responses'][i].value == '':
-            comments.append(
-                (question, ev['responses'][i].value))
-            # keep report uniform
-            comments.append(('', ''))
-    qr.append(comments)
-    return qr
-
-
-def is_question_of_interest(question, qoi):
-    for q in qoi:
-        if question.text.strip(' \t\n\r') == q:
-            return True
 
 
 @render_to('flatpages/about.html')
@@ -369,7 +220,7 @@ def help_page(request):
     return dict(flatpage=page)
 
 
-@render_to('flatpages/about.html')
+@render_to('flatpages/contact.html')
 def contact_page(request):
     page = FlatPage.objects.get(title="Contact")
     return dict(flatpage=page)

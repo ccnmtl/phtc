@@ -1,10 +1,8 @@
-from django.contrib.auth.decorators import login_required
+import simplejson
 from django.http import HttpResponse, HttpResponseForbidden
 from phtc.treatment_activity.models import TreatmentPath, TreatmentNode
-import simplejson
 
 
-@login_required
 def get_next_steps(request, path_id, node_id):
     if not request.is_ajax():
         return HttpResponseForbidden()
@@ -35,7 +33,6 @@ def get_next_steps(request, path_id, node_id):
                         content_type="application/json")
 
 
-@login_required
 def choose_treatment_path(request):
     """ This will soon be obsolete."""
     if not request.is_ajax() or request.method != "POST":

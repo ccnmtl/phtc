@@ -1,7 +1,7 @@
+from django import forms
 from django.db import models
 from django.contrib.contenttypes import generic
 from pagetree.models import PageBlock
-from django import forms
 from treebeard.mp_tree import MP_Node
 
 
