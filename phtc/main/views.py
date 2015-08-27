@@ -18,24 +18,8 @@ from phtc.main.models import DashboardInfo, UserProfile, ModuleType
 from phtc.main.models import SectionCss, NYLEARNS_Course_Map
 
 
-@render_to('registration/registration_form.html')
-def test_nylearns_username(request):
-    if request.POST:
-        username = request.POST.get('username')
-        try:
-            User.objects.get(username=username)
-            return HttpResponse(True)
-        except User.DoesNotExist:
-            return HttpResponse(False)
-    else:
-        return HttpResponse("POST only")
-
-
 @render_to('registration/nylearns_registration_form.html')
 def nylearns(request):
-    user_id = request.GET.get('user_id')
-    course = request.GET.get('course')
-    args = dict(user_id=user_id, course=course)
     form = UserRegistrationForm(initial={
         'is_nylearns': 'True',
         'nylearns_user_id': user_id,
@@ -56,121 +40,8 @@ def nylearns(request):
         except NYLEARNS_Course_Map.DoesNotExist:
             return HttpResponseRedirect(
                 '/dashboard/?course_not_available=true')
-
-    if request.method == "POST":
-        form = UserRegistrationForm()
-        username = request.POST.get('username')
-        try:
-            User.objects.get(username=username)
-            return HttpResponse(True)
-        except User.DoesNotExist:
-            return HttpResponse(False)
-        return render_to_response('registration/registration_form.html', form)
-
-    if not request.GET.get('has_account'):
-        form = AuthenticationForm()
-        c = RequestContext(request, {'form': form, 'args': args})
-        return render_to_response(
-            'registration/nylearns_login.html', c)
     else:
         return dict(form=form, args=args)
-
-
-@render_to('registration/nylearns_registration_form.html')
-def create_nylearns_user(request):
-    if request.POST and request.POST.get('nylearns_course_init'):
-        course = request.POST.get('nylearns_course_init')
-    else:
-        course = 'none'
-    if request.POST and request.POST.get('nylearns_user_id'):
-        user_id = request.POST.get('nylearns_user_id')
-    else:
-        user_id = 'none'
-    form = UserRegistrationForm(request.POST)
-    email = form.data["email"]
-    username = form.data["username"]
-    password = form.data["password1"]
-    args = dict(user_id=user_id, course=course)
-    # check if user or email exist and make sure pass is not blank
-    if (User.objects.filter(email=email).exists() or
-            User.objects.filter(username=username).exists() or
-            password == ""):
-        return dict(form=form, args=args)
-
-    else:
-        user = User.objects.create_user(username, email, password)
-        user.save()
-        userprofile = UserProfile.objects.create(user=user)
-
-    try:
-        userprofile.other_employment_location = form.data[
-            "other_employment_location"]
-    except:
-        pass
-
-    try:
-        userprofile.other_position_category = form.data[
-            "other_position_category"]
-    except:
-        pass
-
-    request.user.email = form.data["email"]
-    userprofile.is_nylearns = form.data["is_nylearns"]
-    userprofile.nylearns_user_id = form.data["nylearns_user_id"]
-    userprofile.nylearns_course_init = form.data["nylearns_course_init"]
-    userprofile.fname = form.data["fname"]
-    userprofile.lname = form.data["lname"]
-    userprofile.degree = form.data["degree"]
-    userprofile.sex = form.data["sex"]
-    userprofile.age = form.data["age"]
-    userprofile.origin = form.data["origin"]
-    userprofile.ethnicity = form.data["ethnicity"]
-    userprofile.degree = form.data["degree"]
-    userprofile.work_city = form.data["work_city"]
-    userprofile.work_state = form.data["work_state"]
-    userprofile.work_zip = form.data["work_zip"]
-    userprofile.employment_location = form.data["employment_location"]
-    userprofile.umc = form.data["umc"]
-    userprofile.position = form.data["position"]
-    userprofile.dept_health = form.data["dept_health"]
-    userprofile.geo_dept_health = form.data["geo_dept_health"]
-    userprofile.experience = form.data["experience"]
-    userprofile.rural = form.data["rural"]
-    userprofile.save()
-    user.is_active = True
-    user.save()
-    authenticated_user = authenticate(username=username, password=password)
-    login(request, authenticated_user)
-    return HttpResponseRedirect(
-        '/nylearns/?profile_created=true&course=' + course)
-
-
-@render_to('registration/nylearns_login.html')
-def nylearns_login(request):
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    course = request.GET.get('course')
-    user_id = request.GET.get('user_id')
-    form = AuthenticationForm(initial={'username': username})
-    if request.POST.get('args'):
-        args = request.POST.get('args')
-    else:
-        args = {'course': course, 'user_id': user_id}
-    if not request.GET.get('course') == '':
-        course = request.GET.get('course')
-    else:
-        course = 'none'
-    if request.method == "POST":
-        req = request.POST
-        if not req.get('username') == '' and not req.get('password') == '':
-            authenticated_user = authenticate(username=username,
-                                              password=password)
-            try:
-                login(request, authenticated_user)
-                return HttpResponseRedirect('/nylearns/?course=' + course)
-            except:
-                pass
-    return dict(form=form, errors=True, args=args)
 
 
 def redirect_to_first_section_if_root(section, root):
@@ -181,45 +52,6 @@ def redirect_to_first_section_if_root(section, root):
             # users will redirect to their dashboard
             # - if not logged in will goto login page
             return HttpResponseRedirect(reverse("dashboard"))
-
-
-def update_status(section, user, module):
-    if user.is_anonymous():
-        return
-    prev_status = False
-    prev_section = section.get_previous()
-    if prev_section:
-        upv = prev_section.get_uservisit(user)
-        if upv:
-            prev_status = upv.status
-    uv = section.get_uservisit(user)
-    if not uv and not prev_status:
-        return
-    if not is_module(module, section):
-        status = calculate_status(prev_status, uv)
-        section.user_pagevisit(user, status=status)
-
-
-def calculate_status(prev_status, uv):
-    if uv:
-        if prev_status:
-            if prev_status == "complete" or prev_status == "in_progress":
-                return "in_progress"
-        if uv.status == "allowed" or uv.status == "in_progress":
-            return "in_progress"
-        elif uv.status == "complete":
-            return "complete"
-        else:
-            return "incomplete"
-    else:
-        if prev_status == "in_progress":
-            return "in_progress"
-        else:
-            return "incomplete"
-
-
-def user_visits(request):
-    return UserPageVisit.objects.filter(user=request.user)
 
 
 def send_nylearns_email(request, user, profile, module):
@@ -323,20 +155,6 @@ def is_module(module, section):
     return module.id == section.id
 
 
-def process_dashboard_ajax(user, section, module):
-    upv = module.get_uservisit(user)
-    if upv and upv.status == "complete":
-        if not is_module_one(module):
-            for sec in module.get_children():
-                sec.user_pagevisit(user, status="complete")
-            return reverse("dashboard")
-    else:
-        module.user_pagevisit(user, status="in_progress")
-        make_sure_parts_are_allowed(module, user, section,
-                                    is_module(module, section))
-        return reverse("dashboard")
-
-
 def has_user_prof(request):
     try:
         request.user.userprofile
@@ -353,56 +171,23 @@ def is_mod_one(module):
 @login_required
 @render_to('main/page.html')
 def page(request, path):
-    if not has_user_prof(request):
-        return HttpResponseRedirect("/dashboard/")
-
     section = get_section_from_path(path)
     root = section.hierarchy.get_root()
     module = section.get_module()
-    is_visited = user_visits(request)
     page_dict = dict(
         section=section,
         module=module,
-        is_visited=is_visited,
-        needs_submit=section.needs_submit(),
-        is_submitted=section.submitted(request.user),
         modules=root.get_children(),
         root=section.hierarchy.get_root(),
         is_mod_one=is_mod_one(module),
     )
 
-    # dashboard ajax
-    if request.POST.get('module'):
-        return HttpResponse(
-            process_dashboard_ajax(request.user, section, module))
-
-    # is the user allowed?
-    if request.user.is_anonymous():
-        section.user_pagevisit(request.user)
-
     rv = redirect_to_first_section_if_root(section, root)
     if rv:
         return rv
 
-    # if this is a deep link to the module make sure ro go to dashboard
-    # as to not break the locking
-    if (request.GET.get('deep_link') and request.GET.get('deep_link') == "true"
-            and not(is_module(module, section))):
-        return HttpResponseRedirect('/dashboard/')
-
-    # is the page already completed? If so, do not update status
-    if(section.get_uservisit(request.user) and
-       section.get_uservisit(request.user).status == "complete"):
-        return page_dict
-    else:
-        update_status(section, request.user, module)
-
     if request.method == "POST":
         return page_post(request, section, module)
-
-    # test if there is a previous section - if so then
-    # decide whether to change status
-    previous_section_handle_status(section, request, module)
 
     # return page
     return page_dict
@@ -482,105 +267,12 @@ def edit_page(request, path):
         return HttpResponseRedirect(reverse("dashboard"))
 
 
-@render_to('main/instructor_page.html')
-def instructor_page(request, path):
-    return dict()
-
-
 def exporter(request):
     h = get_section_from_path('/').hierarchy
     data = h.as_dict()
     resp = HttpResponse(dumps(data))
     resp['Content-Type'] = 'application/json'
     return resp
-
-
-@login_required
-@render_to('main/profile.html')
-def get_user_profile(request):
-    try:
-        profile = UserProfile.objects.get(user=request.user)
-        form = UserRegistrationForm(
-            initial={
-                'fname': profile.fname,
-                'lname': profile.lname,
-                'username': request.user.username,
-                'email': request.user.email,
-                'sex': profile.sex,
-                'age': profile.age,
-                'origin': profile.origin,
-                'ethnicity': profile.ethnicity,
-                'degree': profile.degree,
-                'work_city': profile.work_city,
-                'work_state': profile.work_state,
-                'work_zip': profile.work_zip,
-                'umc': profile.umc,
-                'employment_location': profile.employment_location,
-                'other_employment_location': profile.other_employment_location,
-                'position': profile.position,
-                'other_position_category': profile.other_position_category,
-                'dept_health': profile.dept_health,
-                'geo_dept_health': profile.geo_dept_health,
-                'experience': profile.experience,
-                'rural': profile.rural
-            })
-        return dict(profile=profile, form=form)
-    except UserProfile.DoesNotExist:
-        form = UserRegistrationForm(
-            initial={
-                'username': request.user.username,
-                'email': request.user.email,
-            })
-    return dict(form=form, user=request.user)
-
-
-@login_required
-def update_user_profile(request):
-    if request.method == "POST":
-        form = UserRegistrationForm(request.POST)
-        request.user.username = form.data["username"]
-        if form.data["password1"] != "":
-            request.user.set_password(form.data["password1"])
-        try:
-            userprofile = UserProfile.objects.get(user=request.user)
-        except UserProfile.DoesNotExist:
-            userprofile = UserProfile.objects.create(user=request.user)
-
-        try:
-            userprofile.other_employment_location = form.data[
-                "other_employment_location"]
-        except:
-            pass
-
-        try:
-            userprofile.other_position_category = form.data[
-                "other_position_category"]
-        except:
-            pass
-        request.user.email = form.data["email"]
-        userprofile.fname = form.data["fname"]
-        userprofile.lname = form.data["lname"]
-        userprofile.degree = form.data["degree"]
-        userprofile.sex = form.data["sex"]
-        userprofile.age = form.data["age"]
-        userprofile.origin = form.data["origin"]
-        userprofile.ethnicity = form.data["ethnicity"]
-        userprofile.degree = form.data["degree"]
-        userprofile.work_city = form.data["work_city"]
-        userprofile.work_state = form.data["work_state"]
-        userprofile.work_zip = form.data["work_zip"]
-        userprofile.employment_location = form.data["employment_location"]
-        userprofile.umc = form.data["umc"]
-        userprofile.position = form.data["position"]
-        userprofile.dept_health = form.data["dept_health"]
-        userprofile.geo_dept_health = form.data["geo_dept_health"]
-        userprofile.experience = form.data["experience"]
-        userprofile.rural = form.data["rural"]
-        userprofile.save()
-        request.user.save()
-        return HttpResponseRedirect('/profile/?saved=true/')
-    else:
-        return HttpResponseRedirect('/profile/')
 
 
 @render_to('main/dashboard.html')
@@ -607,33 +299,6 @@ def dashboard_panel(request):
     return render_dashboard(request)
 
 
-@login_required
-@render_to('main/certificate.html')
-def certificate(request, path):
-    section = get_section_from_path(path)
-    root = section.hierarchy.get_root()
-    module = section.get_module()
-    is_visited = user_visits(request)
-    # make sure this page is only viewable if the module is completed.
-    if (module.get_uservisit(request.user)
-            and module.get_uservisit(request.user).status == "complete"):
-        return dict(
-            section=section,
-            module=module,
-            is_visited=is_visited,
-            needs_submit=section.needs_submit(),
-            is_submitted=section.submitted(request.user),
-            modules=root.get_children(),
-            root=section.hierarchy.get_root(),
-            user=request.user,
-            profile=UserProfile.objects.get(user=request.user),
-            date=UserPageVisit.objects.get(user=request.user,
-                                           section=module).last_visit
-        )
-    else:
-        return HttpResponseRedirect('/dashboard/')
-
-
 def render_dashboard(request):
     try:
         next_path = request.META['HTTP_REFERER']
@@ -652,11 +317,11 @@ def render_dashboard(request):
     dashboard_info = DashboardInfo.objects.all()
     module_type = ModuleType.objects.all()
     section_css = SectionCss.objects.all()
-    is_visited = user_visits(request)
+    # is_visited = user_visits(request)
     empty = ""
     return dict(root=root, last_session=last_session,
                 dashboard_info=dashboard_info, empty=empty,
-                is_visited=is_visited, section_css=section_css,
+                section_css=section_css,
                 module_type=module_type)
 
 
@@ -690,3 +355,21 @@ def is_question_of_interest(question, qoi):
     for q in qoi:
         if question.text.strip(' \t\n\r') == q:
             return True
+
+
+@render_to('flatpages/about.html')
+def about_page(request):
+    page = FlatPage.objects.get(title="About")
+    return dict(flatpage=page)
+
+
+@render_to('flatpages/help.html')
+def help_page(request):
+    page = FlatPage.objects.get(title="Help")
+    return dict(flatpage=page)
+
+
+@render_to('flatpages/about.html')
+def contact_page(request):
+    page = FlatPage.objects.get(title="Contact")
+    return dict(flatpage=page)

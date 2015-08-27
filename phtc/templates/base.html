@@ -131,18 +131,13 @@ shieldbrowser({"Chrome":13,"Firefox":6,"MSIE":9,"Safari":5});
   {% endcomment %}
   <footer class="footer">
 	<ul>
-	<li>
-	<a href="/about/">About</a>
-	</li>
-	<li>
-	<a href="/help/">Help</a>
-	</li>
-	<li>
-	<a href="/contact/">Contact</a>
-	</li>
+	  <li><a href="/about/">About</a></li>
+	  <li><a href="/help/">Help</a></li>
+	  <li><a href="/contact/">Contact</a></li>
 	</ul>
-  <p>Principal support for the PHTC is provided through a grant from<br />
-the Health Resources and Services Administration, U.S. Department of Health and Human Services.</p>
+    <p>Principal support for the PHTC is provided through a grant from<br />
+    the Health Resources and Services Administration, U.S. Department of Health and Human Services.
+    </p>
   </footer>
 {% endblock %}
 
@@ -182,18 +177,15 @@ the Health Resources and Services Administration, U.S. Department of Health and 
 if(window.phtcInputFormCheck){
   PHTC.formInputLength();
 }
-  if (PHTC.getUrlVars()['incomplete'] ){
-    var message = "You must complete the previous part in order to continue. \n\n We redirected you back to the dashboard so you can check your status and remeber where you left off."
-    alert(message);
-  }
+  
   window.PHTC = PHTC;
 </script>
 {% if STAGING_ENV %}
-<div class="alert alert-error" style="position: fixed; bottom: 0px;">
-<h4>Warning: Staging Site</h4>
-<p>You are viewing a staging version of this site, not the production site.</p>
-<p>This site was last updated on: <b>{{STAGING_DEPLOY_TIME}}</b></p>
-</div>
+  <div class="alert alert-error" style="position: fixed; bottom: 0px;">
+    <h4>Warning: Staging Site</h4>
+    <p>You are viewing a staging version of this site, not the production site.</p>
+    <p>This site was last updated on: <b>{{STAGING_DEPLOY_TIME}}</b></p>
+  </div>
 {% endif %}
 </body>
 </html>

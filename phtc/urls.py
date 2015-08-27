@@ -27,21 +27,7 @@ urlpatterns = patterns(
     logout_page,
     admin_logout_page,
     auth_urls,
-    url(r'^registration/register/$', RegistrationView.as_view(),
-        name='registration_register'),
-    (r'^register/complete/$', RedirectView.as_view(url='/dashboard/')),
-    (r'^registration/', include('registration.backends.default.urls')),
-
-    url(r'^activate/complete/$', TemplateView.as_view(
-        template_name='registration/activation_complete.html'),
-        name='registration_activation_complete'),
-    # (r'^test_nylearns_username/$', 'phtc.main.views.test_nylearns_username'),
-    # (r'^create_nylearns_user/$', 'phtc.main.views.create_nylearns_user'),
-    (r'^nylearns_login/$', 'phtc.main.views.nylearns_login'),
     (r'^nylearns/$', 'phtc.main.views.nylearns'),
-    (r'^profile/$', 'phtc.main.views.get_user_profile'),
-    (r'^update_profile/$',
-     'phtc.main.views.update_user_profile'),
     (r'^admin/', include(admin.site.urls)),
     (r'^accounts/profile/$', RedirectView.as_view(url='/dashboard/')),
     url(r'^dashboard/',
@@ -49,18 +35,10 @@ urlpatterns = patterns(
         name='dashboard'),
     (r'^dashboard_panel/',
         'phtc.main.views.dashboard_panel'),          
-     url(r'^help/$', TemplateView.as_view(
-        template_name='flatpages/help.html')),
-     url(r'^contact/$', TemplateView.as_view(
-        template_name='flatpages/contact.html')),
-     url(r'^about/$', TemplateView.as_view(
-        template_name='flatpages/about.html')),
     (r'^help/$',
      'phtc.main.views.help_page'),
     (r'^contact/$',
      'phtc.main.views.contact_page'),
-    (r'^certificate/(?P<path>.*)$',
-     'phtc.main.views.certificate'),
     (r'^_stats/', TemplateView.as_view(template_name='stats.html')),
     (r'^uploads/(?P<path>.*)$',
      'django.views.static.serve',
@@ -73,8 +51,6 @@ urlpatterns = patterns(
     # these need to be last
     (r'^edit/(?P<path>.*)$', 'phtc.main.views.edit_page',
      {}, 'edit-page'),
-    (r'^instructor/(?P<path>.*)$',
-     'phtc.main.views.instructor_page'),
 
     # override the default urls for pasword
     url(r'^password/change/$',
@@ -95,8 +71,5 @@ urlpatterns = patterns(
     url(r'^password/reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
         auth_views.password_reset_confirm,
         name='password_reset_confirm'),
-
-    # and now add the registration urls
-    url(r'', include('registration.backends.default.urls')),
     (r'^(?P<path>.*)$', 'phtc.main.views.page'),
 )
