@@ -1,8 +1,6 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
 from phtc.main.models import DashboardInfo
-from phtc.main.models import ModuleType, SectionCss, user_created
-from phtc.main.models import UserProfile
+from phtc.main.models import ModuleType, SectionCss
 from pagetree.models import Hierarchy
 
 

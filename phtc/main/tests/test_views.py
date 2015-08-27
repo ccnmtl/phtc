@@ -3,8 +3,6 @@ from django.test.client import Client
 from django.contrib.auth.models import User
 from phtc.main.models import UserProfile
 from pagetree.models import Hierarchy
-from .test_models import FakeRequest
-from phtc.main.models import user_created
 
 
 class SimpleViewTest(TestCase):
