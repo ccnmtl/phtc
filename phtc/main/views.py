@@ -660,24 +660,6 @@ def render_dashboard(request):
                 module_type=module_type)
 
 
-@render_to('flatpages/about.html')
-def about_page(request):
-    page = FlatPage.objects.get(title="About")
-    return dict(flatpage=page)
-
-
-@render_to('flatpages/help.html')
-def help_page(request):
-    page = FlatPage.objects.get(title="Help")
-    return dict(flatpage=page)
-
-
-@render_to('flatpages/about.html')
-def contact_page(request):
-    page = FlatPage.objects.get(title="Contact")
-    return dict(flatpage=page)
-
-
 def question_other(question, ev, response_list_count, qr):
     counter = []
     for val in response_list_count:
