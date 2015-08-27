@@ -1,42 +1,12 @@
 from json import dumps
 from annoying.decorators import render_to
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.models import User
 from django.contrib.flatpages.models import FlatPage
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from pagetree.helpers import get_section_from_path, get_hierarchy
-from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo, UserProfile, ModuleType
-from phtc.main.models import SectionCss, NYLEARNS_Course_Map
-
-
-@render_to('registration/nylearns_registration_form.html')
-def nylearns(request):
-    form = UserRegistrationForm(initial={
-        'is_nylearns': 'True',
-        'nylearns_user_id': user_id,
-        'nylearns_course_init': course
-    })
-
-    if not request.user.is_anonymous():
-        course = request.GET.get('course')
-        try:
-            course_map = NYLEARNS_Course_Map.objects.get(courseID=course)
-            url = course_map.phtc_url.split('/')
-            # courses must be mapped to first page in module
-            course_url = url[1] + '/' + url[2]
-            section = get_section_from_path(course_url)
-            module = section.get_module()
-            process_dashboard_ajax(request.user, section, module)
-            return HttpResponseRedirect(course_map.phtc_url)
-        except NYLEARNS_Course_Map.DoesNotExist:
-            return HttpResponseRedirect(
-                '/dashboard/?course_not_available=true')
-    else:
-        return dict(form=form, args=args)
+from phtc.main.models import SectionCss
 
 
 def redirect_to_first_section_if_root(section, root):
@@ -161,7 +131,6 @@ def dashboard(request):
     not be courses'''
     if request.user.is_anonymous():
         return render_dashboard(request)
-       
     try:
         UserProfile.objects.get(user=request.user).fname
         return render_dashboard(request)
@@ -194,7 +163,7 @@ def render_dashboard(request):
     section_css = SectionCss.objects.all()
     # is_visited = user_visits(request)
     empty = ""
-    return dict(root=root, # last_session=last_session,
+    return dict(root=root,  # last_session=last_session,
                 dashboard_info=dashboard_info, empty=empty,
                 section_css=section_css,
                 module_type=module_type)
