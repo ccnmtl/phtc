@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from phtc.main.models import DashboardInfo, NYLEARNS_Course_Map
+from phtc.main.models import DashboardInfo
 from phtc.main.models import ModuleType, SectionCss, user_created
 from phtc.main.models import UserProfile
 from pagetree.models import Hierarchy
@@ -13,13 +13,6 @@ class DashboardInfoTest(TestCase):
         d = DashboardInfo.objects.create(dashboard=root, info="")
         f = d.edit_form()
         self.assertTrue(f is not None)
-
-
-class NYLEARNS_Course_MapTest(TestCase):
-    def test_unicode(self):
-        ncm = NYLEARNS_Course_Map.objects.create(
-            courseID="foo", phtc_url="bar")
-        self.assertEqual(str(ncm), "url path:bar")
 
 
 class ModuleTypeTest(TestCase):
@@ -60,23 +53,3 @@ class FakeRequest(object):
         nylearns_course_init="nylearns_course_init",
         nylearns_user_id="nylearns_user_id",
     )
-
-
-class UserCreatedTest(TestCase):
-    def test_user_created(self):
-        sender = None
-        user = User.objects.create(username="testuser")
-        req = FakeRequest()
-        user_created(sender, user, req)
-        up = UserProfile.objects.get(user=user)
-        self.assertEqual(str(up), "testuser's profile")
-
-    def test_user_created_optional_fields(self):
-        sender = None
-        user = User.objects.create(username="testuser")
-        req = FakeRequest()
-        req.POST["other_position_category"] = "other position"
-        req.POST["other_location"] = "other location"
-        user_created(sender, user, req)
-        up = UserProfile.objects.get(user=user)
-        self.assertEqual(str(up), "testuser's profile")
