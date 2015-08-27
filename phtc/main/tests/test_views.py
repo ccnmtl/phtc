@@ -13,7 +13,7 @@ class SimpleViewTest(TestCase):
 
     def test_index(self):
         result = self.c.get("/")
-        self.assertEqual(result.status_code, 302)
+        self.assertEqual(result.status_code, 200)
 
 
 class LoggedInTest(TestCase):
@@ -65,20 +65,6 @@ class LoggedInTest(TestCase):
         root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
         r = self.c.post("/socialwork/introduction/")
         self.assertEqual(r.status_code, 302)
-
-    def test_page_post_then_visit(self):
-        UserProfile.objects.create(user=self.user)
-        h = Hierarchy.objects.create(name="main", base_url="/")
-        root = h.get_root()
-        root.add_child_section_from_dict(
-            {'label': "One", 'slug': "socialwork",
-             'children': [{'label': "Three", 'slug': "introduction"}]
-             })
-        root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
-        r = self.c.post("/socialwork/introduction/")
-        self.assertEqual(r.status_code, 302)
-        r = self.c.post("/socialwork/introduction/")
-        self.assertEqual(r.status_code, 200)
 
     def test_edit_page(self):
         h = Hierarchy.objects.create(name="main", base_url="/")
