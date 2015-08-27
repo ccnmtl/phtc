@@ -5,14 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.flatpages.models import FlatPage
-from django.core.mail import EmailMultiAlternatives
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render_to_response
-from django.template.loader import get_template
-from django.template import Context, RequestContext
 from pagetree.helpers import get_section_from_path, get_hierarchy
-from pagetree.models import Section, UserPageVisit
 from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo, UserProfile, ModuleType
 from phtc.main.models import SectionCss, NYLEARNS_Course_Map
@@ -164,17 +159,14 @@ def dashboard(request):
     '''I assume if we are getting rid of state, then the only
     users that should be logging in are admins and there should
     not be courses'''
-    # test if the user profile has been completed
-    if request.GET and request.GET.get('course_not_available'):
-        # return HttpResponseRedirect('/profile/')
-        request.META['HTTP_REFERER'] = ''
-        '''This tells you the course doesn't exist and you need to select a different one'''
-        HttpResponseRedirect('/dashboard/?course_not_available=true')
+    if request.user.is_anonymous():
+        return render_dashboard(request)
+       
     try:
         UserProfile.objects.get(user=request.user).fname
         return render_dashboard(request)
     except UserProfile.DoesNotExist:
-        return HttpResponseRedirect('/profile/?needs_edit=true/')
+        return HttpResponseRedirect('/dashboard/')
 
 
 @render_to('main/dashboard_panel.html')

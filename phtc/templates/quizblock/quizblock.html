@@ -2,36 +2,18 @@
 {% load getresponse %}
 {{ block.description|markdown }}
 
-{% if request.user.is_anonymous %}
-  <p class="warning">You must be logged in to view this content</p>
-{% else %}
-
-{% for question in block.question_set.all %}
-  {% include 'quizblock/question.html' %}
-{% endfor %}
+  {% for question in block.question_set.all %}
+    {% include 'quizblock/question.html' %}
+  {% endfor %}
+  
 	{% if block.matching %}
 		<script src="{{STATIC_URL}}js/matching.js"></script>
 	{% endif %}
-	{% if is_submitted  %}
-	{% else %}
-		{% if block.pre_test %}
-			<script src="{{STATIC_URL}}js/pre_test.js"></script>
-			<script src="{{STATIC_URL}}js/required_answers.js"></script>
-		{% endif %}
-	{% endif %}
-	{% if is_submitted  %}
-	{% else %}
-		{% if block.post_test %}
-			<script src="{{STATIC_URL}}js/post_test.js"></script>
-			<script src="{{STATIC_URL}}js/required_answers.js"></script>
-		{% endif %}
-	{% endif %}
-	{% if is_submitted  %}
-	{% else %}
-		{% if block.reading_exercise %}
+	
+    {% if block.reading_exercise %}
 			<script src="{{STATIC_URL}}js/reading_exercise.js"></script>
-		{% endif %}
 	{% endif %}
+
 	{% if block.rhetorical %}
 		{% if block.feedback%}
 			<script src="{{STATIC_URL}}js/feedback.js"></script>
@@ -40,4 +22,3 @@
 		{% endif %}
 	{% endif %}	
 
-{% endif %}
