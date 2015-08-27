@@ -48,9 +48,7 @@ jQuery(document).ready(function(){
     ** Module/Part UI 
     */
     $('.module').click(function(event){
-    	console.log("show module");
        var printthis = $(this).find('.show-descendants');
-       console.log(printthis);
        /* shows as bullet list under the link */
        //$(this).find('.show-descendants').show();
        //$(this).find('.show-descendants').css('display','block');
