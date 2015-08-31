@@ -47,9 +47,12 @@ jQuery(document).ready(function(){
     /*
     ** Module/Part UI 
     */
-    $('.module').mouseover(function(event){
-    	$(this).find('.show-descendants').css('display','block').mouseout(function() { 
+    $('.module').mouseover(function(event)
+    {
+    	$(this).find('.show-descendants').css('display','block').mouseout(function() 
+    	{ 
     		$(this).css('display','none');
+    	});
     });
     	
 
