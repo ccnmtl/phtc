@@ -47,14 +47,11 @@ jQuery(document).ready(function(){
     /*
     ** Module/Part UI 
     */
-    $('.module').click(function(event){
-       var printthis = $(this).find('.show-descendants');
-       /* shows as bullet list under the link */
-       //$(this).find('.show-descendants').show();
-       //$(this).find('.show-descendants').css('display','block');
-       var showdecendents = $(this).find('.show-descendants').html();
-       $(this).append(showdecendents).css('display','block');
-    });//end click
+    $('.module').mouseover(function(event){
+    	$(this).find('.show-descendants').css('display','block').mouseout(function() { 
+    		$(this).css('display','none');
+    });
+    	
 
     // NYNJ -> is the course available?
     if (PHTC.getUrlVars().course_not_available === "true"){
