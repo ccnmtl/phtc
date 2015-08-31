@@ -44,18 +44,6 @@ jQuery(document).ready(function(){
     }
     add_bootstrap_popup();
 
-    /*
-    ** Module/Part UI 
-    */
-    $('.module').mouseover(function(event)
-    {
-    	$(this).find('.show-descendants').css('display','block').mouseout(function() 
-    	{ 
-    		$(this).css('display','none');
-    	});
-    });
-    	
-
     // NYNJ -> is the course available?
     if (PHTC.getUrlVars().course_not_available === "true"){
         jQuery('#myModal').modal('toggle');

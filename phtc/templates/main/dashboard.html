@@ -18,6 +18,7 @@
 
 <h1 id="dashboard-header">Online Modules</h1>
 
+
 <div id="dashboard-toc">
   <div id="modules">
     {% for module in root.get_children %}
@@ -26,21 +27,21 @@
 		 			{% ifequal module.id css.section_css_id  %}
 		 				{{ css.css_field }}
 		 			{% endifequal %}
-		 		{% endfor %}'
+		 		{% endfor %} dropdown'
 		  id="{{ module.id }}">
 	      {%for type in module_type%}
 	 		{% ifequal module.id type.module_type_id %}
 				<span class='hide {{ type.info }}'>&nbsp;</span>
 	 		{% endifequal %}
 		  {% endfor %}
-		  <a class="show-module" rel="{{ module.get_absolute_url }}" href="javascript:void(0);">{{ module.label }}</a>
+		  <a class="show-module dropdown-toggle" data-toggle="dropdown" rel="{{ module.get_absolute_url }}" href="javascript:void(0);">{{ module.label }}<span class="caret"></span></a>
 		  <div class="divclearfix"></div>
-		  <div class="show-descendants" style="display:none">
-		    <ul>
+		  <div class="show-descendants">
+		    <ul class="dropdown-menu">
             {% for s in module.get_descendants %}
               {% ifequal s.id module.id %}
               {% else %}
-                <li class="menu-{{s.depth}}">
+                <li class="menu-{{s.depth}}" style="list-style-type: none;">
                   {% ifnotequal s.id section.id %}
                     <a href="{{menu_base}}{{s.get_absolute_url}}">
                   {% else %}
