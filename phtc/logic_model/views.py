@@ -1,4 +1,4 @@
-import simplejson
+import json
 from django.http import HttpResponse
 from phtc.logic_model.models import Column, Scenario, GamePhase
 from phtc.logic_model.models import ActivePhase, BoxColor
@@ -22,5 +22,5 @@ def settings(request):
     }
 
     return HttpResponse(
-        simplejson.dumps(the_settings, indent=2),
+        json.dumps(the_settings, indent=2),
         content_type="application/json")
