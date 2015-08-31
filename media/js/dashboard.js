@@ -47,28 +47,14 @@ jQuery(document).ready(function(){
     /*
     ** Module/Part UI 
     */
-    $('.show-module').click(function(){
-        $('.show-module').parent().removeClass('active');
-        $(this).parent().toggleClass('active');
-        var link = $(this).attr('rel');
-        var id = $(this).parent().attr('id');
-        jQuery('.content').append('<div id="page-load"><h1>Loading...</h1</div>');
-        $.ajax({
-            url: link,
-            mod_id: id,
-            type: "POST",
-            data: { module: link, mod_id: id }
-        }).done(function(data) {
-            
-            $('#return').empty().load('/dashboard_panel/ #part_id_'+ id, function(response, status, xhr){
-                if(status == "success"){
-                    $('#return').children().children().css('display','block');
-                    add_bootstrap_popup();
-                }
-                jQuery('#page-load').remove();
-            });
-        });
-    });//end click
+    $('.module').mouseover(function(event)
+    {
+    	$(this).find('.show-descendants').css('display','block').mouseout(function() 
+    	{ 
+    		$(this).css('display','none');
+    	});
+    });
+    	
 
     // NYNJ -> is the course available?
     if (PHTC.getUrlVars().course_not_available === "true"){

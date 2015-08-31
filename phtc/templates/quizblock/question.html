@@ -1,8 +1,8 @@
 {% load markup %}
 {% load getresponse %}
-
+{% comment %}
 {% getquestionresponse question as response %}
-
+{% endcomment %}
 <div class="cases">
   {{question.intro_text|markdown}}
 

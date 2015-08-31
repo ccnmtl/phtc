@@ -1,14 +1,7 @@
-from django.conf.urls import patterns, include, url
-from registration.backends.default.views import RegistrationView
-from phtc.main.forms import UserRegistrationForm
-
-
-class RegistrationView(RegistrationView):
-    form_class = UserRegistrationForm
-
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.conf import settings
+from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 from django.views.generic import RedirectView
 admin.autodiscover()
@@ -34,22 +27,6 @@ urlpatterns = patterns(
     logout_page,
     admin_logout_page,
     auth_urls,
-    url(r'^registration/register/$', RegistrationView.as_view(),
-        name='registration_register'),
-    (r'^register/complete/$', RedirectView.as_view(url='/dashboard/')),
-    (r'^registration/', include('registration.backends.default.urls')),
-
-    url(r'^activate/complete/$', TemplateView.as_view(
-        template_name='registration/activation_complete.html'),
-        name='registration_activation_complete'),
-    (r'^test_nylearns_username/$', 'phtc.main.views.test_nylearns_username'),
-    (r'^create_nylearns_user/$', 'phtc.main.views.create_nylearns_user'),
-    (r'^nylearns_login/$', 'phtc.main.views.nylearns_login'),
-    (r'^nylearns/$', 'phtc.main.views.nylearns'),
-    (r'^profile/$', 'phtc.main.views.get_user_profile'),
-    (r'^update_profile/$',
-     'phtc.main.views.update_user_profile'),
-    (r'^reports/$', 'phtc.main.views.reports'),
     (r'^admin/', include(admin.site.urls)),
     (r'^accounts/profile/$', RedirectView.as_view(url='/dashboard/')),
     url(r'^dashboard/',
@@ -57,14 +34,10 @@ urlpatterns = patterns(
         name='dashboard'),
     (r'^dashboard_panel/',
         'phtc.main.views.dashboard_panel'),
-    (r'^about/$',
-        'phtc.main.views.about_page'),
     (r'^help/$',
      'phtc.main.views.help_page'),
     (r'^contact/$',
      'phtc.main.views.contact_page'),
-    (r'^certificate/(?P<path>.*)$',
-     'phtc.main.views.certificate'),
     (r'^_stats/', TemplateView.as_view(template_name='stats.html')),
     (r'^uploads/(?P<path>.*)$',
      'django.views.static.serve',
@@ -77,8 +50,6 @@ urlpatterns = patterns(
     # these need to be last
     (r'^edit/(?P<path>.*)$', 'phtc.main.views.edit_page',
      {}, 'edit-page'),
-    (r'^instructor/(?P<path>.*)$',
-     'phtc.main.views.instructor_page'),
 
     # override the default urls for pasword
     url(r'^password/change/$',
@@ -99,8 +70,5 @@ urlpatterns = patterns(
     url(r'^password/reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
         auth_views.password_reset_confirm,
         name='password_reset_confirm'),
-
-    # and now add the registration urls
-    url(r'', include('registration.backends.default.urls')),
     (r'^(?P<path>.*)$', 'phtc.main.views.page'),
 )

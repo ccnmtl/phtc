@@ -14,7 +14,7 @@ class BasicTest(TestCase):
 
     def test_settings_get(self):
         response = self.c.get("/_logic_model/settings/")
-        self.assertEquals(response.status_code, 403)
+        self.assertEquals(response.status_code, 200)
 
     def test_settings_post_no_aps(self):
         response = self.c.post(

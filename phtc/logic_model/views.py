@@ -1,14 +1,10 @@
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseForbidden
+import json
+from django.http import HttpResponse
 from phtc.logic_model.models import Column, Scenario, GamePhase
 from phtc.logic_model.models import ActivePhase, BoxColor
-import simplejson
 
 
-@login_required
 def settings(request):
-    if not request.is_ajax() or request.method != "POST":
-        return HttpResponseForbidden()
 
     columns_in_each_phase = {}
     for ap in ActivePhase.objects.all():
@@ -26,5 +22,5 @@ def settings(request):
     }
 
     return HttpResponse(
-        simplejson.dumps(the_settings, indent=2),
+        json.dumps(the_settings, indent=2),
         content_type="application/json")

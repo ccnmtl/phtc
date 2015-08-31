@@ -6,18 +6,7 @@
   {% else %}
   <li class="menu-{{s.depth}}">
     {% ifnotequal s.id section.id %}
-      {% if request.user.is_staff %}
         <a href="{{menu_base}}{{s.get_absolute_url}}">
-        {% else %}
-        {% for v in is_visited %}
-          {% ifequal s.id v.section_id %}
-              {% ifequal v.status "incomplete" %}
-              {% else %}
-              <a href="{{menu_base}}{{s.get_absolute_url}}">
-              {% endifequal %}
-          {% endifequal %}
-        {% endfor %}
-      {% endif %}
     {% else %}
        <b>
     {% endifnotequal %}
