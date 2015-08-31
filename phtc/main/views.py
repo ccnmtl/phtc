@@ -157,13 +157,11 @@ def render_dashboard(request):
 
     h = get_hierarchy("main")
     root = h.get_root()
-    # last_session = h.get_user_section(request.user)
     dashboard_info = DashboardInfo.objects.all()
     module_type = ModuleType.objects.all()
     section_css = SectionCss.objects.all()
-    # is_visited = user_visits(request)
     empty = ""
-    return dict(root=root,  # last_session=last_session,
+    return dict(root=root,
                 dashboard_info=dashboard_info, empty=empty,
                 section_css=section_css,
                 module_type=module_type)
