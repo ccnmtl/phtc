@@ -1,3 +1,4 @@
+import simplejson
 from django.http import HttpResponse
 from phtc.logic_model.models import Column, Scenario, GamePhase
 from phtc.logic_model.models import ActivePhase, BoxColor
