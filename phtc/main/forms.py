@@ -51,10 +51,10 @@ class UserRegistrationForm(RegistrationForm):
                 ('Please Select', 'Please Select'),
                 ('American Indian or Alaskan Native',
                  'American Indian or Alaskan Native'),
-                (('Asian (including Chinese, Filipino, Japanese, '
-                  + 'Korean, Asian Indian, or Thai)'),
-                 ('Asian (including Chinese, Filipino, Japanese, '
-                  + 'Korean, Asian Indian, or Thai)')),
+                (('Asian (including Chinese, Filipino, Japanese, ' +
+                  'Korean, Asian Indian, or Thai)'),
+                 ('Asian (including Chinese, Filipino, Japanese, ' +
+                  'Korean, Asian Indian, or Thai)')),
                 ('Asian (other)', 'Asian (other)'),
                 ('Black or African-American',
                  'Black or African-American'),

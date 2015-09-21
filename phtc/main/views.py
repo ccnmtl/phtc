@@ -148,8 +148,8 @@ def render_dashboard(request):
         next_path = request.META['HTTP_REFERER']
         if (len(next_path.split('/nylearns/?')[1].split('&')) > 1):
             params = next_path.split('/nylearns/?')[1].split('&')
-            if (params[0].split('=')[0] == "course"
-                    or params[1].split('=')[0] == "course"):
+            if (params[0].split('=')[0] == "course" or
+                    params[1].split('=')[0] == "course"):
                 url = '/nylearns/?' + params[0] + '&' + params[1]
                 return HttpResponseRedirect(url)
     except:
