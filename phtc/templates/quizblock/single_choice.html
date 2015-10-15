@@ -9,6 +9,7 @@ margin: -18px 0 0 20px;
       ol>li {margin-left:0; padding-left:0; counter-increment:item; list-style:none inside}
       ol>li:before {content:"" counter(item) "."; padding-right:0.5em}
 </style>
+
 <ol type="A">
   {% for answer in question.answer_set.all %}
     {% if block.rhetorical %}

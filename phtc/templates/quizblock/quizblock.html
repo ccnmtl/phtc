@@ -1,7 +1,12 @@
 {% load markup %}
 {% load getresponse %}
 {{ block.description|markdown }}
+  <style>
+  .question_response {
+     display: none;
+  }
 
+</style>
   {% for question in block.question_set.all %}
     {% include 'quizblock/question.html' %}
   {% endfor %}
@@ -11,7 +16,7 @@
 	{% endif %}
 	
     {% if block.reading_exercise %}
-			<script src="{{STATIC_URL}}js/reading_exercise.js"></script>
+		<script src="{{STATIC_URL}}js/reading_exercise.js"></script>
 	{% endif %}
 
 	{% if block.rhetorical %}
