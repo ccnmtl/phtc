@@ -11,37 +11,40 @@
   <div class="casecontent">
     <div class="casequestion">
       {{question.text|markdown}}
+      
       {% if question.answerable %}
         {% if block.rhetorical %}<form id="form-{{question.id}}" method="post">{% endif %}
         {% if block.matching %}<form id="matching-form-{{question.id}}">{% endif %}
 
-	{% if question.is_single_choice %}
-      {% include 'quizblock/single_choice.html' %}
-  {% endif %}
+	    {% if question.is_single_choice %}
+          {% include 'quizblock/single_choice.html' %}
+        {% endif %}
 
-  {% if question.is_single_choice_feedback %}
-      {% include 'quizblock/single_choice.html' %}
-  {% endif %}
+        {% if question.is_single_choice_feedback %}
+          {% include 'quizblock/single_choice.html' %}
+        {% endif %}
 
-  {% if question.is_matching %}
-      {% include 'quizblock/single_choice_matching.html' %}
-  {% endif %}
+        {% if question.is_matching %}
+          {% include 'quizblock/single_choice_matching.html' %}
+        {% endif %}
 
-	{% if question.is_single_choice_dropdown %}
-  	  {% include 'quizblock/single_choice_dropdown.html' %}
-	{% endif %}
+	    {% if question.is_single_choice_dropdown %}
+    	    {% include 'quizblock/single_choice_dropdown.html' %}
+	    {% endif %}
 
-	{% if question.is_multiple_choice %}
-	  {% include 'quizblock/multiple_choice.html' %}
-	{% endif %}
+	    {% if question.is_multiple_choice %}
+	      {% include 'quizblock/multiple_choice.html' %}
+	    {% endif %}
 
         {% if block.rhetorical %}
           </form>
         {% endif %}
+        
         {% if block.matching %}
           </form><!-- end #matching-form-{{question.id}}-->
         {% endif %}
-      {% else %}
+        
+      {% else %}<!-- question is not answerable -->
         {% if question.is_short_text %}
           {% include 'quizblock/short_text.html' %}
         {% endif %}
@@ -51,14 +54,18 @@
         {% endif %}
       {% endif %}
     </div>
-
-    {% if block.rhetorical %}
-      {% include 'quizblock/show_answer.html' %}
-    {% else %}
-      {% if response %}
-        {% include 'quizblock/show_answer.html' %}
-      {% endif %}
-  {% endif %}
+    <!-- we want to show the anser no matter what -->
+    {% include 'quizblock/show_answer.html' %}
+    
+      {% comment %}
+        {% if block.rhetorical %}
+          {% include 'quizblock/show_answer.html' %}
+        {% else %}
+          {% if response %}
+            {% include 'quizblock/show_answer.html' %}
+          {% endif %}
+        {% endif %}
+      {% endcomment %}
   </div>
 </div>
 
