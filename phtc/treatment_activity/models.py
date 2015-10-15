@@ -90,14 +90,14 @@ class TreatmentActivityBlock(models.Model):
         return False
 
     @classmethod
-    def add_form(self):
+    def add_form(cls):
         return TreatmentActivityBlockForm()
 
     def edit_form(self):
         return TreatmentActivityBlockForm(instance=self)
 
     @classmethod
-    def create(self, request):
+    def create(cls, request):
         form = TreatmentActivityBlockForm(request.POST)
         return form.save()
 

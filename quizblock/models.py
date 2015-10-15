@@ -87,7 +87,7 @@ class Quiz(models.Model):
         return EditForm()
 
     @classmethod
-    def add_form(self):
+    def add_form(cls):
         class AddForm(forms.Form):
             description = forms.CharField(widget=forms.widgets.Textarea())
             rhetorical = forms.BooleanField()
@@ -101,7 +101,7 @@ class Quiz(models.Model):
         return AddForm()
 
     @classmethod
-    def create(self, request):
+    def create(cls, request):
         return Quiz.objects.create(
             description=request.POST.get('description', ''),
             rhetorical=request.POST.get('rhetorical', ''),
@@ -115,7 +115,7 @@ class Quiz(models.Model):
         )
 
     @classmethod
-    def create_from_dict(self, d):
+    def create_from_dict(cls, d):
         q = Quiz.objects.create(
             description=d.get('description', ''),
             rhetorical=d.get('rhetorical', False),

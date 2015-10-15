@@ -129,14 +129,14 @@ class LogicModelBlock(models.Model):
         return False
 
     @classmethod
-    def add_form(self):
+    def add_form(cls):
         return LogicModelBlockForm()
 
     def edit_form(self):
         return LogicModelBlockForm(instance=self)
 
     @classmethod
-    def create(self, request):
+    def create(cls, request):
         form = LogicModelBlockForm(request.POST)
         return form.save()
 
