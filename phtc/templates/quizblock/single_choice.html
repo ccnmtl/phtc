@@ -13,19 +13,11 @@ margin: -18px 0 0 20px;
 <ol type="A">
   {% for answer in question.answer_set.all %}
     {% if block.rhetorical %}
-      <li><div class="answer-value"><input name="question{{question.id}}" value="{{answer.label|safe}}" type="radio" />{{answer.label|safe}}</div></li>
-    {% else %}
-      <li><div class="answer-value">
-        {% if response %}
-          {% ifequal response.value answer.value %}
-            <span class="yours {% if response.is_correct %}correct{% else %}incorrect{% endif %}">{{answer.label|safe}}</span>
-          {% else %}
-            {{answer.label|safe}}
-          {% endifequal %}
-        {% else %}
-          <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
-    value="{{answer.value}}" type="radio" />{{answer.label|safe}}
-        {% endif %}</div>
+      <li>
+        <div class="answer-value">
+          <input name="question{{question.id}}" value="{{answer.label|safe}}" type="radio" />
+          {{answer.label|safe}}
+        </div>
       </li>
     {% endif %}
   {% endfor %}

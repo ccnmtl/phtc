@@ -3,11 +3,12 @@
 {% comment %}
 {% getquestionresponse question as response %}
 {% endcomment %}
+
 <div class="cases">
   {{question.intro_text|markdown}}
 
   <div class="casetitle">Question {{question.display_number}}:</div>
-     
+
   <div class="casecontent">
     <div class="casequestion">
       {{question.text|markdown}}
@@ -26,24 +27,79 @@
         rhetorical and matching blocks have form tags -->
 
 	    {% if question.is_single_choice %}
-          {% include 'quizblock/single_choice.html' %}
-        {% endif %}
+          {% comment %}{% include 'quizblock/single_choice.html' %}{% endcomment %}
+          <style>
+            .answer-value input[type="radio"]{
+              float: left;
+              clear: left;
+          margin: -18px 0 0 20px;
+            }
+            ol {margin-left:0; padding-left:0; counter-reset:item}
+                ol>li {margin-left:0; padding-left:0; counter-increment:item; list-style:none inside}
+                ol>li:before {content:"" counter(item) "."; padding-right:0.5em}
+          </style>
+
+          <ol type="A">
+  {% for answer in question.answer_set.all %}
+    {% if block.rhetorical %}
+      <li><div class="answer-value"><input name="question{{question.id}}" value="{{answer.label|safe}}" type="radio" />{{answer.label|safe}}</div></li>
+    {% else %}
+      <li><div class="answer-value">
+        {% if response %}
+          {% ifequal response.value answer.value %}
+            <span class="yours {% if response.is_correct %}correct{% else %}incorrect{% endif %}">{{answer.label|safe}}</span>
+          {% else %}
+            {{answer.label|safe}}
+          {% endifequal %}
+        {% else %}
+          <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
+    value="{{answer.value}}" type="radio" />{{answer.label|safe}}
+        {% endif %}</div>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ol>
+        {% endif %}<!-- {% if question.is_single_choice %} -->
 
         {% if question.is_single_choice_feedback %}
-          {% include 'quizblock/single_choice.html' %}
-        {% endif %}
+        <!-- Is it using single choice or feedback? -->
+          {% comment %}{% include 'quizblock/single_choice.html' %}{% endcomment %}
+          {% if block.feedback  %}
+      <div class="casesanswerdisplay question_response">
+        <div id="q{{question.id}}" class="toggleable">
+          <p>
+          {{answer.feedback}}
+          </p>
+        </div>
+      </div>
+      <div class="case-feedback">
+        {% for answer in question.answer_set.all %}
+          <div class ="item-feedback well">
+            {% if answer.correct %}
+              <p><span class="correct">Correct: </span>{{ answer.feedback|safe }} </p>
+            {% else %}    
+              <p><span class="incorrect">Incorrect: </span>{{ answer.feedback|safe }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+      </div><!--end case-feedback-->
+{% else %}
+<p>{{question.explanation|markdown}}</p>
+
+{% endif %}
+        {% endif %}<!-- {% if question.is_single_choice_feedback %} -->
 
         {% if question.is_matching %}
-          {% include 'quizblock/single_choice_matching.html' %}
-        {% endif %}
+          {% comment %}{% include 'quizblock/single_choice_matching.html' %}{% endcomment %}
+        {% endif %}<!-- {% if question.is_matching %} -->
 
 	    {% if question.is_single_choice_dropdown %}
-    	    {% include 'quizblock/single_choice_dropdown.html' %}
-	    {% endif %}
+    	    {% comment %}{% include 'quizblock/single_choice_dropdown.html' %}{% endcomment %}
+	    {% endif %}<!-- {% if question.is_matching %} -->
 
 	    {% if question.is_multiple_choice %}
-	      {% include 'quizblock/multiple_choice.html' %}
-	    {% endif %}
+	      {% comment %}{% include 'quizblock/multiple_choice.html' %}{% endcomment %}
+	    {% endif %}<!-- {% if question.is_multiple_choice %} -->
 
         {% if block.rhetorical %}
           </form>
@@ -55,12 +111,12 @@
         
       {% else %}<!-- question is not answerable -->
         {% if question.is_short_text %}
-          {% include 'quizblock/short_text.html' %}
-        {% endif %}
+          {% comment %}{% include 'quizblock/short_text.html' %}{% endcomment %}
+        {% endif %}<!-- {% if question.is_short_text %} -->
 
         {% if question.is_long_text %}
-          {% include 'quizblock/long_text.html' %}
-        {% endif %}
+          {% comment %}{% include 'quizblock/long_text.html' %}{% endcomment %}
+        {% endif %}<!-- {% if question.is_long_text %} -->
       {% endif %}
     </div>
     <!-- we want to show the anser no matter what -->
