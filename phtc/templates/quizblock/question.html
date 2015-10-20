@@ -4,7 +4,9 @@
 <div class="cases">
   {{question.intro_text|markdown}}
 
-  <div class="casetitle">Question {{question.display_number}}:</div>
+  <div class="casetitle">
+    Question {{question.display_number}}:
+  </div>
 
   <div class="casecontent">
     <div class="casequestion">
@@ -25,12 +27,18 @@
 
 	    {% if question.is_single_choice %}
           <!-- {% comment %}{% include 'quizblock/single_choice.html' %}{% endcomment %} -->
-          <ol type="A">
+          <ol type="A"><!-- Think this is done... -->
             {% for answer in question.answer_set.all %}
               {% if block.rhetorical %}
-                <li><div class="answer-value"><input name="question{{question.id}}" value="{{answer.label|safe}}" type="radio" />{{answer.label|safe}}</div></li>
+                <li>
+                  <div class="answer-value">
+                    <input name="question{{question.id}}" value="{{answer.label|safe}}" type="radio" />
+                    {{answer.label|safe}}
+                  </div>
+                </li>
               {% else %}
-                <li><div class="answer-value">
+                <li>
+                  <div class="answer-value">
                   {% if response %}
                     {% ifequal response.value answer.value %}
                       <span class="yours {% if response.is_correct %}correct{% else %}incorrect{% endif %}">{{answer.label|safe}}</span>
@@ -39,8 +47,9 @@
                     {% endifequal %}
                   {% else %}
                     <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
-              value="{{answer.value}}" type="radio" />{{answer.label|safe}}
-                  {% endif %}</div>
+                       value="{{answer.value}}" type="radio" />{{answer.label|safe}}
+                  {% endif %}
+                  </div>
                 </li>
               {% endif %}
             {% endfor %}
@@ -76,40 +85,7 @@
         {% endif %}<!-- {% comment %} {% if question.is_single_choice_feedback %} {% endcomment %} -->
 
 
-        {% if question.is_matching %}
-        <style type="text/css">
-          button.btn, input[type="submit"].btn{
-            margin: 0 0 15px 0;
-          }
-          td.answer-label{
-            width:500px;
-            padding-right: 10px;
-          }
-          td.code-label{
-            width:500px;
-            padding-right: 10px;
-          }
-          ol.answer-codes li{
-  
-          }
-          td.td-ui{
-            width: 15px;
-          }
-          .td-answer-header{
-            width: 100px;
-            font-weight: bold;
-            padding: 0 8px 0 0;
-          }
-          .td-answer-comparison{
-            width: 100px;
-            padding: 0 8px 0 0;
-            text-transform: capitalize;
-          }
-          .explanation{
-            margin: 20px 0;
-            padding: 10px;
-          }
-          </style>
+        {% if question.is_matching %}<!-- {% comment %}{% include 'quizblock/single_choice_matching.html' %}{% endcomment %} -->
             <h4>List of codes:</h4>
             <div id="codes">
               <ol class="answer-codes" type="A">
@@ -119,32 +95,34 @@
               </ol>
             </div><!--end #codes-->
 
-              <table id="header-table" type="A">
-                <tr>
-                  <td class="code-label"><h5>SCENARIO</h5></td>
+            <table id="header-table" type="A">
+              <tr>
+                <td class="code-label"><h5>SCENARIO</h5></td>
                   {% for answer in question.answer_set.all %}
-                  <td class="td-ui">
+                <td class="td-ui">
                       <span>{{ forloop.counter }}</span>
-                  </td>
+                </td>
                   {% endfor %}
-                </tr>
-              </table>
+              </tr>
+            </table>
 
-              <div id="matching">
-                {% for answer in question.answer_set.all %}
-                <table class="table-matching" type="A">
-                  <tr>
-                    <td class="answer-label">{{answer.label|safe}}</td>
+            <div id="matching">
+              {% for answer in question.answer_set.all %}
+              <table class="table-matching" type="A">
+                <tr>
+                  <td class="answer-label">{{answer.label|safe}}</td>
                     {% for answer in question.answer_set.all %}
                     <td class="td-ui user-selection">
-                        <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}-{{ forloop.parentloop.counter0 }}" value="{{answer.value}}" type="radio" />
+                        <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}-{{ forloop.parentloop.counter0 }}" 
+                        value="{{answer.value}}" type="radio" />
                     </td>
                     {% endfor %}
-                  </tr>
-                </table><!--end .table-matching-->    
-                {% endfor %}
-              </div><!--end #matching-->
-              <div id="comparison"></div>
+                </tr>
+              </table><!--end .table-matching-->    
+              {% endfor %}
+            </div><!--end #matching-->
+            <button type="button" class="btn btn-info btn-sm matching-quizblock">Submit</button>
+            <div id="comparison"></div>
 
           {# Create the correct answer object #}
           <script>
@@ -171,102 +149,6 @@
                    correct_answers[aws_label] = aws_value;
                    {% endfor %} 
                    </script>
-        
-         <!-- {% comment %}{% include 'quizblock/single_choice_matching.html' %}{% endcomment %} -->
-          <style type="text/css">
-          button.btn, input[type="submit"].btn{
-            margin: 0 0 15px 0;
-          }
-          td.answer-label{
-            width:500px;
-            padding-right: 10px;
-          }
-          td.code-label{
-            width:500px;
-            padding-right: 10px;
-          }
-          ol.answer-codes li{
-  
-          }
-          td.td-ui{
-            width: 15px;
-          }
-          .td-answer-header{
-            width: 100px;
-            font-weight: bold;
-            padding: 0 8px 0 0;
-          }
-          .td-answer-comparison{
-            width: 100px;
-            padding: 0 8px 0 0;
-            text-transform: capitalize;
-          }
-          .explanation{
-            margin: 20px 0;
-            padding: 10px;
-          }
-          </style>
-            <h4>List of codes:</h4>
-            <div id="codes">
-              <ol class="answer-codes" type="A">
-              {% for answer in question.answer_set.all %}
-                <li>{{ answer.value }}</li>
-              {% endfor %}
-              </ol>
-            </div><!--end #codes-->
-
-              <table id="header-table" type="A">
-                <tr>
-                  <td class="code-label"><h5>SCENARIO</h5></td>
-                  {% for answer in question.answer_set.all %}
-                  <td class="td-ui">
-                      <span>{{ forloop.counter }}</span>
-                  </td>
-                  {% endfor %}
-                </tr>
-              </table>
-
-              <div id="matching">
-                {% for answer in question.answer_set.all %}
-                <table class="table-matching" type="A">
-                  <tr>
-                    <td class="answer-label">{{answer.label|safe}}</td>
-                    {% for answer in question.answer_set.all %}
-                    <td class="td-ui user-selection">
-                        <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}-{{ forloop.parentloop.counter0 }}" value="{{answer.value}}" type="radio" />
-                    </td>
-                    {% endfor %}
-                  </tr>
-                </table><!--end .table-matching-->    
-                {% endfor %}
-              </div><!--end #matching-->
-              <div id="comparison"></div>
-
-          {# Create the correct answer object #}
-          <script>
-           var explanation = {explanation : '{{ question.explanation }}'};
-            function cleanup_string(str, kill_space){
-                       // only replace the hyphen because django is slugifying the strings
-                  var punctuationless = str.replace(/-/g," ")
-                  if(kill_space == true){
-                                 var spaceless = punctuationless.replace(/\s/g, "");
-                                        }else{
-                       var spaceless = punctuationless;
-                              }
-                         var filter = spaceless.replace(/'/g,"");//take out the single quotes
-                               var filter1 = filter.replace(/\[/g,"");//replace [
-                                     var filter2 = filter1.replace(/\]/g,"");//replace ]
-                                            var clean_lower = filter2.toLowerCase();//to lowercase
-                                                   return clean_lower;
-                                                      }
-             var correct_answers = { };
-  
-              {% for answer in question.answer_set.all %}
-                 var aws_label = cleanup_string('{{ answer.label|slugify }}', true);
-                    var aws_value = cleanup_string('{{ answer.value|slugify }}', false);
-                       correct_answers[aws_label] = aws_value;
-                        {% endfor %} 
-          </script>
 
         {% endif %}<!-- {% comment %} {% end if question.is_matching %} {% endcomment %}  -->
 
