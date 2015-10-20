@@ -1,12 +1,6 @@
 {% load markup %}
 {% load getresponse %}
-
-<!-- 
-{% comment %}
-  {% getquestionresponse question as response %}
-{% endcomment %}
--->
-
+<link href="{{STATIC_URL}}css/custom_quizzes.css" rel="stylesheet">
 <div class="cases">
   {{question.intro_text|markdown}}
 
@@ -31,17 +25,6 @@
 
 	    {% if question.is_single_choice %}
           <!-- {% comment %}{% include 'quizblock/single_choice.html' %}{% endcomment %} -->
-          <style>
-            .answer-value input[type="radio"]{
-              float: left;
-              clear: left;
-          margin: -18px 0 0 20px;
-            }
-            ol {margin-left:0; padding-left:0; counter-reset:item}
-                ol>li {margin-left:0; padding-left:0; counter-increment:item; list-style:none inside}
-                ol>li:before {content:"" counter(item) "."; padding-right:0.5em}
-          </style>
-
           <ol type="A">
             {% for answer in question.answer_set.all %}
               {% if block.rhetorical %}
@@ -62,11 +45,7 @@
               {% endif %}
             {% endfor %}
           </ol>
-        {% endif %}<!-- {% end if question.is_single_choice %} -->
-
-
-
-
+        {% endif %}<!-- {% comment %} {% end if question.is_single_choice %} {% endcomment %} -->
 
 
         {% if question.is_single_choice_feedback %}
@@ -94,10 +73,7 @@
           {% else %}
           <p>{{question.explanation|markdown}}</p>
           {% endif %}
-        {% endif %}<!-- {% if question.is_single_choice_feedback %} -->
-
-
-
+        {% endif %}<!-- {% comment %} {% if question.is_single_choice_feedback %} {% endcomment %} -->
 
 
         {% if question.is_matching %}
@@ -292,12 +268,7 @@
                         {% endfor %} 
           </script>
 
-         
-        {% endif %}<!-- {% end if question.is_matching %} -->
-
-
-
-
+        {% endif %}<!-- {% comment %} {% end if question.is_matching %} {% endcomment %}  -->
 
 
 	    {% if question.is_single_choice_dropdown %}
@@ -307,11 +278,7 @@
                 <option value="{{answer.value}}">{{answer.label|safe}}</option>
             {% endfor %}
             </select>
-	    {% endif %}<!-- {% end if question.is_matching %} -->
-
-
-
-
+	    {% endif %}<!-- {% comment %} {% end if question.is_matching %} {% endcomment %} -->
 
 
 	    {% if question.is_multiple_choice %}
@@ -340,7 +307,7 @@
               {% endif %}
             {% endfor %}
           </ol>
-	    {% endif %}<!-- {% end if question.is_multiple_choice %} -->
+	    {% endif %}<!-- {% comment %} {% end if question.is_multiple_choice %} {% endcomment %} -->
 
 
 
@@ -353,28 +320,25 @@
         {% if block.matching %}
           </form><!-- end #matching-form-{{question.id}}-->
         {% endif %}
-        
+
       {% else %}<!-- question is not answerable -->
         {% if question.is_short_text %}
           <!-- {% comment %}{% include 'quizblock/short_text.html' %}{% endcomment %} -->
           {% if block.rhetorical %}
             <input type="text" name="question{{question.id}}" />
           {% else %}
-
-            {% if response %}
-            	<p class="your-answer">Your Answer:</p>
-              <p class="yours">{{response.value|markdown}}</p>
-              {% else %}
               {% if block.reading_exercise %}
+                <!-- Add button for user to indicate when they are done entering their answer 
+                add div drop down area to display the answer when the user clicks on the button -->
   	          	<p class="your-answer">Your Answer:</p>
-	            	 <input class="reading-exercise" type="text" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" />
-	            {% else %}
+	            <input class="reading-exercise" type="text" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" />
+	            <button type="button" class="btn btn-info btn-sm reading-exercise">Submit</button>
+	          {% else %}
 	              <input type="text" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" />
-	            {% endif %}
+	          {% endif %}
             {% endif %}
           {% endif %}
-                
-        {% endif %}<!-- {% if question.is_short_text %} -->
+        {% endif %}<!-- {% comment %} {% if question.is_short_text %} {% endcomment %} -->
         
         
         
@@ -397,7 +361,7 @@
             {% endif %}
           {% endif %}
           
-        {% endif %}<!-- {% if question.is_long_text %} -->
+        <!-- {% comment %} {% if question.is_long_text %} {% endcomment %} -->
       {% endif %}
     </div>
     <!-- we want to show the anser no matter what -->
@@ -480,7 +444,7 @@
       {% endif %}
               {% else %}
       <!-- {% comment %}{% include 'quizblock/long_answer_show_answer.html' %}{% endcomment %} -->
-        <!-- {% comment %} short/long text questions {% endcomment %} -->
+      <!-- {% comment %} short/long text questions {% endcomment %} -->
         
         
   {% if block.reading_exercise %}
@@ -489,17 +453,17 @@
           <p>{{question.explanation|markdown}}</p>
       </div>
   {% else %}
-  {% if question.explanation %}
+      {% if question.explanation %}
       <div class="casesanswerdisplay">
         <a href="#q{{question.id}}" class="moretoggle">Show explanation &gt;&gt;</a>
         <div id="q{{question.id}}" class="toggleable">
           <p>{{question.explanation|markdown}}</p>
         </div>
       </div>
-   {% endif %}
+      {% endif %}
 
-  {% endif %}
     {% endif %}
+  {% endif %}
   
   </div>
 </div>

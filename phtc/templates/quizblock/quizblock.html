@@ -1,24 +1,23 @@
 {% load markup %}
 {% load getresponse %}
 {{ block.description|markdown }}
-  <style>
-  .question_response {
-     display: none;
-  }
 
-</style>
   {% for question in block.question_set.all %}
     {% include 'quizblock/question.html' %}
   {% endfor %}
+  <script>
+  jQuery(document).ready(function(){
+	  jQuery("button.reading-exercise").on('click', function(evt){
+		  jQuery(this).parent().parent().find("div.question_response").css('display','block');
+	  });
+	  
+  }); // end doc.ready
+  </script>
   
 	{% if block.matching %}
 		<script src="{{STATIC_URL}}js/matching.js"></script>
 	{% endif %}
 	
-    {% if block.reading_exercise %}
-		<script src="{{STATIC_URL}}js/reading_exercise.js"></script>
-	{% endif %}
-
 	{% if block.rhetorical %}
 		{% if block.feedback%}
 			<script src="{{STATIC_URL}}js/feedback.js"></script>

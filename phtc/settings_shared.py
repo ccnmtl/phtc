@@ -216,6 +216,10 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.signals.SignalDebugPanel',
 )
 
+DEBUG_TOOLBAR_CONFIG = {
+    'INSERT_BEFORE': '<span class="djdt-insert-here">',
+}
+
 PROD_BASE_URL = "http://training.lowernysphtc.org/"
 PROD_MEDIA_BASE_URL = "http://training.lowernysphtc.org/uploads/"
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
