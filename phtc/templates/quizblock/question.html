@@ -58,35 +58,47 @@
 
 
         {% if question.is_single_choice_feedback %}
-        <!-- Is it using single choice or feedback? -->
           <!-- {% comment %}{% include 'quizblock/single_choice.html' %}{% endcomment %} -->
+          <ol type="A">
+            {% for answer in question.answer_set.all %}
+              {% if block.rhetorical %}
+                <li>
+                  <div class="answer-value">
+                    <input name="question{{question.id}}" value="{{answer.label|safe}}" type="radio" />
+                    {{answer.label|safe}}
+                  </div>
+                </li>
+              {% endif %}
+            {% endfor %}
+           </ol>
+         {% endif %}
+          <!-- {% comment %} {% if question.is_single_choice_feedback %} {% endcomment %} -->
+          <!-- adding show answer block for feedback here -->
           {% if block.feedback  %}
-                <div class="casesanswerdisplay question_response">
-                  <div id="q{{question.id}}" class="toggleable">
-                    <p>
-                    {{answer.feedback}}
-                    </p>
-                  </div>
+            <div class="casesanswerdisplay question_response">
+              <div id="q{{question.id}}" class="toggleable">
+               <p> {{answer.feedback}} </p>
+              </div>
+            </div>
+            <div class="case-feedback feedback_response">
+              {% for answer in question.answer_set.all %}
+                <div class ="item-feedback well">
+                {% if answer.correct %}
+                  <p><span class="correct">Correct: </span>{{ answer.feedback|safe }} </p>
+                {% else %}    
+                  <p><span class="incorrect">Incorrect: </span>{{ answer.feedback|safe }}</p>
+                {% endif %}
                 </div>
-                <div class="case-feedback">
-                  {% for answer in question.answer_set.all %}
-                    <div class ="item-feedback well">
-                      {% if answer.correct %}
-                        <p><span class="correct">Correct: </span>{{ answer.feedback|safe }} </p>
-                      {% else %}    
-                        <p><span class="incorrect">Incorrect: </span>{{ answer.feedback|safe }}</p>
-                      {% endif %}
-                  </div>
-                  {% endfor %}
-                </div><!--end case-feedback-->
+              {% endfor %}
+            </div><!--end case-feedback-->
           {% else %}
-          <p>{{question.explanation|markdown}}</p>
+            <p>{{question.explanation|markdown}}</p>
           {% endif %}
-        {% endif %}<!-- {% comment %} {% if question.is_single_choice_feedback %} {% endcomment %} -->
+          <!-- end show answer block for feedback here -->
 
 
         {% if question.is_matching %}<!-- {% comment %}{% include 'quizblock/single_choice_matching.html' %}{% endcomment %} -->
-            <h4>List of codes:</h4>
+            <h4>List of codes:</h4><!-- Think this is done -->
             <div id="codes">
               <ol class="answer-codes" type="A">
               {% for answer in question.answer_set.all %}
@@ -221,11 +233,7 @@
             {% endif %}
           {% endif %}
         {% endif %}<!-- {% comment %} {% if question.is_short_text %} {% endcomment %} -->
-        
-        
-        
-        
-        
+
 
         {% if question.is_long_text %}
           <!-- {% comment %}{% include 'quizblock/long_text.html' %}{% endcomment %} -->
@@ -246,7 +254,7 @@
         <!-- {% comment %} {% if question.is_long_text %} {% endcomment %} -->
       {% endif %}
     </div>
-    <!-- we want to show the anser no matter what -->
+    <!-- we want to show the answer no matter what -->
     <!-- might be easier to edit question types
     directly since we show answer no matter what -->
     <!-- {% comment %}{% include 'quizblock/show_answer.html' %}{% endcomment %} -->
