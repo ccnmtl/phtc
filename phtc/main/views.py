@@ -137,7 +137,6 @@ def dashboard(request):
         return render_dashboard(request)
     except UserProfile.DoesNotExist:
         return render_dashboard(request)
-    # HttpResponseRedirect('/dashboard/')
 
 
 @render_to('main/dashboard_panel.html')
