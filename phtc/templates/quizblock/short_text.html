@@ -11,6 +11,7 @@
     {% if block.reading_exercise %}
   		<p class="your-answer">Your Answer:</p>
 	  	 <input class="reading-exercise" type="text" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" />
+	  	 <p>{{question.explanation|markdown}}</p>
 	  {% else %}
 	    <input type="text" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" />
 	  {% endif %}

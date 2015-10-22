@@ -1,40 +1,211 @@
 {% load markup %}
 {% load getresponse %}
-{% comment %}
-{% getquestionresponse question as response %}
-{% endcomment %}
+<link href="{{STATIC_URL}}css/custom_quizzes.css" rel="stylesheet">
 <div class="cases">
   {{question.intro_text|markdown}}
 
-  <div class="casetitle">Question {{question.display_number}}:</div>
-     
+  <div class="casetitle">
+    Question {{question.display_number}}:
+  </div>
+
   <div class="casecontent">
     <div class="casequestion">
       {{question.text|markdown}}
       
       {% if question.answerable %}
-        {% if block.rhetorical %}<form id="form-{{question.id}}" method="post">{% endif %}
-        {% if block.matching %}<form id="matching-form-{{question.id}}">{% endif %}
+      
+        {% if block.rhetorical %}
+          <form id="form-{{question.id}}" method="post">
+        {% endif %}
+        
+        {% if block.matching %}
+          <form id="matching-form-{{question.id}}">
+        {% endif %}
+        
+        <!-- go through each question type, note that only the
+        rhetorical and matching blocks have form tags -->
 
 	    {% if question.is_single_choice %}
-          {% include 'quizblock/single_choice.html' %}
-        {% endif %}
+          <!-- {% comment %}{% include 'quizblock/single_choice.html' %}{% endcomment %} -->
+          <ol type="A"><!-- Think this is done... -->
+            {% for answer in question.answer_set.all %}
+              {% if block.rhetorical %}
+                <li>
+                  <div class="answer-value">
+                    <input name="question{{question.id}}" value="{{answer.label|safe}}" type="radio" />
+                    {{answer.label|safe}}
+                  </div>
+                </li>
+              {% else %}
+                <li>
+                  <div class="answer-value">
+                  {% if response %}
+                    {% ifequal response.value answer.value %}
+                      <span class="yours {% if response.is_correct %}correct{% else %}incorrect{% endif %}">{{answer.label|safe}}</span>
+                    {% else %}
+                      {{answer.label|safe}}
+                    {% endifequal %}
+                  {% else %}
+                    <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
+                       value="{{answer.value}}" type="radio" />{{answer.label|safe}}
+                  {% endif %}
+                  </div>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ol>
+        {% endif %}<!-- {% comment %} {% end if question.is_single_choice %} {% endcomment %} -->
+
 
         {% if question.is_single_choice_feedback %}
-          {% include 'quizblock/single_choice.html' %}
-        {% endif %}
+          <!-- {% comment %}{% include 'quizblock/single_choice.html' %}{% endcomment %} -->
+          <ol type="A">
+            {% for answer in question.answer_set.all %}
+              {% if block.rhetorical %}
+                <li>
+                  <div class="answer-value">
+                    <input name="question{{question.id}}" value="{{answer.label|safe}}" type="radio" />
+                    {{answer.label|safe}}
+                  </div>
+                </li>
+              {% endif %}
+            {% endfor %}
+           </ol>
+         {% endif %}
+          <!-- {% comment %} {% if question.is_single_choice_feedback %} {% endcomment %} -->
+          <!-- adding show answer block for feedback here -->
+          {% if block.feedback  %}
+            <div class="casesanswerdisplay question_response">
+              <div id="q{{question.id}}" class="toggleable">
+               <p> {{answer.feedback}} </p>
+              </div>
+            </div>
+            <div class="case-feedback feedback_response">
+              {% for answer in question.answer_set.all %}
+                <div class ="item-feedback well">
+                {% if answer.correct %}
+                  <p><span class="correct">Correct: </span>{{ answer.feedback|safe }} </p>
+                {% else %}    
+                  <p><span class="incorrect">Incorrect: </span>{{ answer.feedback|safe }}</p>
+                {% endif %}
+                </div>
+              {% endfor %}
+            </div><!--end case-feedback-->
+          {% else %}
+            <p>{{question.explanation|markdown}}</p>
+          {% endif %}
+          <!-- end show answer block for feedback here -->
 
-        {% if question.is_matching %}
-          {% include 'quizblock/single_choice_matching.html' %}
-        {% endif %}
+
+        {% if question.is_matching %}<!-- {% comment %}{% include 'quizblock/single_choice_matching.html' %}{% endcomment %} -->
+            <h4>List of codes:</h4><!-- Think this is done -->
+            <div id="codes">
+              <ol class="answer-codes" type="A">
+              {% for answer in question.answer_set.all %}
+                <li>{{ answer.value }}</li>
+              {% endfor %}
+              </ol>
+            </div><!--end #codes-->
+
+            <table id="header-table" type="A">
+              <tr>
+                <td class="code-label"><h5>SCENARIO</h5></td>
+                  {% for answer in question.answer_set.all %}
+                <td class="td-ui">
+                      <span>{{ forloop.counter }}</span>
+                </td>
+                  {% endfor %}
+              </tr>
+            </table>
+
+            <div id="matching">
+              {% for answer in question.answer_set.all %}
+              <table class="table-matching" type="A">
+                <tr>
+                  <td class="answer-label">{{answer.label|safe}}</td>
+                    {% for answer in question.answer_set.all %}
+                    <td class="td-ui user-selection">
+                        <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}-{{ forloop.parentloop.counter0 }}" 
+                        value="{{answer.value}}" type="radio" />
+                    </td>
+                    {% endfor %}
+                </tr>
+              </table><!--end .table-matching-->    
+              {% endfor %}
+            </div><!--end #matching-->
+            <button type="button" class="btn btn-info btn-sm matching-quizblock">Submit</button>
+            <div id="comparison"></div>
+
+          {# Create the correct answer object #}
+          <script>
+           var explanation = {explanation : '{{ question.explanation }}'};
+             function cleanup_string(str, kill_space){
+                         // only replace the hyphen because django is slugifying the strings
+                  var punctuationless = str.replace(/-/g," ")
+                  if(kill_space == true){
+            var spaceless = punctuationless.replace(/\s/g, "");
+                  }else{
+                                var spaceless = punctuationless;
+                                      }
+                        var filter = spaceless.replace(/'/g,"");//take out the single quotes
+                              var filter1 = filter.replace(/\[/g,"");//replace [
+                                    var filter2 = filter1.replace(/\]/g,"");//replace ]
+                                         var clean_lower = filter2.toLowerCase();//to lowercase
+                                              return clean_lower;
+                                               }
+             var correct_answers = { };
+             
+             {% for answer in question.answer_set.all %}
+               var aws_label = cleanup_string('{{ answer.label|slugify }}', true);
+                 var aws_value = cleanup_string('{{ answer.value|slugify }}', false);
+                   correct_answers[aws_label] = aws_value;
+                   {% endfor %} 
+                   </script>
+
+        {% endif %}<!-- {% comment %} {% end if question.is_matching %} {% endcomment %}  -->
+
 
 	    {% if question.is_single_choice_dropdown %}
-    	    {% include 'quizblock/single_choice_dropdown.html' %}
-	    {% endif %}
+    	    <!-- {% comment %}{% include 'quizblock/single_choice_dropdown.html' %}{% endcomment %} -->
+    	    <select name="pageblock-{{block.pageblock.id}}-question{{question.id}}">
+            {% for answer in question.answer_set.all %}
+                <option value="{{answer.value}}">{{answer.label|safe}}</option>
+            {% endfor %}
+            </select>
+	    {% endif %}<!-- {% comment %} {% end if question.is_matching %} {% endcomment %} -->
+
 
 	    {% if question.is_multiple_choice %}
-	      {% include 'quizblock/multiple_choice.html' %}
-	    {% endif %}
+	      <!-- {% comment %}{% include 'quizblock/multiple_choice.html' %}{% endcomment %} -->
+	      <ol type="A">
+            {% for answer in question.answer_set.all %}
+              {% if block.rhetorical %}
+                <li><input name="question{{question.id}}" value="{{answer.label|safe}}" type="checkbox" />{{answer.label|safe}}</li>
+              {% else %}
+                <li>
+                  {% if response %}
+               <!--      {% comment %}
+	            multi select is trickier. since there can be more than one correct
+                    response and more than one response by the user.
+                    {% endcomment %} -->
+                    {% ifanswerin response answer  %}
+                      <span class="yours {% if answer.correct %}correct correctanswer{% else %}incorrect incorrectanswer{% endif %}">{{answer.label|safe}}</span>
+                    {% else %}
+                                <span class="{% if answer.correct %}correct{% else %}incorrect{% endif %}">{{answer.label|safe}}</span>
+                    {% endifanswerin %}
+                  {% else %}
+                    <!-- {% comment %}no response{% endcomment %} -->
+                    <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}" value="{{answer.value}}" type="checkbox" />{{answer.label|safe}}
+                  {% endif %}
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ol>
+	    {% endif %}<!-- {% comment %} {% end if question.is_multiple_choice %} {% endcomment %} -->
+
+
+
+
 
         {% if block.rhetorical %}
           </form>
@@ -43,29 +214,149 @@
         {% if block.matching %}
           </form><!-- end #matching-form-{{question.id}}-->
         {% endif %}
-        
+
       {% else %}<!-- question is not answerable -->
         {% if question.is_short_text %}
-          {% include 'quizblock/short_text.html' %}
-        {% endif %}
+          <!-- {% comment %}{% include 'quizblock/short_text.html' %}{% endcomment %} -->
+          {% if block.rhetorical %}
+            <input type="text" name="question{{question.id}}" />
+          {% else %}
+              {% if block.reading_exercise %}
+                <!-- Add button for user to indicate when they are done entering their answer 
+                add div drop down area to display the answer when the user clicks on the button -->
+  	          	<p class="your-answer">Your Answer:</p>
+	            <input class="reading-exercise" type="text" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" />
+	            <button type="button" class="btn btn-info btn-sm reading-exercise">Submit</button>
+	          {% else %}
+	              <input type="text" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" />
+	          {% endif %}
+            {% endif %}
+          {% endif %}
+        {% endif %}<!-- {% comment %} {% if question.is_short_text %} {% endcomment %} -->
+
 
         {% if question.is_long_text %}
-          {% include 'quizblock/long_text.html' %}
-        {% endif %}
+          <!-- {% comment %}{% include 'quizblock/long_text.html' %}{% endcomment %} -->
+          {% if block.rhetorical %}
+            <textarea rows="10" name="question{{question.id}}" ></textarea>
+          {% else %}
+            {% if response %}
+              {% if block.allow_redo %}
+              <textarea rows="10" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" >{{response.value}}</textarea>
+              {% else %}
+              <p class="yours">{{response.value|markdown}}</p>
+              {% endif %}
+            {% else %}
+              <textarea rows="10" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" ></textarea>
+            {% endif %}
+          {% endif %}
+          
+        <!-- {% comment %} {% if question.is_long_text %} {% endcomment %} -->
       {% endif %}
     </div>
-    <!-- we want to show the anser no matter what -->
-    {% include 'quizblock/show_answer.html' %}
+    <!-- we want to show the answer no matter what -->
+    <!-- might be easier to edit question types
+    directly since we show answer no matter what -->
     
-      {% comment %}
+    
+    <!-- {% comment %}{% include 'quizblock/show_answer.html' %}{% endcomment %} -->
+    
+    
+    {% if question.answerable %}
+      {% if question.is_single_choice %}
+        <!-- {% comment %}{% include 'quizblock/single_choice_show_answer.html' %}{% endcomment %} -->
         {% if block.rhetorical %}
-          {% include 'quizblock/show_answer.html' %}
-        {% else %}
-          {% if response %}
-            {% include 'quizblock/show_answer.html' %}
+                <div class="casesanswerdisplay question_response">
+                  <a href="#q{{question.id}}" class="moretoggle">Show answer &gt;&gt;</a>
+                  <div id="q{{question.id}}" class="toggleable">
+                    <p>
+                      {% if question.correct_answer_letter %}
+                        <i>The correct answer is {{question.correct_answer_letter}}:</i>
+                      {% endif %} 
+                      {{question.explanation|markdown}}
+                    </p>
+                  </div>
+                </div>
+          {% else %}
+          <p>{{question.explanation|markdown}}</p>
           {% endif %}
-        {% endif %}
-      {% endcomment %}
+                {% endif %}
+                {% if question.is_single_choice_feedback %}
+                  <!-- {% comment %}{% include 'quizblock/single_choice_feedback_show_answer.html' %}{% endcomment %} -->
+                  {% if block.feedback  %}
+                <div class="casesanswerdisplay question_response">
+                  <div id="q{{question.id}}" class="toggleable">
+                    <p>
+                    {{answer.feedback}}
+                    </p>
+                  </div>
+                </div>
+                <div class="case-feedback">
+                  {% for answer in question.answer_set.all %}
+                    <div class ="item-feedback well">
+                      {% if answer.correct %}
+                        <p><span class="correct">Correct: </span>{{ answer.feedback|safe }} </p>
+                      {% else %}    
+                        <p><span class="incorrect">Incorrect: </span>{{ answer.feedback|safe }}</p>
+                      {% endif %}
+                  </div>
+                  {% endfor %}
+                </div><!--end case-feedback-->
+          {% else %}
+          <p>{{question.explanation|markdown}}</p>
+
+          {% endif %}
+                {% endif %}
+                {% if question.is_multiple_choice %}
+                   <!-- {% comment %}{% include 'quizblock/multiple_choice_show_answer.html' %}{% endcomment %} -->
+                   {% if block.rhetorical %}
+                <div class="casesanswerdisplay question_response">
+                  <a href="#q{{question.id}}" class="moretoggles">Show answer(s) &gt;&gt;</a>
+                  <div id="q{{question.id}}" class="toggleable">
+                    <p><i>The correct answer(s):</i></p>
+	            <ol type="A">
+	              {% for answer in question.answer_set.all %}
+	                <li>
+                          {% if answer.correct %}
+	                    <span class="correctanswer">
+	          	{% else %}
+	          	  <span class="incorrectanswer" %>
+	          	{% endif %}
+	          	<span class="answer-inner">{{answer.label|safe}}</span>
+                          </span>
+                        </li>
+	              {% endfor %}
+	            </ol>
+                    <p>{{question.explanation|markdown}}</p>
+                  </div>
+                </div>
+          {% else %}
+            <p>{{question.explanation|markdown}}</p>
+          {% endif %}      
+      {% endif %}
+              {% else %}
+      <!-- {% comment %}{% include 'quizblock/long_answer_show_answer.html' %}{% endcomment %} -->
+      <!-- {% comment %} short/long text questions {% endcomment %} -->
+        
+        
+  {% if block.reading_exercise %}
+  	  <div class="casesanswerdisplay question_response">
+  	  	  <p class="your-answer-feedback">Feedback:</p>
+          <p>{{question.explanation|markdown}}</p>
+      </div>
+  {% else %}
+      {% if question.explanation %}
+      <div class="casesanswerdisplay">
+        <a href="#q{{question.id}}" class="moretoggle">Show explanation &gt;&gt;</a>
+        <div id="q{{question.id}}" class="toggleable">
+          <p>{{question.explanation|markdown}}</p>
+        </div>
+      </div>
+      {% endif %}
+
+    {% endif %}
+  {% endif %}
+  
   </div>
 </div>
 

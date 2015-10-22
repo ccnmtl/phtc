@@ -20,6 +20,7 @@ def redirect_to_first_section_if_root(section, root):
 
 
 def page_post(request, section, module):
+    '''I guess this will most likely need to be removed'''
     # giving them feedback before they proceed
     return HttpResponseRedirect(section.get_absolute_url())
 
@@ -135,7 +136,7 @@ def dashboard(request):
         UserProfile.objects.get(user=request.user).fname
         return render_dashboard(request)
     except UserProfile.DoesNotExist:
-        return HttpResponseRedirect('/dashboard/')
+        return render_dashboard(request)
 
 
 @render_to('main/dashboard_panel.html')

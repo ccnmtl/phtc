@@ -24,7 +24,7 @@ class LoggedInTest(TestCase):
 
     def test_dashboard(self):
         result = self.c.get("/dashboard/")
-        self.assertEqual(result.status_code, 302)
+        self.assertEqual(result.status_code, 200)
 
     def test_dashboard_panel(self):
         result = self.c.get("/dashboard_panel/")

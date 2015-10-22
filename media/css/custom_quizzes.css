@@ -1,0 +1,70 @@
+/* quizblock/single_choice.html */
+.answer-value input[type="radio"]{
+    float: left;
+    clear: left;
+    margin: -18px 0 0 20px;
+}
+
+ol {
+    margin-left:0;
+    padding-left:0;
+    counter-reset:item
+}
+
+ol>li {
+    margin-left:0;
+    padding-left:0;
+    counter-increment:item;
+    list-style:none inside
+}
+
+ol>li:before {
+    content:"" counter(item) ".";
+    padding-right:0.5em
+}
+
+
+/* class I added to hide question answers/explanations on the page */
+.question_response {
+    display: none;
+}
+
+/* from if question.is_matching */
+button.btn, input[type="submit"].btn {
+    margin: 0 0 15px 0;
+}
+
+td.answer-label {
+    width:500px;
+    padding-right: 10px;
+}
+
+td.code-label {
+    width:500px;
+    padding-right: 10px;
+}
+
+ol.answer-codes li {
+
+}
+
+td.td-ui {
+    width: 15px;
+}
+
+.td-answer-header {
+    width: 100px;
+    font-weight: bold;
+    padding: 0 8px 0 0;
+}
+
+.td-answer-comparison {
+    width: 100px;
+    padding: 0 8px 0 0;
+    text-transform: capitalize;
+}
+
+.explanation {
+    margin: 20px 0;
+    padding: 10px;
+}

@@ -30,7 +30,7 @@ jQuery(document).ready(function ($) {
     var _answer_key = window.correct_answers;
 
     //private
-    var btn = $('input.btn.btn-primary');
+    var btn = $('button.matching-quizblock');
 
     //clean string function
     function cleanup_string(str, kill_space){
@@ -70,11 +70,11 @@ jQuery(document).ready(function ($) {
 
 
     function display_answer_comparison() {
-        var btn = $('input.btn.btn-primary').clone();
+        var btn = $('button.matching-quizblock').clone();
         var _index = 0;
 
-        $(btn).attr('value', 'try again');
-        $('input.btn.btn-primary').replaceWith(btn);
+        $(btn).html("try again");// attr('', 'try again');
+        $('button.matching-quizblock').replaceWith(btn);
         $(btn).click(function () { window.location.reload(); });
         $('#header-table td.td-ui').remove();
         $('#header-table tr')
