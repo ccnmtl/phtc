@@ -4,6 +4,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
         "click .done-button": "goToNextPhase",
         "click .previous_phase": "goToPreviousPhase",
         "click .change_scenario": "goToFirstPhase",
+        "click .print_scenario": "printScenarioTable",
         "click .game-phase-help-button-div" : "showGamePhaseHelpBox",
         "click .help_box": "closeHelpBox",
         "click .add_a_row_button": "addARow",
@@ -315,6 +316,10 @@ LogicModel.LogicModelView = Backbone.View.extend({
         jQuery("li.next, h1.section-label-header, li.previous").hide();
         self.current_phase = self.current_phase - 1;
         self.paintPhase();
+    },
+    
+    printScenarioTable: function() {
+    	window.print();
     },
 
     render: function() {
