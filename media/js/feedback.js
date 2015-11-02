@@ -2,7 +2,6 @@ jQuery(document).ready(function() {
   jQuery('.casequestion form li').each(function() {
     jQuery(this).click(function(){
       //adding event listeners
-    	console.log(this);
       var casequestion = jQuery(this).parent().parent().parent().parent();
       var arr = jQuery(this).parent().children();
       var index = arr.index(this);
