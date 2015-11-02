@@ -7,6 +7,7 @@
    width:960px;
 }
 </style>
+{% comment %}
 <div class="modal bigModal" id="image-lightbox-{{block.id}}">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -24,7 +25,7 @@
 		</div>
 	</div>
 </div>
-
+{% endcomment %}
 <ul class="thumbnails">
 	<li class="span3">
 		<div class="thumbnail">
@@ -38,6 +39,7 @@
 		</div>
 	</li>
 </ul>
+{% comment %}
 <script>
 jQuery(document).ready(function(){
 	jQuery('.bigModal').modal('show');
@@ -47,6 +49,7 @@ jQuery(document).ready(function(){
 	});
 })
 </script>
+{% endcomment %}
 {% else %}
 
 <img class="img-responsive" alt="{{block.alt}}" src="/uploads/{{ block.image}}" />
