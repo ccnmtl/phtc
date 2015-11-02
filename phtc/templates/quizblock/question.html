@@ -91,8 +91,6 @@
                 </div>
               {% endfor %}
             </div><!--end case-feedback-->
-          {% else %}
-            <p>{{question.explanation|markdown}}</p>
           {% endif %}
           <!-- end show answer block for feedback here -->
 
@@ -271,44 +269,46 @@
       {% if question.is_single_choice %}
         <!-- {% comment %}{% include 'quizblock/single_choice_show_answer.html' %}{% endcomment %} -->
         {% if block.rhetorical %}
-                <div class="casesanswerdisplay question_response">
-                  <a href="#q{{question.id}}" class="moretoggle">Show answer &gt;&gt;</a>
-                  <div id="q{{question.id}}" class="toggleable">
-                    <p>
-                      {% if question.correct_answer_letter %}
-                        <i>The correct answer is {{question.correct_answer_letter}}:</i>
-                      {% endif %} 
-                      {{question.explanation|markdown}}
-                    </p>
-                  </div>
-                </div>
+          <div class="casesanswerdisplay">
+            <a href="#q{{question.id}}" class="moretoggle">Show answer &gt;&gt;</a>
+            <div id="q{{question.id}}" class="toggleable">
+              <p>
+                {% if question.correct_answer_letter %}
+                  <i>The correct answer is {{question.correct_answer_letter}}:</i>
+                {% endif %} 
+                {{question.explanation|markdown}}
+              </p>
+            </div>
+          </div>
           {% else %}
-          <p>{{question.explanation|markdown}}</p>
+            <p>{{question.explanation|markdown}}</p>
           {% endif %}
-                {% endif %}
-                {% if question.is_single_choice_feedback %}
-                  <!-- {% comment %}{% include 'quizblock/single_choice_feedback_show_answer.html' %}{% endcomment %} -->
-                  {% if block.feedback  %}
-                <div class="casesanswerdisplay question_response">
-                  <div id="q{{question.id}}" class="toggleable">
-                    <p>
-                    {{answer.feedback}}
-                    </p>
-                  </div>
-                </div>
-                <div class="case-feedback">
-                  {% for answer in question.answer_set.all %}
-                    <div class ="item-feedback well">
-                      {% if answer.correct %}
-                        <p><span class="correct">Correct: </span>{{ answer.feedback|safe }} </p>
-                      {% else %}    
-                        <p><span class="incorrect">Incorrect: </span>{{ answer.feedback|safe }}</p>
-                      {% endif %}
-                  </div>
-                  {% endfor %}
-                </div><!--end case-feedback-->
+        {% endif %}
+        
+        
+        {% if question.is_single_choice_feedback %}
+          <!-- {% comment %}{% include 'quizblock/single_choice_feedback_show_answer.html' %}{% endcomment %} -->
+          {% if block.feedback  %}
+          <div class="casesanswerdisplay question_response">
+            <div id="q{{question.id}}" class="toggleable">
+              <p>
+                {{answer.feedback}}
+              </p>
+            </div>
+          </div>
+          <div class="case-feedback">
+          {% for answer in question.answer_set.all %}
+            <div class ="item-feedback well">
+             {% if answer.correct %}
+               <p><span class="correct">Correct: </span>{{ answer.feedback|safe }} </p>
+             {% else %}    
+                <p><span class="incorrect">Incorrect: </span>{{ answer.feedback|safe }}</p>
+             {% endif %}
+            </div>
+          {% endfor %}
+          </div><!--end case-feedback-->
           {% else %}
-          <p>{{question.explanation|markdown}}</p>
+            <p>{{question.explanation|markdown}}</p>
 
           {% endif %}
                 {% endif %}

@@ -1,6 +1,8 @@
 jQuery(document).ready(function() {
   jQuery('.casequestion form li').each(function() {
-    jQuery(this).click(function(){//adding event listeners
+    jQuery(this).click(function(){
+      //adding event listeners
+    	console.log(this);
       var casequestion = jQuery(this).parent().parent().parent().parent();
       var arr = jQuery(this).parent().children();
       var index = arr.index(this);
@@ -10,8 +12,7 @@ jQuery(document).ready(function() {
       jQuery(feedback).children().each(function(){
         jQuery(this).css('display','none');
       });
-
-      jQuery(this).children().attr('checked','true');
+      jQuery(this).find("input:radio").attr('checked', true);
 
       jQuery(feedback_item).css({
         display: 'block'
