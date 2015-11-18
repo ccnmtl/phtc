@@ -97,7 +97,7 @@ function check_answer() {
             if (jQuery(this).html() === '') {
                 blank_answer++;
             }
-            if (jQuery(this).html() == '&nbsp;') {
+            if (jQuery(this).html() === '&nbsp;') {
                 jQuery(this).html(' ');
             }
             useranswer += (jQuery(this).html());
@@ -114,7 +114,7 @@ function check_answer() {
             jQuery('.notation_undetermined').addClass('visible');
         }
         else {
-            if (useranswer == correctAnswer) {
+            if (useranswer === correctAnswer) {
                 resetFeedback();
                 jQuery('.notation_feedback').addClass('visible');
                 jQuery('.notation_correct').addClass('visible');

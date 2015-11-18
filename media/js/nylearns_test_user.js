@@ -5,7 +5,7 @@
 			$.post('/test_nylearns_username/',{ username: url_var_username}
 			)
 			.success(function(data, url_var_username){
-				if (data == 'True'){//username already exists
+				if (data === 'True'){//username already exists
 					$('#nylearns-greeting').html('<p class="alert">Welcome Back!</p>');
 				}else{
 					var register = $('#nylearns-register-link').clone();

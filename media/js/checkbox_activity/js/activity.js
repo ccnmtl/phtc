@@ -112,7 +112,7 @@ function CheckboxActivity($, context){
 		$('.interactive').click(function(){
 			if($(this).children().length > 0){
 				$(this).children().each(function(){
-					if($(this).attr('class')=="user-x"){
+					if($(this).attr('class') === "user-x"){
 						$(this).parent().empty();
 					}
 				});
@@ -127,7 +127,7 @@ function CheckboxActivity($, context){
 	this.createRowTitle = function(rowTitle){
 		var formattedRowTitle = '';
 		for(var l in rowTitle){
-			if(l.length == 1){
+			if(l.length === 1){
 				formattedRowTitle += rowTitle[l] + '<br/>';
 			}
 		}
@@ -216,7 +216,7 @@ function CheckboxActivity($, context){
 	// A custom function that allows for stuff that is specific to the 
 	// site that the activity is ebedded into. 
 	this.customEmbed = function(command){
-		if(command == "hide"){
+		if(command === "hide"){
 			$('.pager').css({
 				display: 'none'
 			});

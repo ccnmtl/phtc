@@ -20,7 +20,7 @@ jQuery(document).ready(function(){
 			}
 			
 			function check_answer(){ 
-				if (answered.length == num_answers){
+				if (answered.length === num_answers){
 					submit_clone.remove();
 					submit_btn.css('display','block');
 				}
