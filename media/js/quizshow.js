@@ -8,7 +8,7 @@ function initShowHide() {
 		hideAll();
 		var as = document.getElementsByTagName('a');
 		for (var i = 0; i < as.length; i++) {
-			if (as[i].className == "moretoggle") {
+			if (as[i].className === "moretoggle") {
 				as[i].onclick = clickhandler;
 			}
 		}			
@@ -38,7 +38,7 @@ function hide(s) {
 function hideAll() {
 	var divs = document.getElementsByTagName('div');
 	for (var i = 0; i < divs.length; i++) {
-		if (divs[i].className == "toggleable") {
+		if (divs[i].className === "toggleable") {
 			divs[i].style.display = 'none';
 		}
 	}
@@ -46,7 +46,7 @@ function hideAll() {
 
 function addLoadEvent(func) {
   	var oldonload = window.onload;
-  	if (typeof window.onload != 'function') {
+  	if (typeof window.onload !== 'function') {
     		window.onload = func;
   	} else {
     		window.onload = function() {
@@ -67,7 +67,7 @@ function hideAnswers() {
 		var divlength = divtag.length;
 		for (var i=0; i<divlength; i++) {
 			var divtagclass = divtag[i].className;	
-			if (divtagclass=='answertext') {
+			if (divtagclass==='answertext') {
 				divtag[i].style.display="none";
 			}
 		}
@@ -80,8 +80,8 @@ function reveal() {
 		var divlength = divtag.length;
 		for (var i=0; i<divlength; i++) {
 			var divtagclass = divtag[i].className;
-			if (divtagclass=='answertext') {
-				if (divtag[i].style.display=="block") {
+			if (divtagclass==='answertext') {
+				if (divtag[i].style.display==="block") {
 					divtag[i].style.display="none";
 					document.getElementById("displaytrigger").innerHTML="Show &gt;&gt;";
 				}

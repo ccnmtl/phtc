@@ -1,5 +1,5 @@
 //get the form we are dealing with - profile or registration
-if(jQuery('form').attr('id') == "registration"){
+if(jQuery('form').attr('id') === "registration"){
     var _form = jQuery();
     //Make sure the password field is not left blank for nyLearns registration
     
