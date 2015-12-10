@@ -1,36 +1,17 @@
 # flake8: noqa
 from settings_shared import *
+from ccnmtlsettings.staging import common
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'phtc',
-        'HOST': '',
-        'PORT': 6432,
-        'USER': '',
-        'PASSWORD': '',
-    }
-}
-
-
-TEMPLATE_DIRS = (
-    "/var/www/phtc/phtc/phtc/templates",
-)
-
-MEDIA_ROOT = '/var/www/phtc/uploads/'
-
-STATICFILES_DIRS = ()
-STATIC_ROOT = "/var/www/phtc/phtc/media/"
-
-COMPRESS_ROOT = "/var/www/phtc/phtc/media/"
-DEBUG = False
-STAGING_ENV = True
-TEMPLATE_DEBUG = DEBUG
+locals().update(
+    common(
+        project=project,
+        base=base,
+        STATIC_ROOT=STATIC_ROOT,
+        INSTALLED_APPS=INSTALLED_APPS,
+        s3static=False,
+    ))
 
 PROD_BASE_URL = None
-
-if 'migrate' not in sys.argv:
-    INSTALLED_APPS.append('raven.contrib.django.raven_compat')
 
 try:
     from local_settings import *
