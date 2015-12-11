@@ -49,8 +49,8 @@ django-appconf==1.0.1
 django-indexer==0.3.0
 django-templatetag-sugar==1.0
 django-paging==0.2.5
-django-annoying==0.8.3
-django-compressor==1.5
+django-annoying==0.8.4
+django-compressor==1.6
 django-statsd-mozilla==0.3.16
 django-bootstrap-form==3.2
 django-debug-toolbar==1.4
@@ -64,3 +64,9 @@ django-smartif==0.1
 django-jenkins==0.17.0
 django-stagingcontext==0.1.0
 django-smoketest==0.3.0
+gunicorn==19.3.0
+django-impersonate==0.9.1
+django-waffle==0.10.1
+django-ga-context==0.1.0
+
+ccnmtlsettings==0.1.0
