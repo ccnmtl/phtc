@@ -54,6 +54,10 @@ PAGEBLOCKS = ['pageblocks.TextBlock',
 PROJECT_APPS = ['phtc.main', 'quizblock', 'phtc.logic_model',
                 'phtc.treatment_activity']
 
+DEBUG_TOOLBAR_CONFIG = {
+    'INSERT_BEFORE': '<span class="djdt-insert-here">',
+}
+
 if 'harvest' in sys.argv:
     DATABASES = {
         'default': {
