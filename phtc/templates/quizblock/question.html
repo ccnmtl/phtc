@@ -54,7 +54,8 @@
               {% endif %}
             {% endfor %}
           </ol>
-        {% endif %}<!-- {% comment %} {% end if question.is_single_choice %} {% endcomment %} -->
+        {% endif %}
+        <!-- {% comment %} {% end if question.is_single_choice %} {% endcomment %} -->
 
 
         {% if question.is_single_choice_feedback %}
@@ -95,7 +96,8 @@
           <!-- end show answer block for feedback here -->
 
 
-        {% if question.is_matching %}<!-- {% comment %}{% include 'quizblock/single_choice_matching.html' %}{% endcomment %} -->
+        {% if question.is_matching %}
+        <!-- {% comment %}{% include 'quizblock/single_choice_matching.html' %}{% endcomment %} -->
             <h4>List of codes:</h4><!-- Think this is done -->
             <div id="codes">
               <ol class="answer-codes" type="A">
@@ -160,7 +162,8 @@
                    {% endfor %} 
                    </script>
 
-        {% endif %}<!-- {% comment %} {% end if question.is_matching %} {% endcomment %}  -->
+        {% endif %}
+        <!-- {% comment %} {% end if question.is_matching %} {% endcomment %}  -->
 
 
 	    {% if question.is_single_choice_dropdown %}
@@ -199,7 +202,8 @@
               {% endif %}
             {% endfor %}
           </ol>
-	    {% endif %}<!-- {% comment %} {% end if question.is_multiple_choice %} {% endcomment %} -->
+	    {% endif %}
+	    <!-- {% comment %} {% end if question.is_multiple_choice %} {% endcomment %} -->
 
 
 
@@ -223,14 +227,16 @@
                 <!-- Add button for user to indicate when they are done entering their answer 
                 add div drop down area to display the answer when the user clicks on the button -->
   	          	<p class="your-answer">Your Answer:</p>
-	            <input class="reading-exercise" type="text" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" />
-	            <button type="button" class="btn btn-info btn-sm reading-exercise">Submit</button>
+	            <!-- <input class="reading-exercise" type="text" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" /> -->
+	            <textarea class="reading-exercise" rows="10" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" ></textarea>
+	            <p><button type="button" class="btn btn-info btn-sm reading-exercise">Submit</button></p>
 	          {% else %}
 	              <input type="text" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" />
 	          {% endif %}
             {% endif %}
           {% endif %}
-        {% endif %}<!-- {% comment %} {% if question.is_short_text %} {% endcomment %} -->
+        {% endif %}
+        <!-- {% comment %} {% if question.is_short_text %} {% endcomment %} -->
 
 
         {% if question.is_long_text %}
@@ -346,7 +352,7 @@
         
   {% if block.reading_exercise %}
   	  <div class="casesanswerdisplay question_response">
-  	  	  <p class="your-answer-feedback">Feedback:</p>
+  	  	  <p class="your-answer-feedback"><b><u>Feedback:</u></b></p>
           <p>{{question.explanation|markdown}}</p>
       </div>
   {% else %}
