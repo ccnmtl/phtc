@@ -71,16 +71,12 @@
                 </li>
               {% endif %}
             {% endfor %}
-           </ol>
+            <button type="button" class="btn btn-info btn-sm feedback-quizblock">Submit</button>
+           </ol>     
          {% endif %}
           <!-- {% comment %} {% if question.is_single_choice_feedback %} {% endcomment %} -->
           <!-- adding show answer block for feedback here -->
           {% if block.feedback  %}
-            <div class="casesanswerdisplay question_response">
-              <div id="q{{question.id}}" class="toggleable">
-               <p> {{answer.feedback}} </p>
-              </div>
-            </div>
             <div class="case-feedback feedback_response">
               {% for answer in question.answer_set.all %}
                 <div class ="item-feedback well">
