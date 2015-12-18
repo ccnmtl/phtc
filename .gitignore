@@ -16,4 +16,5 @@ ghostdriver.log
 node_modules
 .project
 .pydevproject
+phtc.sql
 

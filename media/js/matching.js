@@ -65,10 +65,10 @@ jQuery(document).ready(function($) {
 
         if (Object.keys(_answer_key).length !== Object.keys(_user_answers)
             .length) {
-            alert('Please answer each scenario item.');
+            //alert('Please answer each scenario item.');
             return;
         } else {
-            alert('Your answers are in! \n Click ok to continue.');
+            //alert('Your answers are in! \n Click ok to continue.');
             display_answer_comparison();
             return;
         }
