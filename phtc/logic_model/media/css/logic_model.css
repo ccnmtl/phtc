@@ -1,8 +1,11 @@
 h1.section-label-header,
-li.next,
 li.previous,
 #sidebarleft {
     display:none;
+}
+
+li.next {
+	display:block;
 }
 
 header#masthead {

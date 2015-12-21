@@ -272,7 +272,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
                 jQuery("li.next").show();
             //jQuery ('.next_phase').hide();
         } else {
-                jQuery("li.next").hide();
+                jQuery("li.next").show();
             //jQuery ('.next_phase').show();
         }
         
