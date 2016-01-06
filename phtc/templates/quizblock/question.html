@@ -243,23 +243,7 @@
           <!-- {% comment %}{% include 'quizblock/long_text.html' %}{% endcomment %} -->
           {% if block.rhetorical %}
             <textarea rows="10" name="question{{question.id}}" ></textarea>
-            <!-- Add button for user to indicate when they are done entering their answer 
-                add div drop down area to display the answer when the user clicks on the button -->
-  	          	<p class="your-answer">Your Answer:</p>
-	            <input class="reading-exercise" type="text" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" />
-	            <button type="button" class="btn btn-info btn-sm reading-exercise">Submit</button>
-          {% else %}
-            {% if response %}
-              {% if block.allow_redo %}
-              <textarea rows="10" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" >{{response.value}}</textarea>
-              {% else %}
-              <p class="yours">{{response.value|markdown}}</p>
-              {% endif %}
-            {% else %}
-              <textarea rows="10" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" ></textarea>
-            {% endif %}
           {% endif %}
-          
         <!-- {% comment %} {% if question.is_long_text %} {% endcomment %} -->
       {% endif %}
     </div>
