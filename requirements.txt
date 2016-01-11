@@ -21,7 +21,7 @@ pexpect==4.0.1
 pickleshare==0.5
 simplegeneric==0.8.1
 path.py==8.1.2
-ipython==4.0.0
+ipython==4.0.1
 sure==1.2.24
 fuzzywuzzy==0.8.0
 cssselect==0.9.1
