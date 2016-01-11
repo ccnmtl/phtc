@@ -1,5 +1,5 @@
 --index-url https://pypi.ccnmtl.columbia.edu/
-Django==1.8.7
+Django==1.8.8
 feedparser==5.2.1
 Markdown==2.6.4
 pyenchant==1.6.6
@@ -12,7 +12,7 @@ versiontools==1.9.1
 statsd==3.2.1
 mccabe==0.3.1
 flake8==2.5.0
-lxml==3.4.4
+lxml==3.5.0
 ipdb==0.8.1
 traitlets==4.0.0
 ipython_genutils==0.1.0
@@ -21,12 +21,12 @@ pexpect==4.0.1
 pickleshare==0.5
 simplegeneric==0.8.1
 path.py==8.1.2
-ipython==4.0.0
+ipython==4.0.1
 sure==1.2.24
 fuzzywuzzy==0.8.0
 cssselect==0.9.1
 rdflib==4.2.1
-selenium==2.47.1
+selenium==2.48.0
 coverage==3.7.1
 unittest2==0.5.1
 logilab-common==1.1.0
@@ -40,7 +40,7 @@ six==1.10.0
 pyasn1==0.1.9
 pyOpenSSL==0.15.1
 ndg-httpsclient==0.4.0
-djangowind==0.14.1
+djangowind==0.14.3
 sorl==3.1
 tagging==0.3-pre
 typogrify==2.0.7
@@ -50,13 +50,13 @@ django-appconf==1.0.1
 django-indexer==0.3.0
 django-templatetag-sugar==1.0
 django-paging==0.2.5
-django-annoying==0.8.4
+django-annoying==0.8.5
 django-compressor==1.6
 django-statsd-mozilla==0.3.16
 django-bootstrap-form==3.2
 django-debug-toolbar==1.4
 django-treebeard==3.0
-django-pagetree==1.1.7
+django-pagetree==1.1.9
 django-markwhat==1.4
 django-pageblocks==1.0.2
 django-pagetree_export==0.4
@@ -66,8 +66,8 @@ django-jenkins==0.17.0
 django-stagingcontext==0.1.0
 django-smoketest==0.3.0
 gunicorn==19.3.0
-django-impersonate==0.9.1
-django-waffle==0.10.1
+django-impersonate==0.9.2
+django-waffle==0.11
 django-ga-context==0.1.0
 
 ccnmtlsettings==0.1.0

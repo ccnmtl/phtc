@@ -1,4 +1,3 @@
-//(function (jQuery) {
 LogicModel.Scenario = Backbone.Model.extend({
 });
 
