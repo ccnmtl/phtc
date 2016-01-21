@@ -27,7 +27,7 @@ fuzzywuzzy==0.8.0
 cssselect==0.9.1
 rdflib==4.2.1
 selenium==2.48.0
-coverage==3.7.1
+coverage==4.0.3
 unittest2==0.5.1
 logilab-common==1.1.0
 logilab-astng==0.24.3
@@ -62,7 +62,7 @@ django-pageblocks==1.0.2
 django-pagetree_export==0.4
 django-registration-redux==1.1
 django-smartif==0.1
-django-jenkins==0.17.0
+django-jenkins==0.18.1
 django-stagingcontext==0.1.0
 django-smoketest==0.3.0
 gunicorn==19.3.0
