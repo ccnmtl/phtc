@@ -31,7 +31,7 @@ coverage==4.0.3
 unittest2==0.5.1
 logilab-common==1.1.0
 logilab-astng==0.24.3
-pylint==1.4.4
+pylint==1.5.4
 pep8==1.7.0
 pyflakes==1.0.0
 python-ldap==2.4.22
