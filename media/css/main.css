@@ -885,3 +885,19 @@ margin: 0 7px 0 -2px !important;
 .comp_descriptor .comp_criteria {
     width: 340px;
 }
+
+.dropdown-menu .menu-4 {
+    margin-left: 20px;
+}
+.dropdown-menu .menu-5 {
+    margin-left: 40px;
+}
+.dropdown-menu .menu-6 {
+    margin-left: 60px;
+}
+
+.dropdown-menu .menu-item a:hover {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #0088cc;
+}
