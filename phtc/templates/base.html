@@ -53,15 +53,24 @@
           {% block topnavbarleftitems %}{% endblock %}
         </ul>
         <div class="usernav">
-
           {% block topnavbarrightitems %}{% endblock %}
           {% block usernav %}
-
-          {% if request.user.is_anonymous %}
-          
-          {% else %}
-          Hello <span class="user_profile" rel="tooltip" title="View/Edit my profile"><a href="/profile/">{% if request.user.last_name %}{{request.user.first_name}}{% else %}{{request.user.username}}{% endif %}</a></span> <a id="login-logout" href="/accounts/logout/?next=/accounts/login/" class="btn btn-small btn-danger">Log out</a>
-          {% endif %}
+            {% if request.user.is_anonymous %}
+            {% else %}
+              Hello 
+              <span class="user_profile" rel="tooltip" title="View/Edit my profile">
+                <a href="/profile/">
+                  {% if request.user.last_name %}
+                    {{request.user.first_name}}
+                  {% else %}
+                    {{request.user.username}}
+                  {% endif %}
+                </a>
+              </span>
+              <a id="login-logout" href="/accounts/logout/?next=/accounts/login/" class="btn btn-small btn-danger">
+                Log out
+              </a>
+            {% endif %}
           {% endblock %}
         </div><!-- usernav -->
       </div><!-- navbar-inner -->
@@ -70,34 +79,48 @@
 
 {% block masthead %}
     <header id="masthead">
-        <h1><a href="/" title="Return to {% if request.user.is_anonymous %}Home Page{% else %}My Dashboard{% endif %}"><span>Return to {% if request.user.is_anonymous %} Home Page {% else %} My Dashboard {% endif %} </span></a></h1>
+        <h1>
+          <a href="{{menu_base}}{{module.get_absolute_url}}" title="Return to {% if request.user.is_anonymous %}Home Page{% else %}My Dashboard{% endif %}">
+            <span>
+              Return to {% if request.user.is_anonymous %} Home Page {% else %} My Dashboard {% endif %} 
+            </span>
+          </a>
+        </h1>
         <h4 id="logo-ccnmtl">
             <a href="http://ccnmtl.columbia.edu" target="_blank"
             title="Columbia Center for New Media Teaching and Learning">
-            <span>Produced by the Columbia Center for New Media Teaching
-            and Learning</span>
+              <span>
+              Produced by the Columbia Center for New Media Teaching
+              and Learning
+              </span>
             </a>
         </h4>
         {% block primarynav %}
-        {% comment %}<div class="navbar" id="primarynav">
-            <div class="navbar-inner">
+        {% comment %}
+        <div class="navbar" id="primarynav">
+          <div class="navbar-inner">
             <div class="container">
-            <ul class="nav">
-            {% block primarynavtabs %}
-            {% for section in modules %}
-            <li{% ifequal section.id module.id %} class="active"{% endifequal %}><a href="{{section.get_absolute_url}}">{{section.label}}</a></li>
-            {% endfor %}
-            {% endblock %}
-            {% block primarynavtabsextra %}{% endblock %}
-            </ul>
+              <ul class="nav">
+                {% block primarynavtabs %}
+                {% for section in modules %}
+                <li{% ifequal section.id module.id %} class="active"{% endifequal %}>
+                  <a href="{{section.get_absolute_url}}">
+                    {{section.label}}
+                  </a>
+                </li>
+                {% endfor %}
+                {% endblock %}
+                {% block primarynavtabsextra %}{% endblock %}
+              </ul>
             
-            <ul class="nav pull-right">
-            {% block primarynavrightextra %}{% endblock %}
-            </ul>
+              <ul class="nav pull-right">
+                {% block primarynavrightextra %}{% endblock %}
+              </ul>
             </div>
-            </div>
-        </div>{% endcomment %}
-        {% endblock %}
+          </div>
+        </div>
+      {% endcomment %}
+      {% endblock %}
     </header><!-- masthead -->
 {% endblock %}
 
@@ -112,11 +135,11 @@
           {% if request.user.is_superuser %}
             {% ifequal section.get_absolute_url NONE  %}
             {% else %}
-            <ul class="nav nav-pills">
+              <ul class="nav nav-pills">
                 <li><a style="color: #000;"><b>Page mode:</b></a></li>
                 <li{% block mode-view %} class="active"{% endblock %}> <a href="{{section.get_absolute_url}}" >View</a></li>
                 <li{% block mode-edit %}{% endblock %}><a id="test-edit-link" href="/edit{{section.get_absolute_url}}">Edit</a></li>
-             </ul>
+              </ul>
              <hr />
             {% endifequal %}
             
