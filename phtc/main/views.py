@@ -145,6 +145,7 @@ def dashboard(request):
 def dashboard_panel(request):
     return render_dashboard(request)
 
+
 @login_required
 def render_dashboard(request):
     try:
