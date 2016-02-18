@@ -1,81 +1,96 @@
 {% extends 'base.html' %}
+
 {% block title %}My Dashboard{% endblock %}
+
 {% block noleftsidebar %} class="no-left-sidebar dashboard"{% endblock %}
+
 {% block content %}
 <style type="text/css">
-.module-info-popover, .section-info-popover{
-	cursor: pointer;
-	display:inline-block;
-	float: right;
-}
-.toggle-on{
-	display: block !important;
-}
-.toggle-off{
-	display: none;
-}
+    .module-info-popover, .section-info-popover {
+    	cursor: pointer;
+    	display:inline-block;
+    	float: right;
+    }
+    .toggle-on {
+    	display: block !important;
+    }
+    .toggle-off {
+    	display: none;
+    }
 </style>
 
 <h1 id="dashboard-header">Online Modules</h1>
 
-
 <div id="dashboard-toc">
-  <div id="modules">
-    {% for module in root.get_children %}
-	  <div class='module
+    <div id="modules">
+        {% for module in root.get_children %}
+	        <div class='module
 				{% for css in section_css %}
 		 			{% ifequal module.id css.section_css_id  %}
 		 				{{ css.css_field }}
 		 			{% endifequal %}
 		 		{% endfor %} dropdown'
-		  id="{{ module.id }}">
-	      {%for type in module_type%}
-	 		{% ifequal module.id type.module_type_id %}
-				<span class='hide {{ type.info }}'>&nbsp;</span>
-	 		{% endifequal %}
-		  {% endfor %}
-		  <a class="show-module dropdown-toggle" data-toggle="dropdown" rel="{{ module.get_absolute_url }}" href="javascript:void(0);">{{ module.label }}<span class="caret"></span></a>
-		  <div class="divclearfix"></div>
-		  <div class="show-descendants">
-		    <ul class="dropdown-menu">
-            {% for s in module.get_descendants %}
-              {% ifequal s.id module.id %}
-              {% else %}
-                <li class="menu-{{s.depth}}" style="list-style-type: none;">
-                  {% ifnotequal s.id section.id %}
-                    <a href="{{menu_base}}{{s.get_absolute_url}}">
-                  {% else %}
-                     <b>
-                  {% endifnotequal %}
-                    {{s.label}}
-                  {% ifnotequal s.id section.id %}
-                    </a>
-                  {% else %}
-                    </b>
-                  {% endifnotequal %}
-               {% if s.get_children %}<ul>{% else %}
-               {% if s.is_last_child %}</ul>{% endif %}{% endif %}
-                </li>
-               {% endifequal %}
-            {% endfor %}
-            </ul>
-          </div><!--end .show-descendants-->
-      </div><!--end .module-->
-    {% endfor %}
-  </div>
-  <div id="return"></div><!-- end #return -->
-  <div class="divclearfix"></div><!-- divclearfix -->
+		      id="{{ module.id }}">
+	        
+                {% for type in module_type %}
+    	 		    {% ifequal module.id type.module_type_id %}
+    				    <span class='hide {{ type.info }}'>&nbsp;</span>
+    	 		    {% endifequal %}
+                {% endfor %}
+            
+                <a class="show-module dropdown-toggle" data-toggle="dropdown"
+                    rel="{{ module.get_absolute_url }}" href="javascript:void(0);">
+                        {{ module.label }}<span class="caret"></span></a>
+    		  
+                <div class="divclearfix"></div>
+
+                <div class="show-descendants">
+                    <ul class="dropdown-menu">
+                        {% for s in module.get_descendants %}
+                            {% ifequal s.id module.id %}
+                            {% else %}
+                                <li class="menu-{{s.depth}}" style="list-style-type: none;">
+                                {% ifnotequal s.id section.id %}
+                                    <a href="{{menu_base}}{{s.get_absolute_url}}">
+                                {% else %}
+                                    <b>
+                                {% endifnotequal %}
+                                
+                                {{s.label}}
+                                
+                                {% ifnotequal s.id section.id %}
+                                    </a>
+                                {% else %}
+                                    </b>
+                                {% endifnotequal %}
+                   
+                                {% if s.get_children %}<ul>{% else %}
+                                {% if s.is_last_child %}</ul>{% endif %}{% endif %}
+                                </li>
+                            {% endifequal %}
+                        {% endfor %}
+                    </ul>
+                </div><!--end .show-descendants-->
+            </div><!--end .module-->
+        {% endfor %}
+    </div>
+    
+    <div id="return"></div><!-- end #return -->
+
+    <div class="divclearfix"></div><!-- divclearfix -->
+    
 </div><!-- end #dashboard-toc -->
 
-	<div class="modal hide" id="myModal">
-	  <div class="modal-header">
+<div class="modal hide" id="myModal">
+    <div class="modal-header">
 	    <button type="button" class="close" data-dismiss="modal">×</button>
 	    <h3>We appologize.</h3>
-	  </div>
-	  <div class="modal-body">
+	</div>
+    <div class="modal-body">
 	    <p>That course is not available. Please choose from one of the currently available modules.</p>
-	  </div>
-	</div><!--end #myModal-->
+	</div>
+</div><!--end #myModal-->
 
 <script src="{{STATIC_URL}}js/dashboard.js"></script>
+
 {% endblock %}
