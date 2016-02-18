@@ -31,45 +31,29 @@
 		 			{% endifequal %}
 		 		{% endfor %} dropdown'
 		      id="{{ module.id }}">
-	        
+
                 {% for type in module_type %}
     	 		    {% ifequal module.id type.module_type_id %}
     				    <span class='hide {{ type.info }}'>&nbsp;</span>
     	 		    {% endifequal %}
                 {% endfor %}
-            
+
                 <a class="show-module dropdown-toggle" data-toggle="dropdown"
                     rel="{{ module.get_absolute_url }}" href="javascript:void(0);">
                         {{ module.label }}<span class="caret"></span></a>
-    		  
+
                 <div class="divclearfix"></div>
 
                 <div class="show-descendants">
-                    <ul class="dropdown-menu">
+                    <div class="dropdown-menu">
                         {% for s in module.get_descendants %}
-                            {% ifequal s.id module.id %}
-                            {% else %}
-                                <li class="menu-{{s.depth}}" style="list-style-type: none;">
-                                {% ifnotequal s.id section.id %}
-                                    <a href="{{menu_base}}{{s.get_absolute_url}}">
-                                {% else %}
-                                    <b>
-                                {% endifnotequal %}
-                                
-                                {{s.label}}
-                                
-                                {% ifnotequal s.id section.id %}
-                                    </a>
-                                {% else %}
-                                    </b>
-                                {% endifnotequal %}
-                   
-                                {% if s.get_children %}<ul>{% else %}
-                                {% if s.is_last_child %}</ul>{% endif %}{% endif %}
-                                </li>
-                            {% endifequal %}
+                            <div class="menu-item menu-{{s.depth}}">
+                                <a href="{{menu_base}}{{s.get_absolute_url}}">
+                                    {{s.label}}
+                                </a>
+                            </div>
                         {% endfor %}
-                    </ul>
+                    </div>
                 </div><!--end .show-descendants-->
             </div><!--end .module-->
         {% endfor %}
