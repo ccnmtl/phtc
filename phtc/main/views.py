@@ -134,14 +134,15 @@ def exporter(request):
     return resp
 
 
-@login_required
+# @login_required
 @render_to('main/dashboard.html')
 def dashboard(request):
     '''I assume if we are getting rid of state, then the only
     users that should be logging in are admins and there should
     not be courses'''
     if request.user.is_anonymous():
-        return render_dashboard(request)
+        return HttpResponseRedirect('http://region2phtc.org/')
+        # return render_dashboard(request)
     try:
         UserProfile.objects.get(user=request.user).fname
         return render_dashboard(request)
