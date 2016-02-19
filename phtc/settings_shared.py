@@ -1,3 +1,4 @@
+# flake8: noqa
 # Django settings for phtc project.
 import os.path
 import sys
@@ -12,6 +13,10 @@ ALLOWED_HOSTS = [
     ".ccnmtl.columbia.edu", "localhost"]
 
 USE_TZ = True
+
+TEMPLATE_CONTEXT_PROCESSORS += [  # noqa
+    'phtc.main.views.context_processor'
+]
 
 INSTALLED_APPS += [  # noqa
     'sorl.thumbnail',

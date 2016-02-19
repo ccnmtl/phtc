@@ -1,12 +1,21 @@
 from json import dumps
+
 from annoying.decorators import render_to
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.flatpages.models import FlatPage
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from pagetree.helpers import get_section_from_path, get_hierarchy
+
 from phtc.main.models import DashboardInfo, UserProfile, ModuleType
 from phtc.main.models import SectionCss
+
+
+def context_processor(request):
+    ctx = {}
+    ctx['MEDIA_URL'] = settings.MEDIA_URL
+    return ctx
 
 
 def redirect_to_first_section_if_root(section, root):
@@ -125,7 +134,6 @@ def exporter(request):
     return resp
 
 
-@login_required
 @render_to('main/dashboard.html')
 def dashboard(request):
     '''I assume if we are getting rid of state, then the only
@@ -140,13 +148,11 @@ def dashboard(request):
         return render_dashboard(request)
 
 
-@login_required
 @render_to('main/dashboard_panel.html')
 def dashboard_panel(request):
     return render_dashboard(request)
 
 
-@login_required
 def render_dashboard(request):
     try:
         next_path = request.META['HTTP_REFERER']
