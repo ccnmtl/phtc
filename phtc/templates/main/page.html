@@ -13,8 +13,16 @@
 {% endfor %}
 {% endblock %}
 
-
 {% block title %}{{section.label}}{% endblock %}
+{% block brand %}
+    <a class="brand" href="{{menu_base}}{{module.get_absolute_url}}">
+      {% if request.user.is_anonymous %}
+        {{module.label}}
+      {% else %}
+        My Dashboard
+      {% endif %}
+    </a>
+{% endblock %}
 
 {% block pagetitle %}<h1 class="section-label-header" id="section-header">{{section.label}}</h1>{% endblock %}
 

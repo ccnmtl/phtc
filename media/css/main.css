@@ -37,6 +37,10 @@ body > .container
 #content { min-height: 100%; }
 .navbar-top { margin-bottom: 0px; }
 
+.navbar .brand {
+    width: 100% !important;
+}
+
 #primarynav .navbar-inner
 {
     background-color: blue;

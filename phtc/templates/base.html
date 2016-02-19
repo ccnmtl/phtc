@@ -42,13 +42,9 @@
       <div class="navbar-inner">
         <ul class="nav">
           <li>
-            <a class="brand" href="{{menu_base}}{{module.get_absolute_url}}">
-              {% if request.user.is_anonymous %}
-                {{module.label}}
-              {% else %}
-                My Dashboard
-              {% endif %}
-            </a>
+            {% block brand %}
+                <a class="brand" href="/">{% if request.user.is_anonymous %}Home{% else %}My Dashboard{% endif %}</a>
+            {% endblock %}
           </li>
           {% block topnavbarleftitems %}{% endblock %}
         </ul>

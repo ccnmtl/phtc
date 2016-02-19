@@ -1,3 +1,1 @@
-{% load thumbnail %}
-
-<img alt="{{block.alt}}" src="{% if img_src %}{{img_src}}{% else %}{% thumbnail block.image 100x50 %}{% endif %}" />
+<img alt="{{block.alt}}" src="{{MEDIA_URL}}{{block.image.name}}" style="width: 100px; height: auto;"/>
