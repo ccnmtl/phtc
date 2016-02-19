@@ -134,6 +134,7 @@ def exporter(request):
     return resp
 
 
+@login_required
 @render_to('main/dashboard.html')
 def dashboard(request):
     '''I assume if we are getting rid of state, then the only
@@ -148,6 +149,7 @@ def dashboard(request):
         return render_dashboard(request)
 
 
+@login_required
 @render_to('main/dashboard_panel.html')
 def dashboard_panel(request):
     return render_dashboard(request)
