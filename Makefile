@@ -8,6 +8,7 @@ JS_FILES=media/js/dashboard.js \
 	media/js/profile.js media/js/quizshow.js media/js/reading_exercise.js \
 	media/js/registration.js media/js/required_answers.js \
 	media/js/special_question.js
+MAX_COMPLEXITY=8
 
 all: jenkins
 
