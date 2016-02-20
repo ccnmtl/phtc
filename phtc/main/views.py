@@ -76,7 +76,6 @@ def page(request, path):
     if request.method == "POST":
         return page_post(request, section, module)
 
-    # return page
     return page_dict
 
 
@@ -134,7 +133,6 @@ def exporter(request):
     return resp
 
 
-# @login_required
 @render_to('main/dashboard.html')
 def dashboard(request):
     '''I assume if we are getting rid of state, then the only
@@ -142,7 +140,6 @@ def dashboard(request):
     not be courses'''
     if request.user.is_anonymous():
         return HttpResponseRedirect('http://region2phtc.org/')
-        # return render_dashboard(request)
     try:
         UserProfile.objects.get(user=request.user).fname
         return render_dashboard(request)
