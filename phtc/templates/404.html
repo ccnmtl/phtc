@@ -11,16 +11,6 @@
 {% block title %}Page Not Found{% endblock %}
 {% block usernav %}
 {% if request.user.is_anonymous %}
-	<div class="navbar">
-	  <div class="navbar-inner">
-	    <div class="usernav">Hello 
-	    	<span class="user_profile" rel="tooltip" data-original-title="View/Edit my profile">
-	    		<a href="/profile/">demo</a>
-	    	</span>
-	    	<a href="/accounts/login/" class="btn btn-small">Log in</a>
-	    </div><!-- usernav -->
-	  </div><!-- navbar-inner -->
-	</div>
 {% else %}
 	<div class="navbar">
 	  <div class="navbar-inner">
