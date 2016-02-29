@@ -11,6 +11,7 @@
 {% for block in section.pageblock_set.all %}
 {% rendercss block %}
 {% endfor %}
+    <link rel="stylesheet" href="{{STATIC_URL}}css/checkbox_activity.css" type="text/css" media="all" />
 {% endblock %}
 
 {% block title %}{{section.label}}{% endblock %}
