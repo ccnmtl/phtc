@@ -11,7 +11,7 @@ Pillow==3.0.0
 versiontools==1.9.1
 statsd==3.2.1
 mccabe==0.4.0
-flake8==2.5.2
+flake8==2.5.4
 lxml==3.5.0
 ipdb==0.9.0
 traitlets==4.0.0
