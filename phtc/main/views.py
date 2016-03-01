@@ -6,6 +6,7 @@ from annoying.decorators import render_to
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib.flatpages.models import FlatPage
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
@@ -19,8 +20,6 @@ from pagetree.helpers import get_section_from_path, get_hierarchy
 from phtc.main.models import (DashboardInfo, UserProfile, ModuleType,
                               SectionCss, NYLEARNS_Course_Map)
 from quizblock.models import (Quiz, Question, Response, Submission)
-
-
 
 
 def get_userpagevisit_status(section, user):
@@ -63,7 +62,6 @@ def part_flagged_as_allowed(upv):
     return upv.status == "allowed" or upv.status == "in_progress"
 
 
-
 def context_processor(request):
     ctx = {}
     ctx['MEDIA_URL'] = settings.MEDIA_URL
@@ -84,6 +82,19 @@ def page_post(request, section, module):
     '''I guess this will most likely need to be removed'''
     # giving them feedback before they proceed
     return HttpResponseRedirect(section.get_absolute_url())
+
+
+def make_sure_module1_parts_are_allowed(module, user):
+
+    parts = module.get_children()
+    for part in parts:
+        v = part.get_uservisit(user)
+        if v:
+            if (v.status == "in_progress"
+                    and part.get_previous().get_uservisit(user)):
+                part.get_previous().user_pagevisit(user, status="complete")
+            else:
+                part.user_pagevisit(user, status="allowed")
 
 
 def is_module_one(module):
@@ -437,6 +448,32 @@ def aggregate_responses(evaluation_report):
             qr = question_please_add(question, ev, qr)
         else:
             qr = question_other(question, ev, response_list_count, qr)
+    return qr
+
+
+def question_other(question, ev, response_list_count, qr):
+    counter = []
+    for val in response_list_count:
+        for res in ev['responses']:
+            response = res.value.strip(
+                ' \t\n\r').replace(" ", "_").lower()
+            if response == val[0]:
+                val = (val[0], val[1] + 1)
+        counter.append((question, val[0]))
+        counter.append(('# of Responses', val[1]))
+    qr.append(counter)
+    return qr
+
+
+def question_please_add(question, ev, qr):
+    comments = []
+    for i in range(len(ev['responses'])):
+        if not ev['responses'][i].value == '':
+            comments.append(
+                (question, ev['responses'][i].value))
+            # keep report uniform
+            comments.append(('', ''))
+    qr.append(comments)
     return qr
 
 
