@@ -2,21 +2,25 @@
 {% load render %}
 
 {% block js %}
-{% for block in section.pageblock_set.all %}
-{% renderjs block %}
-{% endfor %}
+  {% for block in section.pageblock_set.all %}
+    {% renderjs block %}
+  {% endfor %}
 {% endblock %}
 
 {% block css %}
-{% for block in section.pageblock_set.all %}
-{% rendercss block %}
-{% endfor %}
+  {% for block in section.pageblock_set.all %}
+    {% rendercss block %}
+  {% endfor %}
     <link rel="stylesheet" href="{{STATIC_URL}}css/checkbox_activity.css" type="text/css" media="all" />
 {% endblock %}
 
-{% block title %}{{section.label}}{% endblock %}
+{% block title %}
+  {{section.label}}
+{% endblock %}
+
 {% block brand %}
-    <a class="brand" href="{{menu_base}}{{module.get_absolute_url}}">
+    <a class="brand"
+    href="{{module.get_first_leaf.get_absolute_url}}">
       {% if request.user.is_anonymous %}
         {{module.label}}
       {% else %}
@@ -25,7 +29,11 @@
     </a>
 {% endblock %}
 
-{% block pagetitle %}<h1 class="section-label-header" id="section-header">{{section.label}}</h1>{% endblock %}
+{% block pagetitle %}
+  <h1 class="section-label-header" id="section-header">
+    {{section.label}}
+  </h1>
+{% endblock %}
 
 {% block sidebar %}
         <!-- ###### Secondary Navigation ###### -->
