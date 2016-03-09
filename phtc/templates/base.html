@@ -41,13 +41,7 @@
         <ul class="nav">
           <li>
             {% block brand %}
-                <a class="brand"
-                href="">
-                {% if request.user.is_anonymous %}
-                {% else %}
-                  My Dashboard
-                {% endif %}
-                </a>
+                <div class="brand"></div>
             {% endblock %}
           </li>
           {% block topnavbarleftitems %}{% endblock %}
@@ -79,10 +73,7 @@
 
 {% block masthead %}
     <header id="masthead">
-        <h1>
-          <a href="" title="">
-          </a>
-        </h1>
+        <h1></h1>
         <h4 id="logo-ccnmtl">
             <a href="http://ccnmtl.columbia.edu" target="_blank"
             title="Columbia Center for New Media Teaching and Learning">

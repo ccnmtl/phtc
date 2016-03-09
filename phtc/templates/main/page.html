@@ -19,14 +19,13 @@
 {% endblock %}
 
 {% block brand %}
-    <a class="brand"
-    href="">
+    <div class="brand">
       {% if request.user.is_anonymous %}
         {{module.label}}
       {% else %}
         My Dashboard
       {% endif %}
-    </a>
+    </div>
 {% endblock %}
 
 {% block pagetitle %}
