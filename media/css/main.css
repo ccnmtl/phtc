@@ -235,8 +235,7 @@ h2 {
 
 .navbar .brand {
     margin: 0;
-    padding-left: 23px !important;
-    background: url('../img/icon_home.png') 0 11px no-repeat;
+    padding-left: 10px !important;
 }
 
 .navbar .usernav {

@@ -20,7 +20,7 @@
 
 {% block brand %}
     <a class="brand"
-    href="{{module.get_first_leaf.get_absolute_url}}">
+    href="">
       {% if request.user.is_anonymous %}
         {{module.label}}
       {% else %}
