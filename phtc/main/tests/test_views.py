@@ -11,7 +11,7 @@ class SimpleViewTest(TestCase):
 
     def test_index(self):
         result = self.c.get("/")
-        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 301)
 
 
 class LoggedInTest(TestCase):
@@ -50,8 +50,8 @@ class LoggedInTest(TestCase):
              'children': [{'label': "Three", 'slug': "introduction"}]
              })
         root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
-        r = self.c.get("/")
-        self.assertEqual(r.status_code, 302)
+        r = self.c.get("/socialwork/")
+        self.assertEqual(r.status_code, 200)
 
     def test_page_post(self):
         h = Hierarchy.objects.create(name="main", base_url="/")
