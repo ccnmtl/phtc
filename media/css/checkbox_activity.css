@@ -1,9 +1,9 @@
-
-.checkbox-wrapper table{
+.checkbox-wrapper table {
   border: none !important;
   margin: 14px 0 50px 0;
 }
-.checkbox-wrapper table td{
+
+.checkbox-wrapper table td {
 	border: 1px solid #333;
 	/*background: #e2e2e2;*/
 	min-width: 65px;
@@ -12,24 +12,29 @@
 	padding: 0 10px;
   color: #333;
 }
-.column-header{
+
+.checkbox-wrapper .column-header {
 	height: 25px;
 }
-.column-spacer{
+
+.checkbox-wrapper .column-spacer {
   border: none !important;
   background: none !important;
 }
-.interactive{
-	cursor: pointer;
-  background:#FFF!important;
+
+.checkbox-wrapper .interactive {
+    cursor: pointer;
+    background:#FFF!important;
 }
-.user-x{
+
+.checkbox-wrapper .user-x {
   color: #08C !important;
   font-weight: bold;
   padding: 0 0 0 0px !important;
   font-size: 24px;
 }
-.answr-x{
+
+.checkbox-wrapper .answr-x {
   margin: -3px 0 0 0;
   color: #333 !important;
   font-weight: bold;
@@ -37,7 +42,8 @@
   font-size: 24px;
   float: right;
 }
-#row-title{
+
+.checkbox-wrapper #row-title {
   float: left;
   margin: 170px 0 0 0;
   font-weight: bold;
@@ -45,32 +51,38 @@
   padding: 0 10px;
   color:#C63;
 }
-#column-title{
+
+.checkbox-wrapper #column-title {
   color:#C63;
   font-weight: bold;
   text-transform: uppercase;
   text-align: center;
 }
-.answer-key-wrapper{
+
+.checkbox-wrapper .answer-key-wrapper {
     position: absolute;
     margin: -35px 0 0 239px;
     clear: both;
     padding: 4px;
     border: 1px solid #999;
 }
-.user-answers{
+
+.checkbox-wrapper .user-answers {
   float: left;
   line-height: 20px;
 }
-.activity-answers{
+
+.checkbox-wrapper .activity-answers {
   float: right;
   padding: 0 0 0 40px;
   line-height: 20px;
   margin: 3px 0 0 0
 }
-.clear-button{
+
+.checkbox-wrapper .clear-button {
   margin: 0 30px;
 }
-.submit-button{
+
+.checkbox-wrapper .submit-button {
   margin:0 30px;
 }

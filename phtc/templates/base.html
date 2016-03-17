@@ -10,7 +10,6 @@
 
   {% compress css %}
     <link href="{{STATIC_URL}}bootstrap/css/bootstrap.css" rel="stylesheet">
-    {% comment %} <link href="{{STATIC_URL}}bootstrap/css/bootstrap-responsive.css" rel="stylesheet"> {% endcomment %}
     <link href="{{STATIC_URL}}css/main.css?site=phtc" rel="stylesheet">
   {% endcompress %}
   <link rel="shortcut icon" href="{{STATIC_URL}}img/favicon.ico" type="image/x-icon" />
@@ -35,7 +34,6 @@
 </head>
 
 <body{% block noleftsidebar %}{% endblock %}>
-
   <div class="container">
   {% block topnavbar %}
     <div class="navbar">
@@ -43,7 +41,7 @@
         <ul class="nav">
           <li>
             {% block brand %}
-                <a class="brand" href="/">{% if request.user.is_anonymous %}Home{% else %}My Dashboard{% endif %}</a>
+                <div class="brand"></div>
             {% endblock %}
           </li>
           {% block topnavbarleftitems %}{% endblock %}
@@ -75,13 +73,7 @@
 
 {% block masthead %}
     <header id="masthead">
-        <h1>
-          <a href="{{menu_base}}{{module.get_absolute_url}}" title="Return to {% if request.user.is_anonymous %}Home Page{% else %}My Dashboard{% endif %}">
-            <span>
-              Return to {% if request.user.is_anonymous %} Home Page {% else %} My Dashboard {% endif %} 
-            </span>
-          </a>
-        </h1>
+        <h1></h1>
         <h4 id="logo-ccnmtl">
             <a href="http://ccnmtl.columbia.edu" target="_blank"
             title="Columbia Center for New Media Teaching and Learning">
@@ -92,30 +84,6 @@
             </a>
         </h4>
         {% block primarynav %}
-        {% comment %}
-        <div class="navbar" id="primarynav">
-          <div class="navbar-inner">
-            <div class="container">
-              <ul class="nav">
-                {% block primarynavtabs %}
-                {% for section in modules %}
-                <li{% ifequal section.id module.id %} class="active"{% endifequal %}>
-                  <a href="{{section.get_absolute_url}}">
-                    {{section.label}}
-                  </a>
-                </li>
-                {% endfor %}
-                {% endblock %}
-                {% block primarynavtabsextra %}{% endblock %}
-              </ul>
-            
-              <ul class="nav pull-right">
-                {% block primarynavrightextra %}{% endblock %}
-              </ul>
-            </div>
-          </div>
-        </div>
-      {% endcomment %}
       {% endblock %}
     </header><!-- masthead -->
 {% endblock %}
@@ -138,10 +106,7 @@
               </ul>
              <hr />
             {% endifequal %}
-            
           {% endif %}
-
-
 
                 {% block pagetitle %}{% endblock %}
                 {% block content %}{% endblock %}

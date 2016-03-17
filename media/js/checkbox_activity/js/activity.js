@@ -81,7 +81,7 @@ function CheckboxActivity($, context) {
                 table.append(tr);
             } else {
                 var columnRow = $('<tr class="column-row"/>');
-                //insert a spacer ciolumn to account for the row headers
+                //insert a spacer column to account for the row headers
                 columnRow.append('<td class="column-spacer">&nbsp;</td>');
                 objs.each(function(k) {
                     var obj = objs[k];
@@ -215,18 +215,8 @@ function CheckboxActivity($, context) {
         $('.checkbox-wrapper').append(html);
     };
 
-    this.loadStyles = function($) {
-        // this will need to change depending on how the activity is
-        // installed into your site. Just refence the relatice location
-        // of the checkbox_activity styles.css
-        var myStylesLocation = '/media/js/checkbox_activity/styles.css';
-        $('<style type="text/css">@import url("' +
-          myStylesLocation + '")</style>')
-            .appendTo('head');
-    };
-
     // A custom function that allows for stuff that is specific to the
-    // site that the activity is ebedded into.
+    // site that the activity is embedded into.
     this.customEmbed = function(command) {
         if (command === 'hide') {
             $('.pager').css({
@@ -241,7 +231,6 @@ function CheckboxActivity($, context) {
 
     //initialize the activity
     this.createMatches(this.attrs, this.objects);
-    this.loadStyles($);
 }
 $(document).ready(function() {
     // create new Checkbox - the arguments are jQuery and
