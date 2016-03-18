@@ -27,6 +27,7 @@ urlpatterns = patterns(
     logout_page,
     admin_logout_page,
     auth_urls,
+    (r'^reports/$', 'phtc.main.views.reports'),
     (r'^admin/', include(admin.site.urls)),
     (r'^accounts/profile/$', RedirectView.as_view(url='/dashboard/')),
     url(r'^dashboard/',
