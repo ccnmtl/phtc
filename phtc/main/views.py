@@ -5,7 +5,6 @@ from annoying.decorators import render_to
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
 from django.contrib.flatpages.models import FlatPage
 
 from django.core.urlresolvers import reverse
@@ -16,7 +15,6 @@ from pagetree.models import UserPageVisit
 from pagetree.models import Section
 from quizblock.models import Quiz, Question, Response, Submission
 
-from phtc.main.forms import UserRegistrationForm
 from phtc.main.models import DashboardInfo, UserProfile, ModuleType
 from phtc.main.models import SectionCss
 
@@ -776,75 +774,6 @@ def create_user_report_table(completed_modules, completers):
         completer_objects.append(obj)
 
     return completer_objects
-
-
-@render_to('registration/nylearns_registration_form.html')
-def create_nylearns_user(request):
-    if request.POST and request.POST.get('nylearns_course_init'):
-        course = request.POST.get('nylearns_course_init')
-    else:
-        course = 'none'
-    if request.POST and request.POST.get('nylearns_user_id'):
-        user_id = request.POST.get('nylearns_user_id')
-    else:
-        user_id = 'none'
-    form = UserRegistrationForm(request.POST)
-    email = form.data["email"]
-    username = form.data["username"]
-    password = form.data["password1"]
-    args = dict(user_id=user_id, course=course)
-    # check if user or email exist and make sure pass is not blank
-    if (User.objects.filter(email=email).exists() or
-            User.objects.filter(username=username).exists() or
-            password == ""):
-        return dict(form=form, args=args)
-
-    else:
-        user = User.objects.create_user(username, email, password)
-        user.save()
-        userprofile = UserProfile.objects.create(user=user)
-
-    try:
-        userprofile.other_employment_location = form.data[
-            "other_employment_location"]
-    except:
-        pass
-
-    try:
-        userprofile.other_position_category = form.data[
-            "other_position_category"]
-    except:
-        pass
-
-    request.user.email = form.data["email"]
-    userprofile.is_nylearns = form.data["is_nylearns"]
-    userprofile.nylearns_user_id = form.data["nylearns_user_id"]
-    userprofile.nylearns_course_init = form.data["nylearns_course_init"]
-    userprofile.fname = form.data["fname"]
-    userprofile.lname = form.data["lname"]
-    userprofile.degree = form.data["degree"]
-    userprofile.sex = form.data["sex"]
-    userprofile.age = form.data["age"]
-    userprofile.origin = form.data["origin"]
-    userprofile.ethnicity = form.data["ethnicity"]
-    userprofile.degree = form.data["degree"]
-    userprofile.work_city = form.data["work_city"]
-    userprofile.work_state = form.data["work_state"]
-    userprofile.work_zip = form.data["work_zip"]
-    userprofile.employment_location = form.data["employment_location"]
-    userprofile.umc = form.data["umc"]
-    userprofile.position = form.data["position"]
-    userprofile.dept_health = form.data["dept_health"]
-    userprofile.geo_dept_health = form.data["geo_dept_health"]
-    userprofile.experience = form.data["experience"]
-    userprofile.rural = form.data["rural"]
-    userprofile.save()
-    user.is_active = True
-    user.save()
-    authenticated_user = authenticate(username=username, password=password)
-    login(request, authenticated_user)
-    return HttpResponseRedirect(
-        '/nylearns/?profile_created=true&course=' + course)
 
 
 @render_to('registration/registration_form.html')
