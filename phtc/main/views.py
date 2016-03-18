@@ -776,19 +776,6 @@ def create_user_report_table(completed_modules, completers):
     return completer_objects
 
 
-@render_to('registration/registration_form.html')
-def test_nylearns_username(request):
-    if request.POST:
-        username = request.POST.get('username')
-        try:
-            User.objects.get(username=username)
-            return HttpResponse(True)
-        except User.DoesNotExist:
-            return HttpResponse(False)
-    else:
-        return HttpResponse("POST only")
-
-
 def create_age_gender_dict(completers):
     items = [
         {
