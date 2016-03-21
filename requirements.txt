@@ -35,7 +35,7 @@ pylint==1.5.4
 pep8==1.7.0
 pyflakes==1.0.0
 python-ldap==2.4.22
-sqlparse==0.1.18
+sqlparse==0.1.19
 six==1.10.0
 pyasn1==0.1.9
 pyOpenSSL==0.15.1
