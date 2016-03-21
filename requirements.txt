@@ -23,7 +23,7 @@ simplegeneric==0.8.1
 path.py==8.1.2
 ipython==4.1.1
 sure==1.2.24
-fuzzywuzzy==0.8.0
+fuzzywuzzy==0.10.0
 cssselect==0.9.1
 rdflib==4.2.1
 selenium==2.48.0
