@@ -891,36 +891,19 @@ def create_age_gender_dict(completers):
 
 
 def calculate_age_gender(completers, items):
+    ranges_to_row = [
+        ("Under 20", 0),
+        ("20-29", 1),
+        ("30-39", 2),
+        ("40-49", 3),
+        ("50-59", 4),
+        ("60-69", 5),
+    ]
     for completer in completers:
-        if completer.age == "Under 20":
-            row = 0
-            set_row_total(completer, items, row)
-            items[row]['Total'] += 1
-
-        if completer.age == "20-29":
-            row = 1
-            set_row_total(completer, items, row)
-            items[row]['Total'] += 1
-
-        if completer.age == "30-39":
-            row = 2
-            set_row_total(completer, items, row)
-            items[row]['Total'] += 1
-
-        if completer.age == "40-49":
-            row = 3
-            set_row_total(completer, items, row)
-            items[row]['Total'] += 1
-
-        if completer.age == "50-59":
-            row = 4
-            set_row_total(completer, items, row)
-            items[row]['Total'] += 1
-
-        if completer.age == "60-69":
-            row = 5
-            set_row_total(completer, items, row)
-            items[row]['Total'] += 1
+        for age_range, row in ranges_to_row:
+            if completer.age == age_range:
+                set_row_total(completer, items, row)
+                items[row]['Total'] += 1
         # set Totals of male and Female
         items[6]['Total'] += 1
     return items
