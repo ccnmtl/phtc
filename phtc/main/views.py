@@ -322,40 +322,90 @@ def reports(request):
 
     report = request.POST.get('report')
     ev_report = request.POST.get('eval_report')
-    # vars used to create reports
-    completed_modules_counted = count_modules_completed(completed_modules)
-    completers = create_completers_list(completed_modules)
-    if report == "training_env":
-        training_env_report = create_training_env_report(
-            completers,
-            total_number_of_users, completed_modules_counted)
-        return create_csv_report2(request, training_env_report, report)
 
-    if report == "user_report_completed":
-        user_report_table = create_user_report_table(
-            completed_modules, users)
-        return create_csv_report2(request, user_report_table, report)
-
-    if report == "user_report_attempted":
-        user_report_table = create_user_report_table(
-            attempted_modules, users)
-        return create_csv_report2(request, user_report_table, report)
-
-    if report == "age_gender_report":
-        age_gender = create_age_gender_dict(completers)
-        return create_csv_report(request, age_gender, report)
-
-    if report == "course_report":
-        pre_test_data = get_pre_test_data(completed_modules, modules)
-        post_test_data = get_post_test_data(completed_modules, modules)
-        course_report_table = create_course_report_table(completed_modules,
-                                                         pre_test_data,
-                                                         post_test_data)
-        return create_csv_report2(request, course_report_table, report)
+    reporters = {
+        "training_env": TrainingEnvReporter,
+        "user_report_completed": UserReportCompletedReporter,
+        "user_report_attempted": UserReportAttemptedReporter,
+        "age_gender_report": AgeGenderReporter,
+        "course_report": CourseReporter,
+    }
+    if report in reporters:
+        reporter = reporters[report](
+            request, completed_modules, attempted_modules,
+            total_number_of_users, users, modules)
+        return reporter.report()
 
     if ev_report:
         return create_ev_report(request, ev_report, completed_modules,
                                 modules)
+
+
+class BaseReporter(object):
+    def __init__(self, request, completed_modules, attempted_modules,
+                 total_number_of_users, users, modules):
+        self.request = request
+        self.total_number_of_users = total_number_of_users
+        self.users = users
+        self.completed_modules = completed_modules
+        self.attempted_modules = attempted_modules
+        # vars used to create reports
+        self.completed_modules_counted = count_modules_completed(
+            completed_modules)
+        self.completers = create_completers_list(completed_modules)
+        self.modules = modules
+
+    def report(self):
+        table = self.generate_table()
+        f = self.report_function
+        return f(self.request, table, self.report)
+
+
+class TrainingEnvReporter(BaseReporter):
+    report = "training_env"
+    report_function = create_csv_report2
+
+    def generate_table(self):
+        return create_training_env_report(
+            self.completers,
+            self.total_number_of_users,
+            self.completed_modules_counted)
+
+
+class UserReportCompletedReporter(BaseReporter):
+    report = "user_report_completed"
+    report_function = create_csv_report2
+
+    def generate_table(self):
+        return create_user_report_table(self.completed_modules, self.users)
+
+
+class UserReportAttemptedReporter(BaseReporter):
+    report = "user_report_attempted"
+    report_function = create_csv_report2
+
+    def generate_table(self):
+        return create_user_report_table(self.attempted_modules, self.users)
+
+
+class AgeGenderReporter(BaseReporter):
+    report = "age_gender_report"
+    report_function = create_csv_report
+
+    def generate_table(self):
+        return create_age_gender_dict(self.completers)
+
+
+class CourseReporter(BaseReporter):
+    report = "course_report"
+    report_function = create_csv_report2
+
+    def generate_table(self):
+        pre_test_data = get_pre_test_data(self.completed_modules, self.modules)
+        post_test_data = get_post_test_data(self.completed_modules,
+                                            self.modules)
+        return create_course_report_table(self.completed_modules,
+                                          pre_test_data, post_test_data)
 
 
 def create_ev_report(request, ev_report, completed_modules, modules):
