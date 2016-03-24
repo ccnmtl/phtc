@@ -77,12 +77,15 @@ def make_sure_parts_are_allowed(module, user, section, is_module):
     status = get_userpagevisit_status(section, user)
     if status == "exists":
         ns = section.get_next()
-        if get_upv_status(ns, user) == "in_progress":
-            ns.user_pagevisit(user, status="complete")
-        elif get_upv_status(ns, user) == "allowed":
-            ns.user_pagevisit(user, status="in_progress")
+        update_next_status(ns, user, "in_progress", "complete")
+        update_next_status(ns, user, "allowed", "in_progress")
     if status == "created":
         section.get_next().user_pagevisit(user, status="allowed")
+
+
+def update_next_status(section, user, current_status, next_status):
+    if get_upv_status(section, user) == current_status:
+        section.user_pagevisit(user, status=next_status)
 
 
 def get_upv_status(section, user):
