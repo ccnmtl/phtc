@@ -429,10 +429,7 @@ def create_ev_report(request, ev_report, completed_modules, modules):
 
 def flatten_response_tables(qr):
     # set the number of rows in the report
-    qr_rows = 0
-    for qr_table in qr:
-        if qr_rows < len(qr_table):
-            qr_rows = len(qr_table)
+    qr_rows = get_qr_rows(qr)
 
     flat_report = []
     for row in range(qr_rows):
@@ -447,6 +444,14 @@ def flatten_response_tables(qr):
                     report_row.append(('', ''))
             flat_report.append(report_row)
     return flat_report
+
+
+def get_qr_rows(qr):
+    qr_rows = 0
+    for qr_table in qr:
+        if qr_rows < len(qr_table):
+            qr_rows = len(qr_table)
+    return qr_rows
 
 
 def aggregate_responses(evaluation_report):
