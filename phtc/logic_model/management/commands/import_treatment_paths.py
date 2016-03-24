@@ -14,36 +14,39 @@ class Command(BaseCommand):
 
     choices = dict(NODE_CHOICES)
 
+    def add_node(self, node, parent):
+        if node.nodeType == node.TEXT_NODE:
+            return
+
+        label = node.attributes.getNamedItem('Label')
+        child = parent.add_child(
+            name=label.nodeValue,
+            type=self.get_activity_type(node))
+
+        duration = node.attributes.getNamedItem('Duration')
+        if duration:
+            child.duration = duration.nodeValue
+
+        value = node.attributes.getNamedItem('Value')
+        if value:
+            child.value = value.nodeValue
+
+        text = node.attributes.getNamedItem('Text')
+        if text:
+            child.text = text.nodeValue
+
+        help_text = node.attributes.getNamedItem('Help')
+        if help_text:
+            child.help = help_text.nodeValue
+
+        child.save()
+
+        if node.hasChildNodes():
+            self.add_children(node.childNodes, child)
+
     def add_children(self, childNodes, parent):
         for node in childNodes:
-            if node.nodeType == node.TEXT_NODE:
-                continue
-
-            label = node.attributes.getNamedItem('Label')
-            child = parent.add_child(
-                name=label.nodeValue,
-                type=self.get_activity_type(node))
-
-            duration = node.attributes.getNamedItem('Duration')
-            if duration:
-                child.duration = duration.nodeValue
-
-            value = node.attributes.getNamedItem('Value')
-            if value:
-                child.value = value.nodeValue
-
-            text = node.attributes.getNamedItem('Text')
-            if text:
-                child.text = text.nodeValue
-
-            help_text = node.attributes.getNamedItem('Help')
-            if help_text:
-                child.help = help_text.nodeValue
-
-            child.save()
-
-            if node.hasChildNodes():
-                self.add_children(node.childNodes, child)
+            self.add_node(node, parent)
 
     def get_activity_type(self, node):
         node_type = node.attributes.getNamedItem('Type').nodeValue
