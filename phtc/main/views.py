@@ -66,8 +66,10 @@ def make_sure_parts_are_allowed(module, user, section, is_module):
     # handle Module one seperately
     if is_module_one(module):
         make_sure_module1_parts_are_allowed(module, user)
+
     if not is_module:
         return
+
     if UserPageVisit.objects.get(
             section=module, user=user).status == "complete":
         module.user_pagevisit(user, status="complete")
@@ -75,15 +77,16 @@ def make_sure_parts_are_allowed(module, user, section, is_module):
     status = get_userpagevisit_status(section, user)
     if status == "exists":
         ns = section.get_next()
-        if UserPageVisit.objects.get(
-                section=ns, user=user).status == "in_progress":
+        if get_upv_status(ns, user) == "in_progress":
             section.get_next().user_pagevisit(user, status="complete")
-        elif UserPageVisit.objects.get(
-                section=ns,
-                user=user).status == "allowed":
+        elif get_upv_status(ns, user) == "allowed":
             section.get_next().user_pagevisit(user, status="in_progress")
     if status == "created":
         section.get_next().user_pagevisit(user, status="allowed")
+
+
+def get_upv_status(section, user):
+    return UserPageVisit.objects.get(section=section, user=user).status
 
 
 def part_flagged_as_allowed(upv):
