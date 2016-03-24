@@ -144,47 +144,46 @@ def page(request, path):
 @login_required
 @render_to('main/edit_page.html')
 def edit_page(request, path):
-    if request.user.is_staff:
-        section = get_section_from_path(path)
-        root = section.hierarchy.get_root()
-        edit_page = True
-        dashboard, created = DashboardInfo.objects.get_or_create(
-            dashboard=section)
-
-        module_type, created = ModuleType.objects.get_or_create(
-            module_type=section)
-
-        if (request.POST.get('module_type_form') or
-                request.POST.get('module_type_form') == ''):
-            module_type.info = request.POST.get('module_type_form', '')
-
-        section_css, created = SectionCss.objects.get_or_create(
-            section_css=section)
-
-        if request.method == "POST":
-            try:
-                dashboard.info = request.POST['dashboard_info']
-            except:
-                pass
-            try:
-                section_css.css_field = request.POST['section_css_field']
-            except:
-                pass
-
-        dashboard.save()
-        section_css.save()
-        module_type.save()
-
-        return dict(section=section,
-                    section_css=section_css,
-                    dashboard=dashboard,
-                    module_type=module_type,
-                    module=section.get_module(),
-                    modules=root.get_children(),
-                    root=section.hierarchy.get_root(),
-                    edit_page=edit_page)
-    else:
+    if not request.user.is_staff:
         return HttpResponseRedirect(reverse("dashboard"))
+    section = get_section_from_path(path)
+    root = section.hierarchy.get_root()
+    edit_page = True
+    dashboard, created = DashboardInfo.objects.get_or_create(
+        dashboard=section)
+
+    module_type, created = ModuleType.objects.get_or_create(
+        module_type=section)
+
+    if (request.POST.get('module_type_form') or
+            request.POST.get('module_type_form') == ''):
+        module_type.info = request.POST.get('module_type_form', '')
+
+    section_css, created = SectionCss.objects.get_or_create(
+        section_css=section)
+
+    if request.method == "POST":
+        try:
+            dashboard.info = request.POST['dashboard_info']
+        except:
+            pass
+        try:
+            section_css.css_field = request.POST['section_css_field']
+        except:
+            pass
+
+    dashboard.save()
+    section_css.save()
+    module_type.save()
+
+    return dict(section=section,
+                section_css=section_css,
+                dashboard=dashboard,
+                module_type=module_type,
+                module=section.get_module(),
+                modules=root.get_children(),
+                root=section.hierarchy.get_root(),
+                edit_page=edit_page)
 
 
 def exporter(request):
