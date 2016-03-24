@@ -79,6 +79,9 @@ class Command(BaseCommand):
             root = self.add_root(label, node)
             self.add_children(node.childNodes, root)
 
+        self.add_paths(xmldoc)
+
+    def add_paths(self, xmldoc):
         paths = xmldoc.getElementsByTagName('TreatmentPath')
         if len(paths) < 1:
             return
