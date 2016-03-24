@@ -66,27 +66,30 @@ def make_sure_parts_are_allowed(module, user, section, is_module):
     # handle Module one seperately
     if is_module_one(module):
         make_sure_module1_parts_are_allowed(module, user)
-    elif is_module:
-        if UserPageVisit.objects.get(
-            section=module,
-                user=user).status == "complete":
-            module.user_pagevisit(user, status="complete")
-            return
-        status = get_userpagevisit_status(section, user)
-        if status == "exists":
-            ns = section.get_next()
-            if UserPageVisit.objects.get(
-                    section=ns, user=user).status == "in_progress":
-                section.get_next().user_pagevisit(user,
-                                                  status="complete")
-            elif UserPageVisit.objects.get(
-                    section=ns,
-                    user=user).status == "allowed":
-                section.get_next().user_pagevisit(user,
-                                                  status="in_progress")
-        if status == "created":
-            section.get_next().user_pagevisit(
-                user, status="allowed")
+
+    if not is_module:
+        return
+
+    if UserPageVisit.objects.get(
+            section=module, user=user).status == "complete":
+        module.user_pagevisit(user, status="complete")
+        return
+    status = get_userpagevisit_status(section, user)
+    if status == "exists":
+        ns = section.get_next()
+        update_next_status(ns, user, "in_progress", "complete")
+        update_next_status(ns, user, "allowed", "in_progress")
+    if status == "created":
+        section.get_next().user_pagevisit(user, status="allowed")
+
+
+def update_next_status(section, user, current_status, next_status):
+    if get_upv_status(section, user) == current_status:
+        section.user_pagevisit(user, status=next_status)
+
+
+def get_upv_status(section, user):
+    return UserPageVisit.objects.get(section=section, user=user).status
 
 
 def part_flagged_as_allowed(upv):
@@ -141,47 +144,48 @@ def page(request, path):
 @login_required
 @render_to('main/edit_page.html')
 def edit_page(request, path):
-    if request.user.is_staff:
-        section = get_section_from_path(path)
-        root = section.hierarchy.get_root()
-        edit_page = True
-        dashboard, created = DashboardInfo.objects.get_or_create(
-            dashboard=section)
-
-        module_type, created = ModuleType.objects.get_or_create(
-            module_type=section)
-
-        if (request.POST.get('module_type_form') or
-                request.POST.get('module_type_form') == ''):
-            module_type.info = request.POST.get('module_type_form', '')
-
-        section_css, created = SectionCss.objects.get_or_create(
-            section_css=section)
-
-        if request.method == "POST":
-            try:
-                dashboard.info = request.POST['dashboard_info']
-            except:
-                pass
-            try:
-                section_css.css_field = request.POST['section_css_field']
-            except:
-                pass
-
-        dashboard.save()
-        section_css.save()
-        module_type.save()
-
-        return dict(section=section,
-                    section_css=section_css,
-                    dashboard=dashboard,
-                    module_type=module_type,
-                    module=section.get_module(),
-                    modules=root.get_children(),
-                    root=section.hierarchy.get_root(),
-                    edit_page=edit_page)
-    else:
+    if not request.user.is_staff:
         return HttpResponseRedirect(reverse("dashboard"))
+    section = get_section_from_path(path)
+    root = section.hierarchy.get_root()
+    edit_page = True
+    dashboard, created = DashboardInfo.objects.get_or_create(
+        dashboard=section)
+    module_type, created = ModuleType.objects.get_or_create(
+        module_type=section)
+
+    update_module_type_info(module_type, request)
+    section_css, created = SectionCss.objects.get_or_create(
+        section_css=section)
+
+    if request.method == "POST":
+        try:
+            dashboard.info = request.POST['dashboard_info']
+        except:
+            pass
+        try:
+            section_css.css_field = request.POST['section_css_field']
+        except:
+            pass
+
+    dashboard.save()
+    section_css.save()
+    module_type.save()
+
+    return dict(section=section,
+                section_css=section_css,
+                dashboard=dashboard,
+                module_type=module_type,
+                module=section.get_module(),
+                modules=root.get_children(),
+                root=section.hierarchy.get_root(),
+                edit_page=edit_page)
+
+
+def update_module_type_info(module_type, request):
+    if (request.POST.get('module_type_form') or
+            request.POST.get('module_type_form') == ''):
+        module_type.info = request.POST.get('module_type_form', '')
 
 
 def exporter(request):
@@ -312,45 +316,96 @@ def reports(request):
     total_number_of_users = len(users)
     attempted_modules = get_all_attempted_modules(root, modules, pagevisits)
     completed_modules = get_all_completed_modules(root, modules, pagevisits)
-    if request.method == "POST":
 
-        report = request.POST.get('report')
-        ev_report = request.POST.get('eval_report')
+    if request.method != "POST":
+        return dict(welcome_msg=welcome_msg, modules=modules)
+
+    report = request.POST.get('report')
+    ev_report = request.POST.get('eval_report')
+
+    reporters = {
+        "training_env": TrainingEnvReporter,
+        "user_report_completed": UserReportCompletedReporter,
+        "user_report_attempted": UserReportAttemptedReporter,
+        "age_gender_report": AgeGenderReporter,
+        "course_report": CourseReporter,
+    }
+    if report in reporters:
+        reporter = reporters[report](
+            request, completed_modules, attempted_modules,
+            total_number_of_users, users, modules)
+        return reporter.report()
+
+    if ev_report:
+        return create_ev_report(request, ev_report, completed_modules,
+                                modules)
+
+
+class BaseReporter(object):
+    def __init__(self, request, completed_modules, attempted_modules,
+                 total_number_of_users, users, modules):
+        self.request = request
+        self.total_number_of_users = total_number_of_users
+        self.users = users
+        self.completed_modules = completed_modules
+        self.attempted_modules = attempted_modules
         # vars used to create reports
-        completed_modules_counted = count_modules_completed(completed_modules)
-        completers = create_completers_list(completed_modules)
-        if report == "training_env":
-            training_env_report = create_training_env_report(
-                completers,
-                total_number_of_users, completed_modules_counted)
-            return create_csv_report2(request, training_env_report, report)
+        self.completed_modules_counted = count_modules_completed(
+            completed_modules)
+        self.completers = create_completers_list(completed_modules)
+        self.modules = modules
 
-        if report == "user_report_completed":
-            user_report_table = create_user_report_table(
-                completed_modules, users)
-            return create_csv_report2(request, user_report_table, report)
+    def report(self):
+        table = self.generate_table()
+        f = self.report_function
+        return f(self.request, table, self.report)
 
-        if report == "user_report_attempted":
-            user_report_table = create_user_report_table(
-                attempted_modules, users)
-            return create_csv_report2(request, user_report_table, report)
 
-        if report == "age_gender_report":
-            age_gender = create_age_gender_dict(completers)
-            return create_csv_report(request, age_gender, report)
+class TrainingEnvReporter(BaseReporter):
+    report = "training_env"
+    report_function = create_csv_report2
 
-        if report == "course_report":
-            pre_test_data = get_pre_test_data(completed_modules, modules)
-            post_test_data = get_post_test_data(completed_modules, modules)
-            course_report_table = create_course_report_table(completed_modules,
-                                                             pre_test_data,
-                                                             post_test_data)
-            return create_csv_report2(request, course_report_table, report)
+    def generate_table(self):
+        return create_training_env_report(
+            self.completers,
+            self.total_number_of_users,
+            self.completed_modules_counted)
 
-        if ev_report:
-            return create_ev_report(request, ev_report, completed_modules,
-                                    modules)
-    return dict(welcome_msg=welcome_msg, modules=modules)
+
+class UserReportCompletedReporter(BaseReporter):
+    report = "user_report_completed"
+    report_function = create_csv_report2
+
+    def generate_table(self):
+        return create_user_report_table(self.completed_modules, self.users)
+
+
+class UserReportAttemptedReporter(BaseReporter):
+    report = "user_report_attempted"
+    report_function = create_csv_report2
+
+    def generate_table(self):
+        return create_user_report_table(self.attempted_modules, self.users)
+
+
+class AgeGenderReporter(BaseReporter):
+    report = "age_gender_report"
+    report_function = create_csv_report
+
+    def generate_table(self):
+        return create_age_gender_dict(self.completers)
+
+
+class CourseReporter(BaseReporter):
+    report = "course_report"
+    report_function = create_csv_report2
+
+    def generate_table(self):
+        pre_test_data = get_pre_test_data(self.completed_modules, self.modules)
+        post_test_data = get_post_test_data(self.completed_modules,
+                                            self.modules)
+        return create_course_report_table(self.completed_modules,
+                                          pre_test_data, post_test_data)
 
 
 def create_ev_report(request, ev_report, completed_modules, modules):
@@ -374,10 +429,7 @@ def create_ev_report(request, ev_report, completed_modules, modules):
 
 def flatten_response_tables(qr):
     # set the number of rows in the report
-    qr_rows = 0
-    for qr_table in qr:
-        if qr_rows < len(qr_table):
-            qr_rows = len(qr_table)
+    qr_rows = get_qr_rows(qr)
 
     flat_report = []
     for row in range(qr_rows):
@@ -392,6 +444,14 @@ def flatten_response_tables(qr):
                     report_row.append(('', ''))
             flat_report.append(report_row)
     return flat_report
+
+
+def get_qr_rows(qr):
+    qr_rows = 0
+    for qr_table in qr:
+        if qr_rows < len(qr_table):
+            qr_rows = len(qr_table)
+    return qr_rows
 
 
 def aggregate_responses(evaluation_report):
@@ -750,16 +810,8 @@ def create_user_report_table(completed_modules, completers):
         obj.append(('Experience in Public Health', v.experience))
         obj.append(('MUC', v.umc))
         obj.append(('Rural', v.rural))
-
-        if v.other_employment_location == '':
-            obj.append(('Employment Location', v.employment_location))
-        else:
-            obj.append(('Employment Location', v.other_employment_location))
-        if v.other_position_category == '':
-            obj.append(('Primary Discipline/Seciality', v.position))
-        else:
-            obj.append(('Primary Discipline/Seciality',
-                        v.other_position_category))
+        obj.append(('Employment Location', get_employment_location(v)))
+        obj.append(('Primary Discipline/Seciality', get_position(v)))
 
         # Gather those that have completed more than one module
         for mod in completed_modules:
@@ -774,6 +826,20 @@ def create_user_report_table(completed_modules, completers):
         completer_objects.append(obj)
 
     return completer_objects
+
+
+def get_employment_location(v):
+    if v.other_employment_location == '':
+        return v.employment_location
+    else:
+        return v.other_employment_location
+
+
+def get_position(v):
+    if v.other_position_category == '':
+        return v.position
+    else:
+        return v.other_position_category
 
 
 def create_age_gender_dict(completers):
@@ -825,36 +891,19 @@ def create_age_gender_dict(completers):
 
 
 def calculate_age_gender(completers, items):
+    ranges_to_row = [
+        ("Under 20", 0),
+        ("20-29", 1),
+        ("30-39", 2),
+        ("40-49", 3),
+        ("50-59", 4),
+        ("60-69", 5),
+    ]
     for completer in completers:
-        if completer.age == "Under 20":
-            row = 0
-            set_row_total(completer, items, row)
-            items[row]['Total'] += 1
-
-        if completer.age == "20-29":
-            row = 1
-            set_row_total(completer, items, row)
-            items[row]['Total'] += 1
-
-        if completer.age == "30-39":
-            row = 2
-            set_row_total(completer, items, row)
-            items[row]['Total'] += 1
-
-        if completer.age == "40-49":
-            row = 3
-            set_row_total(completer, items, row)
-            items[row]['Total'] += 1
-
-        if completer.age == "50-59":
-            row = 4
-            set_row_total(completer, items, row)
-            items[row]['Total'] += 1
-
-        if completer.age == "60-69":
-            row = 5
-            set_row_total(completer, items, row)
-            items[row]['Total'] += 1
+        for age_range, row in ranges_to_row:
+            if completer.age == age_range:
+                set_row_total(completer, items, row)
+                items[row]['Total'] += 1
         # set Totals of male and Female
         items[6]['Total'] += 1
     return items
