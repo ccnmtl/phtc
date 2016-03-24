@@ -810,11 +810,8 @@ def create_user_report_table(completed_modules, completers):
         obj.append(('Experience in Public Health', v.experience))
         obj.append(('MUC', v.umc))
         obj.append(('Rural', v.rural))
+        obj.append(('Employment Location', get_employment_location(v)))
 
-        if v.other_employment_location == '':
-            obj.append(('Employment Location', v.employment_location))
-        else:
-            obj.append(('Employment Location', v.other_employment_location))
         if v.other_position_category == '':
             obj.append(('Primary Discipline/Seciality', v.position))
         else:
@@ -834,6 +831,13 @@ def create_user_report_table(completed_modules, completers):
         completer_objects.append(obj)
 
     return completer_objects
+
+
+def get_employment_location(v):
+    if v.other_employment_location == '':
+        return v.employment_location
+    else:
+        return v.other_employment_location
 
 
 def create_age_gender_dict(completers):
