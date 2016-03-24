@@ -316,45 +316,46 @@ def reports(request):
     total_number_of_users = len(users)
     attempted_modules = get_all_attempted_modules(root, modules, pagevisits)
     completed_modules = get_all_completed_modules(root, modules, pagevisits)
-    if request.method == "POST":
 
-        report = request.POST.get('report')
-        ev_report = request.POST.get('eval_report')
-        # vars used to create reports
-        completed_modules_counted = count_modules_completed(completed_modules)
-        completers = create_completers_list(completed_modules)
-        if report == "training_env":
-            training_env_report = create_training_env_report(
-                completers,
-                total_number_of_users, completed_modules_counted)
-            return create_csv_report2(request, training_env_report, report)
+    if request.method != "POST":
+        return dict(welcome_msg=welcome_msg, modules=modules)
 
-        if report == "user_report_completed":
-            user_report_table = create_user_report_table(
-                completed_modules, users)
-            return create_csv_report2(request, user_report_table, report)
+    report = request.POST.get('report')
+    ev_report = request.POST.get('eval_report')
+    # vars used to create reports
+    completed_modules_counted = count_modules_completed(completed_modules)
+    completers = create_completers_list(completed_modules)
+    if report == "training_env":
+        training_env_report = create_training_env_report(
+            completers,
+            total_number_of_users, completed_modules_counted)
+        return create_csv_report2(request, training_env_report, report)
 
-        if report == "user_report_attempted":
-            user_report_table = create_user_report_table(
-                attempted_modules, users)
-            return create_csv_report2(request, user_report_table, report)
+    if report == "user_report_completed":
+        user_report_table = create_user_report_table(
+            completed_modules, users)
+        return create_csv_report2(request, user_report_table, report)
 
-        if report == "age_gender_report":
-            age_gender = create_age_gender_dict(completers)
-            return create_csv_report(request, age_gender, report)
+    if report == "user_report_attempted":
+        user_report_table = create_user_report_table(
+            attempted_modules, users)
+        return create_csv_report2(request, user_report_table, report)
 
-        if report == "course_report":
-            pre_test_data = get_pre_test_data(completed_modules, modules)
-            post_test_data = get_post_test_data(completed_modules, modules)
-            course_report_table = create_course_report_table(completed_modules,
-                                                             pre_test_data,
-                                                             post_test_data)
-            return create_csv_report2(request, course_report_table, report)
+    if report == "age_gender_report":
+        age_gender = create_age_gender_dict(completers)
+        return create_csv_report(request, age_gender, report)
 
-        if ev_report:
-            return create_ev_report(request, ev_report, completed_modules,
-                                    modules)
-    return dict(welcome_msg=welcome_msg, modules=modules)
+    if report == "course_report":
+        pre_test_data = get_pre_test_data(completed_modules, modules)
+        post_test_data = get_post_test_data(completed_modules, modules)
+        course_report_table = create_course_report_table(completed_modules,
+                                                         pre_test_data,
+                                                         post_test_data)
+        return create_csv_report2(request, course_report_table, report)
+
+    if ev_report:
+        return create_ev_report(request, ev_report, completed_modules,
+                                modules)
 
 
 def create_ev_report(request, ev_report, completed_modules, modules):
