@@ -811,12 +811,7 @@ def create_user_report_table(completed_modules, completers):
         obj.append(('MUC', v.umc))
         obj.append(('Rural', v.rural))
         obj.append(('Employment Location', get_employment_location(v)))
-
-        if v.other_position_category == '':
-            obj.append(('Primary Discipline/Seciality', v.position))
-        else:
-            obj.append(('Primary Discipline/Seciality',
-                        v.other_position_category))
+        obj.append(('Primary Discipline/Seciality', get_position(v)))
 
         # Gather those that have completed more than one module
         for mod in completed_modules:
@@ -838,6 +833,13 @@ def get_employment_location(v):
         return v.employment_location
     else:
         return v.other_employment_location
+
+
+def get_position(v):
+    if v.other_position_category == '':
+        return v.position
+    else:
+        return v.other_position_category
 
 
 def create_age_gender_dict(completers):
