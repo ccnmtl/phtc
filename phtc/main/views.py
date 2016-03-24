@@ -151,14 +151,10 @@ def edit_page(request, path):
     edit_page = True
     dashboard, created = DashboardInfo.objects.get_or_create(
         dashboard=section)
-
     module_type, created = ModuleType.objects.get_or_create(
         module_type=section)
 
-    if (request.POST.get('module_type_form') or
-            request.POST.get('module_type_form') == ''):
-        module_type.info = request.POST.get('module_type_form', '')
-
+    update_module_type_info(module_type, request)
     section_css, created = SectionCss.objects.get_or_create(
         section_css=section)
 
@@ -184,6 +180,12 @@ def edit_page(request, path):
                 modules=root.get_children(),
                 root=section.hierarchy.get_root(),
                 edit_page=edit_page)
+
+
+def update_module_type_info(module_type, request):
+    if (request.POST.get('module_type_form') or
+            request.POST.get('module_type_form') == ''):
+        module_type.info = request.POST.get('module_type_form', '')
 
 
 def exporter(request):
