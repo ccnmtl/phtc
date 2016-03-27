@@ -27,7 +27,6 @@ INSTALLED_APPS += [  # noqa
     'pagetree',
     'pageblocks',
     'quizblock',
-    'registration',
     'treebeard',
     'phtc.treatment_activity',
     'phtc.logic_model',
