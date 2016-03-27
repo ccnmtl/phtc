@@ -202,11 +202,9 @@ def dashboard(request):
     users that should be logging in are admins and there should
     not be courses'''
     if request.user.is_anonymous():
-        print "Anonymous user"
         return HttpResponseRedirect('http://region2phtc.org/')
     try:
         UserProfile.objects.get(user=request.user).fname
-        print "non anonymous user"
         return render_dashboard(request)
     except UserProfile.DoesNotExist:
         return render_dashboard(request)

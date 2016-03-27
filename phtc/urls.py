@@ -22,14 +22,14 @@ if hasattr(settings, 'CAS_BASE'):
 
 urlpatterns = patterns(
     '',
-     url(r'/',
-        view='phtc.main.views.dashboard',
-        name='dashboard'),
     logout_page,
     admin_logout_page,
     auth_urls,
     (r'^reports/$', 'phtc.main.views.reports'),
     (r'^admin/', include(admin.site.urls)),
+    url(r'',
+        view='phtc.main.views.dashboard',
+        name='dashboard'),
     url(r'^dashboard/',
         view='phtc.main.views.dashboard',
         name='dashboard'),

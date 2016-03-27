@@ -11,7 +11,7 @@ class SimpleViewTest(TestCase):
 
     def test_index(self):
         result = self.c.get("/")
-        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 302)
 
 
 class LoggedInTest(TestCase):
@@ -51,7 +51,7 @@ class LoggedInTest(TestCase):
              })
         root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
         r = self.c.get("/")
-        self.assertEqual(r.status_code, 302)
+        self.assertEqual(r.status_code, 200)
 
     def test_page_post(self):
         h = Hierarchy.objects.create(name="main", base_url="/")
@@ -62,7 +62,7 @@ class LoggedInTest(TestCase):
              })
         root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
         r = self.c.post("/socialwork/introduction/")
-        self.assertEqual(r.status_code, 302)
+        self.assertEqual(r.status_code, 200)
 
     def test_edit_page(self):
         h = Hierarchy.objects.create(name="main", base_url="/")
@@ -73,7 +73,7 @@ class LoggedInTest(TestCase):
              })
         root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
         r = self.c.get("/edit/socialwork/introduction/")
-        self.assertEqual(r.status_code, 302)
+        self.assertEqual(r.status_code, 200)
         self.user.is_staff = True
         self.user.save()
         r = self.c.get("/edit/socialwork/introduction/")

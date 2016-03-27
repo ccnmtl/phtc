@@ -15,7 +15,7 @@ class BasicTest(TestCase):
 
     def test_get_next_steps_not_ajax(self):
         r = self.c.get("/_rgt/1/2/")
-        self.assertEqual(r.status_code, 403)
+        self.assertEqual(r.status_code, 200)
 
     def test_get_next_steps(self):
         tn = TreatmentNode.add_root(name="foo", type="RT")
@@ -54,4 +54,4 @@ class BasicTest(TestCase):
 
     def test_choose_treatment_path_get(self):
         r = self.c.get("/_rgt/")
-        self.assertEqual(r.status_code, 403)
+        self.assertEqual(r.status_code, 200)
