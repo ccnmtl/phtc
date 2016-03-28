@@ -1,8 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from registration.signals import user_registered
-from forms import UserRegistrationForm
-from django_statsd.clients import statsd
 from pagetree.models import Section
 from django import forms
 
@@ -37,46 +34,6 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return "%s's profile" % self.user
-
-
-def user_created(sender, user, request, **kwargs):
-    form = UserRegistrationForm(request.POST)
-    data = UserProfile(user=user)
-    data.fname = form.data["fname"]
-    data.lname = form.data["lname"]
-    data.work_city = form.data["work_city"]
-    data.work_state = form.data["work_state"]
-    data.work_zip = form.data["work_zip"]
-    data.sex = form.data["sex"]
-    data.age = form.data["age"]
-    data.origin = form.data["origin"]
-    data.ethnicity = form.data["ethnicity"]
-    data.umc = form.data["umc"]
-    data.employment_location = form.data["employment_location"]
-    data.position = form.data["position"]
-    data.dept_health = form.data["dept_health"]
-    data.geo_dept_health = form.data["geo_dept_health"]
-    data.experience = form.data["experience"]
-    data.rural = form.data["rural"]
-    data.degree = form.data["degree"]
-    # NYNJ additions
-    data.nylearns_course_init = form.data["nylearns_course_init"]
-    data.nylearns_user_id = form.data["nylearns_user_id"]
-
-    try:
-        data.other_position_category = form.data["other_position_category"]
-    except:
-        pass
-
-    try:
-        data.other_employment_location = form.data["other_location"]
-    except:
-        pass
-
-    data.save()
-    statsd.incr('user_registered')
-
-user_registered.connect(user_created)
 
 
 class DashboardInfo(models.Model):

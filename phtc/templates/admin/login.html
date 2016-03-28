@@ -4,28 +4,29 @@
 <h2>Choose a Login Option...</h2>
 
 <form method="get" action="{{CAS_BASE}}cas/login" class="well">
-<input type="hidden" name="service" value="cnmtl_full_np" />
-<input type="hidden" name="destination" value="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}/accounts/caslogin/?next=/admin/&amp;this_is_the_admin_form=1" />
-<p>If you have a Columbia University Network ID
-        (UNI)... </p><input type="submit" value="LOG IN" class="btn btn-primary"/></p>
+  <input type="hidden" name="service" value="cnmtl_full_np" />
+  <input type="hidden" name="destination" value="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}/accounts/caslogin/?next=/admin/&amp;this_is_the_admin_form=1" />
+  <p>
+  If you have a Columbia University Network ID
+        (UNI)... 
+  </p>
+    <input type="submit" value="LOG IN" class="btn btn-primary"/>
 </form>
 
 <form method="post" action="." class="well">
-{% csrf_token %}
-<p>If you have a project account...</p>
+  {% csrf_token %}
+  <p>
+    If you have a project account...
+  </p>
+  <label for="id_username">Username: {{ form.username }}</label>
+  <label for="id_password">Password: {{ form.password }}</label>
 
-<label for="id_username">Username: {{ form.username }}</label>
-<label for="id_password">Password: {{ form.password }}</label>
+  <input type="hidden" name="this_is_the_login_form" value="1" />
+  <input type="hidden" name="post_data" value="{{ post_data }}" />
 
-<input type="hidden" name="this_is_the_login_form" value="1" />
-<input type="hidden" name="post_data" value="{{ post_data }}" />
-
-<input type="submit" value="LOG IN" class="btn btn-primary" />
-<input type="hidden" name="next" value="/admin/" />
+  <input type="submit" value="LOG IN" class="btn btn-primary" />
+  <input type="hidden" name="next" value="/admin/" />
 </form>
-
-<p class="smalltxt"><a href="/registration/register/" title="Create your new project account">Need a new account?</a></p>
-<p class="smalltxt"><a href="/registration/password/reset/" title="Reset Password">Forgot Password?</a></p>
 
 {% endblock %}
 
