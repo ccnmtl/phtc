@@ -82,8 +82,8 @@ class Quiz(models.Model):
                     attrs={'class': 'post_test_credit'}),
                 initial=self.post_test_credit)
             allow_redo = forms.BooleanField(initial=self.allow_redo)
-            alt_text = ("<a href=\"" + reverse("edit-quiz", args=[self.id])
-                        + "\">manage questions/answers</a>")
+            alt_text = ("<a href=\"" + reverse("edit-quiz", args=[self.id]) +
+                        "\">manage questions/answers</a>")
         return EditForm()
 
     @classmethod
@@ -232,8 +232,8 @@ class Question(models.Model):
         return self.answer_set.filter(correct=True)[0]._order
 
     def correct_answer_letter(self):
-        if (self.question_type != "single choice"
-                or self.answer_set.count() == 0):
+        if (self.question_type != "single choice" or
+                self.answer_set.count() == 0):
             return None
         return chr(ord('A') + self.correct_answer_number())
 
@@ -364,7 +364,7 @@ class AnswerForm(forms.ModelForm):
         exclude = ("question",)
 
     def clean(self):
-        if not 'value' in self.cleaned_data:
+        if 'value' not in self.cleaned_data:
             raise forms.ValidationError(
                 'Please enter a meaningful value for this answer.')
         else:

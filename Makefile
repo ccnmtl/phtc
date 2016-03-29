@@ -9,6 +9,7 @@ JS_FILES=media/js/dashboard.js \
 	media/js/registration.js media/js/required_answers.js \
 	media/js/special_question.js
 MAX_COMPLEXITY=7
+PY_DIRS=phtc quizblock
 
 all: jenkins
 
