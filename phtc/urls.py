@@ -27,7 +27,7 @@ urlpatterns = patterns(
     auth_urls,
     (r'^reports/$', 'phtc.main.views.reports'),
     (r'^admin/', include(admin.site.urls)),
-    url(r'',
+    url(r'^$',
         view='phtc.main.views.dashboard',
         name='dashboard'),
     url(r'^dashboard/',
