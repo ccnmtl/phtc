@@ -51,5 +51,5 @@ urlpatterns = patterns(
     # these need to be last
     (r'^edit/(?P<path>.*)$', 'phtc.main.views.edit_page',
      {}, 'edit-page'),
-
+    (r'^(?P<path>.*)$', 'phtc.main.views.page'),
 )

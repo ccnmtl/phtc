@@ -17,7 +17,7 @@ class SimpleViewTest(TestCase):
 class LoggedInTest(TestCase):
     def setUp(self):
         self.c = Client()
-        self.user = User.objects.create(username="test")
+        self.user = User.objects.create(username="test", is_staff=True)
         self.user.set_password("test")
         self.user.save()
         self.c.login(username="test", password="test")
@@ -62,7 +62,7 @@ class LoggedInTest(TestCase):
              })
         root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
         r = self.c.post("/socialwork/introduction/")
-        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.status_code, 302)
 
     def test_edit_page(self):
         h = Hierarchy.objects.create(name="main", base_url="/")
