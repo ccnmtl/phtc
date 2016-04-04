@@ -20,11 +20,7 @@
 
 {% block brand %}
     <div class="brand">
-      {% if request.user.is_anonymous %}
         {{module.label}}
-      {% else %}
-        My Dashboard
-      {% endif %}
     </div>
 {% endblock %}
 

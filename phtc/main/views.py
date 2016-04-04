@@ -8,20 +8,35 @@ from django.contrib.auth.models import User
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
+from django.http.response import HttpResponseForbidden
 from pagetree.helpers import get_section_from_path, get_hierarchy
-
-from pagetree.models import UserPageVisit
 from pagetree.models import Section
-from quizblock.models import Quiz, Question, Response, Submission
+from pagetree.models import UserPageVisit
 
 from phtc.main.models import DashboardInfo, UserProfile, ModuleType
 from phtc.main.models import SectionCss
+from quizblock.models import Quiz, Question, Response, Submission
 
 
 def context_processor(request):
     ctx = {}
     ctx['MEDIA_URL'] = settings.MEDIA_URL
     return ctx
+
+
+def region2phtc(request):
+    # training.lowernysphtc.org site root permanently redirects to region2phtc
+    # training.lowernysphtc.org/<modules>/ were given to external train site
+    return HttpResponseRedirect('http://region2phtc.org/')
+
+
+@login_required
+@render_to('main/dashboard.html')
+def dashboard(request):
+    # full module listing available for logged in users
+    return dict(root=get_hierarchy("main").get_root(),
+                dashboard_info=DashboardInfo.objects.all(),
+                module_type=ModuleType.objects.all())
 
 
 def redirect_to_first_section_if_root(section, root):
@@ -45,11 +60,6 @@ def make_sure_module1_parts_are_allowed(module, user):
                 part.get_previous().user_pagevisit(user, status="complete")
             else:
                 part.user_pagevisit(user, status="allowed")
-
-
-def page_post(request, section, module):
-    # giving them feedback before they proceed
-    return HttpResponseRedirect(section.get_absolute_url())
 
 
 def get_userpagevisit_status(section, user):
@@ -135,7 +145,8 @@ def page(request, path):
         return rv
 
     if request.method == "POST":
-        return page_post(request, section, module)
+        # giving them feedback before they proceed
+        return HttpResponseRedirect(section.get_absolute_url())
 
     return page_dict
 
@@ -257,6 +268,10 @@ QOI = [
 @login_required
 @render_to('main/reports.html')
 def reports(request):
+    if not request.user.is_staff:
+        return HttpResponseForbidden(
+                "You must be a staff member to view reports.")
+
     welcome_msg = "PHTC Reports"
     h = get_hierarchy("main")
     root = h.get_root()

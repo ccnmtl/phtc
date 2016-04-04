@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
-from django.test import TestCase
-from django.test.client import Client, RequestFactory
+from django.core.urlresolvers import reverse
+from django.test.client import RequestFactory
+from django.test.testcases import TestCase
 from pagetree.models import Hierarchy, UserPageVisit
 
 from phtc.main.models import UserProfile
@@ -9,29 +10,68 @@ from phtc.main.views import TrainingEnvReporter, UserReportCompletedReporter, \
 
 
 class SimpleViewTest(TestCase):
-    def setUp(self):
-        self.c = Client()
-
     def test_index(self):
-        result = self.c.get("/")
+        result = self.client.get("/")
         self.assertEqual(result.status_code, 302)
+
+
+class LoggedOutTest(TestCase):
+    def test_root(self):
+        r = self.client.get("/")
+        self.assertEqual(r.status_code, 302)
+        self.assertEquals(r.url, 'http://region2phtc.org/')
+
+    def test_dashboard(self):
+        r = self.client.get(reverse('dashboard'))
+        self.assertEqual(r.status_code, 302)
+        self.assertEquals(r.url,
+                          'http://testserver/accounts/login/?next=/dashboard/')
+
+    def test_reports(self):
+        r = self.client.get(reverse('reports'))
+        self.assertEquals(r.status_code, 302)
+        self.assertEquals(r.url,
+                          'http://testserver/accounts/login/?next=/reports/')
+
+    def test_page(self):
+        h = Hierarchy.objects.create(name="main", base_url="/")
+        root = h.get_root()
+        root.add_child_section_from_dict(
+            {'label': "One", 'slug': "socialwork",
+             'children': [{'label': "Three", 'slug': "introduction"}]
+             })
+        root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
+        r = self.client.get("/socialwork/introduction/")
+        self.assertEqual(r.status_code, 200)
 
 
 class LoggedInTest(TestCase):
     def setUp(self):
-        self.c = Client()
         self.user = User.objects.create(username="test", is_staff=True)
         self.user.set_password("test")
         self.user.save()
-        self.c.login(username="test", password="test")
+        self.client.login(username="test", password="test")
+
+    def test_root(self):
+        r = self.client.get("/")
+        self.assertEqual(r.status_code, 302)
+        self.assertEquals(r.url, 'http://region2phtc.org/')
 
     def test_dashboard(self):
-        result = self.c.get("/dashboard/")
+        result = self.client.get(reverse('dashboard'))
         self.assertEqual(result.status_code, 200)
 
-    def test_dashboard_panel(self):
-        result = self.c.get("/dashboard_panel/")
+    def test_reports(self):
+        result = self.client.get(reverse('reports'))
         self.assertEqual(result.status_code, 200)
+
+    def test_reports_student(self):
+        student = User.objects.create(username="test2")
+        student.set_password("test")
+        student.save()
+        self.client.login(username="test2", password="test")
+        result = self.client.get(reverse('reports'))
+        self.assertEqual(result.status_code, 403)
 
     def test_page(self):
         UserProfile.objects.create(user=self.user)
@@ -42,18 +82,7 @@ class LoggedInTest(TestCase):
              'children': [{'label': "Three", 'slug': "introduction"}]
              })
         root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
-        r = self.c.get("/socialwork/introduction/")
-        self.assertEqual(r.status_code, 200)
-
-    def test_page_root(self):
-        h = Hierarchy.objects.create(name="main", base_url="/")
-        root = h.get_root()
-        root.add_child_section_from_dict(
-            {'label': "One", 'slug': "socialwork",
-             'children': [{'label': "Three", 'slug': "introduction"}]
-             })
-        root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
-        r = self.c.get("/")
+        r = self.client.get("/socialwork/introduction/")
         self.assertEqual(r.status_code, 200)
 
     def test_page_post(self):
@@ -64,7 +93,7 @@ class LoggedInTest(TestCase):
              'children': [{'label': "Three", 'slug': "introduction"}]
              })
         root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
-        r = self.c.post("/socialwork/introduction/")
+        r = self.client.post("/socialwork/introduction/")
         self.assertEqual(r.status_code, 302)
 
     def test_edit_page(self):
@@ -75,19 +104,19 @@ class LoggedInTest(TestCase):
              'children': [{'label': "Three", 'slug': "introduction"}]
              })
         root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
-        r = self.c.get("/edit/socialwork/introduction/")
+        r = self.client.get("/edit/socialwork/introduction/")
         self.assertEqual(r.status_code, 200)
         self.user.is_staff = True
         self.user.save()
-        r = self.c.get("/edit/socialwork/introduction/")
+        r = self.client.get("/edit/socialwork/introduction/")
         self.assertEqual(r.status_code, 200)
 
-        r = self.c.post(
+        r = self.client.post(
             "/edit/socialwork/introduction/",
             dict(module_type_form='')
         )
         self.assertEqual(r.status_code, 200)
-        r = self.c.post(
+        r = self.client.post(
             "/edit/socialwork/introduction/",
             dict(dashboard_info="foo",
                  section_css_field="bar")
