@@ -240,55 +240,6 @@ def render_dashboard(request):
                 module_type=module_type)
 
 
-def create_csv_report(request, report, report_name):
-    # Create the HttpResponse object with the appropriate CSV header.
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = (
-        'attachment; filename="' + report_name + '.csv"')
-    writer = csv.writer(response)
-    header = []
-    header_row = report[0]
-    for k, v in header_row.iteritems():
-        header.append(k)
-    writer.writerow(header)
-
-    for row in report:
-        data = []
-        for k, v in row.iteritems():
-            data.append(v)
-        writer.writerow(data)
-    return response
-
-
-def create_csv_report2(request, report, report_name):
-    # Create the HttpResponse object with the appropriate CSV header.
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = (
-        'attachment; filename="' + report_name + '.csv"')
-    writer = csv.writer(response)
-
-    # write a header row
-    header_fields = []
-    for row in report[0]:
-        header_fields.append(row[0])
-    writer.writerow(header_fields)
-
-    for row in report:
-        fields = []
-        for field in row:
-            field_string = field[1]
-            if type(field_string) == int:
-                field_string = str(field_string)
-            try:
-                field_string = field_string.encode('utf-8')
-            except:
-                pass
-            field_string = field_string[:10000000]
-            fields.append(field_string)
-
-        writer.writerow(fields)
-    return response
-
 QOI = [
     'What is your overall assessment of this training?',
     ('I would recommend this course to others.'),
@@ -313,7 +264,6 @@ def reports(request):
     modules = root.get_children()
     pagevisits = UserPageVisit.objects.all()
     users = UserProfile.objects.all()
-    total_number_of_users = len(users)
     attempted_modules = get_all_attempted_modules(root, modules, pagevisits)
     completed_modules = get_all_completed_modules(root, modules, pagevisits)
 
@@ -333,8 +283,8 @@ def reports(request):
     if report in reporters:
         reporter = reporters[report](
             request, completed_modules, attempted_modules,
-            total_number_of_users, users, modules)
-        return reporter.report()
+            users.count(), users, modules)
+        return reporter.create_report()
 
     if ev_report:
         return create_ev_report(request, ev_report, completed_modules,
@@ -355,15 +305,65 @@ class BaseReporter(object):
         self.completers = create_completers_list(completed_modules)
         self.modules = modules
 
-    def report(self):
+    def create_report(self):
         table = self.generate_table()
         f = self.report_function
         return f(self.request, table, self.report)
 
+    @classmethod
+    def create_csv_report(cls, request, report, report_name):
+        # Create the HttpResponse object with the appropriate CSV header.
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = (
+            'attachment; filename="' + report_name + '.csv"')
+        writer = csv.writer(response)
+        header = []
+        header_row = report[0]
+        for k, v in header_row.iteritems():
+            header.append(k)
+        writer.writerow(header)
+
+        for row in report:
+            data = []
+            for k, v in row.iteritems():
+                data.append(v)
+            writer.writerow(data)
+        return response
+
+    @classmethod
+    def create_csv_report2(cls, request, report, report_name):
+        # Create the HttpResponse object with the appropriate CSV header.
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = (
+            'attachment; filename="' + report_name + '.csv"')
+        writer = csv.writer(response)
+
+        # write a header row
+        header_fields = []
+        for row in report[0]:
+            header_fields.append(row[0])
+        writer.writerow(header_fields)
+
+        for row in report:
+            fields = []
+            for field in row:
+                field_string = field[1]
+                if type(field_string) == int:
+                    field_string = str(field_string)
+                try:
+                    field_string = field_string.encode('utf-8')
+                except:
+                    pass
+                field_string = field_string[:10000000]
+                fields.append(field_string)
+
+            writer.writerow(fields)
+        return response
+
 
 class TrainingEnvReporter(BaseReporter):
     report = "training_env"
-    report_function = create_csv_report2
+    report_function = BaseReporter.create_csv_report2
 
     def generate_table(self):
         return create_training_env_report(
@@ -374,7 +374,7 @@ class TrainingEnvReporter(BaseReporter):
 
 class UserReportCompletedReporter(BaseReporter):
     report = "user_report_completed"
-    report_function = create_csv_report2
+    report_function = BaseReporter.create_csv_report2
 
     def generate_table(self):
         return create_user_report_table(self.completed_modules, self.users)
@@ -382,7 +382,7 @@ class UserReportCompletedReporter(BaseReporter):
 
 class UserReportAttemptedReporter(BaseReporter):
     report = "user_report_attempted"
-    report_function = create_csv_report2
+    report_function = BaseReporter.create_csv_report2
 
     def generate_table(self):
         return create_user_report_table(self.attempted_modules, self.users)
@@ -390,7 +390,7 @@ class UserReportAttemptedReporter(BaseReporter):
 
 class AgeGenderReporter(BaseReporter):
     report = "age_gender_report"
-    report_function = create_csv_report
+    report_function = BaseReporter.create_csv_report
 
     def generate_table(self):
         return create_age_gender_dict(self.completers)
@@ -398,7 +398,7 @@ class AgeGenderReporter(BaseReporter):
 
 class CourseReporter(BaseReporter):
     report = "course_report"
-    report_function = create_csv_report2
+    report_function = BaseReporter.create_csv_report2
 
     def generate_table(self):
         pre_test_data = get_pre_test_data(self.completed_modules, self.modules)
@@ -420,7 +420,7 @@ def create_ev_report(request, ev_report, completed_modules, modules):
     try:
         qr = aggregate_responses(evaluation_report)
         flat_report = flatten_response_tables(qr)
-        return create_csv_report2(
+        return BaseReporter.create_csv_report2(
             request, flat_report, 'evaluation_report')
     except UnboundLocalError:
         return dict(welcome_msg='Report could not be found.',
@@ -735,19 +735,19 @@ def create_course_report_table(completed_modules, pre_test_data,
 def create_training_env_report(completers,
                                total_number_of_users,
                                completed_modules_counted):
-        table = []
-        report = []
-        num_of_completers_duplicated = 0
-        for mod in completed_modules_counted:
-            num_of_completers_duplicated = len(completed_modules_counted)
-        report.append(('Total Unique Registered Users', total_number_of_users))
-        report.append(
-            ('Total Number Completers Unduplicated', len(completers)))
-        report.append(
-            ('Total Number Completers_duplicated',
-                num_of_completers_duplicated))
-        table.append(report)
-        return table
+    table = []
+    report = []
+    num_of_completers_duplicated = 0
+    for mod in completed_modules_counted:
+        num_of_completers_duplicated = len(completed_modules_counted)
+    report.append(('Total Unique Registered Users', total_number_of_users))
+    report.append(
+        ('Total Number Completers Unduplicated', len(completers)))
+    report.append(
+        ('Total Number Completers_duplicated',
+            num_of_completers_duplicated))
+    table.append(report)
+    return table
 
 
 def get_all_attempted_modules(root, modules, pagevisits):

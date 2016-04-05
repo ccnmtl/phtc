@@ -1,8 +1,11 @@
-from django.test import TestCase
-from django.test.client import Client
 from django.contrib.auth.models import User
+from django.test import TestCase
+from django.test.client import Client, RequestFactory
+from pagetree.models import Hierarchy, UserPageVisit
+
 from phtc.main.models import UserProfile
-from pagetree.models import Hierarchy
+from phtc.main.views import TrainingEnvReporter, UserReportCompletedReporter, \
+    UserReportAttemptedReporter, AgeGenderReporter, CourseReporter
 
 
 class SimpleViewTest(TestCase):
@@ -90,3 +93,38 @@ class LoggedInTest(TestCase):
                  section_css_field="bar")
         )
         self.assertEqual(r.status_code, 200)
+
+
+class ReportTest(TestCase):
+    def setUp(self):
+        h = Hierarchy.objects.create(name="main", base_url="/")
+        root = h.get_root()
+        root.add_child_section_from_dict(
+            {'label': "One", 'slug': "socialwork",
+             'children': [{'label': "Three", 'slug': "introduction"}]
+             })
+        root.add_child_section_from_dict({'label': "Two", 'slug': "two"})
+        self.sections = root.get_children()
+
+        user = User.objects.create(username="test")
+        self.profile = UserProfile.objects.create(user=user)
+        self.completed = []
+        for section in self.sections:
+            uv = UserPageVisit.objects.create(
+                user=user, status='complete', section=section)
+            self.completed.append(uv)
+
+    def test_reporters(self):
+        reporters = {
+            "training_env": TrainingEnvReporter,
+            "user_report_completed": UserReportCompletedReporter,
+            "user_report_attempted": UserReportAttemptedReporter,
+            "age_gender_report": AgeGenderReporter,
+            "course_report": CourseReporter,
+        }
+        request = RequestFactory()
+        for reporter in reporters:
+            reporter = reporters[reporter](
+                request, self.completed, [], 1, [self.profile], self.sections)
+            response = reporter.create_report()
+            self.assertEquals(response.status_code, 200)
