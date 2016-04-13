@@ -7,14 +7,10 @@
    base_one_col.html : layout is [ content ]
 {% endcomment %}
 
-
 {% load markup %}
 {% load thumbnail %}
 
 {% block title %}{{ flatpage.title }}{% endblock %}
-
-
-
 
 {% block sidebarleft %}
 	<div class="block sidebar">
@@ -74,6 +70,16 @@
 <h1 class="pageheader">{{ flatpage.title }}</h1>
 {% endblock %}
 
+{% block topnavbar %}
+    <div class="navbar">
+      <div class="navbar-inner">
+        <ul class="nav">
+            <li><a class="brand" href="/" onclick="return window.history.back();">Back</a></li>
+        </ul>
+      </div>
+    </div>
+{% endblock %}
+
 {% block content %}
-{{ flatpage.content}}<!-- temporary removal of |markdown -->
+{{flatpage.content|markdown}}
 {% endblock %}
