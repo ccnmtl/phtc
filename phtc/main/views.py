@@ -5,7 +5,6 @@ from annoying.decorators import render_to
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.flatpages.models import FlatPage
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
@@ -918,21 +917,3 @@ def set_row_total(completer, items, row):
         items[row]['Female'] += 1
         items[6]['Female'] += 1  # this is the Total row
     return items
-
-
-@render_to('flatpages/about.html')
-def about_page(request):
-    page = FlatPage.objects.get(title="About")
-    return dict(flatpage=page)
-
-
-@render_to('flatpages/help.html')
-def help_page(request):
-    page = FlatPage.objects.get(title="Help")
-    return dict(flatpage=page)
-
-
-@render_to('flatpages/contact.html')
-def contact_page(request):
-    page = FlatPage.objects.get(title="Contact")
-    return dict(flatpage=page)
