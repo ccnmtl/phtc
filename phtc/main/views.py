@@ -34,9 +34,11 @@ def region2phtc(request):
 @render_to('main/dashboard.html')
 def dashboard(request):
     # full module listing available for logged in users
-    return dict(root=get_hierarchy("main").get_root(),
-                dashboard_info=DashboardInfo.objects.all(),
-                module_type=ModuleType.objects.all())
+    return dict(
+        root=get_hierarchy("main").get_root(),
+        dashboard_info=DashboardInfo.objects.all(),
+        module_type=ModuleType.objects.all(),
+        section_css=SectionCss.objects.all())
 
 
 def redirect_to_first_section_if_root(section, root):
@@ -204,50 +206,6 @@ def exporter(request):
     resp = HttpResponse(dumps(data))
     resp['Content-Type'] = 'application/json'
     return resp
-
-
-@render_to('main/dashboard.html')
-def dashboard(request):
-    '''I assume if we are getting rid of state, then the only
-    users that should be logging in are admins and there should
-    not be courses'''
-    if request.user.is_anonymous():
-        return HttpResponseRedirect('http://region2phtc.org/')
-    try:
-        UserProfile.objects.get(user=request.user).fname
-        return render_dashboard(request)
-    except UserProfile.DoesNotExist:
-        return render_dashboard(request)
-
-
-@login_required
-@render_to('main/dashboard_panel.html')
-def dashboard_panel(request):
-    return render_dashboard(request)
-
-
-def render_dashboard(request):
-    try:
-        next_path = request.META['HTTP_REFERER']
-        if (len(next_path.split('/nylearns/?')[1].split('&')) > 1):
-            params = next_path.split('/nylearns/?')[1].split('&')
-            if (params[0].split('=')[0] == "course" or
-                    params[1].split('=')[0] == "course"):
-                url = '/nylearns/?' + params[0] + '&' + params[1]
-                return HttpResponseRedirect(url)
-    except:
-        pass
-
-    h = get_hierarchy("main")
-    root = h.get_root()
-    dashboard_info = DashboardInfo.objects.all()
-    module_type = ModuleType.objects.all()
-    section_css = SectionCss.objects.all()
-    empty = ""
-    return dict(root=root,
-                dashboard_info=dashboard_info, empty=empty,
-                section_css=section_css,
-                module_type=module_type)
 
 
 QOI = [
