@@ -8,7 +8,6 @@
 {% endcomment %}
 
 {% load markup %}
-{% load thumbnail %}
 
 {% block title %}{{ flatpage.title }}{% endblock %}
 
@@ -70,14 +69,8 @@
 <h1 class="pageheader">{{ flatpage.title }}</h1>
 {% endblock %}
 
-{% block topnavbar %}
-    <div class="navbar">
-      <div class="navbar-inner">
-        <ul class="nav">
-            <li><a class="brand" href="/" onclick="return window.history.back();">Back</a></li>
-        </ul>
-      </div>
-    </div>
+{% block brand %}
+    <a class="brand" href="/" onclick="return window.history.back();">Back</a>
 {% endblock %}
 
 {% block content %}

@@ -65,13 +65,6 @@
 
 		{% for s in p.get_children %}
 			<div class='section'>
-			{% comment %}{% for info in dashboard_info %}
-			{% ifequal s.id info.dashboard_id %}
-				{% ifnotequal info.info "" %}
-				<div data-content="{{ info.info }}" data-original-title="Module Info" class="module-info-popover"><img src="{{STATIC_URL}}img/status_info.png"/></div>
-				{% endifnotequal %}
-			{% endifequal %}
-			{% endfor %}{% endcomment %}
 			{% get_user_section_status request.user s as status %}
 			{% ifequal status.status "complete" %}
 			<div class="completed-icon-sml"></div>
@@ -129,7 +122,6 @@
 						<div class="link-title unavailable">{{ sub.label }}</div> 
 			            <div class="divclearfix"></div>
 					{% endif %}
-					
 					</div>
 				{% endfor %}
 		{% endfor %}

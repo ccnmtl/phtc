@@ -8,33 +8,20 @@ redirect_after_logout = getattr(settings, 'LOGOUT_REDIRECT_URL', None)
 auth_urls = (r'^accounts/', include('django.contrib.auth.urls'))
 logout_page = (r'^accounts/logout/$', 'django.contrib.auth.views.logout',
                {'next_page': redirect_after_logout})
-admin_logout_page = (r'^accounts/logout/$',
-                     'django.contrib.auth.views.logout',
-                     {'next_page': '/admin/'})
 
 if hasattr(settings, 'CAS_BASE'):
     auth_urls = (r'^accounts/', include('djangowind.urls'))
     logout_page = (r'^accounts/logout/$', 'djangowind.views.logout',
                    {'next_page': redirect_after_logout})
-    admin_logout_page = (r'^admin/logout/$',
-                         'djangowind.views.logout',
-                         {'next_page': redirect_after_logout})
 
 urlpatterns = patterns(
     '',
     logout_page,
-    admin_logout_page,
     auth_urls,
-    (r'^reports/$', 'phtc.main.views.reports'),
+    url(r'^$', view='phtc.main.views.region2phtc', name='region2phtc'),
+    url(r'^reports/$', view='phtc.main.views.reports', name='reports'),
     (r'^admin/', include(admin.site.urls)),
-    url(r'^$',
-        view='phtc.main.views.dashboard',
-        name='dashboard'),
-    url(r'^dashboard/',
-        view='phtc.main.views.dashboard',
-        name='dashboard'),
-    (r'^dashboard_panel/',
-        'phtc.main.views.dashboard_panel'),
+    url(r'^dashboard/', view='phtc.main.views.dashboard', name='dashboard'),
     (r'^_stats/', TemplateView.as_view(template_name='stats.html')),
     (r'^uploads/(?P<path>.*)$',
      'django.views.static.serve',

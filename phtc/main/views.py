@@ -8,20 +8,37 @@ from django.contrib.auth.models import User
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
+from django.http.response import HttpResponseForbidden
 from pagetree.helpers import get_section_from_path, get_hierarchy
-
-from pagetree.models import UserPageVisit
 from pagetree.models import Section
-from quizblock.models import Quiz, Question, Response, Submission
+from pagetree.models import UserPageVisit
 
 from phtc.main.models import DashboardInfo, UserProfile, ModuleType
 from phtc.main.models import SectionCss
+from quizblock.models import Quiz, Question, Response, Submission
 
 
 def context_processor(request):
     ctx = {}
     ctx['MEDIA_URL'] = settings.MEDIA_URL
     return ctx
+
+
+def region2phtc(request):
+    # training.lowernysphtc.org site root permanently redirects to region2phtc
+    # training.lowernysphtc.org/<modules>/ were given to external train site
+    return HttpResponseRedirect('http://region2phtc.org/')
+
+
+@login_required
+@render_to('main/dashboard.html')
+def dashboard(request):
+    # full module listing available for logged in users
+    return dict(
+        root=get_hierarchy("main").get_root(),
+        dashboard_info=DashboardInfo.objects.all(),
+        module_type=ModuleType.objects.all(),
+        section_css=SectionCss.objects.all())
 
 
 def redirect_to_first_section_if_root(section, root):
@@ -45,11 +62,6 @@ def make_sure_module1_parts_are_allowed(module, user):
                 part.get_previous().user_pagevisit(user, status="complete")
             else:
                 part.user_pagevisit(user, status="allowed")
-
-
-def page_post(request, section, module):
-    # giving them feedback before they proceed
-    return HttpResponseRedirect(section.get_absolute_url())
 
 
 def get_userpagevisit_status(section, user):
@@ -135,7 +147,8 @@ def page(request, path):
         return rv
 
     if request.method == "POST":
-        return page_post(request, section, module)
+        # giving them feedback before they proceed
+        return HttpResponseRedirect(section.get_absolute_url())
 
     return page_dict
 
@@ -195,50 +208,6 @@ def exporter(request):
     return resp
 
 
-@render_to('main/dashboard.html')
-def dashboard(request):
-    '''I assume if we are getting rid of state, then the only
-    users that should be logging in are admins and there should
-    not be courses'''
-    if request.user.is_anonymous():
-        return HttpResponseRedirect('http://region2phtc.org/')
-    try:
-        UserProfile.objects.get(user=request.user).fname
-        return render_dashboard(request)
-    except UserProfile.DoesNotExist:
-        return render_dashboard(request)
-
-
-@login_required
-@render_to('main/dashboard_panel.html')
-def dashboard_panel(request):
-    return render_dashboard(request)
-
-
-def render_dashboard(request):
-    try:
-        next_path = request.META['HTTP_REFERER']
-        if (len(next_path.split('/nylearns/?')[1].split('&')) > 1):
-            params = next_path.split('/nylearns/?')[1].split('&')
-            if (params[0].split('=')[0] == "course" or
-                    params[1].split('=')[0] == "course"):
-                url = '/nylearns/?' + params[0] + '&' + params[1]
-                return HttpResponseRedirect(url)
-    except:
-        pass
-
-    h = get_hierarchy("main")
-    root = h.get_root()
-    dashboard_info = DashboardInfo.objects.all()
-    module_type = ModuleType.objects.all()
-    section_css = SectionCss.objects.all()
-    empty = ""
-    return dict(root=root,
-                dashboard_info=dashboard_info, empty=empty,
-                section_css=section_css,
-                module_type=module_type)
-
-
 QOI = [
     'What is your overall assessment of this training?',
     ('I would recommend this course to others.'),
@@ -257,6 +226,10 @@ QOI = [
 @login_required
 @render_to('main/reports.html')
 def reports(request):
+    if not request.user.is_staff:
+        return HttpResponseForbidden(
+                "You must be a staff member to view reports.")
+
     welcome_msg = "PHTC Reports"
     h = get_hierarchy("main")
     root = h.get_root()

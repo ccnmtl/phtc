@@ -1,30 +1,13 @@
 {% extends "base.html" %}
+
 {% block title %}Welcome to the PHTC Training Environment{% endblock %}
+
 {% block noleftsidebar %} class="no-left-sidebar"{% endblock %}
+
 {% block content %}
-    <h1>Welcome to the PHTC Training Environment</h1>
-    <div id="greeting-login">
-        <div id="welcome">
-		<p>
-		The New York City-Long Island-Lower Tri County Public Health Training Center is pleased to offer a comprehensive collection of competency-based public health and public health-related trainings. Our training programs are free, high-quality, and interactive &#8211; designed to fully engage learners and impart needed knowledge and skills for the public health workforce.
-		</p>
-		<p>
-		In order to enroll in these programs, you will need to complete a one-time registration form. In registering, you will create your own personal dashboard where you will gain access to all of our training resources. In addition, from your dashboard you can:
-		</p>
-		<ul>
-		<li>Keep track of progress through and completion of different trainings</li>
-		<li>Print and store certificates of completion</li>
-		<li>Request continuing education credits</li>
-		<li>Update your user profile</li>
-		</ul>
-		<p>
-		New trainings are always being developed and will be added regularly to the training catalog. Be sure to log-in regularly to check for updates!
-		</p>
-		<p><a class="btn btn-success" href="/dashboard/" role="button">Start Modules</a></p>
-        </div><!--end #welcome-->
+<div class="row">
+    <div class="span2 offset4">
         <div id="user_log_in">            
-            <h3 class="log_in">Please log in</h3>
-            
             <form method="post" action="./?next=/module-1/" class="well" id="login-form">
             {% csrf_token %}
             <p>If you have a project account...</p>
@@ -38,8 +21,7 @@
             {% if form.errors%}
             <p class="errornote"><span><b>ERROR:</b> Invalid username or password.</span> Please try again. Note that both username and password are case-sensitive.</p>
             {% endif %}
-
-            <p class="smalltxt"><span class="tooltip-bottom" rel="tooltip" title="Create your own PHTC account"><a href="/registration/register/">Need a new account?</a></span> | <span class="tooltip-bottom" rel="tooltip" title="Reset your password"><a href="/registration/password/reset/">Forgot password?</a></span></p>
+    
             </form>
             
             <form method="get" action="{{CAS_BASE}}cas/login" class="well">
@@ -48,23 +30,8 @@
             (UNI)... </p><input type="submit" value="LOG IN" class="btn btn-primary"/></p>
             </form>
         </div><!--end #user_log_in-->
-    </div><!--end #greeting-login-->
-
-
-<script>
-jQuery(document).ready(function(){
-    var urlVars = window.PHTC.getUrlVars();
-    if(urlVars['next'].length>0 && urlVars['next'].search('deep_link') >-1){
-       return;
-    }else{
-        var deep_link = '?deep_link=true';
-        var location = window.location.href; 
-        window.location.href =  location + deep_link;
-    }
-})
-</script>
-
-
+    </div>
+</div>        
 {% endblock %}
 
 
