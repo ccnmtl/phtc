@@ -1,6 +1,6 @@
 from django import forms
 from django.db import models
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericRelation
 from pagetree.models import PageBlock
 
 
@@ -113,7 +113,7 @@ class Column (models.Model):
 
 
 class LogicModelBlock(models.Model):
-    pageblocks = generic.GenericRelation(PageBlock)
+    pageblocks = GenericRelation(PageBlock)
     template_file = "logic_model/logic_model.html"
     js_template_file = "logic_model/block_js.html"
     css_template_file = "logic_model/block_css.html"

@@ -25,13 +25,13 @@ class LoggedOutTest(TestCase):
         r = self.client.get(reverse('dashboard'))
         self.assertEqual(r.status_code, 302)
         self.assertEquals(r.url,
-                          'http://testserver/accounts/login/?next=/dashboard/')
+                          '/accounts/login/?next=/dashboard/')
 
     def test_reports(self):
         r = self.client.get(reverse('reports'))
         self.assertEquals(r.status_code, 302)
         self.assertEquals(r.url,
-                          'http://testserver/accounts/login/?next=/reports/')
+                          '/accounts/login/?next=/reports/')
 
     def test_page(self):
         h = Hierarchy.objects.create(name="main", base_url="/")

@@ -1,6 +1,6 @@
 from django import forms
 from django.db import models
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericRelation
 from pagetree.models import PageBlock
 from treebeard.mp_tree import MP_Node
 
@@ -74,7 +74,7 @@ class TreatmentPath(models.Model):
 
 
 class TreatmentActivityBlock(models.Model):
-    pageblocks = generic.GenericRelation(PageBlock)
+    pageblocks = GenericRelation(PageBlock)
     template_file = "treatment_activity/treatment_activity.html"
     js_template_file = "treatment_activity/block_js.html"
     css_template_file = "treatment_activity/block_css.html"

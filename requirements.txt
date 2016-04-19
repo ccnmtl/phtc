@@ -1,5 +1,5 @@
 --index-url https://pypi.ccnmtl.columbia.edu/
-Django==1.8.12
+Django==1.9.5
 feedparser==5.2.1
 Markdown==2.6.6
 pyenchant==1.6.6
@@ -47,6 +47,8 @@ raven==5.12.0
 contextlib2==0.5.1
 rcssmin==1.0.6
 rjsmin==1.0.12
+Jinja2==2.8
+Markupsafe==0.23
 
 django-appconf==1.0.1
 django-indexer==0.3.0
@@ -57,7 +59,7 @@ django-compressor==2.0
 django-statsd-mozilla==0.3.16
 django-bootstrap-form==3.2
 django-debug-toolbar==1.4
-django-treebeard==3.0
+django-treebeard==4.0
 django-pagetree==1.1.14
 django-markwhat==1.4
 django-pageblocks==1.0.4
