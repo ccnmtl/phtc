@@ -20,7 +20,6 @@ TEMPLATE_CONTEXT_PROCESSORS += [  # noqa
 
 INSTALLED_APPS += [  # noqa
     'sorl.thumbnail',
-    'tagging',
     'typogrify',
     'bootstrapform',
     'phtc.main',
