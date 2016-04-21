@@ -41,115 +41,21 @@ def dashboard(request):
         section_css=SectionCss.objects.all())
 
 
-def redirect_to_first_section_if_root(section, root):
-    if section.id == root.id:
-        # trying to visit the root page
-        if section.get_next():
-            # just send them to the first child
-            # users will redirect to their dashboard
-            # - if not logged in will goto login page
-            return HttpResponseRedirect(reverse("dashboard"))
-
-
-def make_sure_module1_parts_are_allowed(module, user):
-
-    parts = module.get_children()
-    for part in parts:
-        v = part.get_uservisit(user)
-        if v:
-            if (v.status == "in_progress" and
-                    part.get_previous().get_uservisit(user)):
-                part.get_previous().user_pagevisit(user, status="complete")
-            else:
-                part.user_pagevisit(user, status="allowed")
-
-
-def get_userpagevisit_status(section, user):
-    try:
-        UserPageVisit.objects.get(
-            section=section.get_next(), user=user)
-        return "exists"
-    except UserPageVisit.DoesNotExist:
-        return "created"
-
-
-def make_sure_parts_are_allowed(module, user, section, is_module):
-    # handle Module one seperately
-    if is_module_one(module):
-        make_sure_module1_parts_are_allowed(module, user)
-
-    if not is_module:
-        return
-
-    if UserPageVisit.objects.get(
-            section=module, user=user).status == "complete":
-        module.user_pagevisit(user, status="complete")
-        return
-    status = get_userpagevisit_status(section, user)
-    if status == "exists":
-        ns = section.get_next()
-        update_next_status(ns, user, "in_progress", "complete")
-        update_next_status(ns, user, "allowed", "in_progress")
-    if status == "created":
-        section.get_next().user_pagevisit(user, status="allowed")
-
-
-def update_next_status(section, user, current_status, next_status):
-    if get_upv_status(section, user) == current_status:
-        section.user_pagevisit(user, status=next_status)
-
-
-def get_upv_status(section, user):
-    return UserPageVisit.objects.get(section=section, user=user).status
-
-
-def part_flagged_as_allowed(upv):
-    return upv.status == "allowed" or upv.status == "in_progress"
-
-
-def is_module_one(module):
-    module_one = module.hierarchy.get_root().get_children()[0]
-    return module.id == module_one.id
-
-
-def is_module(module, section):
-    return module.id == section.id
-
-
-def has_user_prof(request):
-    try:
-        request.user.userprofile
-        return True
-    except UserProfile.DoesNotExist:
-        return False
-
-
-def is_mod_one(module):
-    return (module is not None and
-            module == module.hierarchy.get_root().get_children()[0])
-
-
 @render_to('main/page.html')
 def page(request, path):
     section = get_section_from_path(path)
+    if request.method == "POST":
+        # page reset, redirect back to the same page
+        return HttpResponseRedirect(section.get_absolute_url())
+
     root = section.hierarchy.get_root()
     module = section.get_module()
     page_dict = dict(
         section=section,
         module=module,
         modules=root.get_children(),
-        root=section.hierarchy.get_root(),
-        is_mod_one=is_mod_one(module),
+        root=section.hierarchy.get_root()
     )
-
-    rv = redirect_to_first_section_if_root(section, root)
-    if rv:
-        return rv
-
-    if request.method == "POST":
-        # giving them feedback before they proceed
-        return HttpResponseRedirect(section.get_absolute_url())
-
     return page_dict
 
 
