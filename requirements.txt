@@ -38,7 +38,7 @@ python-ldap==2.4.22
 sqlparse==0.1.19
 six==1.10.0
 pyasn1==0.1.9
-pyOpenSSL==0.15.1
+pyOpenSSL==16.0.0
 ndg-httpsclient==0.4.0
 djangowind==0.14.3
 sorl==3.1
