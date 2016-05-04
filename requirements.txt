@@ -50,7 +50,7 @@ rjsmin==1.0.12
 Jinja2==2.8
 Markupsafe==0.23
 
-django-appconf==1.0.1
+django-appconf==1.0.2
 django-indexer==0.3.0
 django-templatetag-sugar==1.0
 django-paging==0.2.5
