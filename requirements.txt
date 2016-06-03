@@ -10,7 +10,7 @@ psycopg2==2.6.1
 Pillow==3.2.0
 versiontools==1.9.1
 statsd==3.2.1
-mccabe==0.4.0
+mccabe==0.5.0
 flake8==2.5.4
 lxml==3.6.0
 ipdb==0.10.0
