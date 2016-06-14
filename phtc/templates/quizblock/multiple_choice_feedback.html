@@ -8,24 +8,6 @@
       <li><input name="question{{question.id}}" value="{{answer.label|safe}}" type="checkbox" />{{answer.label|safe}}</li>
     {% else %}
       <li>
-      <!-- We need to remove anything associated with a user, for non rhetorical (matching and reading exercise) multichoice
-      have answers in the html and compensate for checking answer with JavaScript
-       -->
-          {% comment %}{% if response %}{% endcomment %}
-          {% comment %}
-	       multi select is trickier. since there can be more than one correct
-           response and more than one response by the user.
-          {% endcomment %}
-          {% comment %}
-          {% ifanswerin response answer  %}
-            <span class="yours {% if answer.correct %}correct correctanswer{% else %}incorrect incorrectanswer{% endif %}">{{answer.label|safe}}</span>
-          {% else %}
-            <span class="{% if answer.correct %}correct{% else %}incorrect{% endif %}">{{answer.label|safe}}</span>
-          {% endifanswerin %}
-        {% else %}
-          {% comment %}no response{% endcomment %}
-          <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}" value="{{answer.value}}" type="checkbox" />{{answer.label|safe}}
-        {% endif %}{% endcomment %}
       </li>
     {% endif %}
   {% endfor %}
