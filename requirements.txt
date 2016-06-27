@@ -12,7 +12,7 @@ versiontools==1.9.1
 statsd==3.2.1
 mccabe==0.5.0
 pycodestyle==2.0.0
-flake8==2.6.0
+flake8==2.6.2
 lxml==3.6.0
 ipdb==0.10.1
 traitlets==4.2.1
