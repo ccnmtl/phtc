@@ -25,7 +25,7 @@ pickleshare==0.7.3
 simplegeneric==0.8.1
 ipython==5.0.0
 sure==1.4.0
-fuzzywuzzy==0.11.0
+fuzzywuzzy==0.11.1
 cssselect==0.9.2
 rdflib==4.2.1
 selenium==2.48.0
