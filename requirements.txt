@@ -63,7 +63,7 @@ django-bootstrap-form==3.2.1
 django-bootstrap3==7.0.1
 django-debug-toolbar==1.5
 django-treebeard==4.0.1
-django-pagetree==1.2.1
+django-pagetree==1.2.2
 django-markwhat==1.5
 django-pageblocks==1.0.4
 django-pagetree_export==0.4
