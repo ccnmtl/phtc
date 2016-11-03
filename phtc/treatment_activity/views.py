@@ -1,4 +1,4 @@
-import simplejson
+import json
 from django.http import HttpResponse, HttpResponseForbidden
 from phtc.treatment_activity.models import TreatmentPath, TreatmentNode
 
@@ -11,7 +11,7 @@ def get_next_steps(request, path_id, node_id):
     next_steps = []
     prev = None
     if node.type == 'DP':
-        steps = simplejson.loads(request.POST.get('steps'))
+        steps = json.loads(request.POST.get('steps'))
         decision = steps[len(steps) - 1]['decision']
         node = node.get_children()[decision - 1]
         next_steps.append(node.to_json())
@@ -29,7 +29,7 @@ def get_next_steps(request, path_id, node_id):
             'path': path_id,
             'can_edit': request.user.is_superuser}
 
-    return HttpResponse(simplejson.dumps(data, indent=2),
+    return HttpResponse(json.dumps(data, indent=2),
                         content_type="application/json")
 
 
