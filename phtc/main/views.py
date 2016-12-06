@@ -505,7 +505,7 @@ def question_approximately_how_long(question, response_time_list_count,
 
 def get_pre_test_data(completed_modules, modules):
     module_pre_test_map = []
-    quizes = [x for x in Quiz.objects.filter(pre_test="TRUE")]
+    quizes = [x for x in Quiz.objects.filter(pre_test=True)]
     pre_tests = [q for q in quizes if q.pageblocks.all().count() > 0]
 
     for test in pre_tests:
@@ -519,7 +519,7 @@ def get_pre_test_data(completed_modules, modules):
 
 def get_post_test_data(completed_modules, modules):
     module_post_test_map = []
-    quizes = [x for x in Quiz.objects.filter(post_test="TRUE")]
+    quizes = [x for x in Quiz.objects.filter(post_test=True)]
     post_tests = [q for q in quizes if q.pageblocks.all().count() > 0]
 
     for test in post_tests:
