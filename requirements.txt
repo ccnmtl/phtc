@@ -28,7 +28,7 @@ ipython==5.1.0
 sure==1.4.0
 fuzzywuzzy==0.14.0
 cssselect==1.0.1
-rdflib==4.2.1
+rdflib==4.2.2
 selenium==2.53.6
 coverage==4.3.4
 unittest2==1.1.0
