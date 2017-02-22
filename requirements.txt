@@ -76,7 +76,7 @@ django-impersonate==1.1
 django-waffle==0.11.1
 django-ga-context==0.1.0
 python-dateutil==2.6.0
-boto==2.45.0
+boto==2.46.1
 django-storages==1.5.2
 django-cacheds3storage==0.1.2
 django-smtp-ssl==1.0
