@@ -51,7 +51,7 @@ contextlib2==0.5.4
 rcssmin==1.0.6
 rjsmin==1.0.12
 Jinja2==2.9.5
-Markupsafe==0.23
+Markupsafe==1.0
 
 django-appconf==1.0.2
 django-indexer==0.3.0
