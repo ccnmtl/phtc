@@ -63,8 +63,11 @@ django-annoying==0.10.3
 django-compressor==2.1.1
 django-statsd-mozilla==0.3.16
 django-bootstrap-form==3.2.1
+
 django-bootstrap3==8.2.3
-django-debug-toolbar==1.7
+
+django-debug-toolbar==1.8
+
 django-treebeard==4.1.0
 django-pagetree==1.3.1
 django-markwhat==1.5.1
