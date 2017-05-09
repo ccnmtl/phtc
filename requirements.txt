@@ -30,7 +30,7 @@ fuzzywuzzy==0.15.0
 cssselect==1.0.1
 rdflib==4.2.2
 selenium==2.53.6
-coverage==4.3.4
+coverage==4.4
 unittest2==1.1.0
 logilab-common==1.4.0
 logilab-astng==0.24.3
