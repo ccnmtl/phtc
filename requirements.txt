@@ -16,7 +16,7 @@ pycodestyle==2.0
 enum34==1.1.6
 configparser==3.5.0
 flake8==3.3.0
-lxml==3.7.3
+lxml==3.8.0
 ipdb==0.10.3
 traitlets==4.3.2
 ipython_genutils==0.2.0
