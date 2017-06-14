@@ -28,7 +28,7 @@ sure==1.4.6
 fuzzywuzzy==0.15.0
 cssselect==1.0.1
 rdflib==4.2.2
-selenium==2.53.6
+selenium==3.4.3
 coverage==4.4.1
 unittest2==1.1.0
 logilab-common==1.4.0
