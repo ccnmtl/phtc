@@ -12,4 +12,5 @@ class TreatmentPathAdmin(admin.ModelAdmin):
                     'cirrhosis',
                     'tree')
 
+
 admin.site.register(TreatmentPath, TreatmentPathAdmin)
