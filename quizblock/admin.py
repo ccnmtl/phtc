@@ -48,6 +48,7 @@ class QuestionAdmin(admin.ModelAdmin):
         }),
     )
 
+
 admin.site.register(Question, QuestionAdmin)
 
 
@@ -84,5 +85,6 @@ class QuizAdmin(admin.ModelAdmin):
     form = QuizModelForm
     model = Quiz
     inlines = [QuestionInlineAdmin, ]
+
 
 admin.site.register(Quiz, QuizAdmin)
