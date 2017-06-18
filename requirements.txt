@@ -74,7 +74,7 @@ django-pageblocks==1.1.0
 requirements/src/django-pagetree_export-0.4.tar.gz
 django-jenkins==0.110.0
 django-stagingcontext==0.1.0
-django-smoketest==1.0.0
+django-smoketest==1.1.0
 gunicorn==19.7.1
 django-impersonate==1.1
 django-waffle==0.11.1
