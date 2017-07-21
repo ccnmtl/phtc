@@ -65,7 +65,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
         };
         var the_html = _.template(the_template, the_data);
         jQuery( ".help_box" ).html (the_html);
-        jQuery( ".help_box" ).show();
+        //jQuery( ".help_box" ).show();
     },
 
     closeHelpBox : function() {
