@@ -348,6 +348,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
         });
         view.LogicModelView = self;
         jQuery("div.logic-model-initial-scenario-list").append(view.el);
+        jQuery('.loading-overlay').hide();
     }
 
 });

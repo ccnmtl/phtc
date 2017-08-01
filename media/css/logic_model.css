@@ -404,3 +404,16 @@ div.table-toolbar {
 .pull-center {
     text-align: center;
 }
+
+.loading-overlay
+{
+	position: absolute;
+	display: block;
+	top: 0;
+	left: 0;
+	background-color: #fff;
+	height: 100%;
+	width: 100%;
+	font-size: larger;
+	font-weight: bold;
+}
