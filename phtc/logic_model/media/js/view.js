@@ -10,7 +10,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
         "click .add_a_row_button": "addARow",
         "click .wipe-table-button": "showWipeTableWarning",
         "click .wipe-table-confirm-button": "wipeTable",
-        "click .wipe-table-cancel-button": "cancelWipeTable"
+        "click .wipe-table-cancel-button": "cancelWipeTable",
     },
     phases: null,
     current_phase : null,
@@ -31,7 +31,8 @@ LogicModel.LogicModelView = Backbone.View.extend({
             "checkEmptyBoxes",
             "showWipeTableWarning",
             "wipeTable",
-            "cancelWipeTable"
+            "cancelWipeTable",
+            "beforeLeavePage"
         );
         self.getSettings();
         
@@ -44,6 +45,9 @@ LogicModel.LogicModelView = Backbone.View.extend({
 
         self.scenarios = new LogicModel.ScenarioCollection();
         self.scenarios.bind("add", this.onAddScenario);
+        
+        jQuery("li.next a").on("click", this.beforeLeavePage);
+        jQuery("li.previous a").on("click", this.beforeLeavePage);
     },
 
     showGamePhaseHelpBox: function () {
@@ -65,7 +69,6 @@ LogicModel.LogicModelView = Backbone.View.extend({
         };
         var the_html = _.template(the_template, the_data);
         jQuery( ".help_box" ).html (the_html);
-        //jQuery( ".help_box" ).show();
     },
 
     closeHelpBox : function() {
@@ -92,8 +95,6 @@ LogicModel.LogicModelView = Backbone.View.extend({
                 box_models[i].set ({'contents': ''});
                 box_models[i].set({'color_int': 0});
                 box_models[i].trigger ('setColor');
-                //box_models[i].set ({color_int: -1});
-                //box_models[i].trigger ('nextColor');
             }
         });
         jQuery ('.wipe-table-button').show();
@@ -260,19 +261,20 @@ LogicModel.LogicModelView = Backbone.View.extend({
         if (self.current_phase === 0) {
             jQuery ('.previous_phase').hide();
             jQuery("li.previous").show();
+            jQuery("li.next").show();
             self.ok_to_proceed = true;
         } else {
-            jQuery("li.previous").hide();
+            jQuery("li.previous").show();
+            jQuery("li.next").show();
             jQuery ('.previous_phase').show();
         }
 
-
-        
+        // TO BE REMOVED
         if (self.current_phase == self.phases.length - 1) {
                 jQuery("li.next").show();
             //jQuery ('.next_phase').hide();
         } else {
-                jQuery("li.next").hide();
+                jQuery("li.next").show();
             //jQuery ('.next_phase').show();
         }
         
@@ -349,6 +351,15 @@ LogicModel.LogicModelView = Backbone.View.extend({
         view.LogicModelView = self;
         jQuery("div.logic-model-initial-scenario-list").append(view.el);
         jQuery('.loading-overlay').hide();
-    }
+    },
 
+    beforeLeavePage: function(event) {
+        if (this.current_phase < this.phases.length - 1) {
+            if(!confirm('You have not completed the activity. ' + 
+                'Are you sure you want to leave?')) {
+                return false;
+            }
+        }
+        return true;
+    }
 });
