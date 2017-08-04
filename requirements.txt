@@ -40,7 +40,7 @@ pyflakes==1.6.0
 ldap3==2.3
 sqlparse==0.2.3
 six==1.10.0
-pyasn1==0.3.1
+pyasn1==0.3.2
 pyOpenSSL==17.2.0
 ndg-httpsclient==0.4.2
 djangowind==1.0.0
