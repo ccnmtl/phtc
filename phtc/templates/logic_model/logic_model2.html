@@ -1,31 +1,26 @@
-All the new stuff goes here
+<div class="loading-overlay">Loading...</div>
 <div class="logic-model-container">
 	<div id="phase_container">
 
-		<div>
+		<div class="scenario-list-stage">
 			<div class="logic-model-game-phase-name">Name of this phase of the game.</div>
-			{% comment %}<div class="game-phase-help-button-div">
-				<i class="game-phase-help-button icon-large icon-question-sign"></i>
-	    	</div>
-	    	{% endcomment %}
+			<div class="logic-model-game-phase-instructions">Instructions</div>
+			
 		</div>
 
 		<!-- choose scenario -->
-		{%include "logic_model/subtemplates/initial_scenario_choice.html" %}
+		{%include "logic_model/subtemplates/initial_scenario_choice2.html" %}
 
 		
 		<!-- all subsequent phases of the game -->
-		{%include "logic_model/subtemplates/table.html" %}
+		{%include "logic_model/subtemplates/table2.html" %}
 		<!-- the help box -->
-		{%include "logic_model/subtemplates/help_box.html" %}
+		{%include "logic_model/subtemplates/help_box2.html" %}
 	</div>
 </div>
 
 <script type="text/javascript" language="javascript">
     jQuery(document).ready(function(jQuery){
-        jQuery(".scenario-header").click(function(){
-            jQuery(this).next(".scenario-content").slideToggle("fast");
-            jQuery(this).toggleClass("active");
-        });
+        jQuery(".collapse").collapse();
     });
-</script>
+    </script>

@@ -1,0 +1,484 @@
+h1.section-label-header,
+li.next,
+li.previous,
+#sidebarleft {
+    display:none;
+}
+
+header#masthead {
+    height: 60px !important;
+}
+
+.row {
+    padding-top: 0px;
+}
+
+.game-phase-help-button-div {
+    display: inline;
+    position: relative;
+    left: 600px;
+    top: -25px;
+}
+
+.logic-model-columns {
+    width: 920px;
+    margin: 0;
+    padding: 0;
+}
+
+.centered {
+    margin: auto;
+    display: block;
+}
+
+.divclearfix {
+    clear: both;
+}
+
+span.column_span {
+    width:  153px;
+    margin-left:0px;
+}
+
+span.backbone_column_span {
+    width:  153px;
+    margin-left:0px;
+}
+
+.help_box {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 20px;
+    width: 880px;
+    z-index: 300;
+}
+
+.help-alert {
+    width: 400px;
+    height: 400px;
+    opacity:0.9;
+    filter:alpha(opacity=0.9);
+}
+
+.cell {
+    width: 146px;
+    height: 85px;
+    margin: 2px 0;
+    padding: 1px;
+    float: left;
+    border: 0;
+}
+
+.colhead {
+    width: 138px;
+    height: 40px;
+    margin: 0;
+    padding: 10px 5px;
+    border: 0;
+    background-color: #ccc;
+    font-size: 12px;
+    
+}
+
+.column_name {
+    float: left;
+    width: 110px;
+    line-height: 110%;
+    font-size: 16px;
+}
+
+.column_help_button_span {
+    float: left;
+    width: 25px;
+    height: 25px;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.text_box {
+    display: inline;
+    position: absolute;
+    font: normal 12px/100% arial, helvetica, sans-serif;
+    top: 0px;
+    left: 24px;
+    width : 112px;
+    height: 75px;
+    background-color: #fff;
+    resize: none;
+}
+
+.box_draggable .box_handle {
+    display: inline;
+    position: absolute;
+    left: 0;
+    top: 2px;
+    height: 16px;
+    width: 15px;
+    border: 0;
+    background-color: #fff;
+  -webkit-border-radius: 50%;
+     -moz-border-radius: 50%;
+          border-radius: 50%;
+    cursor: pointer;
+}
+
+.box_draggable .switch_color {
+    display: block;
+    position: absolute;
+    left: 2px;
+    top: 10px;
+    height: 20px;
+    width: 20px;
+    border: 0;
+    background-color: #fff;
+  -webkit-border-radius: 50%;
+     -moz-border-radius: 50%;
+          border-radius: 50%;
+    cursor: pointer;
+}
+
+.btn-logicmodel {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.done-button {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+.done-button {
+    opacity:0.4;
+    filter:alpha(opacity=0.4);
+}
+
+.done-button.active {
+    opacity:1.0;
+    filter:alpha(opacity=1.0);
+}
+
+div.add_a_row_button {
+    display:  none;
+}
+
+div.add_a_row_button.visible {
+    display: inline-block;
+}
+
+.show_expert_logic_model_link_div {
+    display:none;
+}
+
+#phase_container.conclusion .show_expert_logic_model_link_div {
+    display: inline;
+}
+
+#phase_container.conclusion .show_expert_logic_model_link_div a {
+    color: inherit;
+}
+
+/*.box_draggable .box_handle .icon-move{
+    display: inline;
+    position: absolute;
+    left : 1px;
+    top :  33px;
+}*/
+
+.backbone_box_div {
+    display:block;
+}
+
+.backbone_box_div.hidden_box {
+    display:none;
+}
+
+.hover_droppable {
+    background-color: #ccc;
+    /*opacity:0.4;
+    filter:alpha(opacity=40); */
+}
+
+.hover_droppable .text_box, 
+.hover_droppable .box_handle,
+.hover_droppable .switch_color {
+    z-index: -100;
+    opacity:0.0;
+    filter:alpha(opacity=0);
+}
+
+.box_draggable {
+    cursor: pointer;
+}
+
+.box_droppable {
+    height: 50px;
+}
+
+.active_droppable {
+    background-color: green;
+}
+
+.wipe-table-button-div {
+    display: none;
+    position: absolute;
+    top: 160px;
+    left: 0;
+    width: 880px;
+    z-index: 300;
+    width: auto;
+    height: 300px;
+    background-color: #fff;
+    border: 1px solid #999;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+  -webkit-box-shadow: 0 0 50px #666666;
+     -moz-box-shadow: 0 0 50px #666666;
+          box-shadow: 0 0 50px #666666;
+}
+
+.inactive_box {
+    background-color: #666;
+    opacity:0.3;
+    filter:alpha(opacity=30); /* For IE8 and earlier */
+}
+
+/* Pick scenario:*/
+
+#phase_container.pick_scenario div.wipe-table-div, 
+#phase_container.pick_scenario div.table-toolbar, 
+#phase_container.pick_scenario div.logic-model-columns, 
+#phase_container.pick_scenario textarea#reflections,
+#phase_container.pick_scenario .change_scenario,
+#phase_container.pick_scenario .scenario_info,
+#phase_container.pick_scenario .scenario_instructions_container,
+#phase_container.pick_scenario .next_phase  {
+    display:none;
+}
+
+div.table-toolbar {
+    margin-bottom: 5px;
+}
+
+/* Add inputs:*/
+#phase_container.add_inputs div.logic-model-initial-scenario_choice {
+    display:none;
+}
+
+#phase_container.add_inputs div.previous_phase {
+    display:none !important; /* no need to since the "change scenario" button does the same thing. */
+}
+
+/* Add long term outcomes */
+#phase_container.add_long_term_outcomes div.logic-model-initial-scenario_choice {
+    display:none;
+}
+
+/* Add intermediate columns:*/
+#phase_container.add_intermediate_columns div.logic-model-initial-scenario_choice {
+     display:none;
+}
+
+/* Finish work:*/
+#phase_container.finish_work div.logic-model-initial-scenario_choice {
+    display:none;
+}
+/* Conclusion:*/
+#phase_container.conclusion div.logic-model-initial-scenario_choice {
+    display:none;
+}
+
+/* CSS override of EVERYTHING for this activity */
+
+.logic-model-activity h3 {
+    font-size: 24px;
+    line-height: 36px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 30px;
+    color: #000;
+}
+
+#maincontent {
+    width: auto;
+    margin-right: 20px;
+    padding: 0;
+}
+
+#content {
+    position: relative;
+    width: 920px;
+}
+
+.logic-model-container {
+    width: 100%;
+}
+
+.popover-parent {
+    width: auto;
+    height: 500px;
+    background-color: #fff;
+    border: 1px solid #999;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+  -webkit-box-shadow: 0 0 50px #666666;
+     -moz-box-shadow: 0 0 50px #666666;
+          box-shadow: 0 0 50px #666666;
+}
+
+.logic-model-activity .popover-title {
+  font-size: 18px;
+  line-height: 27px;
+  padding: 9px 15px;
+  line-height: 1;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #eee;
+  -webkit-border-radius: 3px 3px 0 0;
+     -moz-border-radius: 3px 3px 0 0;
+          border-radius: 3px 3px 0 0;
+}
+
+.logic-model-game-phase-name {
+    font-size: 22px;
+    font-weight: normal;
+    line-height: 130%;
+    margin: 0 0 20px 0;
+}
+
+.logic-model-activity .scenario_title {
+    font-size: 18px;
+    line-height: 140%;
+    margin-bottom: 10px;
+    padding-bottom: 0;
+    font-weight: normal;
+}
+
+.instructions_for_scenario {
+    margin: 0 0 20px 0;
+}
+
+.scenario-block {
+    margin: 10px auto 30px auto;
+    padding: 0;
+    border: 0;
+    width: auto;
+}
+
+.scenario-header {
+    cursor: pointer;
+    height: 40px;
+    z-index: 1;
+    background: transparent url('../img/caret_close.png') 10px 12px no-repeat;
+}
+
+.scenario-block .active {
+    background: transparent url('../img/caret_open.png') 10px 12px no-repeat;
+}
+
+.scenario-criteria {
+    margin: 0;
+    padding: 0 0 0 30px;
+    border: 0;
+    float: left;
+    font-size: 18px;
+    line-height: 40px;
+    font-weight: normal;
+}
+
+.scenario-content {
+    clear: both;
+    margin: 0 0 0 30px;
+    padding: 10px;
+    border: 0;
+    border-top: 0;
+    display: none;
+}
+
+/* Styling for accordion-specific information blocks */
+
+.scenario-step-stage .accordion-heading {
+    font-size: 22px;
+    font-weight: normal;
+    line-height: 100%;
+    margin: 0;
+}
+
+.scenario-step-stage .accordion-heading .accordion-toggle {
+    margin: 0;
+    padding: 0;
+    display: inline;
+}
+
+.scenario-step-stage .accordion-heading .logic-model-game-phase-name {
+    display: block;
+}
+
+.switch-it, .switch-it2 {
+    background-color: transparent;
+    -webkit-animation-name: example;
+    -webkit-animation-duration: 4s;
+    animation-name: example;
+    animation-duration: 4s;
+}
+
+.switch-it2 {
+    -webkit-animation-name: example2;
+    animation-name: example2;
+}
+
+@-webkit-keyframes example {
+    0%   {background-color:blue;}
+    100% {background-color:transparent;}
+}
+
+@keyframes example {
+    0%   {background-color:blue;}
+    100% {background-color:transparent;}
+}
+
+@-webkit-keyframes example2 {
+    0%   {background-color:blue;}
+    100% {background-color:transparent;}
+}
+
+@keyframes example2 {
+    0%   {background-color:blue;}
+    100% {background-color:transparent;}
+}
+
+.pull-center {
+    text-align: center;
+}
+
+.loading-overlay
+{
+	position: absolute;
+	display: block;
+	top: 0;
+	left: 0;
+	background-color: #fff;
+	height: 100%;
+	width: 100%;
+	font-size: larger;
+	font-weight: bold;
+}

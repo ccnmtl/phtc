@@ -1,2 +1,7 @@
-<!-- Le styles -->
+{% load waffle_tags %}
+
+{% flag "building-logic-models-2" %}
+<link href="{{STATIC_URL}}css/logic_model2.css" rel="stylesheet">
+{% else %}
 <link href="{{STATIC_URL}}css/logic_model.css" rel="stylesheet">
+{% endflag %}
