@@ -5,7 +5,15 @@
 <script src="{{STATIC_URL}}js/jquery-ui-1.10.3.min.js" type="text/javascript" ></script>
 
 {% flag "building-logic-models-2" %}
-
+    <script src="/_logic_model/media/js/logicmodel2.js" type="text/javascript" ></script>
+    <script src="/_logic_model/media/js/view2.js" type="text/javascript" ></script>
+    <script src="/_logic_model/media/js/scenario2.js" type="text/javascript" ></script>
+    <script src="/_logic_model/media/js/box2.js" type="text/javascript" ></script>
+    <script src="/_logic_model/media/js/column2.js" type="text/javascript" ></script>
+    <script src="/_logic_model/media/js/setup2.js" type="text/javascript" ></script>
+    {%include "logic_model/subtemplates/column2.html"   %}
+    {%include "logic_model/subtemplates/box2.html"      %}
+    {%include "logic_model/subtemplates/scenario2.html" %}
 {% else %}
     <script src="/_logic_model/media/js/logicmodel.js" type="text/javascript" ></script>
     <script src="/_logic_model/media/js/view.js" type="text/javascript" ></script>

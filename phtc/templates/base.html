@@ -36,6 +36,9 @@
           {% block usernav %}
             {% if request.user.is_anonymous %}
             {% else %}
+              <!--
+              <span class="user_profile" rel="tooltip" title="view/edit profile"><a href="/dashboard/">Dashboard</a></span>
+              -->
               <a href="/dashboard/">Dashboard</a>
               <a id="login-logout" href="/accounts/logout/?next=/accounts/login/" class="btn btn-small btn-danger">
                 Log out
