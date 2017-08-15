@@ -70,6 +70,7 @@ class Scenario  (models.Model):
     difficulty = models.CharField(max_length=256, default='')
     order_rank = models.IntegerField(default=0, null=True, blank=True, )
     instructions = models.TextField(null=True, blank=True, default='')
+    answer_key = models.TextField(null=True, blank=True)
 
     class Meta:
         ordering = ['order_rank']
@@ -82,7 +83,8 @@ class Scenario  (models.Model):
             'id': self.id,
             'title': self.title,
             'instructions': self.instructions,
-            'difficulty': self.difficulty
+            'difficulty': self.difficulty,
+            'answer_key': self.answer_key
         }
 
 
