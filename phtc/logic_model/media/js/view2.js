@@ -219,10 +219,14 @@ LogicModel.LogicModelView = Backbone.View.extend({
     setUpPhases : function() {
         "use strict";
         var self = this;
-        if (typeof LogicModel.DEBUG_PHASE !== "undefined") {
-            self.current_phase = LogicModel.DEBUG_PHASE;
-        } else {
-            self.current_phase = 0;
+        self.current_phase = 0;
+        for (var i=1; i < self.phases.length; i++) {
+            var phasestep = 'step' + i;
+            jQuery('<div/>', {
+                class: 'step ' + phasestep,
+            }).append(jQuery('<span/>', {
+                text: 'Step '+ i
+            })).appendTo('.activity-progress');
         }
     },
 
@@ -260,7 +264,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
         jQuery('.logic-model-game-phase-instructions').html(
             phase_info.instructions
         );
-        jQuery("#stepTitle").toggleClass("switch-it switch-it2");
+        jQuery("#stepHeaderTitle").toggleClass("switch-it switch-it2");
 
         if (self.current_phase === 0) {
             jQuery ('.previous_phase').hide();
@@ -277,21 +281,14 @@ LogicModel.LogicModelView = Backbone.View.extend({
             jQuery(".scenario-step-stage").show();
         }
 
-        // TO BE REMOVED
-        if (self.current_phase == self.phases.length - 1) {
-                jQuery("li.next").show();
-        } else {
-                jQuery("li.next").show();
-        }
-        
+        jQuery(".activity-progress .step").removeClass("current");
+
+        var currentstep = ".step" + self.current_phase;
+        jQuery(currentstep).addClass("current");
+
         // unhide the last active donebutton on the page:
         jQuery('.done-button').removeClass ('visible');
-        /*
-        if (self.current_phase != self.phases.length - 1) {
-            jQuery('.active_column').last().find ('.done-button').addClass('visible');
-        }
-        */
-
+        
         // unhide the last active donebutton on the page:
         jQuery('.add_a_row_button').removeClass ('visible');
         jQuery('.active_column').first().find('.add_a_row_button').addClass('visible');
@@ -316,6 +313,9 @@ LogicModel.LogicModelView = Backbone.View.extend({
         }
         self.current_phase = self.current_phase  + 1;
         self.paintPhase();
+        
+        var stepTag = $("div[id='stepTag']");
+        window.parent.jQuery('body').animate({scrollTop: stepTag.offset().top}, 'slow');
     },
 
     goToPreviousPhase: function() {
@@ -324,6 +324,9 @@ LogicModel.LogicModelView = Backbone.View.extend({
         jQuery("li.next, h1.section-label-header, li.previous").hide();
         self.current_phase = self.current_phase - 1;
         self.paintPhase();
+
+        var stepTag = $("div[id='stepTag']");
+        window.parent.jQuery('body').animate({scrollTop: stepTag.offset().top}, 'slow');
     },
     
     printScenarioTable: function() {
