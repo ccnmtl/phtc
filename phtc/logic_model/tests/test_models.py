@@ -66,6 +66,7 @@ class ScenarioTest(TestCase):
                 'title': '',
                 'instructions': '',
                 'difficulty': '',
+                'answer_key': None
             }
         )
 

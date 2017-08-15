@@ -1,36 +1,15 @@
-<hr>
-
-
  <!-- the whole table goes here: -->
 <div class="scenario-step-stage">
-		<!--
-<div class="scenario-block scenario_instructions_container">
-    <div class="scenario-header">
-        <div class="scenario-criteria scenario_title_2">
-            Scenario title goes here
-        </div>
-    </div> 
-    <div class="scenario-content scenario_instructions">
-        Scenario instructions go here
-    </div> 
-</div>
-
-<div>
-			<div class="logic-model-game-phase-name">Phase of the game goes here.</div>
-			<p>Placeholder for Steps Instructions. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras a libero pharetra, tempor turpis at, fermentum magna. Lorem ipsum dolor.</p>
-			<div class="logic-model-game-phase-instructions">Instructions</div>
-			
-		</div>-->
 
     <div class="accordion" id="scenario-details">
-            <div class="accordion-group">
+            <div class="accordion-group clearfix">
               <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#scenario-details" href="#scenarioInstructions">
+                <a class="accordion-toggle arrow-open" id="scenarioHeaderTitle" data-toggle="collapse" data-parent="#scenario-details" href="#scenarioInstructions">
                   Scenario: <span class="scenario_title_2">Scenario title goes here</span>
                 </a>
                 <div class="change_scenario btn-logicmodel btn-info"><i class="icon-refresh icon-white"></i> Switch scenario</div>
               </div>
-              <div id="scenarioInstructions" class="accordion-body in collapse" style="height: auto;">
+              <div id="scenarioInstructions" class="accordion-body collapse">
                 <div class="accordion-inner scenario_instructions">
                   Scenario instructions go here
                 </div>
@@ -38,21 +17,22 @@
             </div>
     </div>
 
-
-
-
-
+    <!-- Steps/Progress indicator -->
+    <div class="activity-progress clearfix" id="stepTag">
+    </div>
 
     <div class="accordion" id="step-details">
-            <div class="accordion-group">
+            <div class="accordion-group clearfix">
               <div class="accordion-heading">
-                <a id="stepTitle" class="accordion-toggle logic-model-game-phase-name switch-it2" data-toggle="collapse" data-parent="#step-details" href="#stepInstructions">
-                  Step of the game goes here.
+                <a class="accordion-toggle arrow-open logic-model-game-phase-name switch-it2" id="stepHeaderTitle" data-toggle="collapse" data-parent="#step-details" href="#stepInstructions">
+                  <span>Step of the game goes here.</span>
                 </a>
               </div>
-              <div id="stepInstructions" class="accordion-body in collapse" style="height: auto;">
-                <div class="accordion-inner"><span class="step-number">Instructions</span>
-                  Placeholder for Steps Instructions. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              <div id="stepInstructions" class="accordion-body collapse">
+                <div class="accordion-inner logic-model-game-phase-instructions">
+                Instructions
+                  <!-- Placeholder for Steps Instructions. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+             Turn this on last ZM <div class="logic-model-game-phase-instructions">Instructions</div> -->
                 </div>
               </div>
             </div>
@@ -70,7 +50,7 @@
     <!-- <div class="change_scenario btn-logicmodel btn-info"><i class="icon-refresh icon-white"></i> Switch scenario</div>-->
     <div class="print_scenario btn-logicmodel btn-info"><i class="icon-print icon-white"></i> Print scenario</div>
     <div class ="show_expert_logic_model_link_div btn-logicmodel btn-info">
-        <i class="icon-file icon-white"></i> <a target="_blank" href="/_logic_model/media/pdf/expert_logic_model.pdf" class="show_expert_logic_model_link">Show expert logic model</a>
+        <i class="icon-file icon-white"></i> <a target="_blank" href="" class="show_expert_logic_model_link">Show expert logic model</a>
     </div>
     <div class="wipe-table-button-div alert">
     <h3>Are you sure you want to clear the table?</h3> This will permanently erase everything you typed in the boxes.

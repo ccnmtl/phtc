@@ -47,9 +47,10 @@ span.backbone_column_span {
 
 .help_box {
     display: none;
-    position: absolute;
-    top: 50px;
-    left: 20px;
+    position:fixed;
+    top: 5%;
+    left: 50%;
+    margin-left: -440px;
     width: 880px;
     z-index: 300;
 }
@@ -416,6 +417,25 @@ div.table-toolbar {
 
 /* Styling for accordion-specific information blocks */
 
+.scenario-step-stage .accordion * {
+    border: 0;
+}
+
+.scenario-step-stage .arrow-close {
+    cursor: pointer;
+    height: 40px;
+    z-index: 1;
+    background: transparent url('../img/caret_close.png') 0px 5px no-repeat;
+}
+
+.scenario-step-stage .arrow-open {
+    background: transparent url('../img/caret_open.png') 0px 5px no-repeat;
+}
+
+.scenario-step-stage .logic-model-game-phase-instructions {
+    display: block;
+}
+
 .scenario-step-stage .accordion-heading {
     font-size: 22px;
     font-weight: normal;
@@ -425,7 +445,7 @@ div.table-toolbar {
 
 .scenario-step-stage .accordion-heading .accordion-toggle {
     margin: 0;
-    padding: 0;
+    padding: 0 0 0 25px;
     display: inline;
 }
 
@@ -433,37 +453,142 @@ div.table-toolbar {
     display: block;
 }
 
+.activity-progress li {
+    color: #333;
+    font-weight: bold;
+}
+
+.activity-progress li.completed {
+    color: #000;
+    font-weight: bold;
+}
+
+.activity-progress li.active {
+    color: #f00;
+    font-weight: bold;
+}
+
 .switch-it, .switch-it2 {
     background-color: transparent;
-    -webkit-animation-name: example;
-    -webkit-animation-duration: 4s;
-    animation-name: example;
-    animation-duration: 4s;
+    -webkit-animation-name: fadehighlight;
+    -webkit-animation-duration: 2s;
+    animation-name: fadehighlight;
+    animation-duration: 2s;
 }
 
 .switch-it2 {
-    -webkit-animation-name: example2;
-    animation-name: example2;
+    -webkit-animation-name: fadehighlight2;
+    animation-name: fadehighlight2;
 }
 
-@-webkit-keyframes example {
-    0%   {background-color:blue;}
+@-webkit-keyframes fadehighlight {
+    0%   {background-color: #cce5ff;}
     100% {background-color:transparent;}
 }
 
-@keyframes example {
-    0%   {background-color:blue;}
+@keyframes fadehighlight {
+    0%   {background-color: #cce5ff;}
     100% {background-color:transparent;}
 }
 
-@-webkit-keyframes example2 {
-    0%   {background-color:blue;}
+@-webkit-keyframes fadehighlight2 {
+    0%   {background-color: #cce5ff;}
     100% {background-color:transparent;}
 }
 
-@keyframes example2 {
-    0%   {background-color:blue;}
+@keyframes fadehighlight2 {
+    0%   {background-color: #cce5ff;}
     100% {background-color:transparent;}
+}
+
+/* Steps progress indicator */
+
+.activity-progress .step {
+	font-size: 14px;
+	text-align: center;
+	color: #666;
+	cursor: default;
+	margin: 0 3px;
+	padding: 10px 10px 10px 30px;
+	min-width: 60px;
+	float: left;
+	position: relative;
+	background-color: #d9e3f7;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none; 
+  transition: background-color 0.2s ease;
+  line-height: 16px;
+}
+
+.activity-progress .step:after,
+.activity-progress .step:before {
+	content: " ";
+	position: absolute;
+	top: 0;
+	right: -17px;
+	width: 0;
+	height: 0;
+	border-top: 19px solid transparent;
+	border-bottom: 17px solid transparent;
+	border-left: 17px solid #d9e3f7;	
+	z-index: 2;
+  transition: border-color 0.2s ease;
+}
+
+.activity-progress .step:before {
+	right: auto;
+	left: 0;
+	border-left: 17px solid #fff;	
+	z-index: 0;
+}
+
+.activity-progress .step:first-child:before {
+	border: none;
+}
+
+.activity-progress .step:last-child:after {
+	border: none;
+}
+.activity-progress .step:first-child {
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+    padding-left: 20px;
+}
+
+.activity-progress .step:last-child {
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+.activity-progress .step span {
+	position: relative;
+}
+
+/*.activity-progress .step span:before {
+	opacity: 0;
+	content: "\2713";
+	position: absolute;
+	top: -2px;
+	left: -20px;
+}
+
+.activity-progress .step.done span:before {
+	opacity: 1;
+	-webkit-transition: opacity 0.3s ease 0.5s;
+	-moz-transition: opacity 0.3s ease 0.5s;
+	-ms-transition: opacity 0.3s ease 0.5s;
+	transition: opacity 0.3s ease 0.5s;
+}*/
+
+.activity-progress .step.current {
+	color: #fff;
+	background-color: #23468c;
+}
+
+.activity-progress .step.current:after {
+	border-left: 17px solid #23468c;	
 }
 
 .pull-center {

@@ -22,5 +22,11 @@
 <script type="text/javascript" language="javascript">
     jQuery(document).ready(function(jQuery){
         jQuery(".collapse").collapse();
+        jQuery('#scenarioInstructions').on('show hide', function(e){
+            jQuery('#scenarioHeaderTitle').toggleClass('arrow-open arrow-close', 200);
+        });
+        jQuery('#stepInstructions').on('show hide', function(e){
+            jQuery('#stepHeaderTitle').toggleClass('arrow-open arrow-close', 200);
+        });
     });
-    </script>
+</script>
