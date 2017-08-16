@@ -13,13 +13,6 @@ header#masthead {
     padding-top: 0px;
 }
 
-.game-phase-help-button-div {
-    display: inline;
-    position: relative;
-    left: 600px;
-    top: -25px;
-}
-
 .logic-model-columns {
     width: 920px;
     margin: 0;
