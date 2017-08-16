@@ -7,7 +7,7 @@
                 <a class="accordion-toggle arrow-open" id="scenarioHeaderTitle" data-toggle="collapse" data-parent="#scenario-details" href="#scenarioInstructions">
                   Scenario: <span class="scenario_title_2">Scenario title goes here</span>
                 </a>
-                <div class="change_scenario btn-logicmodel btn-info"><i class="icon-refresh icon-white"></i> Switch scenario</div>
+                <div class="change_scenario">Switch scenario</div>
               </div>
               <div id="scenarioInstructions" class="accordion-body collapse">
                 <div class="accordion-inner scenario_instructions">
@@ -16,6 +16,8 @@
               </div>
             </div>
     </div>
+
+<hr />
 
     <!-- Steps/Progress indicator -->
     <div class="activity-progress clearfix" id="stepTag">
@@ -38,10 +40,6 @@
             </div>
     </div>
 
-
-<hr>
-
-
 </div><!-- /.scenario-step-stage -->
          
 <div class="table-toolbar">
@@ -52,26 +50,45 @@
     <div class ="show_expert_logic_model_link_div btn-logicmodel btn-info">
         <i class="icon-file icon-white"></i> <a target="_blank" href="" class="show_expert_logic_model_link">Show expert logic model</a>
     </div>
-    <div class="modal wipe-table-button-div">
-        <div class="modal-header help-header">
-            <h3>Are you sure you want to clear the table?</h3>
+</div>
+
+<div class="modal wipe-table-button-div">
+    <div class="modal-header help-header">
+        <h3>Are you sure you want to clear the table?</h3>
+    </div>
+    <div class="modal-body">
+        <div>
+        This will permanently erase everything you typed in the logic model table.
         </div>
-        <div class="modal-body">
-            <div>
-            This will permanently erase everything you typed in the boxes.
-            </div>
+    </div>
+    <div class="modal-footer">
+        <div class = "wipe-table-confirm-button btn-logicmodel btn-danger">
+        Yes, I'm sure
         </div>
-        <div class="modal-footer">
-            <div class = "wipe-table-confirm-button btn-logicmodel btn-danger">
-            Yes, I'm sure
-            </div>
-            <div class = "wipe-table-cancel-button btn-logicmodel btn-success">
-            No
-            </div>
+        <div class = "wipe-table-cancel-button btn-logicmodel btn-success">
+        No
         </div>
     </div>
 </div>
 
+<div class="modal switch-scenario-warning">
+    <div class="modal-header help-header">
+        <h3>Are you sure you want to switch scenario?</h3>
+    </div>
+    <div class="modal-body">
+        <div>
+        This will permanently erase everything you typed in the logic model table.
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class = "change_scenario_confirm btn-logicmodel btn-danger">
+        Yes, I'm sure
+        </div>
+        <div class = "change_scenario_cancel btn-logicmodel btn-success">
+        No
+        </div>
+    </div>
+</div>
 
 
 
