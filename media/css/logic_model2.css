@@ -47,12 +47,14 @@ span.backbone_column_span {
 
 .help_box {
     display: none;
-    position:fixed;
-    top: 5%;
-    left: 50%;
-    margin-left: -440px;
-    width: 880px;
+    margin-left: -350px;
     z-index: 300;
+}
+
+.help_box .modal-header h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
 }
 
 .help-alert {
