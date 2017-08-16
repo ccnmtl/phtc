@@ -51,6 +51,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
     closeHelpBox : function() {
         "use strict";
         var self = this;
+        jQuery('.help-overlay').hide();
         jQuery('.help_box').hide();
         jQuery('.help_box').html('');
     },
@@ -58,7 +59,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
     showWipeTableWarning : function () {
         "use strict";
         var self = this;
-        jQuery ('.wipe-table-button').hide();
+        jQuery('.help-overlay').show();
         jQuery ('.wipe-table-button-div').show();
     },
 
@@ -74,7 +75,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
                 box_models[i].trigger ('setColor');
             }
         });
-        jQuery ('.wipe-table-button').show();
+        jQuery('.help-overlay').hide();
         jQuery ('.wipe-table-button-div').hide();
         self.current_phase = 1;
         self.current_number_of_rows = LogicModel.NUMBER_OF_ROWS_INITIALLY_VISIBLE;
@@ -86,6 +87,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
     cancelWipeTable : function () {
         "use strict";
         var self = this;
+        jQuery('.help-overlay').hide();
         jQuery ('.wipe-table-button').show();
         jQuery ('.wipe-table-button-div').hide();
     },
