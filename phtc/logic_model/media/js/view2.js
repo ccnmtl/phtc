@@ -5,7 +5,6 @@ LogicModel.LogicModelView = Backbone.View.extend({
         "click .previous_phase": "goToPreviousPhase",
         "click .change_scenario": "goToFirstPhase",
         "click .print_scenario": "printScenarioTable",
-        "click .game-phase-help-button-div" : "showGamePhaseHelpBox",
         "click .help_box": "closeHelpBox",
         "click .add_a_row_button": "addARow",
         "click .wipe-table-button": "showWipeTableWarning",
@@ -25,7 +24,6 @@ LogicModel.LogicModelView = Backbone.View.extend({
             "onAddScenario",
             "goToNextPhase",
             "goToPreviousPhase",
-            "showGamePhaseHelpBox",
             "addARow",
             "adjustRows",
             "checkEmptyBoxes",
@@ -48,27 +46,6 @@ LogicModel.LogicModelView = Backbone.View.extend({
         
         jQuery("li.next a").on("click", this.beforeLeavePage);
         jQuery("li.previous a").on("click", this.beforeLeavePage);
-    },
-
-    showGamePhaseHelpBox: function () {
-        "use strict";
-        var self = this;
-        var phase_info = self.currentPhaseInfo();
-        var the_template = jQuery('#logic-model-help-box').html();
-        var title_copy = phase_info.name;
-        if (title_copy === '' || title_copy === undefined ) {
-            title_copy = 'Lorem ipsum';
-        }
-        var body_copy = phase_info.instructions;
-        if (body_copy === '' || body_copy === undefined ) {
-            body_copy = 'Lorem ipsum';
-        }
-        var the_data = {
-            'help_title'  : title_copy,
-            'help_body'   : body_copy
-        };
-        var the_html = _.template(the_template, the_data);
-        jQuery( ".help_box" ).html (the_html);
     },
 
     closeHelpBox : function() {
@@ -243,7 +220,6 @@ LogicModel.LogicModelView = Backbone.View.extend({
         if (phase_info.hasOwnProperty ('already_seen'))  {
         }
         else {
-            self.showGamePhaseHelpBox();
             phase_info.already_seen = true;
         }
 
