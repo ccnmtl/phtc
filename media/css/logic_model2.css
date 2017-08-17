@@ -232,6 +232,12 @@ div.add_a_row_button.visible {
     margin-left: -350px;
 }
 
+.switch-scenario-warning {
+    display: none;
+    z-index: 300;
+    margin-left: -350px;
+}
+
 .inactive_box {
     background-color: #666;
     opacity:0.3;
@@ -249,6 +255,24 @@ div.add_a_row_button.visible {
 #phase_container.pick_scenario .scenario_instructions_container,
 #phase_container.pick_scenario .next_phase  {
     display:none;
+}
+
+.change_scenario {
+    display: inline-block;
+    font-size: 16px;
+    padding: 4px 15px 4px 35px;
+    margin: 0 0 0 20px;
+    border: 1px solid #999 !important;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+    background: #fff url('../img/refresh-icon.png') 4px 4px no-repeat;
+    background-size: 26px;
+    cursor: pointer;
+}
+
+.change_scenario:hover {
+    background-color: #ddd;
 }
 
 div.table-toolbar {
@@ -427,20 +451,7 @@ div.table-toolbar {
 
 .scenario-step-stage .accordion-heading .logic-model-game-phase-name {
     display: block;
-}
-
-.activity-progress li {
-    color: #333;
-    font-weight: bold;
-}
-
-.activity-progress li.completed {
-    color: #000;
-    font-weight: bold;
-}
-
-.activity-progress li.active {
-    color: #f00;
+    font-size: 18px;
     font-weight: bold;
 }
 
@@ -478,6 +489,10 @@ div.table-toolbar {
 }
 
 /* Steps progress indicator */
+
+.activity-progress {
+    margin-bottom: 10px;
+}
 
 .activity-progress .step {
 	font-size: 14px;

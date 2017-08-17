@@ -3,7 +3,9 @@ LogicModel.LogicModelView = Backbone.View.extend({
         "click .next_phase": "goToNextPhase",
         "click .done-button": "goToNextPhase",
         "click .previous_phase": "goToPreviousPhase",
-        "click .change_scenario": "goToFirstPhase",
+        "click .change_scenario": "showSwitchScenarioWarning",
+        "click .change_scenario_confirm": "goToFirstPhase",
+        "click .change_scenario_cancel": "cancelSwitchScenario",
         "click .print_scenario": "printScenarioTable",
         "click .help_box": "closeHelpBox",
         "click .add_a_row_button": "addARow",
@@ -28,8 +30,11 @@ LogicModel.LogicModelView = Backbone.View.extend({
             "adjustRows",
             "checkEmptyBoxes",
             "showWipeTableWarning",
+            "wipeTableValues",
             "wipeTable",
             "cancelWipeTable",
+            "showSwitchScenarioWarning",
+            "cancelSwitchScenario",
             "beforeLeavePage"
         );
         self.getSettings();
@@ -63,7 +68,7 @@ LogicModel.LogicModelView = Backbone.View.extend({
         jQuery ('.wipe-table-button-div').show();
     },
 
-    wipeTable : function () {
+    wipeTableValues : function () {
         "use strict";
         var self = this;
         jQuery('.text_box').each(function (a, b) {b.value = ''; });
@@ -75,13 +80,18 @@ LogicModel.LogicModelView = Backbone.View.extend({
                 box_models[i].trigger ('setColor');
             }
         });
+    },
+
+    wipeTable : function () {
+        "use strict";
+        var self = this;
+        self.wipeTableValues();
         jQuery('.help-overlay').hide();
         jQuery ('.wipe-table-button-div').hide();
         self.current_phase = 1;
         self.current_number_of_rows = LogicModel.NUMBER_OF_ROWS_INITIALLY_VISIBLE;
         self.adjustRows();
         self.paintPhase();
-
     },
 
     cancelWipeTable : function () {
@@ -276,11 +286,24 @@ LogicModel.LogicModelView = Backbone.View.extend({
         }
     },
 
+    showSwitchScenarioWarning: function() {
+        jQuery('.help-overlay').show();
+        jQuery ('.switch-scenario-warning').show();
+    },
+
     goToFirstPhase: function() {
         "use strict";
         var self = this;
+        self.wipeTableValues();
         self.current_phase = 0;
         self.paintPhase();
+        jQuery('.help-overlay').hide();
+        jQuery ('.switch-scenario-warning').hide();
+    },
+
+    cancelSwitchScenario: function() {
+        jQuery('.help-overlay').hide();
+        jQuery ('.switch-scenario-warning').hide();
     },
 
     goToNextPhase: function() {
