@@ -9,6 +9,10 @@ header#masthead {
     height: 60px !important;
 }
 
+.print_only {
+    display: none;
+}
+
 .row {
     padding-top: 0px;
 }
@@ -18,6 +22,15 @@ header#masthead {
     margin: 0;
     padding: 0;
 }
+
+.print-break {
+    page-break-after: always;
+    height: 1px;
+    border: 0;
+    margin: 0px;
+    padding: 0px;
+}
+
 
 .centered {
     margin: auto;
@@ -188,10 +201,10 @@ div.add_a_row_button.visible {
 
 .highlight-answerkey {
     background-color: #5cb85c;
-    -moz-animation: flash-green 2s 4;
-    -webkit-animation: flash-green 2s 4;
-    -ms-animation: flash-green 2s 4;
-    animation: flash-green 2s 4;
+    -moz-animation: flash-green 1s 5;
+    -webkit-animation: flash-green 1s 5;
+    -ms-animation: flash-green 1s 5;
+    animation: flash-green 1s 5;
 }
 
 @-webkit-keyframes flash-green {
@@ -629,4 +642,74 @@ div.table-toolbar {
 	z-index: 200;
     opacity: 0.5;
     filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+
+/* Print CSS */
+
+@media print {
+
+    .print_only {
+        margin-top: -60px;
+        display: block;
+    }
+    
+    h3.print_only {
+        margin-top: 50px;
+    }
+
+    .phtc_print_logo {
+        display: block;
+    }
+
+    .phtc_print_logo img {
+        height: 100px;
+    }
+
+    .navbar,
+    #masthead,
+    .help-overlay,
+    #sidebarleft,
+    .nav.nav-pills,
+    .change_scenario,
+    .activity-progress,
+    .table-toolbar,
+    .add_a_row_button,
+    .done-button,
+    .pager,
+    .footer ul,
+    .column_help_button_span,
+    .switch_color
+    {
+        display: none !important;
+    }
+
+    .logic-model-columns {
+        border: 1px solid #999;
+    }
+
+    .colhead {
+        border-right: 1px solid #999;
+        font-weight: bold;
+    }
+
+    .cell {
+        border: 1px solid #999;
+        border-right: 2px solid #999;
+        height: 235px;
+    }
+
+    .text_box {
+        font-size: 14px;
+        left: 0;
+        margin: 0;
+        width: 136px;
+        height: 225px;
+        border: 0;
+    }
+
+    .scenario-step-stage .accordion-body,
+    .scenario-step-stage .collapse.in
+    {
+        height: auto !important;
+    }
 }
