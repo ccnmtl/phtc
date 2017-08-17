@@ -284,6 +284,16 @@ LogicModel.LogicModelView = Backbone.View.extend({
         if (self.current_phase !== 0) {
            self.checkEmptyBoxes();
         }
+        
+        if (self.current_phase == self.phases.length - 1) {
+            jQuery(".show_expert_logic_model_link_div")
+                .show()
+                .addClass("highlight-answerkey");
+        } else {
+            jQuery(".show_expert_logic_model_link_div")
+                .hide()
+                .removeClass("highlight-answerkey");
+        }
     },
 
     showSwitchScenarioWarning: function() {
