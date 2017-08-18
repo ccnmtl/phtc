@@ -904,3 +904,26 @@ margin: 0 7px 0 -2px !important;
     text-decoration: none;
     background-color: #0088cc;
 }
+
+/* Special Logic Model bulleted list */
+
+.custom-counter {
+    margin-left: 0;
+    padding-right: 0;
+    list-style-type: none;
+}
+
+.custom-counter li {
+    counter-increment: step-counter;
+}
+
+.custom-counter li::before {
+    content: counter(step-counter);
+    margin-right: 5px;
+    background-color: #08c;
+    color: white;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 50%;
+}
+
