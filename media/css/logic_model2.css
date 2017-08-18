@@ -540,7 +540,7 @@ div.table-toolbar {
 	color: #666;
 	cursor: default;
 	margin: 0 3px;
-	padding: 10px 10px 10px 30px;
+	padding: 5px 10px 5px 30px;
 	min-width: 60px;
 	float: left;
 	position: relative;
@@ -561,8 +561,8 @@ div.table-toolbar {
 	right: -17px;
 	width: 0;
 	height: 0;
-	border-top: 19px solid transparent;
-	border-bottom: 17px solid transparent;
+	border-top: 14px solid transparent;
+	border-bottom: 12px solid transparent;
 	border-left: 17px solid #d9e3f7;	
 	z-index: 2;
   transition: border-color 0.2s ease;
@@ -599,11 +599,11 @@ div.table-toolbar {
 
 .activity-progress .step.current {
 	color: #fff;
-	background-color: #23468c;
+	background-color: #08c;
 }
 
 .activity-progress .step.current:after {
-	border-left: 17px solid #23468c;	
+	border-left: 17px solid #08c;	
 }
 
 .help-header h3 {
