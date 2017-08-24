@@ -1,3 +1,5 @@
+/* global PHTC: true */
+
 jQuery(document).ready(function() {
     /*
     ** Move the video modules into the video area

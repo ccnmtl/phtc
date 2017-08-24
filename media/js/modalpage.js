@@ -3,12 +3,14 @@ jQuery(document).ready(function() {
         var modalSet;
 
         modalSet = [
-            {'modalContentPath': '/stakeholders/',
-             'modalTitle': 'Stakeholders'},
-            {'modalContentPath': '/logicmodel/',
-             'modalTitle': 'Logic Model'},
+            {
+                'modalContentPath': '/stakeholders/',
+                'modalTitle': 'Stakeholders'},
+            {
+                'modalContentPath': '/logicmodel/',
+                'modalTitle': 'Logic Model'},
             {'modalContentPath': '/evaluationqs/',
-             'modalTitle': 'Evaluation Questions'}
+                'modalTitle': 'Evaluation Questions'}
         ];
 
         for (var i = 0; i < modalSet.length; i++) {

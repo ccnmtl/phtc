@@ -6,18 +6,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "eslintConfig": {
+    "extends": "secure"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/ccnmtl/phtc.git"
   },
-  "author": "",
+  "author": "Jed Davis, Zarina Mustapha",
   "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/ccnmtl/phtc/issues"
   },
   "devDependencies": {
-    "eslint": "~3.17.1",
-    "jshint": "~2.9.1-rc1",
-    "jscs": "~2.7.0"
+    "eslint": "~4.5.0",
+    "eslint-config-scanjs": "^1.0.0-beta4",
+    "eslint-plugin-no-unsafe-innerhtml": "^1.0.16",
+    "eslint-plugin-security": "^1.4.0"
   }
 }

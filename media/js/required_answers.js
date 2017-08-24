@@ -2,7 +2,6 @@ jQuery(document).ready(function() {
     var btn = jQuery('.btn.btn-primary');
     var btn_hold = jQuery('<div class="btn btn-secondary"' +
                           ' style="margin-top:-10px;">Submit*</div>');
-    var form = jQuery('form');
 
     function check_answers(questions) {
         var num_of_questions = questions.length;
