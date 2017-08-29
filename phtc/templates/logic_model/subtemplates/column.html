@@ -1,20 +1,20 @@
 <script type="text/template" id="logic-model-column">
 	<span class ="column_span <%=css_classes %>">
-	    <div class="colhead">
+	    <div class="colhead clearfix">
 	    	<div class="column_name">
 		    	<%=name %>
 	    	</div>
 	    	<div class="column_help_button_span">
-				<i class="column_help_button icon-question-sign"></i>
+				<img class="column_help_button" title="More about '<%=name %>'" src="{{STATIC_URL}}img/icon-info.png" />
 	    	</div>
 	    </div>
 	    <span class="boxes"></span>
-	    <div class="btn btn-info add_a_row_button">
+	    <div class="btn-logicmodel btn-info add_a_row_button">
 	    	<i class="icon-plus icon-white" title="Add a row"></i> 
 	    </div>
-	    <div class="btn btn-primary btn-success done-button">
-	    	I'm Done!
-	    </div>
+	    <button class="btn-logicmodel done-button">
+	    	I am done!
+	    </button>
 	    <div class="divclearfix"></div>
     </span>
 </script>
