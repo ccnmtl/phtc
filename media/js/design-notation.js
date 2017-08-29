@@ -2,7 +2,7 @@ jQuery(document).ready(function() {
 
     var scenario;
     var colNum = 0;
-    var rowNum = 0;
+
     var cellTotal = 0;
     var scenario2_answer = ' ' + 'O' + 'X' + 'O' + ' ' +
         ' ' + ' ' + ' ';
@@ -16,19 +16,16 @@ jQuery(document).ready(function() {
         scenario = jQuery('.interactive-scenario').attr('id');
         if (scenario === 'scenario2') {
             colNum = 4;
-            rowNum = 2;
             cellTotal = 8;
             correctAnswer = scenario2_answer;
         }
         if (scenario === 'scenario3') {
             colNum = 4;
-            rowNum = 2;
             cellTotal = 8;
             correctAnswer = scenario3_answer;
         }
         if (scenario === 'finaldesign') {
             colNum = 5;
-            rowNum = 2;
             cellTotal = 10;
             correctAnswer = finaldesign_answer;
         }

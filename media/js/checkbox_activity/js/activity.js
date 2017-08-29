@@ -14,16 +14,18 @@ function CheckboxActivity($, context) {
     // do this so the context of "this" (instance of the
     //CheckboxActivity) can be refferred to when out of scope
     this.context = context;
-    this.attrs = ['blank',
-                  'Leads researcher to fixate on details',
-                  'Possible misinterpretations due to cultural differences',
-                  'Requires technical training',
-                  'Depends on cooperation of key individuals',
-                  'Readily open to ethical dilemmas',
-                  'Difficult to replicate',
-                 ];
+    this.attrs = [
+        'blank',
+        'Leads researcher to fixate on details',
+        'Possible misinterpretations due to cultural differences',
+        'Requires technical training',
+        'Depends on cooperation of key individuals',
+        'Readily open to ethical dilemmas',
+        'Difficult to replicate',
+    ];
 
-    this.objects = [// this is the object with a matches array
+    this.objects = [
+        // this is the object with a matches array
         // assign the key of the object to the correct
         // match in the attrs array
         {'Participant Observation': [1,2,0,4,5,6]},
@@ -176,8 +178,7 @@ function CheckboxActivity($, context) {
         $('.interactive').each(function() {
             var className = $(this).attr('class');
             var pattrn = /match-0/i;
-            if (className.match(pattrn)) {
-            } else {
+            if (!className.match(pattrn)) {
                 $(this).append('<span class="answr-x">X</span>');
                 if ($(this).children().length > 0) {
                     if ($(this).children().length > 1) {

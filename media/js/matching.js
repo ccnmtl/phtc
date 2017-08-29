@@ -34,13 +34,13 @@ jQuery(document).ready(function($) {
 
     //clean string function
     function cleanup_string(str, kill_space) {
-        var punctuationless = str.replace(
-                /[\.,-\/?#!$%\^&\*;:{}=\-_`~()]/g, '');
+        // eslint-disable-next-line no-useless-escape
+        var xpunctuation = str.replace(/[\.,-\/?#!$%\^&\*;:{}=\-_`~()]/g, '');
         var spaceless;
         if (kill_space === true) {
-            spaceless = punctuationless.replace(/\s/g, '');
+            spaceless = xpunctuation.replace(/\s/g, '');
         } else {
-            spaceless = punctuationless;
+            spaceless = xpunctuation;
         }
         var filter = spaceless.replace(/'/g,'');//take out the single quotes
         var filter1 = filter.replace(/\[/g,'');//replace [
