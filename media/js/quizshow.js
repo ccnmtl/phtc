@@ -1,3 +1,5 @@
+/* exported reveal */
+
 var clickhandler = function() {
     show(this);
     return false;

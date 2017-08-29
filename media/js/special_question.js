@@ -2,7 +2,7 @@ jQuery(document).ready(function() {
 
     var question_number = 4; //enter the number of the question you would like to augment
     var question = jQuery(jQuery('.special-question')
-                          .children('.cases')[question_number - 1]);
+        .children('.cases')[question_number - 1]);
     // set the answers as available src string variables
     var a1 = 'Mod2PPTQ4A.jpg';
     var a2 = 'Mod2PPTQ4B.jpg';
@@ -15,8 +15,8 @@ jQuery(document).ready(function() {
         .children('li')
         .children('input')
         .each(function(i) {
-        var img = new Image();
-        jQuery(img).attr('src', '/media/img/' + answer_array[i]);
-        jQuery(this).after(img);
-    });
+            var img = new Image();
+            jQuery(img).attr('src', '/media/img/' + answer_array[i]);
+            jQuery(this).after(img);
+        });
 });
