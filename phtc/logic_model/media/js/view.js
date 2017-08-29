@@ -229,12 +229,6 @@ LogicModel.LogicModelView = Backbone.View.extend({
         "use strict";
         var self = this;
         var phase_info = self.currentPhaseInfo();
-        if (phase_info.hasOwnProperty ('already_seen'))  {
-        }
-        else {
-            phase_info.already_seen = true;
-        }
-
         var active_columns_for_this_phase = self.columns_in_each_phase[phase_info.id];
         self.columns.each (function (col) {
             if (active_columns_for_this_phase !== undefined) {
