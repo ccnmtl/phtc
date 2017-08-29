@@ -3,9 +3,10 @@ LogicModel.LogicModelView = Backbone.View.extend({
         "click .next_phase": "goToNextPhase",
         "click .done-button": "goToNextPhase",
         "click .previous_phase": "goToPreviousPhase",
-        "click .change_scenario": "goToFirstPhase",
+        "click .change_scenario": "showSwitchScenarioWarning",
+        "click .change_scenario_confirm": "goToFirstPhase",
+        "click .change_scenario_cancel": "cancelSwitchScenario",
         "click .print_scenario": "printScenarioTable",
-        "click .game-phase-help-button-div" : "showGamePhaseHelpBox",
         "click .help_box": "closeHelpBox",
         "click .add_a_row_button": "addARow",
         "click .wipe-table-button": "showWipeTableWarning",
@@ -25,13 +26,15 @@ LogicModel.LogicModelView = Backbone.View.extend({
             "onAddScenario",
             "goToNextPhase",
             "goToPreviousPhase",
-            "showGamePhaseHelpBox",
             "addARow",
             "adjustRows",
             "checkEmptyBoxes",
             "showWipeTableWarning",
+            "wipeTableValues",
             "wipeTable",
             "cancelWipeTable",
+            "showSwitchScenarioWarning",
+            "cancelSwitchScenario",
             "beforeLeavePage"
         );
         self.getSettings();
@@ -50,30 +53,10 @@ LogicModel.LogicModelView = Backbone.View.extend({
         jQuery("li.previous a").on("click", this.beforeLeavePage);
     },
 
-    showGamePhaseHelpBox: function () {
-        "use strict";
-        var self = this;
-        var phase_info = self.currentPhaseInfo();
-        var the_template = jQuery('#logic-model-help-box').html();
-        var title_copy = phase_info.name;
-        if (title_copy === '' || title_copy === undefined ) {
-            title_copy = 'Lorem ipsum';
-        }
-        var body_copy = phase_info.instructions;
-        if (body_copy === '' || body_copy === undefined ) {
-            body_copy = 'Lorem ipsum';
-        }
-        var the_data = {
-            'help_title'  : title_copy,
-            'help_body'   : body_copy
-        };
-        var the_html = _.template(the_template, the_data);
-        jQuery( ".help_box" ).html (the_html);
-    },
-
     closeHelpBox : function() {
         "use strict";
         var self = this;
+        jQuery('.help-overlay').hide();
         jQuery('.help_box').hide();
         jQuery('.help_box').html('');
     },
@@ -81,11 +64,11 @@ LogicModel.LogicModelView = Backbone.View.extend({
     showWipeTableWarning : function () {
         "use strict";
         var self = this;
-        jQuery ('.wipe-table-button').hide();
+        jQuery('.help-overlay').show();
         jQuery ('.wipe-table-button-div').show();
     },
 
-    wipeTable : function () {
+    wipeTableValues : function () {
         "use strict";
         var self = this;
         jQuery('.text_box').each(function (a, b) {b.value = ''; });
@@ -97,18 +80,24 @@ LogicModel.LogicModelView = Backbone.View.extend({
                 box_models[i].trigger ('setColor');
             }
         });
-        jQuery ('.wipe-table-button').show();
+    },
+
+    wipeTable : function () {
+        "use strict";
+        var self = this;
+        self.wipeTableValues();
+        jQuery('.help-overlay').hide();
         jQuery ('.wipe-table-button-div').hide();
         self.current_phase = 1;
         self.current_number_of_rows = LogicModel.NUMBER_OF_ROWS_INITIALLY_VISIBLE;
         self.adjustRows();
         self.paintPhase();
-
     },
 
     cancelWipeTable : function () {
         "use strict";
         var self = this;
+        jQuery('.help-overlay').hide();
         jQuery ('.wipe-table-button').show();
         jQuery ('.wipe-table-button-div').hide();
     },
@@ -219,10 +208,14 @@ LogicModel.LogicModelView = Backbone.View.extend({
     setUpPhases : function() {
         "use strict";
         var self = this;
-        if (typeof LogicModel.DEBUG_PHASE !== "undefined") {
-            self.current_phase = LogicModel.DEBUG_PHASE;
-        } else {
-            self.current_phase = 0;
+        self.current_phase = 0;
+        for (var i=1; i < self.phases.length; i++) {
+            var phasestep = 'step' + i;
+            jQuery('<div/>', {
+                class: 'step ' + phasestep,
+            }).append(jQuery('<span/>', {
+                text: 'Step '+ i
+            })).appendTo('.activity-progress');
         }
     },
 
@@ -236,14 +229,6 @@ LogicModel.LogicModelView = Backbone.View.extend({
         "use strict";
         var self = this;
         var phase_info = self.currentPhaseInfo();
-        if (phase_info.hasOwnProperty ('already_seen'))  {
-            //console.log ("Already seen")
-        }
-        else {
-            self.showGamePhaseHelpBox();
-            phase_info.already_seen = true;
-        }
-
         var active_columns_for_this_phase = self.columns_in_each_phase[phase_info.id];
         self.columns.each (function (col) {
             if (active_columns_for_this_phase !== undefined) {
@@ -256,36 +241,36 @@ LogicModel.LogicModelView = Backbone.View.extend({
         // set the #phase_container span so that
         // the CSS can properly paint this phase of the game.
         jQuery("#phase_container").attr("class", phase_info.css_classes);
-        jQuery('.logic-model-game-phase-name').html(phase_info.name);
+        jQuery(".logic-model-game-phase-name").html(phase_info.name);
+        // Need to break this to be compliant
+        jQuery('.logic-model-game-phase-instructions').html(
+            phase_info.instructions
+        );
+        jQuery("#stepHeaderTitle").toggleClass("switch-it switch-it2");
 
         if (self.current_phase === 0) {
             jQuery ('.previous_phase').hide();
             jQuery("li.previous").show();
             jQuery("li.next").show();
+            jQuery(".scenario-list-stage").show();
+            jQuery(".scenario-step-stage").hide();
             self.ok_to_proceed = true;
         } else {
             jQuery("li.previous").show();
             jQuery("li.next").show();
-            jQuery ('.previous_phase').show();
+            jQuery (".previous_phase").show();
+            jQuery(".scenario-list-stage").hide();
+            jQuery(".scenario-step-stage").show();
         }
 
-        // TO BE REMOVED
-        if (self.current_phase == self.phases.length - 1) {
-                jQuery("li.next").show();
-            //jQuery ('.next_phase').hide();
-        } else {
-                jQuery("li.next").show();
-            //jQuery ('.next_phase').show();
-        }
-        
+        jQuery(".activity-progress .step").removeClass("current");
+
+        var currentstep = ".step" + self.current_phase;
+        jQuery(currentstep).addClass("current");
+
         // unhide the last active donebutton on the page:
         jQuery('.done-button').removeClass ('visible');
-        /*
-        if (self.current_phase != self.phases.length - 1) {
-            jQuery('.active_column').last().find ('.done-button').addClass('visible');
-        }
-        */
-
+        
         // unhide the last active donebutton on the page:
         jQuery('.add_a_row_button').removeClass ('visible');
         jQuery('.active_column').first().find('.add_a_row_button').addClass('visible');
@@ -293,13 +278,36 @@ LogicModel.LogicModelView = Backbone.View.extend({
         if (self.current_phase !== 0) {
            self.checkEmptyBoxes();
         }
+        
+        if (self.current_phase == self.phases.length - 1) {
+            jQuery(".show_expert_logic_model_link_div")
+                .show()
+                .addClass("highlight-answerkey");
+        } else {
+            jQuery(".show_expert_logic_model_link_div")
+                .hide()
+                .removeClass("highlight-answerkey");
+        }
+    },
+
+    showSwitchScenarioWarning: function() {
+        jQuery('.help-overlay').show();
+        jQuery ('.switch-scenario-warning').show();
     },
 
     goToFirstPhase: function() {
         "use strict";
         var self = this;
+        self.wipeTableValues();
         self.current_phase = 0;
         self.paintPhase();
+        jQuery('.help-overlay').hide();
+        jQuery ('.switch-scenario-warning').hide();
+    },
+
+    cancelSwitchScenario: function() {
+        jQuery('.help-overlay').hide();
+        jQuery ('.switch-scenario-warning').hide();
     },
 
     goToNextPhase: function() {
@@ -310,6 +318,9 @@ LogicModel.LogicModelView = Backbone.View.extend({
         }
         self.current_phase = self.current_phase  + 1;
         self.paintPhase();
+        
+        var stepTag = $("div[id='stepTag']");
+        window.parent.jQuery('body').animate({scrollTop: stepTag.offset().top}, 'slow');
     },
 
     goToPreviousPhase: function() {
@@ -318,6 +329,9 @@ LogicModel.LogicModelView = Backbone.View.extend({
         jQuery("li.next, h1.section-label-header, li.previous").hide();
         self.current_phase = self.current_phase - 1;
         self.paintPhase();
+
+        var stepTag = $("div[id='stepTag']");
+        window.parent.jQuery('body').animate({scrollTop: stepTag.offset().top}, 'slow');
     },
     
     printScenarioTable: function() {

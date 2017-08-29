@@ -9,35 +9,28 @@ header#masthead {
     height: 60px !important;
 }
 
+.print_only {
+    display: none;
+}
+
 .row {
     padding-top: 0px;
 }
 
-textarea#reflections {
-    margin: 5px 0 0 0;
-    padding: 5px;
-    border: 1px solid #999;
-    width: 835px;
-    height: 50px;
-    clear: both;
-    font: normal 11px/100% verdana;
-    color: #000;
-}
-
-.game-phase-help-button-div {
-    display: inline;
-    position: relative;
-    left: 600px;
-    top: -25px;
-}
-
 .logic-model-columns {
-    width: 900px;
-    /*
-    height: 500px;
-    border: 1px solid #ccc;
-    */
+    width: 920px;
+    margin: 0;
+    padding: 0;
 }
+
+.print-break {
+    page-break-after: always;
+    height: 1px;
+    border: 0;
+    margin: 0px;
+    padding: 0px;
+}
+
 
 .centered {
     margin: auto;
@@ -49,21 +42,18 @@ textarea#reflections {
 }
 
 span.column_span {
-    width:  150px;
+    width:  153px;
     margin-left:0px;
 }
 
 span.backbone_column_span {
-    width:  150px;
+    width:  153px;
     margin-left:0px;
 }
 
 .help_box {
     display: none;
-    position: absolute;
-    top: 50px;
-    left: 20px;
-    width: 880px;
+    margin-left: -350px;
     z-index: 300;
 }
 
@@ -75,35 +65,36 @@ span.backbone_column_span {
 }
 
 .cell {
-    width: 143px;
-    height: 50px;
+    width: 146px;
+    height: 85px;
     margin: 2px 0;
-    padding: 2px;
+    padding: 1px;
     float: left;
     border: 0;
 }
 
 .colhead {
-    width: 137px;
-    height: 30px;
+    width: 138px;
+    height: 40px;
     margin: 0;
-    padding: 5px;
+    padding: 10px 5px;
     border: 0;
-    background-color: #e0e0e0;
+    background-color: #ccc;
     font-size: 12px;
     
 }
 
 .column_name {
     float: left;
-    width: 115px;
+    width: 110px;
     line-height: 110%;
-    font-weight: bold;
+    font-size: 16px;
 }
 
 .column_help_button_span {
     float: left;
-    width: 20px;
+    width: 25px;
+    height: 25px;
     margin: 0;
     padding: 0;
     cursor: pointer;
@@ -112,11 +103,11 @@ span.backbone_column_span {
 .text_box {
     display: inline;
     position: absolute;
-    font: normal 11px/100% verdana;
+    font: normal 12px/100% arial, helvetica, sans-serif;
     top: 0px;
-    left: 17px;
-    width : 117px;
-    height: 41px;
+    left: 24px;
+    width : 112px;
+    height: 75px;
     background-color: #fff;
     resize: none;
 }
@@ -139,10 +130,10 @@ span.backbone_column_span {
 .box_draggable .switch_color {
     display: block;
     position: absolute;
-    left: 0px;
-    top: 25px;
-    height: 16px;
-    width: 15px;
+    left: 2px;
+    top: 10px;
+    height: 20px;
+    width: 20px;
     border: 0;
     background-color: #fff;
   -webkit-border-radius: 50%;
@@ -151,13 +142,38 @@ span.backbone_column_span {
     cursor: pointer;
 }
 
-div.done-button {
+.btn-logicmodel {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.done-button {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+.done-button {
     opacity:0.4;
     filter:alpha(opacity=0.4);
 }
 
-div.done-button.active {
-    display: inline-block;
+.done-button.active {
     opacity:1.0;
     filter:alpha(opacity=1.0);
 }
@@ -171,15 +187,42 @@ div.add_a_row_button.visible {
 }
 
 .show_expert_logic_model_link_div {
-    display:none;
+    display:inline-block;
 }
 
-#phase_container.conclusion .show_expert_logic_model_link_div {
-    display: inline;
+.show_expert_logic_model_link_div {
+    display: inline-block;
+    margin-left: 20px;
 }
 
 #phase_container.conclusion .show_expert_logic_model_link_div a {
     color: inherit;
+}
+
+.highlight-answerkey {
+    background-color: #5cb85c;
+    -moz-animation: flash-green 1s 5;
+    -webkit-animation: flash-green 1s 5;
+    -ms-animation: flash-green 1s 5;
+    animation: flash-green 1s 5;
+}
+
+@-webkit-keyframes flash-green {
+    0% { background-color: #387038; }
+    50% { background-color: #51a351; }
+    100% { background-color: #5cb85c; }
+}
+
+@-moz-keyframes flash-green {
+    0% { background-color: #387038; }
+    50% { background-color: #51a351; }
+    100% { background-color: #5cb85c; }
+}
+
+@-ms-keyframes flash-green {
+    0% { background-color: #387038; }
+    50% { background-color: #51a351; }
+    100% { background-color: #5cb85c; }
 }
 
 /*.box_draggable .box_handle .icon-move{
@@ -225,21 +268,14 @@ div.add_a_row_button.visible {
 
 .wipe-table-button-div {
     display: none;
-    position: absolute;
-    top: 160px;
-    left: 0;
-    width: 880px;
     z-index: 300;
-    width: auto;
-    height: 300px;
-    background-color: #fff;
-    border: 1px solid #999;
-  -webkit-border-radius: 3px;
-     -moz-border-radius: 3px;
-          border-radius: 3px;
-  -webkit-box-shadow: 0 0 50px #666666;
-     -moz-box-shadow: 0 0 50px #666666;
-          box-shadow: 0 0 50px #666666;
+    margin-left: -350px;
+}
+
+.switch-scenario-warning {
+    display: none;
+    z-index: 300;
+    margin-left: -350px;
 }
 
 .inactive_box {
@@ -259,6 +295,24 @@ div.add_a_row_button.visible {
 #phase_container.pick_scenario .scenario_instructions_container,
 #phase_container.pick_scenario .next_phase  {
     display:none;
+}
+
+.change_scenario {
+    display: inline-block;
+    font-size: 16px;
+    padding: 4px 15px 4px 35px;
+    margin: 0 0 0 20px;
+    border: 1px solid #999 !important;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+    background: #fff url('../img/refresh-icon.png') 4px 4px no-repeat;
+    background-size: 26px;
+    cursor: pointer;
+}
+
+.change_scenario:hover {
+    background-color: #ddd;
 }
 
 div.table-toolbar {
@@ -401,12 +455,170 @@ div.table-toolbar {
     display: none;
 }
 
+/* Styling for accordion-specific information blocks */
+
+.scenario-step-stage .accordion * {
+    border: 0;
+}
+
+.scenario-step-stage .arrow-close {
+    cursor: pointer;
+    height: 40px;
+    z-index: 1;
+    background: transparent url('../img/caret_close.png') 0px 5px no-repeat;
+}
+
+.scenario-step-stage .arrow-open {
+    background: transparent url('../img/caret_open.png') 0px 5px no-repeat;
+}
+
+.scenario-step-stage .logic-model-game-phase-instructions {
+    display: block;
+}
+
+.scenario-step-stage .accordion-heading {
+    font-size: 22px;
+    font-weight: normal;
+    line-height: 100%;
+    margin: 0;
+}
+
+.scenario-step-stage .accordion-heading .accordion-toggle {
+    margin: 0;
+    padding: 0 0 0 25px;
+    display: inline;
+}
+
+.scenario-step-stage .accordion-heading .logic-model-game-phase-name {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.switch-it, .switch-it2 {
+    background-color: transparent;
+    -webkit-animation-name: fadehighlight;
+    -webkit-animation-duration: 2s;
+    animation-name: fadehighlight;
+    animation-duration: 2s;
+}
+
+.switch-it2 {
+    -webkit-animation-name: fadehighlight2;
+    animation-name: fadehighlight2;
+}
+
+@-webkit-keyframes fadehighlight {
+    0%   {background-color: #cce5ff;}
+    100% {background-color:transparent;}
+}
+
+@keyframes fadehighlight {
+    0%   {background-color: #cce5ff;}
+    100% {background-color:transparent;}
+}
+
+@-webkit-keyframes fadehighlight2 {
+    0%   {background-color: #cce5ff;}
+    100% {background-color:transparent;}
+}
+
+@keyframes fadehighlight2 {
+    0%   {background-color: #cce5ff;}
+    100% {background-color:transparent;}
+}
+
+/* Steps progress indicator */
+
+.activity-progress {
+    margin-bottom: 10px;
+}
+
+.activity-progress .step {
+	font-size: 14px;
+	text-align: center;
+	color: #666;
+	cursor: default;
+	margin: 0 3px;
+	padding: 5px 10px 5px 30px;
+	min-width: 60px;
+	float: left;
+	position: relative;
+	background-color: #d9e3f7;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none; 
+  transition: background-color 0.2s ease;
+  line-height: 16px;
+}
+
+.activity-progress .step:after,
+.activity-progress .step:before {
+	content: " ";
+	position: absolute;
+	top: 0;
+	right: -17px;
+	width: 0;
+	height: 0;
+	border-top: 14px solid transparent;
+	border-bottom: 12px solid transparent;
+	border-left: 17px solid #d9e3f7;	
+	z-index: 2;
+  transition: border-color 0.2s ease;
+}
+
+.activity-progress .step:before {
+	right: auto;
+	left: 0;
+	border-left: 17px solid #fff;	
+	z-index: 0;
+}
+
+.activity-progress .step:first-child:before {
+	border: none;
+}
+
+.activity-progress .step:last-child:after {
+	border: none;
+}
+.activity-progress .step:first-child {
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+    padding-left: 20px;
+}
+
+.activity-progress .step:last-child {
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+.activity-progress .step span {
+	position: relative;
+}
+
+.activity-progress .step.current {
+	color: #fff;
+	background-color: #08c;
+}
+
+.activity-progress .step.current:after {
+	border-left: 17px solid #08c;	
+}
+
+.help-header h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    line-height: 150%;
+}
+
 .pull-center {
     text-align: center;
 }
 
-.loading-overlay
-{
+.loading-overlay,
+.help-overlay {
 	position: absolute;
 	display: block;
 	top: 0;
@@ -416,4 +628,88 @@ div.table-toolbar {
 	width: 100%;
 	font-size: larger;
 	font-weight: bold;
+	z-index: 1000;
+}
+
+.help-overlay {
+	position: fixed;
+	display: none;
+	top: 0;
+	left: 0;
+	background-color: #000;
+	height: 100%;
+	width: 100%;
+	z-index: 200;
+    opacity: 0.5;
+    filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+
+/* Print CSS */
+
+@media print {
+
+    .print_only {
+        margin-top: -60px;
+        display: block;
+    }
+    
+    h3.print_only {
+        margin-top: 50px;
+    }
+
+    .phtc_print_logo {
+        display: block;
+    }
+
+    .phtc_print_logo img {
+        height: 100px;
+    }
+
+    .navbar,
+    #masthead,
+    .help-overlay,
+    #sidebarleft,
+    .nav.nav-pills,
+    .change_scenario,
+    .activity-progress,
+    .table-toolbar,
+    .add_a_row_button,
+    .done-button,
+    .pager,
+    .footer ul,
+    .column_help_button_span,
+    .switch_color
+    {
+        display: none !important;
+    }
+
+    .logic-model-columns {
+        border: 1px solid #999;
+    }
+
+    .colhead {
+        border-right: 1px solid #999;
+        font-weight: bold;
+    }
+
+    .cell {
+        border: 1px solid #999;
+        border-right: 2px solid #999;
+        height: 235px;
+    }
+
+    .text_box {
+        font-size: 14px;
+        left: 0;
+        margin: 0;
+        width: 136px;
+        height: 225px;
+        border: 0;
+    }
+
+    .scenario-step-stage .accordion-body,
+    .scenario-step-stage .collapse.in
+    {
+        height: auto !important;
+    }
 }
