@@ -1,39 +1,95 @@
-<!-- the whole table goes here: -->
-<div class="scenario-block scenario_instructions_container">
-    <div class="scenario-header">
-        <div class="scenario-criteria scenario_title_2">
-            Scenario title goes here
+ <!-- the whole table goes here: -->
+<div class="scenario-step-stage">
+
+    <div class="accordion" id="scenario-details">
+            <div class="accordion-group clearfix">
+              <div class="accordion-heading">
+                <a class="accordion-toggle arrow-open" id="scenarioHeaderTitle" data-toggle="collapse" data-parent="#scenario-details" href="#scenarioInstructions">
+                  Scenario: <span class="scenario_title_2">Scenario title goes here</span>
+                </a>
+                <div class="change_scenario">Switch scenario</div>
+              </div>
+              <div id="scenarioInstructions" class="accordion-body collapse">
+                <div class="accordion-inner scenario_instructions">
+                  Scenario instructions go here
+                </div>
+              </div>
+            </div>
+    </div>
+
+<hr />
+
+    <!-- Steps/Progress indicator -->
+    <div class="activity-progress clearfix" id="stepTag">
+    </div>
+
+    <div class="accordion" id="step-details">
+            <div class="accordion-group clearfix">
+              <div class="accordion-heading">
+                <a class="accordion-toggle arrow-open logic-model-game-phase-name switch-it2" id="stepHeaderTitle" data-toggle="collapse" data-parent="#step-details" href="#stepInstructions">
+                  <span>Step of the game goes here.</span>
+                </a>
+              </div>
+              <div id="stepInstructions" class="accordion-body collapse">
+                <div class="accordion-inner logic-model-game-phase-instructions">
+                Instructions
+                </div>
+              </div>
+            </div>
+    </div>
+
+</div><!-- /.scenario-step-stage -->
+         
+<div class="table-toolbar">
+    <div class="previous_phase btn-logicmodel btn-info"><i class="icon-arrow-left icon-white"></i> Back a step</div>
+    <div class="wipe-table-button btn-logicmodel btn-info"><i class="icon-trash icon-white"></i> Clear table</div>
+    <!-- <div class="change_scenario btn-logicmodel btn-info"><i class="icon-refresh icon-white"></i> Switch scenario</div>-->
+    <div class="print_scenario btn-logicmodel btn-info"><i class="icon-print icon-white"></i> Print scenario</div>
+    <div class ="show_expert_logic_model_link_div btn-logicmodel btn-info">
+        <i class="icon-file icon-white"></i> <a target="_blank" href="" class="show_expert_logic_model_link">Show expert logic model</a>
+    </div>
+</div>
+
+<div class="modal wipe-table-button-div">
+    <div class="modal-header help-header">
+        <h3>Are you sure you want to clear the table?</h3>
+    </div>
+    <div class="modal-body">
+        <div>
+        This will permanently erase everything you typed in the logic model table.
         </div>
-    </div> 
-    <div class="scenario-content scenario_instructions">
-        Scenario instructions go here
-    </div> 
-</div>
-
-
-
-<div class="table-toolbar{% comment %}wipe-table-div{% endcomment %}">
-    <div class="previous_phase btn btn-info"><i class="icon-arrow-left icon-white"></i> Back a step</div>
-    <div class="wipe-table-button btn btn-info"><i class="icon-trash icon-white"></i> Clear table</div>
-    <div class="change_scenario btn btn-info"><i class="icon-refresh icon-white"></i> Switch scenario</div>
-    <div class="print_scenario btn btn-info"><i class="icon-print icon-white"></i> Print scenario</div>
-    <div class ="show_expert_logic_model_link_div btn btn-info">
-        <i class="icon-file icon-white"></i> <a target="_blank" href="/_logic_model/media/pdf/expert_logic_model.pdf" class="show_expert_logic_model_link">Show expert logic model</a>
     </div>
-    <div class="wipe-table-button-div alert">
-    <h3>Are you sure you want to clear the table?</h3> This will permanently erase everything you typed in the boxes.
-    <div class = "wipe-table-confirm-button btn btn-danger">
-    Yes, I'm sure.
-    </div>
-    <div class = "wipe-table-cancel-button btn btn-success">
-    No.
-    </div>
+    <div class="modal-footer">
+        <div class = "wipe-table-confirm-button btn-logicmodel btn-danger">
+        Yes, I'm sure
+        </div>
+        <div class = "wipe-table-cancel-button btn-logicmodel btn-success">
+        No
+        </div>
     </div>
 </div>
 
+<div class="modal switch-scenario-warning">
+    <div class="modal-header help-header">
+        <h3>Are you sure you want to switch scenario?</h3>
+    </div>
+    <div class="modal-body">
+        <div>
+        This will permanently erase everything you typed in the logic model table.
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class = "change_scenario_confirm btn-logicmodel btn-danger">
+        Yes, I'm sure
+        </div>
+        <div class = "change_scenario_cancel btn-logicmodel btn-success">
+        No
+        </div>
+    </div>
+</div>
 
 
-
+<div class="print-break clearfix"></div>
 
 <!-- the whole table goes here: -->
 <div class="logic-model-columns clearfix"></div>

@@ -1,32 +1,33 @@
-{% load waffle_tags %}
-{% flag "building-logic-models-2" %}
-    {% include "logic_model/logic_model2.html" %}
-{% else %}
 <div class="loading-overlay">Loading...</div>
 <div class="logic-model-container">
 	<div id="phase_container">
-
-		<div>
+<div class="phtc_print_logo print_only"><img src="{{STATIC_URL}}img/region2phtc-logo_horizontal.png" /></div>
+        <h3 class="print_only">Building your own logic model</h3>
+		<div class="scenario-list-stage">
 			<div class="logic-model-game-phase-name">Name of this phase of the game.</div>
+			<div class="logic-model-game-phase-instructions">Instructions</div>
+			
 		</div>
 
 		<!-- choose scenario -->
-		{%include "logic_model/subtemplates/initial_scenario_choice.html" %}
+		{%include "logic_model/subtemplates/initial_scenario_choice2.html" %}
 
 		
 		<!-- all subsequent phases of the game -->
-		{%include "logic_model/subtemplates/table.html" %}
+		{%include "logic_model/subtemplates/table2.html" %}
 		<!-- the help box -->
-		{%include "logic_model/subtemplates/help_box.html" %}
+		{%include "logic_model/subtemplates/help_box2.html" %}
 	</div>
 </div>
 
 <script type="text/javascript" language="javascript">
     jQuery(document).ready(function(jQuery){
-        jQuery(".scenario-header").click(function(){
-            jQuery(this).next(".scenario-content").slideToggle("fast");
-            jQuery(this).toggleClass("active");
+        jQuery(".collapse").collapse();
+        jQuery('#scenarioInstructions').on('show hide', function(e){
+            jQuery('#scenarioHeaderTitle').toggleClass('arrow-open arrow-close', 200);
+        });
+        jQuery('#stepInstructions').on('show hide', function(e){
+            jQuery('#stepHeaderTitle').toggleClass('arrow-open arrow-close', 200);
         });
     });
 </script>
-{% endflag %}

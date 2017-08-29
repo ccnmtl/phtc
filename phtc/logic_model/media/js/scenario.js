@@ -22,8 +22,11 @@ LogicModel.ScenarioView = Backbone.View.extend({
     chooseMe : function () {
         "use strict";
         var self = this;
-        jQuery ('.scenario_instructions').html (self.model.get ('instructions'));
-        jQuery ('.scenario_title_2').html (self.model.get ('title'));
+        jQuery('.scenario_instructions').html (self.model.get ('instructions'));
+        jQuery('.scenario_title_2').html (self.model.get ('title'));
+        var href = STATIC_URL + 'pdf/' + self.model.get('answer_key');
+        jQuery('.show_expert_logic_model_link').attr('href', href);
+        jQuery('.scenario-step-stage .accordion-body').css('height','auto');
         self.LogicModelView.goToNextPhase();
     }
 });

@@ -51,20 +51,26 @@ LogicModel.ColumnView = Backbone.View.extend({
         "use strict";
         var self = this;
         var the_template = jQuery('#logic-model-help-box').html();
-        var examples_copy = self.model.get ('help_examples'  );
-        if (examples_copy === '' || examples_copy === undefined ) {
-            examples_copy = 'Lorem ipsum';
+        var title_copy = self.model.get ('name');
+        if (title_copy === '' || title_copy === undefined ) {
+            title_copy = 'Lorem ipsum';
         }
-        var definition_copy = self.model.get ('help_definition'  );
+        var definition_copy = self.model.get ('help_definition');
         if (definition_copy === '' || definition_copy === undefined ) {
             definition_copy = 'Lorem ipsum';
         }
+        var examples_copy = self.model.get ('help_examples');
+        if (examples_copy === '' || examples_copy === undefined ) {
+            examples_copy = 'Lorem ipsum';
+        }
         var the_data = {
-            'help_title'  : definition_copy,
+            'help_title'  : title_copy,
+            'help_meaning'  : definition_copy,
             'help_body': examples_copy
         };
         var the_html = _.template(the_template, the_data);
         jQuery( ".help_box" ).html (the_html);
+        jQuery('.help-overlay').show();
         jQuery( ".help_box" ).show();
     },
 
