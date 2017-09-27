@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from xml.dom import minidom
+from xml.dom import minidom  # nosec
 from optparse import make_option
 from phtc.treatment_activity.models import TreatmentNode, NODE_CHOICES
 from phtc.treatment_activity.models import TreatmentPath
@@ -70,7 +70,7 @@ class Command(BaseCommand):
             return
 
         TreatmentNode.objects.all().delete()
-        xmldoc = minidom.parse(options.get('file'))
+        xmldoc = minidom.parse(options.get('file'))  # nosec
 
         root_nodes = xmldoc.getElementsByTagName('TreatmentNodes')
         for r in root_nodes:
