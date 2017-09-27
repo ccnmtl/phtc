@@ -24,7 +24,7 @@ class Command(BaseCommand):
                 upv = UserPageVisit.objects.filter(user_id=user.id)
                 for v in upv:
                     v.delete()
-            except:
+            except User.DoesNotExist:
                 pass
             print "done clearing out " + username + "\'s user page visits"
         else:

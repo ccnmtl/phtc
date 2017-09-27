@@ -16,6 +16,7 @@ from pagetree.models import UserPageVisit
 from phtc.main.models import DashboardInfo, UserProfile, ModuleType
 from phtc.main.models import SectionCss
 from quizblock.models import Quiz, Question, Response, Submission
+from django.utils.datastructures import MultiValueDictKeyError
 
 
 def context_processor(request):
@@ -173,11 +174,11 @@ def edit_page(request, path):
     if request.method == "POST":
         try:
             dashboard.info = request.POST['dashboard_info']
-        except:
+        except MultiValueDictKeyError:
             pass
         try:
             section_css.css_field = request.POST['section_css_field']
-        except:
+        except MultiValueDictKeyError:
             pass
 
     dashboard.save()
@@ -324,7 +325,7 @@ class BaseReporter(object):
                     field_string = str(field_string)
                 try:
                     field_string = field_string.encode('utf-8')
-                except:
+                except UnicodeEncodeError:
                     pass
                 field_string = field_string[:10000000]
                 fields.append(field_string)
