@@ -1,5 +1,5 @@
-jQuery(document).ready(function () {
-    var view = new LogicModel.LogicModelView({
+jQuery(document).ready(function() {
+    new LogicModel.LogicModelView({
         el: 'div.logic-model-container'
     });
 });

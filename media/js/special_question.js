@@ -1,6 +1,6 @@
 jQuery(document).ready(function() {
-
-    var question_number = 4; //enter the number of the question you would like to augment
+    // enter the number of the question you would like to augment
+    var question_number = 4;
     var question = jQuery(jQuery('.special-question')
         .children('.cases')[question_number - 1]);
     // set the answers as available src string variables
