@@ -412,7 +412,7 @@ def flatten_response_tables(qr):
                 try:
                     report_row.append(report[row])
                     report_row.append(report[row+1])
-                except:
+                except (IndexError, KeyError):
                     report_row.append(('', ''))
                     report_row.append(('', ''))
             flat_report.append(report_row)
