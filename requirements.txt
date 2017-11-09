@@ -50,7 +50,7 @@ raven==6.3.0
 contextlib2==0.5.5
 rcssmin==1.0.6
 rjsmin==1.0.12
-Jinja2==2.9.6
+Jinja2==2.10
 MarkupSafe==1.0
 pytz==2017.3
 
