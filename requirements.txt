@@ -37,7 +37,7 @@ editdistance==0.4
 pylint==1.7.4
 pep8==1.7.1
 pyflakes==1.6.0
-ldap3==2.3
+ldap3==2.4
 sqlparse==0.2.4
 six==1.11.0
 pyasn1==0.3.7
