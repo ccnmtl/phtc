@@ -1,5 +1,4 @@
 from models import Quiz, Question, Answer
-from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -15,8 +14,7 @@ class rendered_with(object):
             if isinstance(items, dict):
                 return render_to_response(
                     self.template_name,
-                    items,
-                    context_instance=RequestContext(request))
+                    items, {})
             else:
                 return items
 
