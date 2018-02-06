@@ -69,48 +69,72 @@ class Quiz(models.Model):
     def edit_form(self):
         class EditForm(forms.Form):
             description = forms.CharField(widget=forms.widgets.Textarea(),
-                                          initial=self.description)
-            rhetorical = forms.BooleanField(initial=self.rhetorical)
-            feedback = forms.BooleanField(initial=self.feedback)
+                                          initial=self.description,
+                                          required=False)
+            rhetorical = forms.BooleanField(initial=self.rhetorical,
+                                            required=False)
+            feedback = forms.BooleanField(initial=self.feedback,
+                                          required=False)
+            allow_redo = forms.BooleanField(initial=self.allow_redo,
+                                            required=False)
             reading_exercise = forms.BooleanField(
-                initial=self.reading_exercise)
-            matching = forms.BooleanField(initial=self.matching)
-            pre_test = forms.BooleanField(initial=self.pre_test)
-            post_test = forms.BooleanField(initial=self.post_test)
+                initial=self.reading_exercise,
+                required=False)
+            matching = forms.BooleanField(initial=self.matching,
+                                          required=False)
+            pre_test = forms.BooleanField(initial=self.pre_test,
+                                          required=False)
+            post_test = forms.BooleanField(initial=self.post_test,
+                                           required=False)
             post_test_credit = forms.FloatField(
                 widget=forms.widgets.TextInput(
                     attrs={'class': 'post_test_credit'}),
-                initial=self.post_test_credit)
-            allow_redo = forms.BooleanField(initial=self.allow_redo)
-            alt_text = ("<a href=\"" + reverse("edit-quiz", args=[self.id]) +
-                        "\">manage questions/answers</a>")
+                initial=self.post_test_credit,
+                required=False)
+            alt_text = (
+                "<a href=\"" + reverse("edit-quiz", args=[self.id]) +
+                "\">manage questions/answers</a>")
         return EditForm()
 
     @classmethod
     def add_form(cls):
         class AddForm(forms.Form):
-            description = forms.CharField(widget=forms.widgets.Textarea())
-            rhetorical = forms.BooleanField()
-            feedback = forms.BooleanField()
-            reading_exercise = forms.BooleanField()
-            matching = forms.BooleanField()
-            allow_redo = forms.BooleanField()
-            pre_test = forms.BooleanField()
-            post_test = forms.BooleanField()
-            post_test_credit = forms.FloatField(initial=0.0)
+            description = forms.CharField(required=False,
+                                          widget=forms.widgets.Textarea())
+            rhetorical = forms.BooleanField(required=False)
+            feedback = forms.BooleanField(required=False)
+            allow_redo = forms.BooleanField(required=False)
+            reading_exercise = forms.BooleanField(required=False)
+            matching = forms.BooleanField(required=False)
+            pre_test = forms.BooleanField(required=False)
+            post_test = forms.BooleanField(required=False)
+            post_test_credit = forms.FloatField(initial=0.0, required=False)
         return AddForm()
 
     @classmethod
+    def bool(cls, d, name, default_value):
+        value = d.get(name, default_value)
+        return value in ('True', True, 'on')
+
+    @classmethod
     def create(cls, request):
+        reading_exercise = cls.bool(request.POST, 'reading_exercise', False)
+        matching = cls.bool(request.POST, 'matching', False)
+        allow_redo = cls.bool(request.POST, 'allow_redo', False)
+        pre_test = cls.bool(request.POST, 'pre_test', False)
+        post_test = cls.bool(request.POST, 'post_test', False)
+        rhetorical = cls.bool(request.POST, 'rhetorical', False)
+        feedback = cls.bool(request.POST, 'feedback', False)
+
         return Quiz.objects.create(
             description=request.POST.get('description', ''),
-            rhetorical=request.POST.get('rhetorical', ''),
-            feedback=request.POST.get('feedback', ''),
-            reading_exercise=request.POST.get('reading_exercise', ''),
-            matching=request.POST.get('matching', ''),
-            allow_redo=request.POST.get('allow_redo', ''),
-            pre_test=request.POST.get('pre_test', ''),
-            post_test=request.POST.get('post_test', ''),
+            rhetorical=rhetorical,
+            feedback=feedback,
+            reading_exercise=reading_exercise,
+            matching=matching,
+            allow_redo=allow_redo,
+            pre_test=pre_test,
+            post_test=post_test,
             post_test_credit=request.POST.get('post_test_credit', 0.0)
         )
 
@@ -119,11 +143,11 @@ class Quiz(models.Model):
         q = Quiz.objects.create(
             description=d.get('description', ''),
             rhetorical=d.get('rhetorical', False),
-            feedback=d.get('feedback', ''),
-            reading_exercise=d.get('reading_exercise', ''),
-            matching=d.get('matching', ''),
-            pre_test=d.get('pre_test', ''),
-            post_test=d.get('post_test', ''),
+            feedback=d.get('feedback', False),
+            reading_exercise=d.get('reading_exercise', False),
+            matching=d.get('matching', False),
+            pre_test=d.get('pre_test', False),
+            post_test=d.get('post_test', False),
             post_test_credit=d.get('post_test_credit', 0.0),
             allow_redo=d.get('allow_redo', True),
         )
@@ -132,14 +156,14 @@ class Quiz(models.Model):
 
     def edit(self, vals, files):
         self.description = vals.get('description', '')
-        self.rhetorical = vals.get('rhetorical', '')
-        self.feedback = vals.get('feedback', '')
-        self.reading_exercise = vals.get('reading_exercise', '')
-        self.matching = vals.get('matching', '')
-        self.pre_test = vals.get('pre_test', '')
-        self.post_test = vals.get('post_test', '')
+        self.rhetorical = self.bool(vals, 'rhetorical', False)
+        self.feedback = self.bool(vals, 'feedback', False)
+        self.reading_exercise = self.bool(vals, 'reading_exercise', False)
+        self.matching = self.bool(vals, 'matching', False)
+        self.pre_test = self.bool(vals, 'pre_test', False)
+        self.post_test = self.bool(vals, 'post_test', False)
         self.post_test_credit = vals.get('post_test_credit', '')
-        self.allow_redo = vals.get('allow_redo', '')
+        self.allow_redo = self.bool(vals, 'allow_redo', False)
         self.save()
 
     def add_question_form(self, request=None):
