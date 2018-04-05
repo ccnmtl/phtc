@@ -1,5 +1,5 @@
 # flake8: noqa
-from settings_shared import *
+from phtc.ettings_shared import *
 from ccnmtlsettings.production import common
 
 locals().update(
@@ -14,6 +14,6 @@ locals().update(
 PROD_BASE_URL = None
 
 try:
-    from local_settings import *
+    from phtc.local_settings import *
 except ImportError:
     pass
