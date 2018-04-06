@@ -1,5 +1,5 @@
 # flake8: noqa
-from phtc.ettings_shared import *
+from phtc.settings_shared import *
 from ccnmtlsettings.production import common
 
 locals().update(
