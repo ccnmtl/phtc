@@ -16,6 +16,8 @@
   {% block css %}{% endblock %}
   <script src="{{STATIC_URL}}js/jquery-1.7.2.min.js"></script>
   {% block feeds %}{% endblock %}
+  <link rel="stylesheet" href="https://search.sites.columbia.edu/cu-privacy-notice/cu-privacy-notice.css" />
+  <script src="https://search.sites.columbia.edu/cu-privacy-notice/cu-privacy-notice.js"></script>
 </head>
 
 <body{% block noleftsidebar %}{% endblock %}>
@@ -164,6 +166,7 @@ if(window.phtcInputFormCheck){
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
       ga('create', '{{GA_CODE}}', 'auto');
+      ga('set', 'anonymizeIp', true);
       ga('send', 'pageview');
     </script>
 {% endif %}
