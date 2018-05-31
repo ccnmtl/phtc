@@ -21,6 +21,7 @@ TEMPLATES[0]['OPTIONS']['context_processors'].append(  # noqa
 INSTALLED_APPS += [  # noqa
     'sorl.thumbnail',
     'typogrify',
+    'bootstrap3',
     'bootstrapform',
     'phtc.main',
     'pagetree',
