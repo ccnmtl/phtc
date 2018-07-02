@@ -64,6 +64,9 @@ class Quiz(models.Model):
     def unlocked(self, user):
         # meaning that the user can proceed *past* this one,
         # not that they can access this one. careful.
+        if user.is_anonymous:
+            return False
+
         return Submission.objects.filter(quiz=self, user=user).count() > 0
 
     def edit_form(self):
