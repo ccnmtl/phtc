@@ -36,7 +36,7 @@ editdistance==0.4
 pylint==1.9.3 # pyup: <2.0.0
 pep8==1.7.1
 pyflakes==2.0.0
-ldap3==2.5
+ldap3==2.5.1
 sqlparse==0.2.4
 six==1.11.0
 pyasn1==0.4.4
