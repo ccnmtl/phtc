@@ -8,7 +8,7 @@ from django.conf.urls import include, url
 from django.views.generic import TemplateView
 
 from phtc.main.views import (
-    region2phtc, reports, dashboard, edit_page, page,
+    region2phtc, dashboard, edit_page, page,
 )
 admin.autodiscover()
 
@@ -26,7 +26,6 @@ urlpatterns = [
     logout_page,
     auth_urls,
     url(r'^$', view=region2phtc, name='region2phtc'),
-    url(r'^reports/$', view=reports, name='reports'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^dashboard/', view=dashboard, name='dashboard'),
     url(r'^_stats/', TemplateView.as_view(template_name='stats.html')),
