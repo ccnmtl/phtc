@@ -68,7 +68,7 @@ django-debug-toolbar==1.9.1
 
 django-treebeard==4.2.1
 django-pagetree==1.4.1
-django-markwhat==1.6.0
+django-markwhat==1.6.1
 django-pageblocks==1.2.0 # pyup: <2.0.0
 requirements/src/django-pagetree_export-0.4.tar.gz
 django-jenkins==0.110.0
