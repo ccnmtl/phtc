@@ -32,7 +32,7 @@ coverage==4.5.1
 unittest2==1.1.0
 logilab-common==1.4.2
 logilab-astng==0.24.3
-editdistance==0.4
+editdistance==0.5
 pylint==1.9.3 # pyup: <2.0.0
 pep8==1.7.1
 pyflakes==2.0.0
